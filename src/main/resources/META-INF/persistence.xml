@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="com.deemsys.ehr_EHR_war_1.0PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.deemsys.ehr.entity.Holidays</class>
+    <class>com.deemsys.ehr.entity.Roles</class>
+    <class>com.deemsys.ehr.entity.Settings</class>
+    <class>com.deemsys.ehr.entity.Symptoms</class>
+    <class>com.deemsys.ehr.entity.Clinic</class>
+    <class>com.deemsys.ehr.entity.Forms</class>
+    <class>com.deemsys.ehr.entity.FormMapping</class>
+    <class>com.deemsys.ehr.entity.Patients</class>
+    <class>com.deemsys.ehr.entity.Doctor</class>
+    <class>com.deemsys.ehr.entity.Appointments</class>
+    <class>com.deemsys.ehr.entity.Users</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.1.140:3306/ehr"/>
+      <property name="javax.persistence.jdbc.password" value="ehrpass@123"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="ehruser"/>
+    </properties>
+  </persistence-unit>
+</persistence>
