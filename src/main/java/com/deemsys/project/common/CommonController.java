@@ -24,5 +24,19 @@ public class CommonController {
 		return "/index";
 	}
 	
+    @RequestMapping(value={"/search"},method=RequestMethod.GET)
+	public String getSearch(ModelMap model)
+	{
+    	model.addAttribute("Success",true);
+		return "/search";
+	}
+    
+    // Login Failed
+ 	@RequestMapping(value="/login-failed",method=RequestMethod.GET)
+ 	public String getLogin(ModelMap model)
+ 	{
+     	model.addAttribute("failed",true);
+ 		return "/index";
+ 	}
 	
 }

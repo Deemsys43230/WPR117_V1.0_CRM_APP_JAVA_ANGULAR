@@ -64,7 +64,7 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                 },
                 controller:'CommonController'
             }).
-            when('/search-reports', {
+            when('/', {
                 templateUrl: 'views/searchReport.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
@@ -81,6 +81,6 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                 controller:'SearchReportsController'
             }).
             otherwise({
-                redirectTo: '/index'
+                redirectTo: '/search-reports'
             });
     }]);

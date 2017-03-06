@@ -16,24 +16,24 @@
 				<p>To Upload Reports</p>
 						<h4>Sign In</h4>
 						<hr/>
-						<form class="contact-form" name="indexjobForm" ng-submit="indexjobForm.$valid && saveJobSeeker()" novalidate>
-                            <h5>First Name<span class="text-red"><sup>*</sup></span></h5>
-                                <input type="text" name="firstName" ng-model="indexJobSeekerForm.firstName" required validate-name placeholder="First Name" maxlength="25">
+						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
+                            <h5>Username<span class="text-red"><sup>*</sup></span></h5>
+                                <input type="text" name="username" placeholder="Username" id="username" maxlength="25">
                                 <div class="error-container" >
                                  <div ng-show="submitted">
 	                          			<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please Enter First Name</span>
 	                          			<span ng-cloak ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please Enter Valid Name</span>
 	                              </div>
                               	</div>
-                            	<h5>Last Name</span><span class="text-red"><sup>*</sup></span></h5>
-                                <input type="text" name="lastName" ng-model="indexJobSeekerForm.lastName" required validate-name placeholder="Last Name" maxlength="25">
+                            	<h5>Password</span><span class="text-red"><sup>*</sup></span></h5>
+                                <input type="text" placeholder="Password" name="password" id="password">
                                 <div class="error-container" >
                                  <div ng-show="submitted">
 	                          			<span ng-cloak ng-show="indexjobForm.lastName.$error.required">Please Enter Last Name</span>
 	                          			<span ng-cloak ng-show="!indexjobForm.lastName.$error.required&&indexjobForm.lastName.$error.validateName">Please Enter Valid Name</span>
 	                              </div>
                               	</div>                               
-                                <input type="submit" name="submit" ng-disabled="saveData" ng-click="submitted=true" value="Sign In" class="btn">
+                                <input type="submit" name="submit" value="Sign In" class="btn">
                             	<div flash-message="2000" class="col-md-8 pull-right no-padding"></div>
                     	</form>
 			</div>
