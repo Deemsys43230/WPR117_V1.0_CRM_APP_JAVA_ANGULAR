@@ -22,6 +22,16 @@
 
 	<context:component-scan base-package="com.deemsys.project" />
 	
+	<!-- Angular Configuration Resources-->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/styles/**" location="/WEB-INF/resources/styles/" />
+	<mvc:resources mapping="/scripts/**" location="/WEB-INF/resources/scripts/" />
+	<mvc:resources mapping="/components/**" location="/WEB-INF/resources/components/" />
+	<mvc:resources mapping="/js/**" location="/WEB-INF/resources/js/" />
+	<mvc:resources mapping="/views/**" location="/WEB-INF/resources/views/" />
+	<mvc:resources mapping="/admin/**" location="/WEB-INF/resources/views/admin/" />
+	<!-- End Angular Configuration -->
+	
 	<mvc:annotation-driven />
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
