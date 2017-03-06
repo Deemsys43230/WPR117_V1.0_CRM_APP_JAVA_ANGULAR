@@ -1,0 +1,89 @@
+
+<!-- SERVICES -->
+<section id="services">
+	<div class="container">
+	<div class="col-md-12 login-form" ng-hide="showResult">
+		<div class="col-md-8">
+			<h4>Search Crash Reports</h4>
+			<hr />
+			<form class="contact-form" name="indexjobForm"
+				ng-submit="indexjobForm.$valid && saveJobSeeker()" novalidate>
+				<h5>
+					Crash Date<span class="text-red"><sup>*</sup></span>
+				</h5>
+				<input type="text" name="firstName"
+					ng-model="indexJobSeekerForm.firstName" required validate-name
+					placeholder="First Name" maxlength="25">
+				<div class="error-container">
+					<div ng-show="submitted">
+						<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please
+							Enter First Name</span> <span ng-cloak
+							ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please
+							Enter Valid Name</span>
+					</div>
+				</div>
+				<h5>
+					Report Number<span class="text-red"><sup>*</sup></span>
+				</h5>
+				<input type="text" name="firstName"
+					ng-model="indexJobSeekerForm.firstName" required validate-name
+					placeholder="First Name" maxlength="25">
+				<div class="error-container">
+					<div ng-show="submitted">
+						<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please
+							Enter First Name</span> <span ng-cloak
+							ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please
+							Enter Valid Name</span>
+					</div>
+				</div>
+				<hr/>
+				<h5>
+					First Name<span class="text-red"><sup>*</sup></span>
+				</h5>
+				<input type="text" name="firstName"
+					ng-model="indexJobSeekerForm.firstName" required validate-name
+					placeholder="First Name" maxlength="25">
+				<div class="error-container">
+					<div ng-show="submitted">
+						<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please
+							Enter First Name</span> <span ng-cloak
+							ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please
+							Enter Valid Name</span>
+					</div>
+				</div>
+				<h5>
+					Last Name</span><span class="text-red"><sup>*</sup></span>
+				</h5>
+				<input type="text" name="lastName"
+					ng-model="indexJobSeekerForm.lastName" required validate-name
+					placeholder="Last Name" maxlength="25">
+				<div class="error-container">
+					<div ng-show="submitted">
+						<span ng-cloak ng-show="indexjobForm.lastName.$error.required">Please
+							Enter Last Name</span> <span ng-cloak
+							ng-show="!indexjobForm.lastName.$error.required&&indexjobForm.lastName.$error.validateName">Please
+							Enter Valid Name</span>
+					</div>
+				</div>
+				<hr/>
+				<div class="text-center"><button class="btn btn-lg btn-primary" ng-click="showResult=true;">Search Report</button></div>
+				<div flash-message="2000" class="col-md-8 pull-right no-padding"></div>
+			</form>
+		</div>
+		<div class="col-md-4">
+		<h4>Minimum Details Required to Perform Search</h4>
+		<hr/>
+		<ul><li> Date of Accident and Report Number</li><li> Date of Accident, First Name and Last Name</li></ul>
+		</div>
+		</div>
+		
+		<div class="col-md-12 login-form" style="min-height:500px;" ng-show="showResult">
+		<div class="col-md-12">
+		<h4>Search Result</h4>		
+		<div class="text-center"><button class="btn btn-sm" ng-click="showResult=false;">Back to Search</button></div>
+		</div>
+		</div>
+		
+	</div>
+</section>
+<!-- /SERVICES -->
