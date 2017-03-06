@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 6 Mar, 2017 10:19:10 AM by Hibernate Tools 3.4.0.CR1
+// Generated 6 Mar, 2017 4:52:52 PM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

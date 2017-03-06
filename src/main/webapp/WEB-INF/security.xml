@@ -24,6 +24,30 @@
 		 <access-denied-handler error-page="/logout" /> 
 	</http>
 	
+	<!-- Roles and URL protection -->
+	<http pattern="/Admin/**" create-session="never" use-expressions="true"
+		entry-point-ref="oauthAuthenticationEntryPoint"
+		access-decision-manager-ref="accessDecisionManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<anonymous enabled="false" />
+		<intercept-url pattern="/Admin/**" access="hasAnyRole('ROLE_ADMIN')" />
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+		<access-denied-handler ref="oauthAccessDeniedHandler" />
+		<session-management invalid-session-url="/logout" />
+	</http>
+	
+	<!-- Roles and URL protection -->
+	<http pattern="/User/**" create-session="never" use-expressions="true"
+		entry-point-ref="oauthAuthenticationEntryPoint"
+		access-decision-manager-ref="accessDecisionManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<anonymous enabled="false" />
+		<intercept-url pattern="/User/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+		<access-denied-handler ref="oauthAccessDeniedHandler" />
+		<session-management invalid-session-url="/logout" />
+	</http>
+	
 	<authentication-manager id="clientAuthenticationManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider user-service-ref="clientDetailsUserService" />
@@ -112,7 +136,7 @@
 		<access-denied-handler error-page="/redirect" />
 		<form-login 
 		    login-page="/user-login" 
-		    default-target-url="/welcome"
+		    default-target-url="/home"
 			authentication-failure-url="/login-failed" 
 			username-parameter="username"
 			password-parameter="password"
@@ -138,11 +162,15 @@
 	<authentication-manager alias="authenticationManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider user-service-ref="loginDAO">
-		<!-- <password-encoder hash="md5">
+		<password-encoder hash="md5">
 		<salt-source ref="passwordKey"/>
-		</password-encoder> -->
+		</password-encoder>
 		</authentication-provider>
 	</authentication-manager>
+	
+	<beans:bean id="passwordKey"
+		class="com.deemsys.project.login.PasswordKey">
+	</beans:bean>
 
 
 </beans:beans>

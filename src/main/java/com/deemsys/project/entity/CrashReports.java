@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 6 Mar, 2017 10:19:10 AM by Hibernate Tools 3.4.0.CR1
+// Generated 6 Mar, 2017 4:52:52 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -28,6 +28,7 @@ public class CrashReports implements java.io.Serializable {
 	private String reportNumber;
 	private Date crashDate;
 	private String fileName;
+	private Date addedDate;
 	private Date addedDateTime;
 	private Integer status;
 	private Set<Occupants> occupantses = new HashSet<Occupants>(0);
@@ -41,12 +42,14 @@ public class CrashReports implements java.io.Serializable {
 
 	public CrashReports(String reportId, Accounts accounts,
 			String reportNumber, Date crashDate, String fileName,
-			Date addedDateTime, Integer status, Set<Occupants> occupantses) {
+			Date addedDate, Date addedDateTime, Integer status,
+			Set<Occupants> occupantses) {
 		this.reportId = reportId;
 		this.accounts = accounts;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.fileName = fileName;
+		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
 		this.status = status;
 		this.occupantses = occupantses;
@@ -98,6 +101,16 @@ public class CrashReports implements java.io.Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "added_date", length = 10)
+	public Date getAddedDate() {
+		return this.addedDate;
+	}
+
+	public void setAddedDate(Date addedDate) {
+		this.addedDate = addedDate;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
