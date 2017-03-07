@@ -57,51 +57,12 @@
 			</div>
 		</div> <!--/#home-carousel-->
     </section>
-<body>
+<body ng-app="commonApp">
 
-	
-    	<!-- SERVICES -->
-	<section id="services">
-		<div class="container">
-			<div class="col-md-6">
-			<p>This page is for the Police Department oficials to upload
-				crash reports. (Sign in required)</p>
-			<hr />
-			<p>Not what you are looking for? To Search and Download your
-				crash reports.</p>
-			<hr />
-			<div class="text-center">
-				<a href="search" class="btn btn-lg btn-primary" >Search Report</a>
-			</div>
-		</div>
-				<div class="col-md-6 login-form">
-				<p>To Upload Reports</p>
-						<h4>Sign In</h4>
-						<hr/>
-						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
-                            <h5>Username<span class="text-red"><sup>*</sup></span></h5>
-                                <input type="text" name="username" placeholder="Username" id="username" maxlength="25">
-                                <div class="error-container" >
-                                 <div ng-show="submitted">
-	                          			<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please Enter First Name</span>
-	                          			<span ng-cloak ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please Enter Valid Name</span>
-	                              </div>
-                              	</div>
-                            	<h5>Password</span><span class="text-red"><sup>*</sup></span></h5>
-                                <input type="text" placeholder="Password" name="password" id="password">
-                                <div class="error-container" >
-                                 <div ng-show="submitted">
-	                          			<span ng-cloak ng-show="indexjobForm.lastName.$error.required">Please Enter Last Name</span>
-	                          			<span ng-cloak ng-show="!indexjobForm.lastName.$error.required&&indexjobForm.lastName.$error.validateName">Please Enter Valid Name</span>
-	                              </div>
-                              	</div>                               
-                                <input type="submit" name="submit" value="Sign In" class="btn">
-                            	<div flash-message="2000" class="col-md-8 pull-right no-padding"></div>
-                    	</form>
-			</div>
-		</div>
-	</section>
-	<!-- /SERVICES -->
+
+
+
+    <div ng-view></div>
 
 	<!-- FOOTER -->
 	<footer id="footer">

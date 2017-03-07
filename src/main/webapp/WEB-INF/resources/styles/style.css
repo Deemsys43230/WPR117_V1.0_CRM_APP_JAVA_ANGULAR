@@ -944,7 +944,6 @@
 	}
 
 	#home-carousel .item:before{
-		background-color: #000;
 		content: "";
 		height: 100%;
 		top: 0;
