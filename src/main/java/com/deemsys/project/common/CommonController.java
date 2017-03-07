@@ -48,16 +48,9 @@ public class CommonController {
 	public String getHomePage(ModelMap model)
 	{
     	model.addAttribute("Success",true);
-		return "/index";
+		return "/home";
 	}
-    
-    @RequestMapping(value="/login-failed",method=RequestMethod.GET)
-	public String getLoginFailedPage(ModelMap model)
-	{
-    	model.addAttribute("Success",true);
-		return "/index";
-	}
-	
+   	
     @RequestMapping(value={"/search"},method=RequestMethod.GET)
 	public String getSearch(ModelMap model)
 	{
