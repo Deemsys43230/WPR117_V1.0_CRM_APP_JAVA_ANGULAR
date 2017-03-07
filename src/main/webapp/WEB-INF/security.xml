@@ -130,21 +130,21 @@
 		</beans:constructor-arg>
 	</beans:bean>
 	
-<!-- Normal Form Login -->
-<http auto-config="true" use-expressions="true">
-		<!-- access denied page -->
-		<access-denied-handler error-page="/redirect" />
-		<form-login 
-		    login-page="/user-login" 
-		    default-target-url="/home"
-			authentication-failure-url="/login-failed" 
-			username-parameter="username"
-			password-parameter="password"
-			always-use-default-target="true" />
-		<session-management invalid-session-url="/logout" />
-		<logout logout-success-url="/logout" delete-cookies="JSESSIONID" invalidate-session="true"/>
-				<!-- enable csrf protection -->
-</http>
+	<!-- Normal Form Login -->
+	<http auto-config="true" use-expressions="true">
+			<!-- access denied page -->
+			<access-denied-handler error-page="/redirect" />
+			<form-login 
+			    login-page="/user-login" 
+			    default-target-url="/home"
+				authentication-failure-url="/login-failed?error=1" 
+				username-parameter="username"
+				password-parameter="password"
+				always-use-default-target="true" />
+			<session-management invalid-session-url="/logout" />
+			<logout logout-success-url="/logout" delete-cookies="JSESSIONID" invalidate-session="true"/>
+					<!-- enable csrf protection -->
+	</http>
 
 	<global-method-security
 		pre-post-annotations="enabled" proxy-target-class="true">

@@ -78,25 +78,21 @@
 				<p>To Upload Reports</p>
 						<h4>Sign In</h4>
 						<hr/>
+						<c:if test="${not empty param['error']}">
+		                            <div style="color:#FF0000;padding-left:20px;"><i class="fa fa-exclamation-triangle"></i>&nbsp;${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}<br/><br/></div>
+		                             </c:if>
 						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
                             <h5>Username<span class="text-red"><sup>*</sup></span></h5>
                                 <input type="text" name="username" placeholder="Username" id="username" maxlength="25">
                                 <div class="error-container" >
-                                 <div ng-show="submitted">
-	                          			<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please Enter First Name</span>
-	                          			<span ng-cloak ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please Enter Valid Name</span>
-	                              </div>
+                                 <span id="username_error"></span>
                               	</div>
                             	<h5>Password</span><span class="text-red"><sup>*</sup></span></h5>
                                 <input type="text" placeholder="Password" name="password" id="password">
                                 <div class="error-container" >
-                                 <div ng-show="submitted">
-	                          			<span ng-cloak ng-show="indexjobForm.lastName.$error.required">Please Enter Last Name</span>
-	                          			<span ng-cloak ng-show="!indexjobForm.lastName.$error.required&&indexjobForm.lastName.$error.validateName">Please Enter Valid Name</span>
-	                              </div>
+                                 <span id="password_error"></span>
                               	</div>                               
-                                <input type="submit" name="submit" value="Sign In" class="btn">
-                            	<div flash-message="2000" class="col-md-8 pull-right no-padding"></div>
+                                <input type="submit" name="submit" onclick="return checkValidation()" value="Sign In" class="btn">
                     	</form>
 			</div>
 		</div>
@@ -130,6 +126,33 @@
 		<ul><li><a href=""><i class="fa fa-angle-up"></i></a></li></ul>
 	</div>
 
+	
+	
+	<script>
+	function checkValidation(){
+		var username=document.getElementById("username").value;
+		var password=document.getElementById("password").value;
+	
+		document.getElementById("username_error").innerText="";
+		document.getElementById("password_error").innerText="";
+		
+		var error=false;
+		if(username==""){
+			error=true;
+			document.getElementById("username_error").innerText="Please Enter Username";
+		}
+		if(password==""){
+			error=true;
+			document.getElementById("password_error").innerText="Please Enter Password";
+		}
+		if(error){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	</script>
+	
 	
 	<!-- JS -->
 	<script type="text/javascript" src="resources/js/jquery.min.js"></script><!-- jQuery -->

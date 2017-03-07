@@ -37,22 +37,22 @@
 		                            <div style="color:#FF0000;padding-left:20px;"><i class="fa fa-exclamation-triangle"></i>&nbsp;${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}<br/><br/></div>
 		                             </c:if>
                  <form role="form" action="j_spring_security_check" method="post">
-                <div class="col-md-10 col-md-offset-1"><br/>
-                    <input class="form-control-login" placeholder="Username" name="username" id="username" autofocus>
-                    <div class="error-container" style="margin-top:-20px;">
-                    <span id="username_error"></span>
-                    </div>
-                </div>
-                <div class="col-md-10 col-md-offset-1">
-                <input type="password" class="form-control-login" placeholder="Password" name="password" id="password">
-                    <div class="error-container" style="margin-top:-20px;">
-                    <span id="password_error"></span>
-                    </div>
-                </div>
-                 <div class="col-md-10 col-md-offset-1">
-                <button type="submit" onclick="return checkValidation()" class="btn-readmore">Login</button>
-                    <a href="index" class="pull-right margin-top-25"><i class="fa fa-arrow-circle-left">&nbsp;&nbsp;</i>Go To Site Main Page</a>
-                </div>
+		                <div class="col-md-10 col-md-offset-1"><br/>
+		                    <input class="form-control-login" placeholder="Username" name="username" id="username" autofocus>
+		                    <div class="error-container" style="margin-top:-20px;">
+		                    <span id="username_error"></span>
+		                    </div>
+		                </div>
+		                <div class="col-md-10 col-md-offset-1">
+		                <input type="password" class="form-control-login" placeholder="Password" name="password" id="password">
+		                    <div class="error-container" style="margin-top:-20px;">
+		                    <span id="password_error"></span>
+		                    </div>
+		                </div>
+		                 <div class="col-md-10 col-md-offset-1">
+		                <button type="submit" onclick="return checkValidation()" class="btn-readmore">Login</button>
+		                    <a href="index" class="pull-right margin-top-25"><i class="fa fa-arrow-circle-left">&nbsp;&nbsp;</i>Go To Site Main Page</a>
+		                </div>
                 </form>
             </div>
         </div>
