@@ -16,7 +16,6 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
             return {
 
                 'request': function(request) {
-                    request.headers['X-CSRFToken']=$cookies.get('X-CSRFToken');
                     return request;
                 },
                 'response': function (response) {

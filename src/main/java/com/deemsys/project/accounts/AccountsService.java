@@ -155,6 +155,15 @@ public class AccountsService {
 		return 1;
 	}
 	
+	// Reset Password
+	public int resetPassword(String accountId)
+	{
+		Users users = usersDAO.getByAccountId(accountId);
+		users.setPassword(users.getPassword());
+		usersDAO.update(users);
+		return 1;
+	}
+	
 	
 	
 }

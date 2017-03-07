@@ -11,4 +11,6 @@ public interface CrashReportsDAO extends IGenericDAO<CrashReports>{
 	
 	public void saveCrashReports(CrashReports crashReports) throws Exception;
 	public CrashReportsSearchResultSet searchCrashReports(CrashReportSearchForm crashReportSearchForm);
+	public CrashReports getReportsByReportId(String reportId);
+	public void deleteCrashReports(CrashReports crashReports);
 }

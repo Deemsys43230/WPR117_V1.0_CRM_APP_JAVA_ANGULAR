@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
@@ -17,14 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  */
 @Controller
-@RequestMapping("/User")
 public class CrashReportsController {
 	
 	@Autowired
 	CrashReportsService crashReportsService;
 
     @RequestMapping(value="/getCrashReports",method=RequestMethod.GET)
-	public String getCrashReports(@RequestParam("id") Integer id,ModelMap model)
+	public String getCrashReports(@RequestParam("id") String id,ModelMap model)
 	{
     	model.addAttribute("crashReportsForm",crashReportsService.getCrashReports(id));
     	model.addAttribute("requestSuccess",true);
@@ -32,28 +32,51 @@ public class CrashReportsController {
 	}
 	
     
-    @RequestMapping(value="/mergeCrashReports",method=RequestMethod.POST)
-   	public String mergeCrashReports(@ModelAttribute("crashReportsForm") CrashReportsForm crashReportsForm,ModelMap model)
+    @RequestMapping(value="/User/mergeCrashReports",method=RequestMethod.POST)
+   	public String mergeCrashReports(@RequestBody CrashReportsForm crashReportsForm,ModelMap model)
    	{
     	crashReportsService.mergeCrashReports(crashReportsForm);
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}
     
-    @RequestMapping(value="/saveUpdateCrashReports",method=RequestMethod.POST)
-   	public String saveCrashReports(@ModelAttribute("crashReportsForm") CrashReportsForm crashReportsForm,ModelMap model)
+    @RequestMapping(value="/User/uploadCrashReports",method=RequestMethod.POST)
+   	public String uploadCrashReports(@RequestParam("crashReport") MultipartFile crashReport, @RequestParam("reportNumber") String reportNumber,ModelMap model)
+   	{
+    	try {
+			String reportId=crashReportsService.uploadCrashReport(crashReport, reportNumber);
+			model.addAttribute("reportId",reportId);
+			model.addAttribute("requestSuccess", true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			model.addAttribute("error", e.toString());
+			model.addAttribute("requestSuccess", false);
+		}
+		return "/returnPage";
+   	}
+    
+    @RequestMapping(value="/User/saveUpdateCrashReports",method=RequestMethod.POST)
+   	public String saveCrashReports(@RequestBody CrashReportsForm crashReportsForm, ModelMap model)
    	{
     	if(crashReportsForm.getReportId()==null)
-    		crashReportsService.saveCrashReports(crashReportsForm);
-    	else
+			try {
+				crashReportsService.saveCrashReports(crashReportsForm);
+				model.addAttribute("requestSuccess",true);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				model.addAttribute("error",e.toString());
+				model.addAttribute("requestSuccess",false);
+			}
+		else
     		crashReportsService.updateCrashReports(crashReportsForm);
-    	model.addAttribute("requestSuccess",true);
+    
    		return "/returnPage";
    	}
-   
     
-    @RequestMapping(value="/deleteCrashReports",method=RequestMethod.POST)
-   	public String deleteCrashReports(@RequestParam("id") Integer id,ModelMap model)
+    @RequestMapping(value="/User/deleteCrashReports",method=RequestMethod.POST)
+   	public String deleteCrashReports(@RequestParam("id") String id,ModelMap model)
    	{
     	
     	crashReportsService.deleteCrashReports(id);

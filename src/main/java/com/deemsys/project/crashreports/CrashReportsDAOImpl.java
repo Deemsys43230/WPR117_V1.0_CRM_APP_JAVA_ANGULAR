@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -38,9 +39,10 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	}
 
 	@Override
-	public void merge(CrashReports entity) {
+	public void merge(CrashReports crashReports) {
 		// TODO Auto-generated method stub
-		this.sessionFactory.getCurrentSession().merge(entity);
+		crashReports.setFileName(crashReports.getReportId()+"_"+crashReports.getReportNumber()+".pdf");
+		this.sessionFactory.getCurrentSession().merge(crashReports);
 	}	
 	
 	@Override
@@ -157,8 +159,13 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}
 		
 		if(!crashReportSearchForm.getCrashDate().equals("")){
-			Criterion crashDateCriterion = Restrictions.eq("crashDate", CRMConstants.convertYearFormat(crashReportSearchForm.getReportNumber()));
+			Criterion crashDateCriterion = Restrictions.eq("crashDate", CRMConstants.convertYearFormat(crashReportSearchForm.getCrashDate()));
 			criteria.add(crashDateCriterion);
+		}
+		
+		if(!crashReportSearchForm.getLocation().equals("")){
+			Criterion locationCriterion = Restrictions.eq("location", crashReportSearchForm.getLocation());
+			criteria.add(locationCriterion);
 		}
 		
 		if(!crashReportSearchForm.getAddedDate().equals("")){
@@ -167,16 +174,17 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}
 		
 		if(!crashReportSearchForm.getFirstName().equals("")){
-			Criterion firstNameCriterion = Restrictions.eq("o1.firstName", crashReportSearchForm.getFirstName());
+			Criterion firstNameCriterion = Restrictions.like("o1.id.firstName", crashReportSearchForm.getFirstName(),MatchMode.ANYWHERE);
 			criteria.add(firstNameCriterion);
 		}
 		
 		if(!crashReportSearchForm.getLastName().equals("")){
-			Criterion lastNameCriterion = Restrictions.eq("o1.lastName", crashReportSearchForm.getLastName());
+			Criterion lastNameCriterion = Restrictions.like("o1.id.lastName", crashReportSearchForm.getLastName(),MatchMode.ANYWHERE);
 			criteria.add(lastNameCriterion);
 		}
 		
-		criteria.add(Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId()));
+		if(!crashReportSearchForm.getAccountId().equals("0"))
+		  criteria.add(Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId()));
 		
 		ProjectionList projectionList = Projections.projectionList();
 		
@@ -188,8 +196,8 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("c1.fileName"),"fileName");
 		projectionList.add(Projections.property("c1.status"),"status");
 		
-		projectionList.add(Projections.property("o1.firstName"),"firstName");
-		projectionList.add(Projections.property("o1.lastName"),"lastName");
+		projectionList.add(Projections.property("o1.id.firstName"),"firstName");
+		projectionList.add(Projections.property("o1.id.lastName"),"lastName");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		
@@ -206,15 +214,27 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	public void saveCrashReports(CrashReports crashReports) throws Exception {
 		// TODO Auto-generated method stub
 		try{
-			String uuid=UUID.randomUUID().toString().replaceAll("-", "");
-			crashReports.setReportId(uuid);
-			crashReports.setFileName(uuid+"_"+crashReports.getReportNumber());
+			crashReports.setFileName(crashReports.getReportId()+"_"+crashReports.getReportNumber()+".pdf");
 			this.sessionFactory.getCurrentSession().save(crashReports);
 		}catch(Exception ex){
 			ex.printStackTrace();
 			throw ex;
 		}
 		
+	}
+
+	@Override
+	public CrashReports getReportsByReportId(String reportId) {
+		// TODO Auto-generated method stub
+		
+		return (CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.eq("reportId", reportId)).uniqueResult();
+	}
+
+	@Override
+	public void deleteCrashReports(CrashReports crashReports) {
+		// TODO Auto-generated method stub
+		this.sessionFactory.getCurrentSession().delete(crashReports);
+	
 	}
 
 	

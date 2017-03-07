@@ -1,11 +1,16 @@
 package com.deemsys.project.crashreports;
 
+import java.util.Date;
+
+import com.deemsys.project.common.CRMConstants;
+
 
 public class CrashReportSearchList {
 	
 	private String reportId;
 	private String reportNumber;
 	private String crashDate;
+	private String location;
 	private String addedDate;
 	private String addedDateTime;
 	private String firstName;
@@ -24,23 +29,29 @@ public class CrashReportSearchList {
 	public void setReportNumber(String reportNumber) {
 		this.reportNumber = reportNumber;
 	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
 	public String getCrashDate() {
 		return crashDate;
 	}
-	public void setCrashDate(String crashDate) {
-		this.crashDate = crashDate;
+	public void setCrashDate(Date crashDate) {
+		this.crashDate = CRMConstants.convertMonthFormat(crashDate);
 	}
 	public String getAddedDate() {
 		return addedDate;
 	}
-	public void setAddedDate(String addedDate) {
-		this.addedDate = addedDate;
+	public void setAddedDate(Date addedDate) {
+		this.addedDate = CRMConstants.convertMonthFormat(addedDate);
 	}
 	public String getAddedDateTime() {
 		return addedDateTime;
 	}
-	public void setAddedDateTime(String addedDateTime) {
-		this.addedDateTime = addedDateTime;
+	public void setAddedDateTime(Date addedDateTime) {
+		this.addedDateTime = CRMConstants.convertUSAFormatWithTime(addedDateTime);
 	}
 	public String getFirstName() {
 		return firstName;
@@ -67,12 +78,13 @@ public class CrashReportSearchList {
 		this.fileName = fileName;
 	}
 	public CrashReportSearchList(String reportId, String reportNumber,
-			String crashDate, String addedDate, String addedDateTime,
+			String crashDate, String location, String addedDate, String addedDateTime,
 			String firstName, String lastName, Integer status, String fileName) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
+		this.location = location;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
 		this.firstName = firstName;

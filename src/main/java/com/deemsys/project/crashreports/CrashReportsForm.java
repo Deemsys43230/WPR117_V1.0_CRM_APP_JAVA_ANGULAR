@@ -21,6 +21,8 @@ public class CrashReportsForm {
 	private String reportNumber;
 	private String crashDate;
 	private MultipartFile crashReport;
+	private String location;
+	private String fileName;
 	private String addedDate;
 	private String addedDateTime;
 	private Integer status;
@@ -58,6 +60,14 @@ public class CrashReportsForm {
 		this.crashReport = crashReport;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	public String getAddedDate() {
 		return addedDate;
 	}
@@ -90,15 +100,24 @@ public class CrashReportsForm {
 		this.occupantsForms = occupantsForms;
 	}
 
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public CrashReportsForm(String reportId, String reportNumber,
-			String crashDate, MultipartFile crashReport, String addedDate,
+			String crashDate, String location, String fileName, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
-		this.crashReport = crashReport;
+		this.location = location;
+		this.fileName = fileName;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
 		this.status = status;

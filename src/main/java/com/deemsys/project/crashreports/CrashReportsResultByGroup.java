@@ -11,6 +11,7 @@ public class CrashReportsResultByGroup {
 	private String reportId;
 	private String reportNumber;
 	private String crashDate;
+	private String location;
 	private String addedDate;
 	private String addedDateTime;
 	private Integer status;
@@ -33,6 +34,14 @@ public class CrashReportsResultByGroup {
 		this.reportNumber = reportNumber;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	public String getCrashDate() {
 		return crashDate;
 	}
@@ -45,16 +54,16 @@ public class CrashReportsResultByGroup {
 		return addedDate;
 	}
 
-	public void setAddedDate(Date addedDate) {
-		this.addedDate = CRMConstants.convertMonthFormat(addedDate);
+	public void setAddedDate(String addedDate) {
+		this.addedDate = addedDate;
 	}
 
 	public String getAddedDateTime() {
 		return addedDateTime;
 	}
 
-	public void setAddedDateTime(Date addedDateTime) {
-		this.addedDateTime = CRMConstants.convertUSAFormatWithTime(addedDateTime);
+	public void setAddedDateTime(String addedDateTime) {
+		this.addedDateTime = addedDateTime;
 	}
 
 	public Integer getStatus() {
@@ -82,7 +91,7 @@ public class CrashReportsResultByGroup {
 	}
 
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
-			String crashDate, String addedDate, String addedDateTime,
+			String crashDate, String location, String addedDate, String addedDateTime,
 			Integer status, String fileName, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;

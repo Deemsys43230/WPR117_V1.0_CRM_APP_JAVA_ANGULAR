@@ -77,4 +77,13 @@ public class AccountsController {
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}
+    
+    @RequestMapping(value="/resetAccount",method=RequestMethod.POST)
+   	public String resetPassword(@RequestParam("id") String id,ModelMap model)
+   	{
+    	
+    	accountsService.resetPassword(id);
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
 }

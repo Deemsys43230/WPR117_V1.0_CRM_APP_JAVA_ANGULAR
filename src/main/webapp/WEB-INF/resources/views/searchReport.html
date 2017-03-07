@@ -2,93 +2,59 @@
 <!-- SERVICES -->
 <section id="services">
 	<div class="container" style="width:90%;">
-		<div class="col-md-12 search-form" ng-hide="showResult">
+		<div class="col-md-12 search-form">
 			<div class="col-md-4" style="background-color: #f2f2f2;padding:20px;">
 				<h4>Search Crash Reports</h4>
 				<hr />
-				<form class="contact-form" name="indexjobForm"
-					ng-submit="indexjobForm.$valid && saveJobSeeker()" novalidate>
+				<form class="contact-form" name="reportSearchForm"
+					ng-submit="reportSearchForm.$valid && searchCrashReports()" novalidate>
 					<h5>
 						Crash Date<span class="text-red"><sup>*</sup></span>
 					</h5>
-					<input type="text" name="firstName"
-						ng-model="indexJobSeekerForm.firstName" required validate-name
+					<input type="text" name="crashDate"
+						ng-model="crashReportSearchForm.crashDate" required
 						placeholder="Crash Date" maxlength="25">
 					<div class="error-container">
 						<div ng-show="submitted">
-							<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please
-								Enter First Name</span> <span ng-cloak
-								ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please
-								Enter Valid Name</span>
+							<span ng-cloak ng-show="reportSearchForm.crashDate.$error.required">Please
+								Enter Crash Date</span>
 						</div>
 					</div>					
 					<hr />
 					<h5>
 						Report Number
 					</h5>
-					<input type="text" name="firstName"
-						ng-model="indexJobSeekerForm.firstName" required validate-name
+					<input type="text" name="reportNumber"
+						ng-model="crashReportSearchForm.reportNumber"
 						placeholder="Report Number" maxlength="25">
-					<div class="error-container">
-						<div ng-show="submitted">
-							<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please
-								Enter First Name</span> <span ng-cloak
-								ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please
-								Enter Valid Name</span>
-						</div>
-					</div>
 					<h5>
 						Location
 					</h5>
 					<input type="text" name="location"
-						ng-model="indexJobSeekerForm.location" required validate-name
+						ng-model="crashReportSearchForm.location"
 						placeholder="Location" maxlength="25">
-					<div class="error-container">
-						<div ng-show="submitted">
-							<span ng-cloak ng-show="indexjobForm.location.$error.required">Please
-								Enter Last Name</span> <span ng-cloak
-								ng-show="!indexjobForm.lastName.$error.required&&indexjobForm.lastName.$error.validateName">Please
-								Enter Valid Name</span>
-						</div>
-					</div>
 					<h5>
 						First Name
 					</h5>
 					<input type="text" name="firstName"
-						ng-model="indexJobSeekerForm.firstName" required validate-name
+						ng-model="crashReportSearchForm.firstName"
 						placeholder="First Name" maxlength="25">
-					<div class="error-container">
-						<div ng-show="submitted">
-							<span ng-cloak ng-show="indexjobForm.firstName.$error.required">Please
-								Enter First Name</span> <span ng-cloak
-								ng-show="!indexjobForm.firstName.$error.required&&indexjobForm.firstName.$error.validateName">Please
-								Enter Valid Name</span>
-						</div>
-					</div>
 					<h5>
 						Last Name
 					</h5>
 					<input type="text" name="lastName"
-						ng-model="indexJobSeekerForm.lastName" required validate-name
+						ng-model="crashReportSearchForm.lastName"
 						placeholder="Last Name" maxlength="25">
-					<div class="error-container">
-						<div ng-show="submitted">
-							<span ng-cloak ng-show="indexjobForm.lastName.$error.required">Please
-								Enter Last Name</span> <span ng-cloak
-								ng-show="!indexjobForm.lastName.$error.required&&indexjobForm.lastName.$error.validateName">Please
-								Enter Valid Name</span>
-						</div>
-					</div>
 					<hr />
 					
 					<div class="text-center">
-						<button class="btn btn-lg btn-primary" ng-click="showResult=true;">Search
-							Report</button>
+						<input type="submit" class="btn btn-lg btn-primary" ng-click="submitted=true;" value="Search Report" />
 					</div>
 					<div flash-message="2000" class="col-md-8 pull-right no-padding"></div>
 				</form>
 			</div>
 			<div class="col-md-8">
+			<span class="pull-right"><a href="/CRM/" class="btn btn-danger"><i class="fa fa-reply"></i> Back to Home</a></span>
 			<h4>Search Results</h4>
 			<hr/>
 				<table class="table table-striped">
@@ -100,91 +66,40 @@
 							<th>Actions</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
+					<tbody ng-init="count=0">
+						<tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult">
+							
 						</tr>	
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
+						<tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
+							<th scope="row">{{$index+1}}</th>
+							<td>{{occupants.firstName}}</td>
+							<td>{{occupants.lastName}}</td>
 							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
 						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
+						<tr ng-repeat-end=""></tr>
+						<tr ng-show="totalRecords==0">
+							<td colspan="12"><center>
+							<strong>No Records Found!!!</strong>
+						</center></td>
 						</tr>
 						
 					</tbody>
 				</table>
-				<div class="container">                 
-				  <ul class="pagination">
-					  <li><a href="#">1</a></li>
-					  <li class="active"><a href="#">2</a></li>
-					  <li><a href="#">3</a></li>
-					  <li><a href="#">4</a></li>
-					  <li><a href="#">5</a></li>
-				 </ul>
-				</div>
+				<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
+    					</dir-pagination-controls>
+    				<div class="col-md-12">
+    					<div class="col-md-3 pull-right no-padding">
+    					<label>Number of Records</label>
+	<select class="form-control input-sm" ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows" id="noOfRows">
+		<option value="5">Show 5 Per Page</option>
+		<option value="10">Show 10 Per Page</option>
+		<option value="25">Show 25 Per Page</option>
+		<option value="50">Show 50 Per Page</option>
+		<option value="100">Show 100 Per Page</option>
+		<option value="250">Show 250 Per Page</option>
+	</select>
+			</div>
+    				</div>
 			</div>
 		</div>
 

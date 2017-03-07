@@ -142,6 +142,15 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 		return this.sessionFactory.getCurrentSession().createCriteria(Occupants.class).add(Restrictions.eq("id.reportId", reportId)).list();
 	}
 
+	@Override
+	public void deleteOccupantsByReportId(String reportId) {
+		// TODO Auto-generated method stub
+		List<Occupants> occupants=this.getOccupantsByReportId(reportId);
+		for (Occupants occupant : occupants) {
+			this.sessionFactory.getCurrentSession().delete(occupant);
+		}
+	}
+
 	
 
 }

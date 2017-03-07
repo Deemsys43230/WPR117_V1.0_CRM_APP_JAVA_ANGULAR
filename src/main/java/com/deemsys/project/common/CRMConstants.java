@@ -1,10 +1,22 @@
 package com.deemsys.project.common;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
 public class CRMConstants {
+	
+	@Autowired
+	CRMProperties crmProperties;
 	
 	public static Integer CRM_ADMIN_ROLE_ID=1;
 	public static Integer CRM_USER_ROLE_ID=2;
@@ -118,4 +130,34 @@ public class CRMConstants {
 
 		return convertedDateTime;
 	}
+	
+	// Upload PDF Files In Temp Folder
+	public static void uploadPDFFiles(MultipartFile pdffile,String filePath) throws IOException{
+		
+		InputStream inputStream=null;
+		try {
+			
+			byte[] bytes = pdffile.getBytes();
+			inputStream = new ByteArrayInputStream(bytes);
+		 BufferedOutputStream bostream =
+                 new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+		 int read=0;
+		 while((read=inputStream.read(bytes))!=-1){
+			 bostream.write(bytes,0,read);
+		 }
+		 bostream.flush();
+		 bostream.close();
+		}catch(IOException e){
+			throw e;
+		}
+	}
+	
+	public static File saveTemporaryFile(MultipartFile file,String filePath) throws IllegalStateException, IOException{
+		//create a temp file
+		File convFile = new File(filePath);
+		file.transferTo(convFile);
+        return convFile;
+		
+	}
+
 }

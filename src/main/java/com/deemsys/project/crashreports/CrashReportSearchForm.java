@@ -5,6 +5,7 @@ public class CrashReportSearchForm {
 	private String accountId;
 	private String reportNumber;
 	private String crashDate;
+	private String location;
 	private String addedDate;
 	private String firstName;
 	private String lastName;
@@ -28,6 +29,12 @@ public class CrashReportSearchForm {
 	}
 	public void setCrashDate(String crashDate) {
 		this.crashDate = crashDate;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	public String getAddedDate() {
 		return addedDate;
@@ -59,12 +66,13 @@ public class CrashReportSearchForm {
 	public void setItemsPerPage(Integer itemsPerPage) {
 		this.itemsPerPage = itemsPerPage;
 	}
-	public CrashReportSearchForm(String accountId,String reportNumber, String crashDate,
+	public CrashReportSearchForm(String accountId,String reportNumber, String crashDate, String location,
 			String addedDate, String firstName, String lastName,Integer pageNumber,Integer itemsPerPage) {
 		super();
 		this.accountId = accountId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
+		this.location = location;
 		this.addedDate = addedDate;
 		this.firstName = firstName;
 		this.lastName = lastName;
