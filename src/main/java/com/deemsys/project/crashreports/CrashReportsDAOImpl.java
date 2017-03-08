@@ -191,6 +191,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("c1.reportId"),"reportId");
 		projectionList.add(Projections.property("c1.reportNumber"),"reportNumber");
 		projectionList.add(Projections.property("c1.crashDate"),"crashDate");
+		projectionList.add(Projections.property("c1.location"),"location");
 		projectionList.add(Projections.property("c1.addedDate"),"addedDate");
 		projectionList.add(Projections.property("c1.addedDateTime"),"addedDateTime");
 		projectionList.add(Projections.property("c1.fileName"),"fileName");

@@ -2,6 +2,8 @@
 package com.deemsys.project.crashreports;
 
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -92,4 +94,19 @@ public class CrashReportsController {
    		return "/returnPage";
    	}
 	
+    @RequestMapping(value="/saveIPAddressOfClientMachine",method=RequestMethod.POST)
+   	public String saveIPAddressOfClientMachine(@RequestParam("reportId") String reportId,ModelMap model,HttpServletRequest request)
+   	{
+    	String ipAddress=request.getHeader("X-FORWARDED-FOR");
+    	if(ipAddress==null){
+    		ipAddress=request.getRemoteAddr();
+    	}
+    	System.out.println("IpAddress"+ipAddress);
+    	System.out.println("host"+request.getRemoteHost());
+    	model.addAttribute("IpAddress", ipAddress);
+    	model.addAttribute("host", request.getRemoteHost());
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
+    
 }

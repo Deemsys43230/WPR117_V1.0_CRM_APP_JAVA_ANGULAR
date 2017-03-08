@@ -1,9 +1,11 @@
-
+<link rel="stylesheet" href="resources/angular/components/datetime/datetimepicker.css"></link>
+<script src="resources/angular/components/datetime/datetimepicker.js"></script>
+<script src="resources/angular/components/datetime/moment.js"></script>
 <!-- SERVICES -->
 <section id="services">
 	<div class="container" style="width:90%;">
 		<div class="col-md-12 search-form">
-			<div class="col-md-4" style="background-color: #f2f2f2;padding:20px;">
+			<div class="col-md-3" style="background-color: #f2f2f2;padding:20px;">
 				<h4>Search Crash Reports</h4>
 				<hr />
 				<form class="contact-form" name="reportSearchForm"
@@ -11,9 +13,12 @@
 					<h5>
 						Crash Date<span class="text-red"><sup>*</sup></span>
 					</h5>
-					<input type="text" name="crashDate"
+					<div class="input-group">
+					<input type="text" name="crashDate" id="crashDate"
 						ng-model="crashReportSearchForm.crashDate" required
-						placeholder="Crash Date" maxlength="25">
+						placeholder="Crash Date"> 
+					<span class="input-group-addon white-color-bg"> <span class="fa fa-calendar"></span></span>
+					</div>
 					<div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="reportSearchForm.crashDate.$error.required">Please
@@ -53,16 +58,17 @@
 					<div flash-message="2000" class="col-md-8 pull-right no-padding"></div>
 				</form>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 			<span class="pull-right"><a href="/CRM/" class="btn btn-danger"><i class="fa fa-reply"></i> Back to Home</a></span>
 			<h4>Search Results</h4>
 			<hr/>
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>#</th>
+							<th>Report #</th>
 							<th>First Name</th>
 							<th>Last Name</th>
+							<th>Location</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -71,10 +77,11 @@
 							
 						</tr>	
 						<tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
-							<th scope="row">{{$index+1}}</th>
+							<th scope="row">{{resultData.reportNumber}}</th>
 							<td>{{occupants.firstName}}</td>
 							<td>{{occupants.lastName}}</td>
-							<td><a href="">View</a>&nbsp;&nbsp;<a href="">Download</a></td>
+							<td>{{resultData.location}}</td>
+							<td><a href="" ng-click="viewReport(resultData.reportId,resultData.reportNumber,occupants.firstName,occupants.lastName,resultData.location,resultData.fileName)">Select</a></td>
 						</tr>
 						<tr ng-repeat-end=""></tr>
 						<tr ng-show="totalRecords==0">
@@ -87,33 +94,79 @@
 				</table>
 				<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
     					</dir-pagination-controls>
-    				<div class="col-md-12">
-    					<div class="col-md-3 pull-right no-padding">
-    					<label>Number of Records</label>
-	<select class="form-control input-sm" ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows" id="noOfRows">
-		<option value="5">Show 5 Per Page</option>
-		<option value="10">Show 10 Per Page</option>
-		<option value="25">Show 25 Per Page</option>
-		<option value="50">Show 50 Per Page</option>
-		<option value="100">Show 100 Per Page</option>
-		<option value="250">Show 250 Per Page</option>
-	</select>
-			</div>
-    				</div>
-			</div>
-		</div>
-
-		<div class="col-md-12 login-form" style="min-height: 500px;"
-			ng-show="showResult">
-			<div class="col-md-12">
-				<h4>Search Result</h4>
-				<div class="text-center">
-					<button class="btn btn-sm" ng-click="showResult=false;">Back
-						to Search</button>
+				<div class="col-md-12">
+					<div class="col-md-3 pull-right no-padding">
+						<label>Number of Records</label> <select
+							class="form-control input-sm"
+							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
+							id="noOfRows">
+							<option value="5">Show 5 Per Page</option>
+							<option value="10">Show 10 Per Page</option>
+							<option value="25">Show 25 Per Page</option>
+							<option value="50">Show 50 Per Page</option>
+							<option value="100">Show 100 Per Page</option>
+							<option value="250">Show 250 Per Page</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-12" style="border:2px solid red;margin-top:30px;text-align: center;padding:10px;" ng-show="isAccessable==0">
+					<span><i class="fa fa-exclamation-triangle"></i> Your limit is exceed. So you can access reports after 24 hours only.</span>
 				</div>
 			</div>
 		</div>
 
+	<!-- 	<div class="col-md-12 login-form" style="min-height: 500px;"
+			ng-show="showResult">
+			<div class="col-md-12">
+				<span class="pull-right"><a href="" class="btn btn-primary" ng-click="showResult=false;"><i class="fa fa-reply"></i> Back to Search</a></span>
+				<h4>View Report</h4>
+				<hr/>
+				<div class="text-center">
+					<object data='http://cdn.crashreportsonline.com/crashreports/ec06d021-492e-4b4d-beff-6c6fe7b6a2c0_5956223.pdf' type='application/pdf' width='100%' height='700px'></object>
+				</div>
+			</div>
+		</div> -->
+
 	</div>
 </section>
+<div class="modal fade" id="viewReportConfirmationModal" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+          		<h4 class="modal-title">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-stripped table-bordered">
+					<tbody>
+						<tr>
+						<td>Report #</td><td>{{reportNumber}}</td>
+						</tr>
+						<tr>
+						<td>First Name</td><td>{{firstName}}</td>
+						</tr>
+						<tr>
+						<td>Last Name</td><td>{{lastName}}</td>
+						</tr>
+						<tr>
+						<td>Location</td><td>{{location}}</td>
+						</tr>
+					</tbody>
+				</table>
+				Do you want to view or download reports?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" ng-click="openReport()">Yes</button>
+				<button type="close" class="btn btn-danger" data-dismiss="modal">No</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- /SERVICES -->
+<script>
+$('#crashDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+	maxDate : new Date()
+})
+</script>

@@ -114,7 +114,8 @@
 	<script type="text/javascript" src="resources/js/jquery.isotope.min.js"></script><!-- isotope -->
 	<script type="text/javascript" src="resources/js/jquery.magnific-popup.min.js"></script><!-- magnific-popup -->
 	<script type="text/javascript" src="resources/js/scripts.js"></script><!-- Scripts -->
-	
+	<!-- For Date Picker -->
+	<script src="resources/angular/components/datetime/moment.js"></script>
 	<!-- Directive -->
 	<script type="text/javascript" src="resources/scripts/directives/fileUpload.js"></script>
     <script src="resources/angular/angular-flash/angular-flash.min.js"></script>

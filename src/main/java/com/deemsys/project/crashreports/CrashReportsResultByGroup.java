@@ -97,6 +97,7 @@ public class CrashReportsResultByGroup {
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
+		this.location = location;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
 		this.status = status;
