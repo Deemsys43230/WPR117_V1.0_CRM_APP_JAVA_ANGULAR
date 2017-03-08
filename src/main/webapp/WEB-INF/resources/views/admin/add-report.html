@@ -58,10 +58,10 @@
 			      </div>
 				    </div>
 				    <h4><u>Occupants List</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-			    <div class="form-group" ng-repeat="occupant in report.occupants">
+			    <div class="form-group" ng-repeat="occupant in report.occupantsForms">
 			      <label class="control-label col-sm-2">First Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.firstname" placeholder="Enter First Name" name="firstName{{$index}}" required>
+			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName{{$index}}" required>
 			        <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.firstName{{$index}}.$error.required">Please
@@ -71,7 +71,7 @@
 			      </div>
 			      <label class="control-label col-sm-2">Last Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.lastname" placeholder="Enter Last Name" name="lastName{{$index}}" required>
+			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName{{$index}}" required>
 			        <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.lastName{{$index}}.$error.required">Please
@@ -79,13 +79,13 @@
 						</div>
 					</div>	
 			      </div>
-			      <div class="col-sm-2"><a href="" ng-click="removeOccupant($index)">Remove</a></div>
+			      <div class="col-sm-2"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
 			    </div>
 			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
 			  
 			  	 <div class="form-group">  
 			  	  <div class="col-sm-offset-2 col-sm-10">
-			        <button type="submit" class="btn btn-send" ng-click="submitted=true">Submit</button>
+			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
 			        <button type="button" class="btn btn-default">Reset</button>
 			      </div>
 			    </div>

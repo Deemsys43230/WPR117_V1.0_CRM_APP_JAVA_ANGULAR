@@ -6,32 +6,39 @@ var adminApp = angular.module('adminApp',['flash','requestModule']);
 
 
 //Add Reports Controller
-adminApp.controller('AddReportsController',['$scope','$http','requestHandler',function($scope,$http,requestHandler){
+adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$location','Flash',function($scope,$http,requestHandler,$location,Flash){
+	$scope.reportSave=false;
+	$scope.buttonText="Submit";
 	$scope.report={
 			"crashDate":"",
 			"reportNumber":"",
 			"location":"",
 			"fileName":"",
-			"occupants":[{"firstname":"","lastname":"","status":1},{"firstname":"","lastname":"","status":1},{"firstname":"","lastname":"","status":1}]
+			"occupantsForms":[{"firstName":"","lastName":"","status":1},{"firstName":"","lastName":"","status":1},{"firstName":"","lastName":"","status":1}]
 	};
 	
 	//Add Occupant
 	$scope.addOccupant=function(){
-		$scope.newOccupant={"firstname":"","lastname":"","status":1};
-		$scope.report.occupants.push($scope.newOccupant);
+		$scope.newOccupant={"firstName":"","lastName":"","status":1};
+		$scope.report.occupantsForms.push($scope.newOccupant);
 	};
 	
 	// Remove Occupant
 	$scope.removeOccupant=function(index){
-		$scope.report.occupants.splice(index,1);
+		$scope.report.occupantsForms.splice(index,1);
 	};
 	
 	// Save Crash Reports
 	$scope.saveCrashReport=function(){
-		requestHandler.postFileUpload("User/uploadCrashReports.json",$scope.crashReportFile,"crashReport").then(function(response){
+		$scope.reportSave=true;
+		$scope.buttonText="Submiting....";
+		requestHandler.postFileUpdate("User/uploadCrashReports.json",$scope.crashReportFile,"crashReport",$scope.report.reportNumber,"reportNumber").then(function(response){
 			$scope.report.reportId=response.data.reportId;
 			requestHandler.postRequest("User/mergeCrashReports.json",$scope.report).then(function(response){
-				console.log(reponse);
+				$scope.reportSave=false;
+				$scope.buttonText="Submit";
+				successMessage(Flash,"Successfully Added");
+				$location.path('/reports');
 			});
 		});
 	};

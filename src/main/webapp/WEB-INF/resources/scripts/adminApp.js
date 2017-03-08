@@ -83,3 +83,18 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                 redirectTo: '/reports'
             });
     }]);
+
+//To Display success message
+//For User Messages
+function successMessage(Flash, message) {
+  Flash.dismiss();
+  Flash.create('success', message, 'alert');
+  $('html, body').animate({ scrollTop: 0 }, 600);
+  return false;
+}
+function errorMessage(Flash, message) {
+  Flash.dismiss();
+  Flash.create('danger', message, 'custom-class');
+  $('html, body').animate({ scrollTop: 0 }, 600);
+  return false;
+}
