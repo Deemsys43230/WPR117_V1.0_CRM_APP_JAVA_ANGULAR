@@ -6,50 +6,87 @@
 		<h3>Add Reports<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
 	<hr/>
 	<div class="container">
-			  <form class="form-horizontal">
+			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Crash Date:</label>
 			      <div class="col-sm-4">
-			        <input type="text" class="form-control" ng-model="report.crashDate" placeholder="Enter Crash Date">
+			        <input type="text" class="form-control" ng-model="report.crashDate" placeholder="Enter Crash Date" name="crashDate" required>
+			        <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="addCrashReportForm.crashDate.$error.required">Please
+								Enter Crash Date</span>
+						</div>
+					</div>	
 			      </div>
 			    </div>
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Report Number:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number">
+			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" required>
+			      	 <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
+								Enter Report Number</span>
+						</div>
+					</div>	
 			      </div>
 			    </div>
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Location:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location">
+			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" required>
+			         <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="addCrashReportForm.location.$error.required">Please
+								Enter Location</span>
+						</div>
+					</div>	
 			      </div>
 			    </div>
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Upload Report:</label>
 			      <div class="col-sm-4">          
-			        <input type="file" class="form-control">
+			        <input type="file" class="form-control" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" required>
+			      	 <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="addCrashReportForm.crashReportFile.$error.required">Please
+								Select Report</span>
+								<span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&addCrashReportForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
+	                            <span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&!addCrashReportForm.crashReportFile.$error.validateFileType&&addCrashReportForm.crashReportFile.$error.validateFileSize">File should be less than 10 MB</span>
+						</div>
+					</div>	
 			      </div>
 				    </div>
-				    <hr/>
-				    <h4>Occupants List&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size:14px;" href="" ng-click="addOccupant();">Add One More Occupant</a></h4>
-				    <hr/>
-			    <div class="form-group" ng-repeat="occupant in report.occupants" ng-if="occupant.isRemoved==0">
+				    <h4><u>Occupants List</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+			    <div class="form-group" ng-repeat="occupant in report.occupants">
 			      <label class="control-label col-sm-2">First Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.firstname" placeholder="Enter First Name">
+			        <input type="text" class="form-control" ng-model="occupant.firstname" placeholder="Enter First Name" name="firstName{{$index}}" required>
+			        <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="addCrashReportForm.firstName{{$index}}.$error.required">Please
+								Enter First Name</span>
+						</div>
+					</div>	
 			      </div>
 			      <label class="control-label col-sm-2">Last Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.lastname" placeholder="Enter Last Name">
+			        <input type="text" class="form-control" ng-model="occupant.lastname" placeholder="Enter Last Name" name="lastName{{$index}}" required>
+			        <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="addCrashReportForm.lastName{{$index}}.$error.required">Please
+								Enter Last Name</span>
+						</div>
+					</div>	
 			      </div>
-			      <div class="col-sm-2"><a href="" ng-click="occupant.isRemoved=1">Remove</a></div>
+			      <div class="col-sm-2"><a href="" ng-click="removeOccupant($index)">Remove</a></div>
 			    </div>
-			    <hr/>
-			    <div class="form-group">        
-			      <div class="col-sm-offset-2 col-sm-10">
-			        <button type="submit" class="btn btn-send">Submit</button>
-			        <button type="submit" class="btn btn-default">Reset</button>
+			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
+			  
+			  	 <div class="form-group">  
+			  	  <div class="col-sm-offset-2 col-sm-10">
+			        <button type="submit" class="btn btn-send" ng-click="submitted=true">Submit</button>
+			        <button type="button" class="btn btn-default">Reset</button>
 			      </div>
 			    </div>
 			  </form>

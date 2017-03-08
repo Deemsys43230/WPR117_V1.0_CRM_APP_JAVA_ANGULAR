@@ -1,6 +1,6 @@
 
 //File Upload Directive
-angular.module('commonApp').directive('fileModel', ['$parse', function ($parse) {
+angular.module('adminApp').directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -16,7 +16,7 @@ angular.module('commonApp').directive('fileModel', ['$parse', function ($parse) 
 }]);
 
 //File Required Validation Directive
-angular.module('commonApp').directive('validFile',function(){
+angular.module('adminApp').directive('validFile',function(){
 	  return {
 	    require:'ngModel',
 	    link:function(scope,el,attrs,ngModel){
@@ -32,8 +32,8 @@ angular.module('commonApp').directive('validFile',function(){
 });
 
 //File Type Validation Directive
-angular.module('commonApp').directive('validateFileType',function(){
-	var validFormats=['pdf','docx','doc','rtf'];
+angular.module('adminApp').directive('validateFileType',function(){
+	var validFormats=['pdf'];
 	  return {
 	    require:'ngModel',
 	    link:function(scope,el,attrs,ngModel){
@@ -46,7 +46,7 @@ angular.module('commonApp').directive('validateFileType',function(){
 	          };
 	          
 	          ngModel.$validators.validateFileSize=function(){
-	        	  return fileSize<5000000;
+	        	  return fileSize<10000000;
 	          };
 	      });
 	    }

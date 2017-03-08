@@ -1,4 +1,4 @@
-var adminApp= angular.module('adminApp', ['ngRoute','oc.lazyLoad','ngCookies','requestModule','flash','ngAnimate']);
+var adminApp= angular.module('adminApp', ['ngRoute','oc.lazyLoad','ngCookies','requestModule','flash','ngAnimate','angularUtils.directives.dirPagination']);
 
 adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
@@ -55,7 +55,8 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                         return $ocLazyLoad.load({
                             name:'adminApp',
                             files:[
-                                'resources/scripts/controllers/reportsController.js'
+                                'resources/scripts/controllers/reportsController.js',
+                                'resources/scripts/directives/fileUpload.js',
                             ]
                         });
                     }]

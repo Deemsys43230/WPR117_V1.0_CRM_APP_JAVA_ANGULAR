@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="resources/angular/components/datetime/datetimepicker.css"></link>
+<script src="resources/angular/components/datetime/datetimepicker.js"></script>
+<script src="resources/angular/components/datetime/moment.js"></script>
 <section id="services">
 	<div class="container" style="width:90%;">
 		<div class="col-md-12  white-form">
@@ -7,27 +10,32 @@
 		<form>
 			  <div class="form-group col-md-2">
 			    <label for="carshDate">Crash Date:</label>
-			    <input type="text" class="form-control" id="carshDate">
+			    <div class="input-group">
+					<input type="text" name="crashDate" id="crashDate" class="form-control"
+						ng-model="crashReportSearchForm.crashDate"
+						placeholder="Crash Date"> 
+					<span class="input-group-addon white-color-bg"> <span class="fa fa-calendar"></span></span>
+					</div>
 			  </div>
 			  <div class="form-group col-md-2">
 			    <label for="reportNumber">Report Number:</label>
-			    <input type="text" class="form-control" id="reportNumber">
+			    <input type="text" class="form-control" id="reportNumber" ng-model="crashReportSearchForm.reportNumber">
 			  </div>
 			  <div class="form-group col-md-2">
-			    <label for="carshDate">Crash Date:</label>
-			    <input type="text" class="form-control" id="carshDate">
+			    <label for="carshDate">First Name:</label>
+			    <input type="text" class="form-control" id="firstName" ng-model="crashReportSearchForm.firstName">
 			  </div>
 			  <div class="form-group col-md-2">
-			    <label for="reportNumber">Report Number:</label>
-			    <input type="text" class="form-control" id="reportNumber">
+			    <label for="reportNumber">Last Name:</label>
+			    <input type="text" class="form-control" id="lastName" ng-model="crashReportSearchForm.lastName">
 			  </div>
 			  <div class="form-group col-md-2">
-			    <label for="carshDate">Crash Date:</label>
-			    <input type="text" class="form-control" id="carshDate">
+			    <label for="carshDate">Location:</label>
+			    <input type="text" class="form-control" id="location" ng-model="crashReportSearchForm.location">
 			  </div>
 			  <div class="form-group col-md-2">
-			    <button type="submit" class="btn btn-send" style="margin-top:32px;">Search</button>
-			    <button type="submit" class="btn btn-default" style="margin-top:32px;">Reset</button>
+			    <button type="button" class="btn btn-send" style="margin-top:32px;" ng-click="getCrashReportsList()">Search</button>
+			    <button type="button" class="btn btn-default" style="margin-top:32px;" ng-click="resetSearch()">Reset</button>
 			  </div>
 		</form>
 		</div>
@@ -43,111 +51,47 @@
 		            </tr>
 		        </thead>
 		        <tbody>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>1</td>
-		                <td>John</td>
-		                <td>Carter</td>
-		                <td>johncarter@mail.com</td>
+		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult">
+		            	
+		            </tr>
+		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
+		            	<td>{{resultData.crashDate}}</td>
+		                <td>{{resultData.reportNumber}}</td>
+		                <td>{{occupants.firstName}}</td>
+		                <td>{{occupants.lastName}}</td>
+		                <td>{{resultData.location}}</td>
 		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
 		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>2</td>
-		                <td>Peter</td>
-		                <td>Parker</td>
-		                <td>peterparker@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>3</td>
-		                <td>John</td>
-		                <td>Rambo</td>
-		                <td>johnrambo@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>4</td>
-		                <td>John</td>
-		                <td>Carter</td>
-		                <td>johncarter@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>5</td>
-		                <td>Peter</td>
-		                <td>Parker</td>
-		                <td>peterparker@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>6</td>
-		                <td>John</td>
-		                <td>Rambo</td>
-		                <td>johnrambo@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>1</td>
-		                <td>John</td>
-		                <td>Carter</td>
-		                <td>johncarter@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>2</td>
-		                <td>Peter</td>
-		                <td>Parker</td>
-		                <td>peterparker@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		              	<td>3</td>
-		                <td>John</td>
-		                <td>Rambo</td>
-		                <td>johnrambo@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>
-		                <td>4</td>
-		                <td>John</td>
-		                <td>Carter</td>
-		                <td>johncarter@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>		                
-		                <td>5</td>
-		                <td>Peter</td>
-		                <td>Parker</td>
-		                <td>peterparker@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
-		            <tr>
-		            	<td>02/10/2017</td>		                
-		                <td>6</td>
-		                <td>John</td>
-		                <td>Rambo</td>
-		                <td>johnrambo@mail.com</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
-		            </tr>
+		            <tr ng-repeat-end=""></tr>
+		           	<tr ng-show="totalRecords==0">
+							<td colspan="12"><center>
+							<strong>No Records Found!!!</strong>
+						</center></td>
+						</tr>
 		        </tbody>
 		    </table>
-		    <ul class="pagination">
-			  <li><a href="#">1</a></li>
-			  <li class="active"><a href="#">2</a></li>
-			  <li><a href="#">3</a></li>
-			  <li><a href="#">4</a></li>
-			  <li><a href="#">5</a></li>
-			</ul>
+		 		<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
+    					</dir-pagination-controls>
+				<div class="col-md-3 pull-right no-padding">
+						<label>Number of Records</label> <select
+							class="form-control input-sm"
+							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
+							id="noOfRows">
+							<option value="5">Show 5 Per Page</option>
+							<option value="10">Show 10 Per Page</option>
+							<option value="25">Show 25 Per Page</option>
+							<option value="50">Show 50 Per Page</option>
+							<option value="100">Show 100 Per Page</option>
+							<option value="250">Show 250 Per Page</option>
+						</select>
+				</div>
 		</div>
 	</div>
 </section>
+<script>
+$('#crashDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+	maxDate : new Date()
+})
+</script>
