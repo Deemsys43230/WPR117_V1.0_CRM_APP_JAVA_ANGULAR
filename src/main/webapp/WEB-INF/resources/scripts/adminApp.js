@@ -48,22 +48,22 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
         }]);
 
         $routeProvider.
-            when('/dashboard', {
-                templateUrl: 'admin/dashboard.html',
+            when('/add-report', {
+                templateUrl: 'admin/add-report.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name:'adminApp',
                             files:[
-                                'resources/scripts/controllers/adminDashboardController.js'
+                                'resources/scripts/controllers/addReportsController.js'
                             ]
                         })
                     }]
 
                 },
-                controller:'AdminDashboardController'
+                controller:'AddReportsController'
             }).
             otherwise({
-                redirectTo: '/dashboard'
+                redirectTo: '/add-report'
             });
     }]);

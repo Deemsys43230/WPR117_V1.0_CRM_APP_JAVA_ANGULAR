@@ -599,11 +599,10 @@
 	}
 
 	body {
-		font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif;
-		font-size: 14px;
+		/* font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif; */
+		font-size: 16px;
 		font-weight: 400;
 		line-height: 1.7857;
-		letter-spacing: 0.075em;
 		color: #555;
 		background-color: #fff;
 	}
@@ -641,9 +640,10 @@
 	}
 
 	h1, h2, h3, h4, h5, h6{
-        font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif;
-		font-weight: 700;
-		text-transform: uppercase;
+        font-family:  'Arial';
+        font-weight: bold; 
+		
+		
 	}
 
 	input, textarea{
@@ -651,7 +651,11 @@
 	}
 
 	label{
-		font-weight: 300;
+		/* font-weight: 300; */
+	}
+	
+	.form-horizontal .control-label{
+	text-align: left;
 	}
 
 	#pre-status,
@@ -938,7 +942,6 @@
 	#home-carousel  .item {
 		background-position: center top;
 		background-repeat: no-repeat;
-		background-size:cover;
 		width:100%;
 		height: 450px;
 	}
@@ -1519,6 +1522,12 @@
 	}
 	
 	.search-form{
+		background-color: white;
+		width:100%;
+		padding:20px;
+	}
+	
+	.white-form{
 		background-color: white;
 		width:100%;
 		padding:20px;
@@ -2688,4 +2697,7 @@ padding-right:50px !important;
 .div-scroll{
 	max-height:450px;
 	overflow:auto;
+}
+.sub-form{
+	background-color:#f3f3f3;
 }
