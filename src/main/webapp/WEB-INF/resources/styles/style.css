@@ -704,8 +704,8 @@
 /* 3. BUTTONS */
 
 	.btn-send{
-		background-color: #00b300;
-		border-radius: 0;
+		background-color: #383838;
+		border-radius: 2px;
 		border: 0;
 		color: #fff;
 		padding: 8px 14px;
@@ -717,7 +717,7 @@
 	}
 
 	.btn-send:hover,.btn-send:focus{
-		background-color: #008200;
+		background-color: #777;
 		color: #fff;
 	}
 
@@ -2700,4 +2700,18 @@ padding-right:50px !important;
 }
 .sub-form{
 	background-color:#f3f3f3;
+}
+.search-block{
+	padding:20px;
+	background-color:#f2f2f2;
+	margin-bottom:20px;
+}
+.brown-text{
+	color:#7A1318;
+	font-size:13pt;
+	font-weight:400;
+	line-height: 50px;
+}
+submit-btn{
+	
 }

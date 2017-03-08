@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<title>Innova Consulting Group</title>
+	<title>Police Reports</title>
 	
 	<meta property="og:image" content="<c:out value="${image}"/>"/>
 	<meta property="og:title" content="<c:out value="${title}"/>"/>

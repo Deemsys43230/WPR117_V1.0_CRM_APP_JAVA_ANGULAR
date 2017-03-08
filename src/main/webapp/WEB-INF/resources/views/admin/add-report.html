@@ -2,11 +2,10 @@
 <!-- SERVICES -->
 <section id="services">
 	<div class="container" style="width:90%;">
-	<div class="col-md-12 white-form" style="min-height: 500px;">
-	<button class="btn btn-primnary active">Add Reports</button>&nbsp;&nbsp;<button class="btn btn-primnary">My Reports</button>
+	<div class="col-md-12  white-form">
+		<h3>Add Reports<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
 	<hr/>
 	<div class="container">
-	<h4>Add Report</h4><hr/>
 			  <form class="form-horizontal">
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Crash Date:</label>
@@ -33,7 +32,7 @@
 			      </div>
 				    </div>
 				    <hr/>
-				    <h5>Occupants List&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" ng-click="addOccupant();">Add One More Occupant</a></h5>
+				    <h4>Occupants List&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size:14px;" href="" ng-click="addOccupant();">Add One More Occupant</a></h4>
 				    <hr/>
 			    <div class="form-group" ng-repeat="occupant in report.occupants" ng-if="occupant.isRemoved==0">
 			      <label class="control-label col-sm-2">First Name:</label>
@@ -46,10 +45,11 @@
 			      </div>
 			      <div class="col-sm-2"><a href="" ng-click="occupant.isRemoved=1">Remove</a></div>
 			    </div>
-			    
+			    <hr/>
 			    <div class="form-group">        
 			      <div class="col-sm-offset-2 col-sm-10">
-			        <button type="submit" class="btn btn-default">Submit</button>
+			        <button type="submit" class="btn btn-send">Submit</button>
+			        <button type="submit" class="btn btn-default">Reset</button>
 			      </div>
 			    </div>
 			  </form>

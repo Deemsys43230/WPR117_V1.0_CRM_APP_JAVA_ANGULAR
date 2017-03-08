@@ -55,15 +55,30 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                         return $ocLazyLoad.load({
                             name:'adminApp',
                             files:[
-                                'resources/scripts/controllers/addReportsController.js'
+                                'resources/scripts/controllers/reportsController.js'
                             ]
-                        })
+                        });
                     }]
 
                 },
                 controller:'AddReportsController'
             }).
+            when('/reports', {
+                templateUrl: 'admin/view-reports.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'adminApp',
+                            files:[
+                                'resources/scripts/controllers/reportsController.js'
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'ViewReportController'
+            }).
             otherwise({
-                redirectTo: '/add-report'
+                redirectTo: '/reports'
             });
     }]);

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<title>Innova Consulting Group</title>
+	<title>Police Reports</title>
 	
 	<meta property="og:image" content="<c:out value="${image}"/>"/>
 	<meta property="og:title" content="<c:out value="${title}"/>"/>
@@ -64,18 +64,11 @@
 	<section id="services">
 		<div class="container">
 			<div class="col-md-6">
-			<p>This page is for the Police Department oficials to upload
+			<p class="brown-text">This page is for the Police Department oficials to upload
 				crash reports. (Sign in required)</p>
 			<hr />
-			<p>Not what you are looking for? To Search and Download your
-				crash reports.</p>
-			<hr />
-			<div class="text-center">
-				<a href="search" class="btn btn-lg btn-primary" >Search Report</a>
-			</div>
 		</div>
 				<div class="col-md-6 login-form">
-				<p>To Upload Reports</p>
 						<h4>Sign In</h4>
 						<hr/>
 						<c:if test="${not empty param['error']}">
@@ -92,8 +85,13 @@
                                 <div class="error-container" >
                                  <span id="password_error"></span>
                               	</div>                               
-                                <input type="submit" name="submit" onclick="return checkValidation()" value="Sign In" class="btn">
+                                <input type="submit" name="submit" onclick="return checkValidation()" value="Sign In" class="btn-send">
                     	</form>
+			</div>
+			<div class="col-md-12" style="padding:20px;">
+			<p class="brown-text">Not what you are looking for?
+			<a href="search">Click Here</a>
+			To Search and Download your crash reports.</p>
 			</div>
 		</div>
 	</section>
