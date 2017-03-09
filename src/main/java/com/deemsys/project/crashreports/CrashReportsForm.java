@@ -23,6 +23,7 @@ public class CrashReportsForm {
 	private MultipartFile crashReport;
 	private String location;
 	private String fileName;
+	private String fileAccessPath;
 	private String addedDate;
 	private String addedDateTime;
 	private Integer status;
@@ -108,8 +109,16 @@ public class CrashReportsForm {
 		this.fileName = fileName;
 	}
 
+	public String getFileAccessPath() {
+		return fileAccessPath;
+	}
+
+	public void setFileAccessPath(String fileAccessPath) {
+		this.fileAccessPath = fileAccessPath;
+	}
+
 	public CrashReportsForm(String reportId, String reportNumber,
-			String crashDate, String location, String fileName, String addedDate,
+			String crashDate, String location, String fileName, String fileAccessPath, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
@@ -118,6 +127,7 @@ public class CrashReportsForm {
 		this.crashDate = crashDate;
 		this.location = location;
 		this.fileName = fileName;
+		this.fileAccessPath = fileAccessPath;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
 		this.status = status;

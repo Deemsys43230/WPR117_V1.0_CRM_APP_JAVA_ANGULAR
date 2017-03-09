@@ -192,6 +192,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("c1.reportNumber"),"reportNumber");
 		projectionList.add(Projections.property("c1.crashDate"),"crashDate");
 		projectionList.add(Projections.property("c1.location"),"location");
+		projectionList.add(Projections.property("c1.noOfOccupants"),"noOfOccupants");
 		projectionList.add(Projections.property("c1.addedDate"),"addedDate");
 		projectionList.add(Projections.property("c1.addedDateTime"),"addedDateTime");
 		projectionList.add(Projections.property("c1.fileName"),"fileName");
@@ -236,6 +237,29 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		// TODO Auto-generated method stub
 		this.sessionFactory.getCurrentSession().delete(crashReports);
 	
+	}
+
+	@Override
+	public Integer checkReportNumberExist(String reportNumber) {
+		// TODO Auto-generated method stub
+		CrashReports crashReports =(CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.eq("reportNumber", reportNumber)).uniqueResult();
+		if(crashReports!=null){
+			return 1;
+		}else{
+			return 0;
+		}
+		
+	}
+
+	@Override
+	public Integer checkReportNumberExist(String reportId, String reportNumber) {
+		// TODO Auto-generated method stub
+		CrashReports crashReports =(CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.and(Restrictions.ne("reportId", reportId),Restrictions.eq("reportNumber", reportNumber))).uniqueResult();
+		if(crashReports!=null){
+			return 1;
+		}else{
+			return 0;
+		}
 	}
 
 	

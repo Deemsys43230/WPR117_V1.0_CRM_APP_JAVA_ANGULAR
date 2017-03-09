@@ -3,10 +3,11 @@
 <script src="resources/angular/components/datetime/moment.js"></script>
 <section id="services">
 	<div class="container" style="width:90%;">
-		<div class="col-md-12  white-form">
-		<div flash-message="2000" class="col-md-5 pull-right margin-top35"></div>
-		<h3>Reports List<a href="#/add-report" class="btn btn-send pull-right">Add New Report</a></h3>
+		<div class="col-md-12 white-form">
+		<div class="col-md-12">
+		<h3>Reports List <a href="#/add-report" class="btn btn-send pull-right">Add New Report</a><div flash-message="2000" class="col-md-5 pull-right"></div></h3>
 		<hr/>
+		</div>
 		<div class="col-md-12 search-block">
 		<form>
 			  <div class="form-group col-md-2">
@@ -43,25 +44,19 @@
 		<table class="table table-bordered table-striped">
 		        <thead>
 		            <tr>
-		            	<th>Crash Date</th>
-		                <th>Report Number #</th>
 		                <th>First Name</th>
 		                <th>Last Name</th>
-		                <th>Location</th>
 		                <th>Action</th>
 		            </tr>
 		        </thead>
 		        <tbody>
-		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult">
-		            	
+		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" style="background-color: grey;color:#fff;">
+		            	<td colspan="2"><label>Crash Date:</label> {{resultData.crashDate}}&nbsp;&nbsp;|&nbsp;&nbsp;<label>Report Number:</label> {{resultData.reportNumber}}&nbsp;&nbsp;|&nbsp;&nbsp;<label>Location:</label> {{resultData.location}}&nbsp;&nbsp;|&nbsp;&nbsp;<label>No. of Occupants:</label> {{resultData.noOfOccupants}}</td>
+		            	<td><a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs">Edit</a>&nbsp;|&nbsp;<a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs">Delete</a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs">View</a></td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
-		            	<td>{{resultData.crashDate}}</td>
-		                <td>{{resultData.reportNumber}}</td>
-		                <td>{{occupants.firstName}}</td>
-		                <td>{{occupants.lastName}}</td>
-		                <td>{{resultData.location}}</td>
-		                <td><a href="">Edit</a>&nbsp;|&nbsp;<a href="">Delete</a></td>
+		            	<td>{{occupants.firstName}}</td>
+		                <td colspan="2">{{occupants.lastName}}</td>
 		            </tr>
 		            <tr ng-repeat-end=""></tr>
 		           	<tr ng-show="totalRecords==0">
@@ -71,14 +66,15 @@
 						</tr>
 		        </tbody>
 		    </table>
-		 		<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
+		    <dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
     					</dir-pagination-controls>
-				<div class="col-md-3 pull-right no-padding">
+    		<div class="col-md-12 no-padding">
+		    <div class="col-md-3 pull-right no-padding">
 						<label>Number of Records</label> <select
 							class="form-control input-sm"
 							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
 							id="noOfRows">
-							<option value="5">Show 5 Per Page</option>
+							<option value="4">Show 4 Per Page</option>
 							<option value="10">Show 10 Per Page</option>
 							<option value="25">Show 25 Per Page</option>
 							<option value="50">Show 50 Per Page</option>
@@ -86,9 +82,29 @@
 							<option value="250">Show 250 Per Page</option>
 						</select>
 				</div>
+			</div>
+				
 		</div>
 	</div>
 </section>
+<!-- Delete Rport Confirmation Modal -->
+<div class="modal fade" id="deleteReportModal" role="dialog" data-backdrop="static" data-keyboard=false>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				Do you want to delete the report?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" ng-click="deleteReport()" ng-disabled="isDeleting">{{deleteText}}</button>
+				<button type="close" class="btn btn-danger" data-dismiss="modal" ng-disabled="isDeleting">No</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 $('#crashDate').datetimepicker({
 	pickTime : false,

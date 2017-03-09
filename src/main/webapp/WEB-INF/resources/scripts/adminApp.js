@@ -28,14 +28,16 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             break;
                         }
                         case 401:{
-                            alert("restricted");
+                        	window.location.href = window.location.origin+"/CRM/logout?sessionout";
                             break;
                         }
                         case 403: {
-                            $location.path("/login");
+                        	window.location.href = window.location.origin+"/CRM/logout?sessionout";
                             break;
                         }
                         case 500: {
+                        	alert("Please try again!");
+                        	window.location.href = window.location.origin+"/CRM/logout";
                             break;
                         }
                         default : {
@@ -63,8 +65,22 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'AddReportsController'
-            }).
-            when('/reports', {
+            }).when('/edit-report/:id', {
+                templateUrl: 'admin/add-report.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'adminApp',
+                            files:[
+                                'resources/scripts/controllers/reportsController.js',
+                                'resources/scripts/directives/fileUpload.js',
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'EditReportsController'
+            }).when('/reports', {
                 templateUrl: 'admin/view-reports.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
@@ -84,6 +100,54 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
             });
     }]);
 
+adminApp.directive('validateName', function() {
+	var NAME_EXPR = /^ *([a-zA-Z]+ ?)+ *$/;
+	// var USA_MOB_EXPR_WITH_BR=/^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/;
+	return {
+	require : 'ngModel',
+	restrict : '',
+	link : function(scope, elm, attrs, ngModel) {
+		ngModel.$validators.validateName = function(modelValue) {
+			return NAME_EXPR.test(modelValue);// ||USA_MOB_EXPR_WITH_BR.test(modelValue);
+		};
+	}
+	};
+});
+
+// Report Number Exists
+adminApp.directive('reportNumberExists',['$q','$timeout','requestHandler',function($q, $timeout, requestHandler) {
+	var CheckReportNumberExists = function(isNew) {
+		if (isNew === 0)
+			return true;
+		else
+			return false;
+		};
+		return {
+			restrict : 'A',
+			require : 'ngModel',
+			link : function(scope, element, attributes,ngModel) {
+				ngModel.$asyncValidators.reportNumberExists = function(modelValue) {
+				var defer = $q.defer();
+				$timeout(function() {
+						var isNew;
+						var sendRequest = requestHandler.getRequest('/User/checkReportNumberExist.json?reportNumber='+modelValue+'&reportId='+scope.reportId).then(function(response) {
+							isNew = response.data.isExist;
+						});
+						sendRequest.then(function() {
+								if (CheckReportNumberExists(isNew)) {
+									defer.resolve();
+								} else {
+									defer.reject();
+								}
+								});
+								isNew = false;
+								}, 10);
+				
+									return defer.promise;
+								};
+							}
+					};
+} ]);
 //To Display success message
 //For User Messages
 function successMessage(Flash, message) {

@@ -65,5 +65,12 @@ public class CommonController {
      	model.addAttribute("failed",true);
  		return "/index";
  	}
-	
+ 	
+ 	// Logout
+ 	@RequestMapping(value="/logout",method=RequestMethod.GET)
+   	public String logout(ModelMap model)
+   	{
+       	model.addAttribute("Success",true);
+   		return "/index";
+   	}
 }

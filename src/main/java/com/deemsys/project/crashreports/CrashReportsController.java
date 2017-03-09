@@ -43,11 +43,11 @@ public class CrashReportsController {
    	}
     
     @RequestMapping(value="/User/uploadCrashReports",method=RequestMethod.POST)
-   	public String uploadCrashReports(@RequestParam("crashReport") MultipartFile crashReport, @RequestParam("reportNumber") String reportNumber,ModelMap model)
+   	public String uploadCrashReports(@RequestParam("crashReport") MultipartFile crashReport, @RequestParam("reportNumber") String reportNumber,  @RequestParam("reportId") String reportId,ModelMap model)
    	{
     	try {
-			String reportId=crashReportsService.uploadCrashReport(crashReport, reportNumber);
-			model.addAttribute("reportId",reportId);
+			String generatedReportId=crashReportsService.uploadCrashReport(crashReport, reportNumber, reportId);
+			model.addAttribute("reportId",generatedReportId);
 			model.addAttribute("requestSuccess", true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -86,7 +86,7 @@ public class CrashReportsController {
    		return "/returnPage";
    	}
     
-    @RequestMapping(value="/searchCrashReports",method=RequestMethod.POST)
+    @RequestMapping(value="/User/searchCrashReports",method=RequestMethod.POST)
    	public String getAllCrashReportss(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model)
    	{
     	model.addAttribute("crashReportsResult",crashReportsService.searchCrashReportsList(crashReportSearchForm));
@@ -94,6 +94,14 @@ public class CrashReportsController {
    		return "/returnPage";
    	}
 	
+    @RequestMapping(value="/searchCrashReportsAllUser",method=RequestMethod.POST)
+   	public String searchCrashReportsAllUser(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model)
+   	{
+    	model.addAttribute("crashReportsResult",crashReportsService.searchCrashReportsList(crashReportSearchForm));
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
+    
     @RequestMapping(value="/saveIPAddressOfClientMachine",method=RequestMethod.POST)
    	public String saveIPAddressOfClientMachine(@RequestParam("reportId") String reportId,ModelMap model,HttpServletRequest request)
    	{
@@ -108,5 +116,13 @@ public class CrashReportsController {
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}
-    
+ 
+    // Check Report Number Already Exist
+    @RequestMapping(value="/User/checkReportNumberExist",method=RequestMethod.GET)
+	public String checkReportNumberAlreadyExist(@RequestParam("reportNumber") String reportNumber,@RequestParam("reportId") String reportId,ModelMap model)
+	{
+    	model.addAttribute("isExist",crashReportsService.checkReportNumberIsExist(reportId,reportNumber));
+    	model.addAttribute("requestSuccess",true);
+		return "/returnPage";
+	}
 }

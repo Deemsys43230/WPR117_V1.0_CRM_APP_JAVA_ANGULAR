@@ -14,7 +14,7 @@ commonApp.controller('SearchReportsController',['$scope','$http','requestHandler
 	
 	$scope.searchCrashReports=function(){
 		if($scope.isAccessable==1){
-			requestHandler.postRequest("searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
+			requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
 				$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 				$scope.crashReportsResultList=response.data.crashReportsResult;
 				console.log($scope.crashReportsResultList);
@@ -48,7 +48,7 @@ commonApp.controller('SearchReportsController',['$scope','$http','requestHandler
 		requestHandler.postRequest("/mergeCrashReportRestriction.json","").then(function(response){
 			console.log(response);
 		});
-		$window.location='http://cdn.crashreportsonline.com/crashreports/ec06d021-492e-4b4d-beff-6c6fe7b6a2c0_5956223.pdf';
+		$window.location=$scope.fileName;
 	};
 	
 	$scope.init=function(){

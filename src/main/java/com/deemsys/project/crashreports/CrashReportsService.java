@@ -78,7 +78,7 @@ public class CrashReportsService {
 				if(rowCount!=0){
 					crashReportsResultByGroupList.add(crashReportsResultByGroup);
 				}
-				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getLocation(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crashReportSearchList.getFileName(), new ArrayList<OccupantsForm>());
+				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getLocation(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
 			}
 			// Set Occupants
 			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), 1));
@@ -86,7 +86,7 @@ public class CrashReportsService {
 		}
 		if(rowCount>0)
 			crashReportsResultByGroupList.add(crashReportsResultByGroup);
-
+			
 		crashReportsSearchResult=new CrashReportsSearchResult(crashReportsSearchResultSet.getTotalRecords(), crashReportsResultByGroupList);
 		
 		return crashReportsSearchResult;
@@ -106,7 +106,7 @@ public class CrashReportsService {
 			occupantsForms.add(occupantsForm);
 		}
 		
-		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getLocation(), crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
+		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
 		
 		//End
 		
@@ -122,7 +122,7 @@ public class CrashReportsService {
 		try {
 			Accounts accounts = accountsDAO.getAccountsById(loginService.getCurrentAccountId());
 			
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), null,  new Date(), new Date(), 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null, new Date(), new Date(), 1, null);
 
 			crashReportsDAO.merge(crashReports);
 
@@ -157,7 +157,7 @@ public class CrashReportsService {
 		try {
 			Accounts accounts = accountsDAO.getAccountsById(loginService.getCurrentAccountId());
 			
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), null,  new Date(), new Date(), 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
 
 			crashReportsDAO.saveCrashReports(crashReports);
 
@@ -177,10 +177,17 @@ public class CrashReportsService {
 		return 1;
 	}
 	
-	public String uploadCrashReport(MultipartFile crashReport,String reportNumber) throws Exception{
+	public String uploadCrashReport(MultipartFile crashReport,String reportNumber, String reportId) throws Exception{
 		
-		String uuid= UUID.randomUUID().toString().replaceAll("-", "");
-		String fileName= uuid+"_"+reportNumber+".pdf";
+		String fileName="";
+		if(reportId.equals("")){
+			String uuid= UUID.randomUUID().toString().replaceAll("-", "");
+			fileName= uuid+"_"+reportNumber+".pdf";
+			reportId=uuid;
+		}else{
+			fileName= reportId+"_"+reportNumber+".pdf";
+		}
+		
 		String filePath=crmProperties.getProperty("tempFolder")+fileName;
 		try {
 			// Write File Temp Folder
@@ -195,7 +202,7 @@ public class CrashReportsService {
 			e.printStackTrace();
 		}
 		
-		return uuid;
+		return reportId;
 	}
 	
 	//Update an Entry
@@ -230,6 +237,18 @@ public class CrashReportsService {
 		return 1;
 	}
 	
-	
+	//Check Report Number Exist
+	public Integer checkReportNumberIsExist(String reportId,String reportNumber)
+	{
+		Integer isExist=null;
+		if(reportId!=null){
+			isExist = crashReportsDAO.checkReportNumberExist(reportId, reportNumber);
+		}else{
+			isExist = crashReportsDAO.checkReportNumberExist(reportNumber);
+		}
+		
+		
+		return isExist;
+	}
 	
 }

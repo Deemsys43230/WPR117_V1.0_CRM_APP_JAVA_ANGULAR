@@ -81,7 +81,7 @@
 							<td>{{occupants.firstName}}</td>
 							<td>{{occupants.lastName}}</td>
 							<td>{{resultData.location}}</td>
-							<td><a href="" ng-click="viewReport(resultData.reportId,resultData.reportNumber,occupants.firstName,occupants.lastName,resultData.location,resultData.fileName)">Select</a></td>
+							<td><a href="" ng-click="viewReport(resultData.reportNumber,occupants.firstName,occupants.lastName,resultData.location,resultData.fileName)">Select</a></td>
 						</tr>
 						<tr ng-repeat-end=""></tr>
 						<tr ng-show="totalRecords==0">
@@ -100,7 +100,6 @@
 							class="form-control input-sm"
 							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
 							id="noOfRows">
-							<option value="5">Show 5 Per Page</option>
 							<option value="10">Show 10 Per Page</option>
 							<option value="25">Show 25 Per Page</option>
 							<option value="50">Show 50 Per Page</option>

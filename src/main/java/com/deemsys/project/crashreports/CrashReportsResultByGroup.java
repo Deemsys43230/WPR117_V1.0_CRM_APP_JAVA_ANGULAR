@@ -16,6 +16,7 @@ public class CrashReportsResultByGroup {
 	private String addedDateTime;
 	private Integer status;
 	private String fileName;
+	private Integer noOfOccupants;
 	private List<OccupantsForm> occupantsForms;
 	
 	public String getReportId() {
@@ -90,9 +91,17 @@ public class CrashReportsResultByGroup {
 		this.occupantsForms = occupantsForms;
 	}
 
+	public Integer getNoOfOccupants() {
+		return noOfOccupants;
+	}
+
+	public void setNoOfOccupants(Integer noOfOccupants) {
+		this.noOfOccupants = noOfOccupants;
+	}
+
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
 			String crashDate, String location, String addedDate, String addedDateTime,
-			Integer status, String fileName, List<OccupantsForm> occupantsForms) {
+			Integer status, String fileName, Integer noOfOccupants, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -102,6 +111,7 @@ public class CrashReportsResultByGroup {
 		this.addedDateTime = addedDateTime;
 		this.status = status;
 		this.fileName = fileName;
+		this.noOfOccupants = noOfOccupants;
 		this.occupantsForms = occupantsForms;
 	}
 

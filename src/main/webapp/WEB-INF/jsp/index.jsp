@@ -53,6 +53,7 @@
 		                            <div style="color:#FF0000;padding-left:20px;"><i class="fa fa-exclamation-triangle"></i>&nbsp;${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}<br/><br/></div>
 		                             </c:if>
 						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
+						<div id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
                             <h5>Username<span class="text-red"><sup>*</sup></span></h5>
                                 <input type="text" name="username" placeholder="Username" id="username" maxlength="25">
                                 <div class="error-container" >
@@ -105,6 +106,12 @@
 	
 	
 	<script>
+	if(location.search=='?sessionout'){
+		document.getElementById('sessionout').style.display = 'inline';
+	}else{
+		document.getElementById('sessionout').style.display = 'none';
+	}
+	
 	function checkValidation(){
 		var username=document.getElementById("username").value;
 		var password=document.getElementById("password").value;

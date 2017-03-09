@@ -33,11 +33,12 @@ myApp.factory("requestHandler",['$http',function($http){
          });
     };
     
-	requestObj.postFileUpdate=function(requestURL,data,params,data1,params1){      
+	requestObj.postFileUpdate=function(requestURL,data,params,data1,params1,data2,params2){      
 	        
 	        var fd = new FormData();
 	        fd.append(params, data);
 	        fd.append(params1, data1);
+	        fd.append(params2, data2);
 	        
 	         return $http.post(requestURL,fd,{
 	             transformRequest: angular.identity,

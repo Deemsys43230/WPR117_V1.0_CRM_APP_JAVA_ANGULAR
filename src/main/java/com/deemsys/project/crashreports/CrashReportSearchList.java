@@ -17,6 +17,7 @@ public class CrashReportSearchList {
 	private String lastName;
 	private Integer status;
 	private String fileName;
+	private Integer noOfOccupants;
 	public String getReportId() {
 		return reportId;
 	}
@@ -77,9 +78,15 @@ public class CrashReportSearchList {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	public Integer getNoOfOccupants() {
+		return noOfOccupants;
+	}
+	public void setNoOfOccupants(Integer noOfOccupants) {
+		this.noOfOccupants = noOfOccupants;
+	}
 	public CrashReportSearchList(String reportId, String reportNumber,
 			String crashDate, String location, String addedDate, String addedDateTime,
-			String firstName, String lastName, Integer status, String fileName) {
+			String firstName, String lastName, Integer status, String fileName,Integer noOfOccupants) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -91,6 +98,7 @@ public class CrashReportSearchList {
 		this.lastName = lastName;
 		this.status = status;
 		this.fileName = fileName;
+		this.noOfOccupants = noOfOccupants;
 	}
 	public CrashReportSearchList() {
 		super();

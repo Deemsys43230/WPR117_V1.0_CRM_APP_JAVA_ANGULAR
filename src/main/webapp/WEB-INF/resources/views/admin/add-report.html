@@ -1,16 +1,23 @@
-
+<link rel="stylesheet" href="resources/angular/components/datetime/datetimepicker.css"></link>
+<script src="resources/angular/components/datetime/datetimepicker.js"></script>
+<script src="resources/angular/components/datetime/moment.js"></script>
 <!-- SERVICES -->
 <section id="services">
 	<div class="container" style="width:90%;">
 	<div class="col-md-12  white-form">
-		<h3>Add Report<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
+		<h3>{{title}}<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
 	<hr/>
 	<div class="container">
 			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Crash Date:</label>
 			      <div class="col-sm-4">
-			        <input type="text" class="form-control" ng-model="report.crashDate" placeholder="Enter Crash Date" name="crashDate" required>
+			         <div class="input-group">
+					<input type="text" name="crashDate" id="crashDate" class="form-control"
+						ng-model="report.crashDate"
+						placeholder="Enter Crash Date" required> 
+					<span class="input-group-addon white-color-bg"> <span class="fa fa-calendar"></span></span>
+					</div>
 			        <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.crashDate.$error.required">Please
@@ -22,11 +29,12 @@
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Report Number:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" required>
+			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" required report-number-exists>
 			      	 <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
 								Enter Report Number</span>
+							<span ng-cloak ng-show="!addCrashReportForm.reportNumber.$error.required&&addCrashReportForm.reportNumber.$error.reportNumberExists">Report Number Already Exist</span>
 						</div>
 					</div>	
 			      </div>
@@ -45,9 +53,9 @@
 			    </div>
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Upload Report:</label>
-			      <div class="col-sm-4">          
-			        <input type="file" class="form-control" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" required>
-			      	 <div class="error-container">
+			      <div class="col-sm-4" ng-cloak ng-show="!isEdit">          
+			        <input type="file" class="form-control" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit">
+			      	<div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.crashReportFile.$error.required">Please
 								Select Report</span>
@@ -56,27 +64,33 @@
 						</div>
 					</div>	
 			      </div>
+			      <div class="col-md-1" ng-cloak ng-show="!showCancel"><a href="" ng-click="isEdit=true;showCancel=true;clearFile();">Cancel</a></div>
+			      <div class="col-sm-4" ng-cloak ng-show="isEdit">
+			      	<span>{{report.fileName}}</span>&nbsp;&nbsp;<a href="" ng-click="isEdit=false;showCancel=false;">Edit</a>
+			      </div>
 				    </div>
-				    <h4><u>Occupants</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+				    <h4><u>Occupants List</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 			    <div class="form-group" ng-repeat="occupant in report.occupantsForms">
 			      <label class="control-label col-sm-2">First Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName{{$index}}" required>
+			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName{{$index}}" maxlength="45" required validate-name>
 			        <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.firstName{{$index}}.$error.required">Please
 								Enter First Name</span>
+								<span ng-cloak ng-show="!addCrashReportForm.firstName{{$index}}.$error.required&&addCrashReportForm.firstName{{$index}}.$error.validateName">Enter Valid First Name</span>
 						</div>
 					</div>	
 			      </div>
 			      <label class="control-label col-sm-2">Last Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName{{$index}}" required>
+			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName{{$index}}" maxlength="45" required validate-name>
 			        <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.lastName{{$index}}.$error.required">Please
 								Enter Last Name</span>
-						</div>
+							<span ng-cloak ng-show="!addCrashReportForm.lastName{{$index}}.$error.required&&addCrashReportForm.lastName{{$index}}.$error.validateName">Enter Valid Last Name</span>
+  						</div>
 					</div>	
 			      </div>
 			      <div class="col-sm-2"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
@@ -86,7 +100,7 @@
 			  	 <div class="form-group">  
 			  	  <div class="col-sm-offset-2 col-sm-10">
 			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
-			        <button type="button" class="btn btn-default">Reset</button>
+			        <a href="#/reports" class="btn btn-default">Cancel</a>
 			      </div>
 			    </div>
 			  </form>
@@ -97,3 +111,10 @@
 	</div>
 </section>
 <!-- /SERVICES -->
+<script>
+$('#crashDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+	maxDate : new Date()
+})
+</script>
