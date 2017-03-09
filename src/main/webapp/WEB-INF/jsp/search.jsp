@@ -5,16 +5,7 @@
 	<meta charset="UTF-8">
 	
 	<title>Police Reports</title>
-	
-	<meta property="og:image" content="<c:out value="${image}"/>"/>
-	<meta property="og:title" content="<c:out value="${title}"/>"/>
-	<meta property="og:description" content="<c:out value="${description}"/>" />
-	<meta property="og:url" content="<c:out value="${url}"/>"/>
-	<meta property="og:site_name" content="Innova Consulting Group"/>
-	<meta property="og:type" content="website"/>
-	<meta name="author" content="Innova Consulting Group"/>
-	<meta property="fb:app_id" content="2054449691447123">
-	
+		
 	<!-- Main CSS file -->
 	<link rel="stylesheet" href="resources/styles/bootstrap.css" />
 	<link rel="stylesheet" href="resources/styles/owl-carousel.css" />
@@ -38,31 +29,16 @@
 	<![endif]-->
 	
 </head>
-
-    <!-- SLIDER -->
-	<section id="slider">
-		<div id="home-carousel" class="carousel slide" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="item active" style="background-image: url(resources/images/slider/01.jpg)">
-					<div class="carousel-caption container">
-						<!-- <div class="row">
-							<div class="col-sm-7">
-								<h1>You are entire </h1>
-								<h2>creative world</h2>
-								<p>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor. Aenean sollicitudin, lorem quis bibendum auctor.</p>
-							</div>
-						</div> -->
-					</div>
-				</div>
-			</div>
-		</div> <!--/#home-carousel-->
-    </section>
+	<div class="container" style="width:92%;">
+		<img src="resources/images/slider/01.jpg" style="width:100%;"/>
+	</div>
 <body ng-app="commonApp">
 
 
 
 
-    <div ng-view></div>
+    <div ng-view>
+	</div>
 
 	<!-- FOOTER -->
 	<footer id="footer">
@@ -117,7 +93,6 @@
 	<!-- For Date Picker -->
 	<script src="resources/angular/components/datetime/moment.js"></script>
 	<!-- Directive -->
-	<script type="text/javascript" src="resources/scripts/directives/fileUpload.js"></script>
     <script src="resources/angular/angular-flash/angular-flash.min.js"></script>
     <link rel="stylesheet" href="resources/angular/angular-flash/angular-flash.css"/>
      <!-- dirPagination -->

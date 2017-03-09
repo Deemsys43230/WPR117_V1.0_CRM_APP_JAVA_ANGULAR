@@ -3,7 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 
-	<title>Innova Consulting Group</title>
+	<title>Police Reports</title>
+	
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<!-- Main CSS file -->
 	<link rel="stylesheet" href="resources/styles/bootstrap.css" />
