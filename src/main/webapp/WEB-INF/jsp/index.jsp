@@ -69,7 +69,7 @@
 			</div>
 			<div class="col-md-12" style="padding:20px;">
 			<p class="brown-text">Not what you are looking for?
-			<a href="search">Click Here</a>
+			<a href="/CRM/">Click Here</a>
 			To Search and Download your crash reports.</p>
 			</div>
 		</div>
