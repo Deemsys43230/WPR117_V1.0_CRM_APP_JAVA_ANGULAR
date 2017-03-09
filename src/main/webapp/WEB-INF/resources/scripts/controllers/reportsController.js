@@ -15,7 +15,7 @@ adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$
 	$scope.showCancel=true;
 	$scope.reportSave=false;
 	$scope.buttonText="Submit";
-	$scope.title="Add Reports";
+	$scope.title="Add Report";
 	$scope.report={
 			"crashDate":"",
 			"reportNumber":"",
@@ -59,7 +59,7 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 	
 	$scope.isEdit=true;
 	$scope.showCancel=true;
-	$scope.title="Edit Reports";
+	$scope.title="Edit Report";
 	$scope.reportSave=false;
 	$scope.buttonText="Submit";
 	

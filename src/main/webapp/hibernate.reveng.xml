@@ -7,4 +7,5 @@
   <table-filter match-catalog="CRM" match-name="occupants"/>
   <table-filter match-catalog="CRM" match-name="roles"/>
   <table-filter match-catalog="CRM" match-name="users"/>
+  <table-filter match-catalog="CRM" match-name="crash_report_restriction"/>
 </hibernate-reverse-engineering>

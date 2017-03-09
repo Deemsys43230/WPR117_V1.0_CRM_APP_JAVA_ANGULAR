@@ -34,7 +34,7 @@
 	</div>
 	<body ng-app="adminApp">
 	<div class="col-md-12">
-	<a href="j_spring_security_logout" class="pull-right" style="margin-top:10px;margin-right:100px;"><i class="fa fa-sign-out fa-fw"></i>&nbsp;Logout</a>
+	<a href="j_spring_security_logout" class="pull-right logout-tag"><i class="fa fa-sign-out fa-fw"></i>&nbsp;Logout</a>
 	</div>
 	<div ng-view></div>
 	<!-- FOOTER -->

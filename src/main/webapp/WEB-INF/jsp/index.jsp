@@ -60,7 +60,7 @@
                                  <span id="username_error"></span>
                               	</div>
                             	<h5>Password</span><span class="text-red"><sup>*</sup></span></h5>
-                                <input type="text" placeholder="Password" name="password" id="password">
+                                <input type="password" placeholder="Password" name="password" id="password">
                                 <div class="error-container" >
                                  <span id="password_error"></span>
                               	</div>                               
