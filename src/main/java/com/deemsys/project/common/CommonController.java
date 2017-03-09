@@ -23,7 +23,7 @@ public class CommonController {
 	@Autowired
 	LoginService loginService;
 	
-    @RequestMapping(value={"/index","/"},method=RequestMethod.GET)
+    @RequestMapping(value={"/upload"},method=RequestMethod.GET)
 	public String getIndex(ModelMap model)
 	{
     	model.addAttribute("Success",true);
@@ -51,7 +51,7 @@ public class CommonController {
 		return "/home";
 	}
    	
-    @RequestMapping(value={"/search"},method=RequestMethod.GET)
+    @RequestMapping(value={"/index","/"},method=RequestMethod.GET)
 	public String getSearch(ModelMap model)
 	{
     	model.addAttribute("Success",true);
