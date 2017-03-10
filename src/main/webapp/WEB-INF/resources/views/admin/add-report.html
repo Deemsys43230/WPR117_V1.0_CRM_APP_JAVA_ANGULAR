@@ -96,10 +96,9 @@
 								Enter Last Name</span>
 							<span ng-cloak ng-show="!addCrashReportForm.lastName{{$index}}.$error.required&&addCrashReportForm.lastName{{$index}}.$error.validateName">Enter Valid Last Name</span>
 						</div>
-						<span ng-cloak ng-show="minOccupantError">Minimum one occupant</span>
 					</div>	
 			      </div>
-			      <div class="col-sm-2"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
 			    </div>
 			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
 			  

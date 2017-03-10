@@ -11,7 +11,6 @@ adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$
 	// For Check Report Number Already Exist
 	$scope.reportId="";
 	
-	$scope.minOccupantError=false;
 	$scope.isEdit=false;
 	$scope.showCancel=true;
 	$scope.reportSave=false;
@@ -33,11 +32,7 @@ adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$
 	
 	// Remove Occupant
 	$scope.removeOccupant=function(index){
-		if($scope.report.occupantsForms.length>1){
-			$scope.report.occupantsForms.splice(index,1);
-		}else{
-			$scope.minOccupantError=true;
-		}
+		$scope.report.occupantsForms.splice(index,1);
 	};
 	
 	// Save Crash Reports
@@ -62,7 +57,6 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 	// For Check Report Number Already Exist
 	$scope.reportId=$routeParams.id;
 	
-	$scope.minOccupantError=false;
 	$scope.isEdit=true;
 	$scope.showCancel=true;
 	$scope.title="Edit Report";
@@ -85,11 +79,7 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 	
 	// Remove Occupant
 	$scope.removeOccupant=function(index){
-		if($scope.report.occupantsForms.length>1){
-			$scope.report.occupantsForms.splice(index,1);
-		}else{
-			$scope.minOccupantError=true;
-		}
+		$scope.report.occupantsForms.splice(index,1);
 	};
 	
 	$scope.saveCrashReport=function(){
