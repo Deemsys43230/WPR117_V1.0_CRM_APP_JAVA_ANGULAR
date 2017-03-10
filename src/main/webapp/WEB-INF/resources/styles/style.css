@@ -605,6 +605,7 @@
 		line-height: 1.7857;
 		color: #555;
 		background-color: #f5f5f5;
+		min-height: 800px;
 	}
 
 	/* a { 
@@ -2729,6 +2730,18 @@ padding-right:50px !important;
 .logout-tag{
 	margin-top:10px;
 	margin-right:100px;
+}
+.calender-control{
+	background-color:white !important;
+	cursor: pointer !important;
+}
+.calender-control-span{
+	cursor:pointer;
+}
+/* For angular Js, Hide any validation error message before the page fully loads*/
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
 }
 
 .option-bold option{

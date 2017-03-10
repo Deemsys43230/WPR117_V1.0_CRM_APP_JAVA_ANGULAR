@@ -14,15 +14,15 @@
 						Crash Date<span class="text-red"><sup>*</sup></span>
 					</h5>
 					<div class="input-group">
-					<input type="text" name="crashDate" id="crashDate"
+					<input type="text" name="crashDate" id="crashDateSearch" class="form-control calender-control"
 						ng-model="crashReportSearchForm.crashDate" required
 						placeholder="Crash Date"> 
-					<span class="input-group-addon white-color-bg"> <span class="fa fa-calendar"></span></span>
+					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalenderSearch"> <span class="fa fa-calendar"></span></span>
 					</div>
 					<div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="reportSearchForm.crashDate.$error.required">Please
-								Enter Crash Date</span>
+								Select Crash Date</span>
 						</div>
 					</div>					
 					<hr />
@@ -163,9 +163,12 @@
 </div>
 <!-- /SERVICES -->
 <script>
-$('#crashDate').datetimepicker({
+$('#crashDateSearch').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
 	maxDate : new Date()
-})
+});
+$("#crashDateCalenderSearch").click(function(){
+	$('#crashDateSearch').focus();
+});
 </script>

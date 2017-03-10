@@ -2,21 +2,21 @@
 <script src="resources/angular/components/datetime/datetimepicker.js"></script>
 <script src="resources/angular/components/datetime/moment.js"></script>
 <!-- SERVICES -->
-<section id="services">
+<section id="services" ng-cloak class="ng-cloak">
 	<div class="container" style="width:90%;">
 	<div class="col-md-12  white-form">
 		<h3>{{title}}<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
 	<hr/>
-	<div class="container" ng-cloak>
+	<div class="container" ng-cloak class="ng-cloak">
 			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Crash Date:</label>
 			      <div class="col-sm-4">
 			         <div class="input-group">
-					<input type="text" name="crashDate" id="crashDate" class="form-control"
+					<input type="text" name="crashDate" id="crashDateAdd" class="form-control calender-control"
 						ng-model="report.crashDate"
-						placeholder="Enter Crash Date" required> 
-					<span class="input-group-addon white-color-bg"> <span class="fa fa-calendar"></span></span>
+						placeholder="Enter Crash Date" required readonly> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalender"> <span class="fa fa-calendar"></span></span>
 					</div>
 			        <div class="error-container">
 						<div ng-show="submitted">
@@ -117,9 +117,14 @@
 </section>
 <!-- /SERVICES -->
 <script>
-$('#crashDate').datetimepicker({
+$('#crashDateAdd').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
-	maxDate : new Date()
-})
+	maxDate : new Date(),
+	ignoreReadonly:true
+});
+
+$("#crashDateCalenderAdd").click(function(){
+	$('#crashDate').focus();
+});
 </script>

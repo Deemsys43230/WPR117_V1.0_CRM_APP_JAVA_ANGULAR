@@ -13,10 +13,10 @@
 			  <div class="form-group col-md-2">
 			    <label for="carshDate">Crash Date:</label>
 			    <div class="input-group">
-					<input type="text" name="crashDate" id="crashDate" class="form-control"
+					<input type="text" name="crashDate" id="crashDateReportList" class="form-control calender-control"
 						ng-model="crashReportSearchForm.crashDate"
 						placeholder="Crash Date"> 
-					<span class="input-group-addon white-color-bg"> <span class="fa fa-calendar"></span></span>
+					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalenderReportList"> <span class="fa fa-calendar"></span></span>
 					</div>
 			  </div>
 			  <div class="form-group col-md-2">
@@ -108,9 +108,12 @@
 	</div>
 </div>
 <script>
-$('#crashDate').datetimepicker({
+$('#crashDateReportList').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
 	maxDate : new Date()
-})
+});
+$("#crashDateCalenderReportList").click(function(){
+	$('#crashDateReportList').focus();
+});
 </script>
