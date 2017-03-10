@@ -16,7 +16,7 @@
 					<input type="text" name="crashDate" id="crashDateAdd" class="form-control calender-control"
 						ng-model="report.crashDate"
 						placeholder="Enter Crash Date" required readonly> 
-					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalender"> <span class="fa fa-calendar"></span></span>
+					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalenderAdd"> <span class="fa fa-calendar"></span></span>
 					</div>
 			        <div class="error-container">
 						<div ng-show="submitted">
@@ -125,6 +125,6 @@ $('#crashDateAdd').datetimepicker({
 });
 
 $("#crashDateCalenderAdd").click(function(){
-	$('#crashDate').focus();
+	$('#crashDateAdd').focus();
 });
 </script>
