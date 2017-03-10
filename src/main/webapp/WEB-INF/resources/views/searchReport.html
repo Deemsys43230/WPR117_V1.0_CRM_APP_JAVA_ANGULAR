@@ -2,8 +2,8 @@
 <script src="resources/angular/components/datetime/datetimepicker.js"></script>
 <script src="resources/angular/components/datetime/moment.js"></script>
 <!-- SERVICES -->
-<section id="services">
-	<div class="container" style="width:90%;">
+<section id="services" ng-cloak>
+	<div class="container" style="width:90%;" ng-cloak>
 		<div class="col-md-12 search-form">
 			<div class="col-md-3" style="background-color: #f2f2f2;padding:20px;">
 				<h4>Search Crash Reports</h4>
@@ -62,7 +62,7 @@
 			<!-- <span class="pull-right"><a href="/CRM/" class="btn btn-default"><i class="fa fa-reply"></i> Back to Home</a></span> -->
 			<h4>Search Results</h4>
 			<hr/>
-				<table class="table table-striped">
+				<table class="table table-striped" ng-cloak>
 					<thead>
 						<tr>
 							<th>Report #</th>
@@ -85,7 +85,7 @@
 						</tr>
 						<tr ng-repeat-end=""></tr>
 						<tr ng-show="totalRecords==0">
-							<td colspan="12"><center>
+							<td colspan="5"><center>
 							<strong>No Records Found!!!</strong>
 						</center></td>
 						</tr>
@@ -108,7 +108,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="col-md-12 access-alert" ng-show="isAccessable==0">
+				<div class="col-md-12 access-alert" ng-show="isAccessable==0" ng-cloak>
 					<span><i class="fa fa-exclamation-triangle"></i> You have already downloaded a crash report today. Kindly wait for another 24 hours before attempting again (or) contact our support team for further assistance at <a href="mailto:support@crashreportsonline.com">support@crashreportsonline.com</a></span>
 				</div>
 			</div>

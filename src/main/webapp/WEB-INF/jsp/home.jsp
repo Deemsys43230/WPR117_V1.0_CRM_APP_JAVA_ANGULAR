@@ -32,11 +32,13 @@
 	<div class="container" style="width:92%;">
 		<img src="resources/images/slider/01.jpg" style="width:100%;"/>
 	</div>
-	<body ng-app="adminApp">
+	<body ng-app="adminApp" ng-cloak>
 	<div class="col-md-12">
 	<a href="j_spring_security_logout" class="pull-right logout-tag"><i class="fa fa-sign-out fa-fw"></i>&nbsp;Logout</a>
 	</div>
-	<div ng-view></div>
+	<div style="min-height: 500px;">
+	<div ng-view ng-cloak></div>
+	</div>
 	<!-- FOOTER -->
 	<footer id="footer">
 		<div class="container">

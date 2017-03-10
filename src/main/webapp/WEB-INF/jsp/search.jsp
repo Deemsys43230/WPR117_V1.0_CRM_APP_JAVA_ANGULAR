@@ -32,13 +32,12 @@
 	<div class="container" style="width:92%;">
 		<img src="resources/images/slider/01.jpg" style="width:100%;"/>
 	</div>
-<body ng-app="commonApp">
+<body ng-app="commonApp" ng-cloak>
 
 
 
-
-    <div ng-view>
-	</div>
+   <div style="min-height: 500px;">
+   <div ng-view ng-cloak></div></div> 
 
 	<!-- FOOTER -->
 	<footer id="footer">

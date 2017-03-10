@@ -41,26 +41,29 @@
 			  </div>
 		</form>
 		</div>
-		<table class="table table-bordered table-striped">
+		<table class="table table-bordered table-striped" ng-cloak>
 		        <thead>
 		            <tr>
-		                <th>First Name</th>
-		                <th>Last Name</th>
+		                <th colspan="2">First Name</th>
+		                <th colspan="2">Last Name</th>
 		                <th>Action</th>
 		            </tr>
 		        </thead>
 		        <tbody>
 		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
-		            	<td colspan="2"><label>Crash Date:</label> {{resultData.crashDate}}&nbsp;&nbsp;|&nbsp;&nbsp;<label>Report Number:</label> {{resultData.reportNumber}}&nbsp;&nbsp;|&nbsp;&nbsp;<label>Location:</label> {{resultData.location}}&nbsp;&nbsp;|&nbsp;&nbsp;<label>No. of Occupants:</label> {{resultData.noOfOccupants}}</td>
-		            	<td><a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-fw"></i> Edit</a>&nbsp;|&nbsp;<a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> Delete</a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs"><i class="fa fa-eye fa-fw"></i> View Report</a></td>
+		            	<td width="16%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
+		            	<td width="20%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
+		            	<td width="24%"><label>Location:</label><br/>{{resultData.location}}</td>
+		            	<td width="16%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
+		            	<td width="24%"><a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-fw"></i> Edit</a>&nbsp;|&nbsp;<a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> Delete</a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs"><i class="fa fa-eye fa-fw"></i> View Report</a></td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
-		            	<td>{{occupants.firstName}}</td>
-		                <td colspan="2">{{occupants.lastName}}</td>
+		            	<td colspan="2">{{occupants.firstName}}</td>
+		                <td colspan="3">{{occupants.lastName}}</td>
 		            </tr>
 		            <tr ng-repeat-end=""></tr>
 		           	<tr ng-show="totalRecords==0">
-							<td colspan="12"><center>
+							<td colspan="5"><center>
 							<strong>No Records Found!!!</strong>
 						</center></td>
 						</tr>

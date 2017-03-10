@@ -21,7 +21,7 @@ adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$
 			"reportNumber":"",
 			"location":"",
 			"fileName":"",
-			"occupantsForms":[{"firstName":"","lastName":"","status":1},{"firstName":"","lastName":"","status":1},{"firstName":"","lastName":"","status":1}]
+			"occupantsForms":[{"firstName":"","lastName":"","status":1}]
 	};
 	
 	//Add Occupant
@@ -114,7 +114,7 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 
 //View Report Controller
 adminApp.controller('ViewReportController',['$scope','$http','requestHandler',function($scope,$http,requestHandler){
-	
+
 	$scope.getCrashReportsList=function(){
 		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
