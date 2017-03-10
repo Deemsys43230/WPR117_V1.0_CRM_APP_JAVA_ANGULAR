@@ -52,8 +52,8 @@
 			      </div>
 			    </div>
 			    <div class="form-group">
-			      <label class="control-label col-sm-2">Upload Report:</label>
-			      <div class="col-sm-4" ng-cloak ng-show="!isEdit">          
+			      <label class="control-label col-md-2">Upload Report:</label>
+			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
 			        <input type="file" class="form-control" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit">
 			      	<div class="error-container">
 						<div ng-show="submitted">
@@ -65,8 +65,13 @@
 					</div>	
 			      </div>
 			      <div class="col-md-2" ng-cloak ng-show="!showCancel"><a href="" ng-click="isEdit=true;showCancel=true;clearFile();"><i class="fa fa-close fa-fw"></i> Cancel</a></div>
-			      <div class="col-sm-5" ng-cloak ng-show="isEdit">
-			      	<span>{{report.fileName}} &nbsp;&nbsp;<a href="" ng-click="isEdit=false;showCancel=false;"><i class="fa fa-pencil fa-fw"></i> Edit</a></span>
+			      <div class="col-md-5" ng-cloak ng-show="isEdit" style="padding-bottom: 2px;">
+			      	<span ng-cloak>{{report.fileName}} &nbsp;&nbsp;</span>
+			      <div class="error-container">
+			      </div>
+			      </div>
+			      <div class="col-md-2" ng-cloak ng-show="isEdit">
+			      <a href="" ng-click="isEdit=false;showCancel=false;"><i class="fa fa-pencil fa-fw"></i> Change</a>
 			      </div>
 				    </div>
 				    <h4><u>Occupants</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
@@ -90,7 +95,8 @@
 							<span ng-cloak ng-show="addCrashReportForm.lastName{{$index}}.$error.required">Please
 								Enter Last Name</span>
 							<span ng-cloak ng-show="!addCrashReportForm.lastName{{$index}}.$error.required&&addCrashReportForm.lastName{{$index}}.$error.validateName">Enter Valid Last Name</span>
-  						</div>
+						</div>
+						<span ng-cloak ng-show="minOccupantError">Minimum one occupant</span>
 					</div>	
 			      </div>
 			      <div class="col-sm-2"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>

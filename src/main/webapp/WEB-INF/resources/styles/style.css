@@ -600,7 +600,7 @@
 
 	body {
 		/* font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif; */
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: 400;
 		line-height: 1.7857;
 		color: #555;
@@ -745,7 +745,7 @@
     background-color: #383838;
     border-radius: 0;
     border: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #fff;
     padding: 3px 10px;
     text-transform: uppercase;
@@ -795,7 +795,7 @@
         background: #f7f7f7;
         border: 0px solid #ddd;
         color: #222;
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .ic-rounded {
@@ -1092,7 +1092,7 @@
 	}
 
 	.section-title h1{
-        font-size: 30px;
+        font-size: 32px;
         font-weight: 500;
 		margin-top: 0;
 	}
@@ -1111,7 +1111,7 @@
 
 	.st-service h2{
         font-family:  'Open Sans', sans-serif;
-		font-size: 16px;
+		font-size: 18px;
 		margin-top: 0;
 		margin-bottom: 15px;
 	}
@@ -1284,7 +1284,7 @@
 
 	.st-pricing ul li{
 		padding: 12px 0;
-		font-size: 15px;
+		font-size: 17px;
 	}
 
 	.st-pricing a.btn-send{
@@ -1323,7 +1323,7 @@
 	.office-carousel-right {	
 		background-color: #f0f0f0;
 		color:#000;
-		font-size: 32px;
+		font-size: 34px;
 		height: 40px;
 		line-height: 40px;
 		margin-top: -20px;
@@ -1422,7 +1422,7 @@
 
 	.team-member .member-social a{
 		position: relative;
-		font-size: 16px;
+		font-size: 18px;
 		color: #fff;
 		top: 47%;
 	}
@@ -1464,7 +1464,7 @@
 	}
 
 	.st-testimonials .client-info span{
-		font-size: 12px;
+		font-size: 14px;
 		text-transform: uppercase;
 	}
 
@@ -1491,7 +1491,7 @@
 	}
 
 	#fun-facts .fun-fact p{
-		font-size: 16px;
+		font-size: 18px;
 	}
 
 
@@ -1512,7 +1512,7 @@
 	}
 
 	.contact-info p i{
-		font-size: 16px;
+		font-size: 18px;
 		margin-right: 10px;
 	}
 
@@ -1554,7 +1554,7 @@
 
     .about-us-text{
         margin-top: 7px;
-        font-size: 13px;
+        font-size: 15px;
     }
 
 	.contact-form textarea{
@@ -1569,7 +1569,7 @@
 
     .choose-file{
         border: 3px solid #fff;
-        font-size: 15px;
+        font-size: 17px;
         color: #fff;
         padding: 8px 14px;
         width: 100% !important;
@@ -1578,7 +1578,7 @@
 
     .choose-file:hover{
         border: 3px solid #fff;
-        font-size: 15px;
+        font-size: 17px;
         color: #00b300;
         background-color: #fff;
         padding: 8px 14px;
@@ -1588,7 +1588,7 @@
 
     .choose-file.override{
         border: 3px solid #999;
-        font-size: 15px;
+        font-size: 17px;
         color: #999;
         padding: 8px 14px;
         width: 100% !important;
@@ -1597,7 +1597,7 @@
 
     .choose-file.override:hover{
         border: 3px solid #286090;
-        font-size: 15px;
+        font-size: 17px;
         color: #286090;
         padding: 8px 14px;
         width: 100% !important;
@@ -1606,7 +1606,7 @@
 
     .white-box{
         border: 3px solid #fff;
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 500;
         color: #286090;
         background-color: #fff;
@@ -1643,7 +1643,7 @@
 
 	.post-meta span{
 		margin-right: 6px;
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 600;
 		opacity: 0.6;
 	}
@@ -1656,7 +1656,7 @@
 	.post-carousel-right {	
 		background-color: #f0f0f0;
 		color:#000;
-		font-size: 32px;
+		font-size: 34px;
 		height: 40px;
 		line-height: 40px;
 		margin-top: -20px;
@@ -1692,14 +1692,14 @@
 		background-color: #f5f5f5;
 		text-align: center;
 		padding: 40px 0;
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: 600;
 	}
 
 	.post-quote{
 		background-color: #f5f5f5;
 		padding: 30px;
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: 500;
 		font-style: italic;
 	}
@@ -1713,7 +1713,7 @@
 		height: 35px;
 		line-height: 31px;
 		text-align: center;
-		font-size: 16px;
+		font-size: 18px;
 		color: #a3a3a3;
 		border: 1px solid #d1d1d1;
 		padding: 0;
@@ -2048,7 +2048,7 @@ h4{
 }
 
 .solution-panel .panel-title{
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .read-more-red{
@@ -2121,7 +2121,7 @@ h4{
 
 .admin-title{
     font-weight: normal;
-    font-size: 22px;
+    font-size: 24px;
     margin: 10px 20px;
 }
 
@@ -2265,7 +2265,7 @@ thead.high-light tr{
 
 .error-container{
 	height:20px;
-	font-size:12px;
+	font-size:14px;
 	text-align:right;
 	color:red;
 }
@@ -2289,7 +2289,7 @@ ul.admin-sub-menu li{
 ul.admin-sub-menu li a{
 	background-color:#efefef;
 	font-weight: 600;
-    font-size: 15px;
+    font-size: 17px;
     padding: 12px 15px;
     cursor: pointer;
     text-transform: uppercase;
@@ -2621,7 +2621,7 @@ padding-right:50px !important;
     color: #444;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 /* background image for each link */
@@ -2708,8 +2708,8 @@ padding-right:50px !important;
 	margin-bottom:20px;
 }
 .brown-text{
-	color:#7A1318;
-	font-size:13pt;
+	color: #808080;
+	font-size:15pt;
 	font-weight:400;
 	line-height: 50px;
 }
@@ -2729,4 +2729,25 @@ padding-right:50px !important;
 .logout-tag{
 	margin-top:10px;
 	margin-right:100px;
+}
+
+.option-bold option{
+	font-weight: bold;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+/* Override Bootstrap Font Size */
+h5{
+	font-size: 16px !important;
+}
+
+h4{
+	font-size: 20px !important;
+}
+
+h3{
+	font-size: 26px !important;
 }
