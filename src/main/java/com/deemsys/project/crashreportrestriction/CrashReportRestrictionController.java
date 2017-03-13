@@ -36,14 +36,14 @@ public class CrashReportRestrictionController {
 	
     
     @RequestMapping(value="/mergeCrashReportRestriction",method=RequestMethod.POST)
-   	public String mergeCrashReportRestriction(ModelMap model,HttpServletRequest request)
+   	public String mergeCrashReportRestriction(@RequestParam("reportId") String reportId,ModelMap model,HttpServletRequest request)
    	{
     	String ipAddress=request.getHeader("X-FORWARDED-FOR");
        	if(ipAddress==null){
        		ipAddress=request.getRemoteAddr();
        	}
-       	CrashReportRestrictionForm crashReportRestrictionForm = new CrashReportRestrictionForm(ipAddress, null, 1);
-    	crashReportRestrictionService.mergeCrashReportRestriction(crashReportRestrictionForm);
+       	CrashReportRestrictionForm crashReportRestrictionForm = new CrashReportRestrictionForm(reportId, ipAddress, null, 1);
+    	model.addAttribute("reportStatus",crashReportRestrictionService.mergeCrashReportRestriction(crashReportRestrictionForm));
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}

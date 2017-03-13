@@ -41,9 +41,9 @@
 			  </div>
 		</form>
 		</div>
-		<table class="table table-bordered table-striped" ng-cloak>
+		<table class="table table-bordered" ng-cloak>
 		        <thead>
-		            <tr>
+		            <tr class="report-table-header">
 		                <th colspan="2">First Name</th>
 		                <th colspan="2">Last Name</th>
 		                <th>Action</th>
@@ -111,7 +111,6 @@
 $('#crashDateReportList').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
-	maxDate : new Date()
 });
 $("#crashDateCalenderReportList").click(function(){
 	$('#crashDateReportList').focus();

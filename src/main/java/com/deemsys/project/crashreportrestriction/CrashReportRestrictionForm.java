@@ -9,10 +9,19 @@ package com.deemsys.project.crashreportrestriction;
  */
 public class CrashReportRestrictionForm {
 
+	private String reportId;
 	private String clientIp;
 	private String lastAccessTime;
 	private Integer status;
 	
+	public String getReportId() {
+		return reportId;
+	}
+
+	public void setReportId(String reportId) {
+		this.reportId = reportId;
+	}
+
 	public String getClientIp() {
 		return clientIp;
 	}
@@ -37,9 +46,10 @@ public class CrashReportRestrictionForm {
 		this.status = status;
 	}
 
-	public CrashReportRestrictionForm(String clientIp, String lastAccessTime,
+	public CrashReportRestrictionForm(String reportId,String clientIp, String lastAccessTime,
 			Integer status) {
 		super();
+		this.reportId = reportId;
 		this.clientIp = clientIp;
 		this.lastAccessTime = lastAccessTime;
 		this.status = status;

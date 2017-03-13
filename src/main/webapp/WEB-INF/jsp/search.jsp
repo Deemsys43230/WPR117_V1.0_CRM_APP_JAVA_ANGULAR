@@ -37,7 +37,9 @@
 
 
    <div style="min-height: 500px;">
-   <div ng-view ng-cloak></div></div> 
+   <div ng-view ng-cloak></div>
+   <div ng-controller="authenticationController"></div>
+   </div> 
 	<!-- FOOTER -->
 	<footer id="footer">
 		<div class="container">

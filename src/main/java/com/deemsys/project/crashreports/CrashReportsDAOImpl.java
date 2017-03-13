@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -41,7 +42,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public void merge(CrashReports crashReports) {
 		// TODO Auto-generated method stub
-		crashReports.setFileName(crashReports.getReportId()+"_"+crashReports.getReportNumber()+".pdf");
+		crashReports.setFileName(crashReports.getReportId()+".pdf");
 		this.sessionFactory.getCurrentSession().merge(crashReports);
 	}	
 	
@@ -154,7 +155,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		criteria.createAlias("c1.occupantses", "o1");
 		
 		if(!crashReportSearchForm.getReportNumber().equals("")){
-			Criterion reportNumberCriterion = Restrictions.eq("reportNumber", crashReportSearchForm.getReportNumber());
+			Criterion reportNumberCriterion = Restrictions.like("reportNumber", crashReportSearchForm.getReportNumber(),MatchMode.ANYWHERE);
 			criteria.add(reportNumberCriterion);
 		}
 		
@@ -204,6 +205,9 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		
 		criteria.setProjection(projectionList);
+		
+		// Set Order
+		criteria.addOrder(Order.desc("c1.addedDateTime"));
 		
 		List<CrashReportSearchList> crashReportSearchLists = criteria.setResultTransformer(new AliasToBeanResultTransformer(CrashReportSearchList.class)).setFirstResult((crashReportSearchForm.getPageNumber()-1)*crashReportSearchForm.getItemsPerPage()).setMaxResults(crashReportSearchForm.getItemsPerPage()).list();
 		

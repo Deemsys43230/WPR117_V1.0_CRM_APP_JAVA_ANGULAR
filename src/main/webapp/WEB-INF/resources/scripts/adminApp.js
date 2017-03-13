@@ -98,7 +98,11 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
             otherwise({
                 redirectTo: '/reports'
             });
-    }]);
+    }]).controller('authenticationController', function($rootScope, $scope, $http, $location, requestHandler) {
+    	requestHandler.getRequest("getCurrentDate.json","").then(function(response){
+			 $rootScope.currentDate=response.data.currentDate;
+    	});
+    });
 
 adminApp.directive('validateName', function() {
 	var NAME_EXPR = /^ *([a-zA-Z]+ ?)+ *$/;
@@ -130,7 +134,7 @@ adminApp.directive('reportNumberExists',['$q','$timeout','requestHandler',functi
 				var defer = $q.defer();
 				$timeout(function() {
 						var isNew;
-						var sendRequest = requestHandler.getRequest('/User/checkReportNumberExist.json?reportNumber='+modelValue+'&reportId='+scope.reportId).then(function(response) {
+						var sendRequest = requestHandler.getRequest('/User/checkReportNumberExist.json?reportNumber='+encodeURIComponent(modelValue)+'&reportId='+scope.reportId).then(function(response) {
 							isNew = response.data.isExist;
 						});
 						sendRequest.then(function() {
@@ -148,6 +152,24 @@ adminApp.directive('reportNumberExists',['$q','$timeout','requestHandler',functi
 							}
 					};
 } ]);
+
+// Loader
+adminApp.directive('loading', function () {
+    return {
+      restrict: 'E',
+      replace:true,
+      template: '<div class="loader"></div>',
+      link: function (scope, element, attr) {
+            scope.$watch('loading', function (val) {
+                if (val)
+                    $(element).show();
+                else
+                    $(element).hide();
+            });
+      }
+    };
+});
+
 //To Display success message
 //For User Messages
 function successMessage(Flash, message) {

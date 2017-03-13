@@ -6,11 +6,15 @@ var adminApp = angular.module('adminApp',['flash','requestModule']);
 
 
 //Add Reports Controller
-adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$location','Flash',function($scope,$http,requestHandler,$location,Flash){
+adminApp.controller('AddReportsController',['$rootScope','$scope','$http','requestHandler','$location','Flash',function($rootScope,$scope,$http,requestHandler,$location,Flash){
 	
 	// For Check Report Number Already Exist
 	$scope.reportId="";
 	
+	// Set Max Date
+	$('#crashDateAdd').data("DateTimePicker").setMaxDate($rootScope.currentDate);
+	
+	$scope.occupantListLength=0;
 	$scope.isEdit=false;
 	$scope.showCancel=true;
 	$scope.reportSave=false;
@@ -28,11 +32,14 @@ adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$
 	$scope.addOccupant=function(){
 		$scope.newOccupant={"firstName":"","lastName":"","status":1};
 		$scope.report.occupantsForms.push($scope.newOccupant);
+		console.log($scope.report.occupantsForms);
 	};
 	
 	// Remove Occupant
 	$scope.removeOccupant=function(index){
+
 		$scope.report.occupantsForms.splice(index,1);
+		console.log($scope.report.occupantsForms);
 	};
 	
 	// Save Crash Reports
@@ -52,10 +59,13 @@ adminApp.controller('AddReportsController',['$scope','$http','requestHandler','$
 }]);
 
 // Edit Report Controller
-adminApp.controller('EditReportsController',['$scope','$http','requestHandler','$location','Flash','$routeParams',function($scope,$http,requestHandler,$location,Flash,$routeParams){
+adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requestHandler','$location','Flash','$routeParams',function($rootScope,$scope,$http,requestHandler,$location,Flash,$routeParams){
 	
 	// For Check Report Number Already Exist
 	$scope.reportId=$routeParams.id;
+	
+	// Set Max Date
+	$('#crashDateAdd').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 	
 	$scope.isEdit=true;
 	$scope.showCancel=true;
@@ -66,6 +76,7 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 	$scope.getReport=function(){
 		requestHandler.getRequest("getCrashReports.json?id="+$scope.reportId,"").then(function(response){
 			$scope.report=response.data.crashReportsForm;
+			$scope.occupantListLength=$scope.report.occupantsForms.length;
 		});
 	};
 	
@@ -75,11 +86,14 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 	$scope.addOccupant=function(){
 		$scope.newOccupant={"firstName":"","lastName":"","status":1};
 		$scope.report.occupantsForms.push($scope.newOccupant);
+		console.log($scope.report.occupantsForms);
 	};
 	
 	// Remove Occupant
 	$scope.removeOccupant=function(index){
+
 		$scope.report.occupantsForms.splice(index,1);
+		console.log($scope.report.occupantsForms);
 	};
 	
 	$scope.saveCrashReport=function(){
@@ -113,7 +127,7 @@ adminApp.controller('EditReportsController',['$scope','$http','requestHandler','
 }]);
 
 //View Report Controller
-adminApp.controller('ViewReportController',['$scope','$http','requestHandler',function($scope,$http,requestHandler){
+adminApp.controller('ViewReportController',['$rootScope','$scope','$http','requestHandler','Flash',function($rootScope,$scope,$http,requestHandler,Flash){
 
 	$scope.getCrashReportsList=function(){
 		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
@@ -146,6 +160,8 @@ adminApp.controller('ViewReportController',['$scope','$http','requestHandler',fu
 				"itemsPerPage":"10",
 				"addedDate":"",
 		};
+		// Set Max Date
+		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 		$scope.getCrashReportsList();
 	};
 	

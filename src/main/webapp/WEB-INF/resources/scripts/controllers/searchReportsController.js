@@ -3,7 +3,7 @@
  */
 
 var commonApp = angular.module('commonApp',['flash','requestModule']);
-commonApp.controller('SearchReportsController',['$scope','$http','requestHandler','$window',function($scope,$http,requestHandler,$window){
+commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','requestHandler','$window',function($rootScope,$scope,$http,requestHandler,$window){
 
 	// Get Restriction Status
 	$scope.getReportRestrictionStatus=function(){
@@ -34,21 +34,27 @@ commonApp.controller('SearchReportsController',['$scope','$http','requestHandler
 		}
 	});
 	
-	$scope.viewReport=function(reportNumber,firstName,lastName,location,fileName){
+	$scope.viewReport=function(reportNumber,firstName,lastName,location,fileName,reportId){
 		//$scope.showResult=true;
 		$scope.reportNumber=reportNumber;
 		$scope.firstName=firstName;
 		$scope.lastName=lastName;
 		$scope.location=location;
 		$scope.fileName=fileName;
+		$scope.reportId=reportId;
 		$("#viewReportConfirmationModal").modal('show');
 	};
 	
 	$scope.openReport=function(){
-		requestHandler.postRequest("/mergeCrashReportRestriction.json","").then(function(response){
+		requestHandler.postRequest("/mergeCrashReportRestriction.json?reportId="+$scope.reportId,"").then(function(response){
 			console.log(response);
+			if(response.data.reportStatus==1){
+				$window.location=$scope.fileName;
+			}else{
+				$("#viewReportConfirmationModal").modal('hide');
+				alert("Reports Not Available!!! Please search again");
+			}
 		});
-		$window.location=$scope.fileName;
 	};
 	
 	$scope.init=function(){
@@ -66,8 +72,10 @@ commonApp.controller('SearchReportsController',['$scope','$http','requestHandler
 				"itemsPerPage":"10",
 				"addedDate":"",
 		};
+		// Set Max Date
+		$('#crashDateSearch').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 		// Check Restriction Status
-		$scope.getReportRestrictionStatus();
+		//$scope.getReportRestrictionStatus();
 	};
 	
 	$scope.init();

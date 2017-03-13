@@ -62,9 +62,9 @@
 			<!-- <span class="pull-right"><a href="/CRM/" class="btn btn-default"><i class="fa fa-reply"></i> Back to Home</a></span> -->
 			<h4>Search Results</h4>
 			<hr/>
-				<table class="table table-striped" ng-cloak>
+				<table class="table table-bordered" ng-cloak>
 					<thead>
-						<tr>
+						<tr class="report-table-header">
 							<th>Report #</th>
 							<th>First Name</th>
 							<th>Last Name</th>
@@ -81,7 +81,7 @@
 							<td>{{occupants.firstName}}</td>
 							<td>{{occupants.lastName}}</td>
 							<td>{{resultData.location}}</td>
-							<td><a href="" ng-click="viewReport(resultData.reportNumber,occupants.firstName,occupants.lastName,resultData.location,resultData.fileName)">Select</a></td>
+							<td><a href="" ng-click="viewReport(resultData.reportNumber,occupants.firstName,occupants.lastName,resultData.location,resultData.fileName,resultData.reportId)">Select</a></td>
 						</tr>
 						<tr ng-repeat-end=""></tr>
 						<tr ng-show="totalRecords==0">
@@ -166,7 +166,6 @@
 $('#crashDateSearch').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
-	maxDate : new Date()
 });
 $("#crashDateCalenderSearch").click(function(){
 	$('#crashDateSearch').focus();

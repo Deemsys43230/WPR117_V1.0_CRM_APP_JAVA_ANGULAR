@@ -2,6 +2,8 @@
 package com.deemsys.project.common;
 
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,6 +37,20 @@ public class CommonController {
     	
     	try {
 			model.addAttribute("role",loginService.getCurrentRole());
+			model.addAttribute("requestSuccess", true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			model.addAttribute("requestSuccess", false);
+		}
+    	return "";
+    }
+    
+    @RequestMapping(value="getCurrentDate",method=RequestMethod.GET)
+    public String getCurrentDate(ModelMap model){
+    	
+    	try {
+			model.addAttribute("currentDate",CRMConstants.convertMonthFormat(new Date()));
 			model.addAttribute("requestSuccess", true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -29,7 +29,7 @@
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Report Number:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" required report-number-exists>
+			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required report-number-exists>
 			      	 <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
@@ -42,7 +42,7 @@
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Location:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" required>
+			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
 			         <div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.location.$error.required">Please
@@ -54,7 +54,7 @@
 			    <div class="form-group" ng-cloak>
 			      <label class="control-label col-md-2">Upload Report:</label>
 			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
-			        <input type="file" class="form-control" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit">
+			        <input type="file" class="form-control" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" style="height: auto !important;">
 			      	<div class="error-container">
 						<div ng-show="submitted">
 							<span ng-cloak ng-show="addCrashReportForm.crashReportFile.$error.required">Please
@@ -75,30 +75,32 @@
 			      </div>
 				    </div>
 				    <h4><u>Occupants</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-			    <div class="form-group" ng-repeat="occupant in report.occupantsForms">
+			    <div class="form-group" data-slide-number="{{$index}}" ng-repeat="occupant in report.occupantsForms track by $index" ng-if="occupant.status==1">
+			      <ng-form name="occupantsForm">
 			      <label class="control-label col-sm-2">First Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName{{$index}}" maxlength="45" required validate-name>
+			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName" maxlength="50" required validate-name>
 			        <div class="error-container">
 						<div ng-show="submitted">
-							<span ng-cloak ng-show="addCrashReportForm.firstName{{$index}}.$error.required">Please
+							<span ng-cloak ng-show="occupantsForm.firstName.$error.required">Please
 								Enter First Name</span>
-								<span ng-cloak ng-show="!addCrashReportForm.firstName{{$index}}.$error.required&&addCrashReportForm.firstName{{$index}}.$error.validateName">Enter Valid First Name</span>
+								<span ng-cloak ng-show="!occupantsForm.firstName.$error.required && occupantsForm.firstName.$error.validateName">Enter Valid First Name</span>
 						</div>
 					</div>	
 			      </div>
 			      <label class="control-label col-sm-2">Last Name:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName{{$index}}" maxlength="45" required validate-name>
+			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName" maxlength="50" required validate-name>
 			        <div class="error-container">
 						<div ng-show="submitted">
-							<span ng-cloak ng-show="addCrashReportForm.lastName{{$index}}.$error.required">Please
+							<span ng-cloak ng-show="occupantsForm.lastName.$error.required">Please
 								Enter Last Name</span>
-							<span ng-cloak ng-show="!addCrashReportForm.lastName{{$index}}.$error.required&&addCrashReportForm.lastName{{$index}}.$error.validateName">Enter Valid Last Name</span>
+							<span ng-cloak ng-show="!occupantsForm.lastName.$error.required && occupantsForm.lastName.$error.validateName">Enter Valid Last Name</span>
 						</div>
 					</div>	
 			      </div>
 			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			    </ng-form>
 			    </div>
 			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
 			  
@@ -120,7 +122,6 @@
 $('#crashDateAdd').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
-	maxDate : new Date(),
 	ignoreReadonly:true
 });
 

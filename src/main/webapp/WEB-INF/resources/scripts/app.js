@@ -82,4 +82,32 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
             otherwise({
                 redirectTo: '/search-reports'
             });
-    }]);
+    }]).controller('authenticationController', function($rootScope, $scope, $http, $location, requestHandler) {
+    	requestHandler.getRequest("getCurrentDate.json","").then(function(response){
+			 $rootScope.currentDate=response.data.currentDate;
+    	});
+   });
+
+commonApp.controller("initController",['$scope',"$timeout",function($scope,$timeout){
+	$scope.loading=true;
+	$timeout(function(){
+		$scope.loading=false;
+	},100);
+}]);
+
+//Loader
+commonApp.directive('loading', function () {
+    return {
+      restrict: 'E',
+      replace:true,
+      template: '<div class="loader"></div>',
+      link: function (scope, element, attr) {
+            scope.$watch('loading', function (val) {
+                if (val)
+                    $(element).show();
+                else
+                    $(element).hide();
+            });
+      }
+    };
+});

@@ -131,9 +131,11 @@ public class CrashReportsService {
 			
 			// Insert Occupants
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), 1);
-				Occupants occupants = new Occupants(occupantsId, crashReports);
-				occupantsDAO.save(occupants);
+				if(occupantsForm.getStatus()==1){
+					OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), 1);
+					Occupants occupants = new Occupants(occupantsId, crashReports);
+					occupantsDAO.save(occupants);
+				}
 			}
 			
 		} catch (Exception e) {
@@ -162,9 +164,11 @@ public class CrashReportsService {
 			crashReportsDAO.saveCrashReports(crashReports);
 
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), 1);
-				Occupants occupants = new Occupants(occupantsId, crashReports);
-				occupantsDAO.save(occupants);
+				if(occupantsForm.getStatus()==1){
+					OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), 1);
+					Occupants occupants = new Occupants(occupantsId, crashReports);
+					occupantsDAO.save(occupants);
+				}
 			}
 			
 		} catch (Exception e) {
@@ -182,10 +186,10 @@ public class CrashReportsService {
 		String fileName="";
 		if(reportId.equals("")){
 			String uuid= UUID.randomUUID().toString().replaceAll("-", "");
-			fileName= uuid+"_"+reportNumber+".pdf";
+			fileName= uuid+".pdf";
 			reportId=uuid;
 		}else{
-			fileName= reportId+"_"+reportNumber+".pdf";
+			fileName= reportId+".pdf";
 		}
 		
 		String filePath=crmProperties.getProperty("tempFolder")+fileName;
