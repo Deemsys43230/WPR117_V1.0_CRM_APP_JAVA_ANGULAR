@@ -130,12 +130,12 @@ public class CrashReportsService {
 			occupantsDAO.deleteOccupantsByReportId(crashReportsForm.getReportId());
 			
 			// Insert Occupants
+			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				if(occupantsForm.getStatus()==1){
-					OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), 1);
-					Occupants occupants = new Occupants(occupantsId, crashReports);
-					occupantsDAO.save(occupants);
-				}
+				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), sequenceNo, 1);
+				Occupants occupants = new Occupants(occupantsId, crashReports);
+				occupantsDAO.save(occupants);
+				sequenceNo++;
 			}
 			
 		} catch (Exception e) {
@@ -162,13 +162,13 @@ public class CrashReportsService {
 			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
 
 			crashReportsDAO.saveCrashReports(crashReports);
-
+			
+			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				if(occupantsForm.getStatus()==1){
-					OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), 1);
-					Occupants occupants = new Occupants(occupantsId, crashReports);
-					occupantsDAO.save(occupants);
-				}
+				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), sequenceNo, 1);
+				Occupants occupants = new Occupants(occupantsId, crashReports);
+				occupantsDAO.save(occupants);
+				sequenceNo++;
 			}
 			
 		} catch (Exception e) {

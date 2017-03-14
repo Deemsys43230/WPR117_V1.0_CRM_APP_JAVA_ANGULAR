@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 9 Mar, 2017 4:09:43 PM by Hibernate Tools 3.4.0.CR1
+// Generated 14 Mar, 2017 5:37:35 PM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,6 +14,7 @@ public class OccupantsId implements java.io.Serializable {
 	private String reportId;
 	private String firstName;
 	private String lastName;
+	private Integer sequenceNo;
 	private Integer status;
 
 	public OccupantsId() {
@@ -24,10 +25,11 @@ public class OccupantsId implements java.io.Serializable {
 	}
 
 	public OccupantsId(String reportId, String firstName, String lastName,
-			Integer status) {
+			Integer sequenceNo, Integer status) {
 		this.reportId = reportId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.sequenceNo = sequenceNo;
 		this.status = status;
 	}
 
@@ -40,7 +42,7 @@ public class OccupantsId implements java.io.Serializable {
 		this.reportId = reportId;
 	}
 
-	@Column(name = "first_name", length = 45)
+	@Column(name = "first_name", length = 50)
 	public String getFirstName() {
 		return this.firstName;
 	}
@@ -49,13 +51,22 @@ public class OccupantsId implements java.io.Serializable {
 		this.firstName = firstName;
 	}
 
-	@Column(name = "last_name", length = 45)
+	@Column(name = "last_name", length = 50)
 	public String getLastName() {
 		return this.lastName;
 	}
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	@Column(name = "sequence_no")
+	public Integer getSequenceNo() {
+		return this.sequenceNo;
+	}
+
+	public void setSequenceNo(Integer sequenceNo) {
+		this.sequenceNo = sequenceNo;
 	}
 
 	@Column(name = "status")
@@ -87,6 +98,10 @@ public class OccupantsId implements java.io.Serializable {
 						.getLastName() != null
 						&& castOther.getLastName() != null && this
 						.getLastName().equals(castOther.getLastName())))
+				&& ((this.getSequenceNo() == castOther.getSequenceNo()) || (this
+						.getSequenceNo() != null
+						&& castOther.getSequenceNo() != null && this
+						.getSequenceNo().equals(castOther.getSequenceNo())))
 				&& ((this.getStatus() == castOther.getStatus()) || (this
 						.getStatus() != null && castOther.getStatus() != null && this
 						.getStatus().equals(castOther.getStatus())));
@@ -101,6 +116,10 @@ public class OccupantsId implements java.io.Serializable {
 				+ (getFirstName() == null ? 0 : this.getFirstName().hashCode());
 		result = 37 * result
 				+ (getLastName() == null ? 0 : this.getLastName().hashCode());
+		result = 37
+				* result
+				+ (getSequenceNo() == null ? 0 : this.getSequenceNo()
+						.hashCode());
 		result = 37 * result
 				+ (getStatus() == null ? 0 : this.getStatus().hashCode());
 		return result;
