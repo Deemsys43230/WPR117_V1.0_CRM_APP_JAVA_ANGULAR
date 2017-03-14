@@ -53,6 +53,8 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 			}else{
 				$("#viewReportConfirmationModal").modal('hide');
 				alert("Reports Not Available!!! Please search again");
+				$scope.crashReportSearchForm.pageNumber=1;
+				$scope.searchCrashReports();
 			}
 		});
 	};

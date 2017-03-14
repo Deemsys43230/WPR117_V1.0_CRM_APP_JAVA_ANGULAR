@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deemsys.project.common.CRMConstants;
+import com.deemsys.project.crashreports.CrashReportsDAO;
 import com.deemsys.project.entity.CrashReportRestriction;
+import com.deemsys.project.entity.CrashReports;
 /**
  * 
  * @author Deemsys
@@ -31,6 +33,9 @@ public class CrashReportRestrictionService {
 
 	@Autowired
 	CrashReportRestrictionDAO crashReportRestrictionDAO;
+	
+	@Autowired
+	CrashReportsDAO crashReportsDAO;
 	
 	//Get All Entries
 	public List<CrashReportRestrictionForm> getCrashReportRestrictionList()
@@ -72,12 +77,17 @@ public class CrashReportRestrictionService {
 		//TODO: Convert Form to Entity Here
 		
 		//Logic Starts
-		
-		CrashReportRestriction crashReportRestriction=new CrashReportRestriction(crashReportRestrictionForm.getClientIp(), new DateTime().toDate(), crashReportRestrictionForm.getStatus());
-
-		crashReportRestrictionDAO.merge(crashReportRestriction);
+		CrashReports crashReports = crashReportsDAO.getReportsByReportId(crashReportRestrictionForm.getReportId());
+		if(crashReports!=null){
+			CrashReportRestriction crashReportRestriction=new CrashReportRestriction(crashReportRestrictionForm.getClientIp(), new DateTime().toDate(), crashReportRestrictionForm.getStatus());
+			crashReportRestrictionDAO.merge(crashReportRestriction);
+			return 1;
+		}else{
+			// Reports Not Available
+			return 0;
+		}
 		//Logic Ends
-		return 1;
+		
 	}
 	
 	//Save an Entry

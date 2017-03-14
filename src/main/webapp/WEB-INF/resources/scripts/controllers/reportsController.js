@@ -119,6 +119,13 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		}
 	};
 	
+	// Change File
+	$scope.changeFile=function(){
+		$scope.isEdit=false;
+		$scope.showCancel=false;
+		$('#crashReportFile').trigger('click');
+	};
+	
 	// Clear Selected File
 	$scope.clearFile = function () {
 	    angular.element("input[type='file']").val(null);
