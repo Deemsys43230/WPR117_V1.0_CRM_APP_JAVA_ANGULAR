@@ -111,6 +111,22 @@ public class CRMConstants {
 		return dateformat;
 	}
 	
+	public static Date convertYearFormatWithTime24Hr(String date)
+	{
+		  SimpleDateFormat monthFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date dateformat=new Date();
+		try {
+			dateformat = monthFormat.parse(date);
+			dateformat=yearFormat.parse(yearFormat.format(dateformat));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return dateformat;
+	}
+	
 	// Convert To USA Month Format With Time
 	public static String convertUSAFormatWithTimeAMPM(String date)
 	{

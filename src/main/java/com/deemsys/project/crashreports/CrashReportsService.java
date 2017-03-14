@@ -122,7 +122,17 @@ public class CrashReportsService {
 		try {
 			Accounts accounts = accountsDAO.getAccountsById(loginService.getCurrentAccountId());
 			
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null, new Date(), new Date(), 1, null);
+			Date addedDate = new Date();
+			Date addedDateTime = new Date();
+			if(crashReportsForm.getAddedDate()!=null){
+				addedDate=CRMConstants.convertYearFormat(crashReportsForm.getAddedDate());
+			}
+			
+			if(crashReportsForm.getAddedDateTime()!=null){
+				addedDateTime=CRMConstants.convertYearFormatWithTime24Hr(crashReportsForm.getAddedDateTime());
+			}
+			
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null, addedDate, addedDateTime, 1, null);
 
 			crashReportsDAO.merge(crashReports);
 
