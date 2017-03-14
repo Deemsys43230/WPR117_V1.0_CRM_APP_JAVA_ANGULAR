@@ -49,7 +49,8 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 		requestHandler.postRequest("/mergeCrashReportRestriction.json?reportId="+$scope.reportId,"").then(function(response){
 			console.log(response);
 			if(response.data.reportStatus==1){
-				$window.location=$scope.fileName;
+				$("#viewReportConfirmationModal").modal('hide');
+				$window.open($scope.fileName,"_blank");
 			}else{
 				$("#viewReportConfirmationModal").modal('hide');
 				alert("Reports Not Available!!! Please search again");

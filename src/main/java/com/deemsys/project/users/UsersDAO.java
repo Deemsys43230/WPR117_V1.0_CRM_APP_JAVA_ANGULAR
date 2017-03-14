@@ -10,4 +10,5 @@ import com.deemsys.project.entity.Users;
 public interface UsersDAO extends IGenericDAO<Users>{
 	public Users getByUsername(String username);
 	public Users getByAccountId(String accountId);
+	public Integer checkPassword(String accountId,String password);
 }

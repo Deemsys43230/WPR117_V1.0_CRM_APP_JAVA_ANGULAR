@@ -94,6 +94,20 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'ViewReportController'
+            }).when('/changepassword', {
+                templateUrl: 'admin/change-password.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'adminApp',
+                            files:[
+                                'resources/scripts/controllers/changePasswordController.js'
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'ChangePasswordController'
             }).
             otherwise({
                 redirectTo: '/reports'
@@ -144,10 +158,9 @@ adminApp.directive('reportNumberExists',['$q','$timeout','requestHandler',functi
 									defer.reject();
 								}
 								});
-								isNew = false;
-								}, 10);
-				
-									return defer.promise;
+							isNew = false;
+						}, 10);
+								return defer.promise;
 								};
 							}
 					};

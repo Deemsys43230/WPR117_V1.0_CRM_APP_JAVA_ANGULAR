@@ -19,7 +19,7 @@
 					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalenderAdd"> <span class="fa fa-calendar"></span></span>
 					</div>
 			        <div class="error-container">
-						<div ng-show="submitted">
+						<div ng-show="submitted || addCrashReportForm.crashDate.$dirty">
 							<span ng-cloak ng-show="addCrashReportForm.crashDate.$error.required">Please
 								Enter Crash Date</span>
 						</div>
@@ -31,7 +31,7 @@
 			      <div class="col-sm-4">          
 			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required report-number-exists>
 			      	 <div class="error-container">
-						<div ng-show="submitted">
+						<div ng-show="submitted || addCrashReportForm.reportNumber.$dirty">
 							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
 								Enter Report Number</span>
 							<span ng-cloak ng-show="!addCrashReportForm.reportNumber.$error.required&&addCrashReportForm.reportNumber.$error.reportNumberExists">Report Number Already Exist</span>
@@ -44,7 +44,7 @@
 			      <div class="col-sm-4">          
 			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
 			         <div class="error-container">
-						<div ng-show="submitted">
+						<div ng-show="submitted || addCrashReportForm.location.$dirty">
 							<span ng-cloak ng-show="addCrashReportForm.location.$error.required">Please
 								Enter Location</span>
 						</div>
@@ -56,7 +56,7 @@
 			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
 			        <input type="file" class="form-control" id="crashReportFile" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" style="height: auto !important;">
 			      	<div class="error-container">
-						<div ng-show="submitted">
+						<div ng-show="submitted || addCrashReportForm.crashReportFile.$dirty">
 							<span ng-cloak ng-show="addCrashReportForm.crashReportFile.$error.required">Please
 								Select Report</span>
 								<span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&addCrashReportForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
@@ -81,7 +81,7 @@
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName" maxlength="50" required validate-name>
 			        <div class="error-container">
-						<div ng-show="submitted">
+						<div ng-show="submitted || occupantsForm.firstName.$dirty">
 							<span ng-cloak ng-show="occupantsForm.firstName.$error.required">Please
 								Enter First Name</span>
 								<span ng-cloak ng-show="!occupantsForm.firstName.$error.required && occupantsForm.firstName.$error.validateName">Enter Valid First Name</span>
@@ -92,7 +92,7 @@
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName" maxlength="50" required validate-name>
 			        <div class="error-container">
-						<div ng-show="submitted">
+						<div ng-show="submitted || occupantsForm.lastName.$dirty">
 							<span ng-cloak ng-show="occupantsForm.lastName.$error.required">Please
 								Enter Last Name</span>
 							<span ng-cloak ng-show="!occupantsForm.lastName.$error.required && occupantsForm.lastName.$error.validateName">Enter Valid Last Name</span>

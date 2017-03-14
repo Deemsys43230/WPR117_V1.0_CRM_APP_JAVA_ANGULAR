@@ -11,19 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.deemsys.project.login.LoginService;
+
 /**
  * 
  * @author Deemsys
  *
  */
 @Controller
-@RequestMapping("/SAdmin")
 public class AccountsController {
 	
 	@Autowired
 	AccountsService accountsService;
+	
+	@Autowired
+	LoginService loginService;
 
-    @RequestMapping(value="/getAccount",method=RequestMethod.GET)
+    @RequestMapping(value="/SAdmin/getAccount",method=RequestMethod.GET)
 	public String getAccounts(@RequestParam("id") String id,ModelMap model)
 	{
     	model.addAttribute("accountsForm",accountsService.getAccounts(id));
@@ -32,7 +36,7 @@ public class AccountsController {
 	}
 	
     
-    @RequestMapping(value="/mergeAccounts",method=RequestMethod.POST)
+    @RequestMapping(value="/SAdmin/mergeAccounts",method=RequestMethod.POST)
    	public String mergeAccounts(@RequestBody AccountsForm accountsForm,ModelMap model)
    	{
     	accountsService.mergeAccounts(accountsForm);
@@ -40,7 +44,7 @@ public class AccountsController {
    		return "/returnPage";
    	}
     
-    @RequestMapping(value="/saveUpdateAccounts",method=RequestMethod.POST)
+    @RequestMapping(value="/SAdmin/saveUpdateAccounts",method=RequestMethod.POST)
    	public String saveAccounts(@RequestBody AccountsForm accountsForm,ModelMap model)
    	{
     	if(accountsForm.getAccountId()==null)
@@ -52,7 +56,7 @@ public class AccountsController {
    	}
    
     
-    @RequestMapping(value="/deleteAccount",method=RequestMethod.POST)
+    @RequestMapping(value="/SAdmin/deleteAccount",method=RequestMethod.POST)
    	public String deleteAccounts(@RequestParam("id") String id,ModelMap model)
    	{
     	
@@ -61,7 +65,7 @@ public class AccountsController {
    		return "/returnPage";
    	}
     
-    @RequestMapping(value="/getAllAccounts",method=RequestMethod.GET)
+    @RequestMapping(value="/SAdmin/getAllAccounts",method=RequestMethod.GET)
    	public String getAllAccountss(ModelMap model)
    	{
     	model.addAttribute("accountsForms",accountsService.getAccountsList());
@@ -69,7 +73,7 @@ public class AccountsController {
    		return "/returnPage";
    	}
 	
-    @RequestMapping(value="/enableOrDisableAccount",method=RequestMethod.POST)
+    @RequestMapping(value="/SAdmin/enableOrDisableAccount",method=RequestMethod.POST)
    	public String enableOrDisableAccount(@RequestParam("id") String id,ModelMap model)
    	{
     	
@@ -78,11 +82,29 @@ public class AccountsController {
    		return "/returnPage";
    	}
     
-    @RequestMapping(value="/resetAccount",method=RequestMethod.POST)
+    @RequestMapping(value="/SAdmin/resetPassword",method=RequestMethod.POST)
    	public String resetPassword(@RequestParam("id") String id,ModelMap model)
    	{
     	
     	accountsService.resetPassword(id);
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
+    
+    @RequestMapping(value="/User/checkPassword",method=RequestMethod.POST)
+   	public String checkPassword(@RequestParam("password") String currentPassword,ModelMap model)
+   	{
+    	
+    	model.addAttribute("isCorrect",accountsService.checkPassword(loginService.getCurrentAccountId(),currentPassword));
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
+    
+    @RequestMapping(value="/User/changePassword",method=RequestMethod.POST)
+   	public String changePassword(@RequestParam("password") String password,ModelMap model)
+   	{
+    	
+    	accountsService.changePassword(loginService.getCurrentAccountId(),password);
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}

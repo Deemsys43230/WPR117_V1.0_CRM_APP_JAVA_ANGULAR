@@ -147,6 +147,17 @@ public class UsersDAOImpl implements UsersDAO{
 		return (Users) this.sessionFactory.getCurrentSession().createCriteria(Users.class).add(Restrictions.eq("accounts.accountId", accountId)).uniqueResult();
 	}
 
+	@Override
+	public Integer checkPassword(String accountId, String password) {
+		// TODO Auto-generated method stub
+		Users users = (Users) this.sessionFactory.getCurrentSession().createCriteria(Users.class).add(Restrictions.and(Restrictions.eq("accounts.accountId", accountId), Restrictions.eq("password", password))).uniqueResult();
+		if(users!=null){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+
 	
 
 }

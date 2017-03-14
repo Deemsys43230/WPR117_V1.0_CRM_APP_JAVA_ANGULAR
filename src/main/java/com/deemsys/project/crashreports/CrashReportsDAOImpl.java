@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import com.deemsys.project.common.BasicQuery;
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.entity.CrashReports;
+import com.deemsys.project.entity.Users;
 
 /**
  * 
@@ -258,6 +259,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public Integer checkReportNumberExist(String reportId, String reportNumber) {
 		// TODO Auto-generated method stub
+		this.sessionFactory.getCurrentSession().createCriteria(Users.class).setProjection(Projections.max("userId")).uniqueResult();
 		CrashReports crashReports =(CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.and(Restrictions.ne("reportId", reportId),Restrictions.eq("reportNumber", reportNumber))).uniqueResult();
 		if(crashReports!=null){
 			return 1;

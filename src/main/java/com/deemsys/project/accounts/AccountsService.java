@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration.Password;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.entity.Accounts;
 import com.deemsys.project.entity.Users;
+import com.deemsys.project.login.PasswordEncryptor;
 import com.deemsys.project.users.UsersDAO;
 import com.deemsys.project.users.UsersForm;
 import com.deemsys.project.users.UsersService;
@@ -38,6 +40,9 @@ public class AccountsService {
 	
 	@Autowired
 	UsersService usersService;
+	
+	@Autowired
+	PasswordEncryptor passwordEncryptor;
 	
 	//Get All Entries
 	public List<AccountsForm> getAccountsList()
@@ -159,11 +164,22 @@ public class AccountsService {
 	public int resetPassword(String accountId)
 	{
 		Users users = usersDAO.getByAccountId(accountId);
-		users.setPassword(users.getPassword());
+		users.setPassword(passwordEncryptor.encodePassword(users.getPassword()));
 		usersDAO.update(users);
 		return 1;
 	}
-	
-	
-	
+
+	public int changePassword(String accountId,String password) {
+		// TODO Auto-generated method stub
+		Users users = usersDAO.getByAccountId(accountId);
+		users.setPassword(passwordEncryptor.encodePassword(password));
+		usersDAO.update(users);
+		return 1;
+	}
+
+	public Integer checkPassword(String accountId, String currentPassword) {
+		// TODO Auto-generated method stub
+		return usersDAO.checkPassword(accountId,passwordEncryptor.encodePassword(currentPassword));
+	}
+		
 }
