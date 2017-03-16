@@ -70,7 +70,7 @@
 			<div class="col-md-12" style="padding:20px;">
 			<p class="brown-text">Not what you are looking for?
 			<a href="/">Click Here</a> to search and download your crash reports.</p>
-			</div>
+			</div> 
 		</div>
 	</section>
 	<!-- /SERVICES -->

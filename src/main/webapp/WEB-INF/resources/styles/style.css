@@ -2770,6 +2770,18 @@ h3{
 	font-size: 26px !important;
 }
 
+/* Error Message */
+.error-message{
+    position: relative;
+    display: inline-block !important;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FF0000;
+    background-color: #F0E68C;
+    margin-bottom: 10px;
+}
+/* Error Message Ends*/
+
 /* Loader In CSS  */
 .loader {
   border: 16px solid #f3f3f3;

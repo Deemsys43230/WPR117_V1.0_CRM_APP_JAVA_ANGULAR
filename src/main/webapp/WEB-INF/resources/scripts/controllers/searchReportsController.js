@@ -12,27 +12,42 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 		});
 	};
 	
+	// Search Crash Reports
 	$scope.searchCrashReports=function(){
 		if($scope.isAccessable==1){
-			requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
-				$scope.totalRecords=response.data.crashReportsResult.totalRecords;
-				$scope.crashReportsResultList=response.data.crashReportsResult;
-				console.log($scope.crashReportsResultList);
-			});
+			if($scope.crashReportSearchForm.crashDate!=""&&$scope.crashReportSearchForm.reportNumber!=""){
+				$scope.isCombinationError=false;
+			}else if($scope.crashReportSearchForm.crashDate!=""&&$scope.crashReportSearchForm.firstName!=""){
+				$scope.isCombinationError=false;
+			}else if($scope.crashReportSearchForm.crashDate!=""&&$scope.crashReportSearchForm.lastName!=""){
+				$scope.isCombinationError=false;
+			}else if($scope.crashReportSearchForm.firstName!=""&&$scope.crashReportSearchForm.lastName!=""){
+				$scope.isCombinationError=false;
+			}else{
+				$scope.isCombinationError=true;
+			}
+			
+			if(!$scope.isCombinationError){
+				requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
+					$scope.totalRecords=response.data.crashReportsResult.totalRecords;
+					$scope.crashReportsResultList=response.data.crashReportsResult;
+					console.log($scope.crashReportsResultList);
+				});
+			}
 		}
     };
 	
-	$scope.$watch("crashReportSearchForm.pageNumber",function(){
-		if($scope.crashReportSearchForm.crashDate!="")
-		  $scope.searchCrashReports();
-	});
-
-	$scope.$watch("crashReportSearchForm.itemsPerPage",function(){
-		if($scope.crashReportSearchForm.crashDate!=""){
-			$scope.crashReportSearchForm.pageNumber=1;
-			$scope.searchCrashReports();
-		}
-	});
+    // On Page Change In Pagination
+	$scope.onPageChane=function(pageNumber){
+    	$scope.crashReportSearchForm.pageNumber=pageNumber;
+    	$scope.searchCrashReports();
+    };
+    
+    // No of Records Per Page Change
+    $scope.onRecordsPerPageChange=function(){
+    	$scope.crashReportSearchForm.pageNumber=1;
+		$scope.searchCrashReports();
+    };
 	
 	$scope.viewReport=function(reportNumber,firstName,lastName,location,fileName,reportId){
 		//$scope.showResult=true;
@@ -65,6 +80,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 
 		$scope.totalRecords=0;
 		$scope.isAccessable=1;
+		$scope.isCombinationError=false;
 		$scope.crashReportSearchForm={
 				"accountId":"0",
 				"reportNumber":"",
