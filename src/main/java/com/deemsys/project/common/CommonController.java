@@ -2,7 +2,10 @@
 package com.deemsys.project.common;
 
 
+import java.io.IOException;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +33,17 @@ public class CommonController {
 	{
     	model.addAttribute("Success",true);
 		return "/index";
+	}
+    
+    @RequestMapping(value={"/upload/"},method=RequestMethod.GET)
+	public void getIndex1(HttpServletResponse http,ModelMap model)
+	{
+    	try {
+			http.sendRedirect("../upload");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
     
     @RequestMapping(value="getCurrentRole",method=RequestMethod.GET)

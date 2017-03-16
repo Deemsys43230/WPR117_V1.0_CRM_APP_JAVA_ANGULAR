@@ -51,6 +51,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 			if(response.data.reportStatus==1){
 				$("#viewReportConfirmationModal").modal('hide');
 				$window.open($scope.fileName,"_blank");
+				//$window.location=$scope.fileName;
 			}else{
 				$("#viewReportConfirmationModal").modal('hide');
 				alert("Reports Not Available!!! Please search again");

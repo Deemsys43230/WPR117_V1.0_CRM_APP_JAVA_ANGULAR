@@ -3,7 +3,7 @@ var myApp=angular.module("requestModule",[]);
 myApp.factory("requestHandler",['$http',function($http){
     
     var requestObj={};
-    var appURL=window.location.origin;
+    var appURL=window.location.origin+"/CRM/";
     
     
     requestObj.getURL=function(){
@@ -12,7 +12,7 @@ myApp.factory("requestHandler",['$http',function($http){
 
     requestObj.getRequest=function(requestURL,params){
 
-         requestURL=appURL+"/CRM/"+requestURL;
+         requestURL=appURL+requestURL;
          return $http.get(requestURL,params).then(function (results) {  
             return results;   
          });
@@ -50,7 +50,7 @@ myApp.factory("requestHandler",['$http',function($http){
     
     requestObj.postRequest=function(requestURL,params){      
        
-        requestURL=appURL+"/CRM/"+requestURL;
+        requestURL=appURL+requestURL;
         return $http.post(requestURL,params).then(function (results) {
                 return results;
          });
@@ -58,7 +58,7 @@ myApp.factory("requestHandler",['$http',function($http){
     
     
     requestObj.postExportRequest=function(requestURL,params){
-        requestURL=appURL+"/CRM/"+requestURL;
+        requestURL=appURL+requestURL;
         return $http({
 		    	    url: requestURL,
 		    	    method: "POST",
@@ -74,7 +74,7 @@ myApp.factory("requestHandler",['$http',function($http){
     
     
     requestObj.deletePostRequest=function(requestURL,params){
-    	 requestURL=appURL+"/CRM/"+requestURL+params;
+    	 requestURL=appURL+requestURL+params;
     	 return $http({
 			  method : "POST",
 			  url : requestURL,
