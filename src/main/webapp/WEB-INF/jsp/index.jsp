@@ -55,12 +55,12 @@
 						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
 						<div id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
                             <h5>Username<span class="text-red"><sup>*</sup></span></h5>
-                                <input type="text" name="username" placeholder="Username" id="username" maxlength="25">
+                                <input type="text" class="form-control" name="username" placeholder="Username" id="username" maxlength="25">
                                 <div class="error-container" >
                                  <span id="username_error"></span>
                               	</div>
                             	<h5>Password</span><span class="text-red"><sup>*</sup></span></h5>
-                                <input type="password" placeholder="Password" name="password" id="password">
+                                <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                                 <div class="error-container" >
                                  <span id="password_error"></span>
                               	</div>                               
@@ -69,7 +69,7 @@
 			</div>
 			<div class="col-md-12" style="padding:20px;">
 			<p class="brown-text">Not what you are looking for?
-			<a href="/">Click Here</a> to search and download your crash reports.</p>
+			<a href="/CRM">Click Here</a> to search and download your crash reports.</p>
 			</div> 
 		</div>
 	</section>
