@@ -78,6 +78,17 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'SearchReportsController'
+            }).when('/contactUs', {
+                templateUrl: 'views/contactUs.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'commonApp',
+                            files:[]
+                        });
+                    }]
+
+                },
             }).
             otherwise({
                 redirectTo: '/search-reports'

@@ -155,34 +155,54 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class,"c1");
 		criteria.createAlias("c1.occupantses", "o1");
 		
-		if(!crashReportSearchForm.getReportNumber().equals("")){
-			Criterion reportNumberCriterion = Restrictions.like("reportNumber", crashReportSearchForm.getReportNumber(),MatchMode.ANYWHERE);
-			criteria.add(reportNumberCriterion);
+		if(crashReportSearchForm.getReportNumber()!=null && !crashReportSearchForm.getReportNumber().equals("")){
+			if(crashReportSearchForm.getSearchType()==0){
+				Criterion reportNumberCriterion = Restrictions.eq("reportNumber", crashReportSearchForm.getReportNumber());
+				criteria.add(reportNumberCriterion);
+			}else{
+				Criterion reportNumberCriterion = Restrictions.like("reportNumber", crashReportSearchForm.getReportNumber(),MatchMode.ANYWHERE);
+				criteria.add(reportNumberCriterion);
+			}
 		}
 		
-		if(!crashReportSearchForm.getCrashDate().equals("")){
+		if(crashReportSearchForm.getCrashDate()!=null && !crashReportSearchForm.getCrashDate().equals("")){
 			Criterion crashDateCriterion = Restrictions.eq("crashDate", CRMConstants.convertYearFormat(crashReportSearchForm.getCrashDate()));
 			criteria.add(crashDateCriterion);
 		}
 		
-		if(!crashReportSearchForm.getLocation().equals("")){
-			Criterion locationCriterion = Restrictions.eq("location", crashReportSearchForm.getLocation());
-			criteria.add(locationCriterion);
+		if(crashReportSearchForm.getLocation()!=null && !crashReportSearchForm.getLocation().equals("")){
+			if(crashReportSearchForm.getSearchType()==0){
+				Criterion locationCriterion = Restrictions.eq("location", crashReportSearchForm.getLocation());
+				criteria.add(locationCriterion);
+			}else{
+				Criterion locationCriterion = Restrictions.like("location", crashReportSearchForm.getLocation(),MatchMode.ANYWHERE);
+				criteria.add(locationCriterion);
+			}
 		}
 		
-		if(!crashReportSearchForm.getAddedDate().equals("")){
+		if(crashReportSearchForm.getAddedDate()!=null && !crashReportSearchForm.getAddedDate().equals("")){
 			Criterion addedDateCriterion = Restrictions.eq("addedDate", CRMConstants.convertYearFormat(crashReportSearchForm.getAddedDate()));
 			criteria.add(addedDateCriterion);
 		}
 		
-		if(!crashReportSearchForm.getFirstName().equals("")){
-			Criterion firstNameCriterion = Restrictions.like("o1.id.firstName", crashReportSearchForm.getFirstName(),MatchMode.ANYWHERE);
-			criteria.add(firstNameCriterion);
+		if(crashReportSearchForm.getFirstName()!=null && !crashReportSearchForm.getFirstName().equals("")){
+			if(crashReportSearchForm.getSearchType()==0){
+				Criterion firstNameCriterion = Restrictions.eq("o1.id.firstName", crashReportSearchForm.getFirstName());
+				criteria.add(firstNameCriterion);
+			}else{
+				Criterion firstNameCriterion = Restrictions.like("o1.id.firstName", crashReportSearchForm.getFirstName(),MatchMode.ANYWHERE);
+				criteria.add(firstNameCriterion);
+			}
 		}
 		
-		if(!crashReportSearchForm.getLastName().equals("")){
-			Criterion lastNameCriterion = Restrictions.like("o1.id.lastName", crashReportSearchForm.getLastName(),MatchMode.ANYWHERE);
-			criteria.add(lastNameCriterion);
+		if(crashReportSearchForm.getLastName()!=null &&!crashReportSearchForm.getLastName().equals("")){
+			if(crashReportSearchForm.getSearchType()==0){
+				Criterion lastNameCriterion = Restrictions.eq("o1.id.lastName", crashReportSearchForm.getLastName());
+				criteria.add(lastNameCriterion);
+			}else{
+				Criterion lastNameCriterion = Restrictions.like("o1.id.lastName", crashReportSearchForm.getLastName(),MatchMode.ANYWHERE);
+				criteria.add(lastNameCriterion);
+			}
 		}
 		
 		if(!crashReportSearchForm.getAccountId().equals("0"))

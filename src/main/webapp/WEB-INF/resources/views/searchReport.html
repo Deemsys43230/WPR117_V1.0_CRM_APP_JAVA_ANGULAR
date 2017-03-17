@@ -11,6 +11,31 @@
 				<form class="contact-form" name="reportSearchForm"
 					ng-submit="reportSearchForm.$valid && searchCrashReports()" novalidate>
 					<h5>
+						First Name<span style="color:red"><sup>*</sup></span>
+					</h5>
+					<input type="text" name="firstName" class="form-control"
+						ng-model="crashReportSearchForm.firstName"
+						placeholder="First Name" maxlength="50" required>
+						 <div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="reportSearchForm.firstName.$error.required">Please
+								Enter First Name</span>
+						</div>
+					</div>
+					<h5>
+						Last Name<span style="color:red"><sup>*</sup></span>
+					</h5>
+					<input type="text" name="lastName" class="form-control"
+						ng-model="crashReportSearchForm.lastName"
+						placeholder="Last Name" maxlength="50" required>
+						<div class="error-container">
+						<div ng-show="submitted">
+							<span ng-cloak ng-show="reportSearchForm.lastName.$error.required">Please
+								Enter Last Name</span>
+						</div>
+					</div>
+					<hr/>
+					<h5>
 						Crash Date
 					</h5>
 					<div class="input-group">
@@ -31,27 +56,15 @@
 					<input type="text" name="location" class="form-control"
 						ng-model="crashReportSearchForm.location"
 						placeholder="Location" maxlength="100">
-					<h5>
-						First Name
-					</h5>
-					<input type="text" name="firstName" class="form-control"
-						ng-model="crashReportSearchForm.firstName"
-						placeholder="First Name" maxlength="50">
-					<h5>
-						Last Name
-					</h5>
-					<input type="text" name="lastName" class="form-control"
-						ng-model="crashReportSearchForm.lastName"
-						placeholder="Last Name" maxlength="50">
 					<hr />
-				<span ng-cloak class="error-message" ng-show="isCombinationError">Minimum requirements for successful search are one of:<br/>
+		<!-- 		<span ng-cloak class="error-message" ng-show="isCombinationError">Minimum requirements for successful search are one of:<br/>
 							<ul>
 							<li>Crash Date & Report Number</li>
 							<li>Crash Date & First Name</li>
 							<li>Crash Date & Last Name</li>
 							<li>First Name & Last Name</li>
 							</ul>
-							</span>
+							</span> -->
 					<div class="text-center">
 						<input type="submit" class="btn btn-lg btn-send" ng-click="submitted=true;" value="Search Report" />
 					</div>
@@ -92,7 +105,7 @@
 						
 					</tbody>
 				</table>
-				<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" on-page-change="onPageChane(newPageNumber)">
+				<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true">
     					</dir-pagination-controls>
 				<div class="col-md-12">
 					<div class="col-md-3 pull-right no-padding">
@@ -112,8 +125,14 @@
 					<span><i class="fa fa-exclamation-triangle"></i> You have already downloaded a crash report today. Kindly wait for another 24 hours before attempting again (or) contact our support team for further assistance at <a href="mailto:support@crashreportsonline.com">support@crashreportsonline.com</a></span>
 				</div>
 			</div>
+			
+		<div class="col-md-12">
+		<div class="col-md-3"></div>
+		<div class="col-md-9">
+				Having problems? Please reach us through the <a href="#/contactUs">Contact Us</a> option.</div>
 		</div>
-
+		</div>
+	
 	<!-- 	<div class="col-md-12 login-form" style="min-height: 500px;"
 			ng-show="showResult">
 			<div class="col-md-12">

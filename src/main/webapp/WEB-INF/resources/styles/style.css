@@ -2265,8 +2265,8 @@ thead.high-light tr{
 }
 
 .error-container{
-	height:20px;
-	font-size:14px;
+	height:10px;
+	font-size:12px;
 	text-align:right;
 	color:red;
 }

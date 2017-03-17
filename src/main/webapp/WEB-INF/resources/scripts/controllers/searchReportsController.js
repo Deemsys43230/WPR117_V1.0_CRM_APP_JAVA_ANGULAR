@@ -15,38 +15,38 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 	// Search Crash Reports
 	$scope.searchCrashReports=function(){
 		if($scope.isAccessable==1){
-			if($scope.crashReportSearchForm.crashDate!=""&&$scope.crashReportSearchForm.reportNumber!=""){
-				$scope.isCombinationError=false;
-			}else if($scope.crashReportSearchForm.crashDate!=""&&$scope.crashReportSearchForm.firstName!=""){
-				$scope.isCombinationError=false;
-			}else if($scope.crashReportSearchForm.crashDate!=""&&$scope.crashReportSearchForm.lastName!=""){
-				$scope.isCombinationError=false;
-			}else if($scope.crashReportSearchForm.firstName!=""&&$scope.crashReportSearchForm.lastName!=""){
-				$scope.isCombinationError=false;
-			}else{
-				$scope.isCombinationError=true;
-			}
-			
-			if(!$scope.isCombinationError){
-				requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
-					$scope.totalRecords=response.data.crashReportsResult.totalRecords;
-					$scope.crashReportsResultList=response.data.crashReportsResult;
-					console.log($scope.crashReportsResultList);
-				});
-			}
+			$scope.crashReportSearchForm.pageNumber=1;
+			requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
+				$scope.totalRecords=response.data.crashReportsResult.totalRecords;
+				$scope.crashReportsResultList=response.data.crashReportsResult;
+				console.log($scope.crashReportsResultList);
+			});
 		}
     };
 	
-    // On Page Change In Pagination
-	$scope.onPageChane=function(pageNumber){
-    	$scope.crashReportSearchForm.pageNumber=pageNumber;
-    	$scope.searchCrashReports();
+    // Secondary Search
+    $scope.secondarySearch=function(){
+    	if($scope.isAccessable==1){
+    		requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
+				$scope.totalRecords=response.data.crashReportsResult.totalRecords;
+				$scope.crashReportsResultList=response.data.crashReportsResult;
+				console.log($scope.crashReportsResultList);
+			});
+		}
     };
     
+    // On Page Change In Pagination
+    $scope.$watch('crashReportSearchForm.pageNumber',function(){
+    	if(($scope.crashReportSearchForm.firstName!=undefined && $scope.crashReportSearchForm.firstName!="")&&($scope.crashReportSearchForm.lastName!=undefined && $scope.crashReportSearchForm.lastName!="")){
+    		$scope.secondarySearch();
+    	}
+    });
+	
     // No of Records Per Page Change
     $scope.onRecordsPerPageChange=function(){
-    	$scope.crashReportSearchForm.pageNumber=1;
-		$scope.searchCrashReports();
+    	if(($scope.crashReportSearchForm.firstName!=undefined && $scope.crashReportSearchForm.firstName!="")&&($scope.crashReportSearchForm.lastName!=undefined && $scope.crashReportSearchForm.lastName!="")){
+    		$scope.searchCrashReports();
+    	}
     };
 	
 	$scope.viewReport=function(reportNumber,firstName,lastName,location,fileName,reportId){
@@ -80,7 +80,6 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 
 		$scope.totalRecords=0;
 		$scope.isAccessable=1;
-		$scope.isCombinationError=false;
 		$scope.crashReportSearchForm={
 				"accountId":"0",
 				"reportNumber":"",
@@ -91,6 +90,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 				"pageNumber":1,
 				"itemsPerPage":"10",
 				"addedDate":"",
+				"searchType":0
 		};
 		// Set Max Date
 		$('#crashDateSearch').data("DateTimePicker").setMaxDate($rootScope.currentDate);

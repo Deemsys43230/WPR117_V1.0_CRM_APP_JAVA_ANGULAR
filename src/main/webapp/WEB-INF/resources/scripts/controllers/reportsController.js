@@ -137,18 +137,25 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 adminApp.controller('ViewReportController',['$rootScope','$scope','$http','requestHandler','Flash',function($rootScope,$scope,$http,requestHandler,Flash){
 
 	$scope.getCrashReportsList=function(){
+		$scope.crashReportSearchForm.pageNumber=1;
 		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 			$scope.crashReportsResultList=response.data.crashReportsResult;
 		});
 	};
     
+	$scope.secondarySearch=function(){
+		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
+			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
+			$scope.crashReportsResultList=response.data.crashReportsResult;
+		});
+	};
+	
     $scope.$watch("crashReportSearchForm.pageNumber",function(){
-		$scope.getCrashReportsList();
+		$scope.secondarySearch();
 	});
 
 	$scope.$watch("crashReportSearchForm.itemsPerPage",function(){
-		$scope.crashReportSearchForm.pageNumber=1;
 		$scope.getCrashReportsList();
 	});
 	
@@ -166,6 +173,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 				"pageNumber":1,
 				"itemsPerPage":"10",
 				"addedDate":"",
+				"searchType":1
 		};
 		// Set Max Date
 		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
@@ -195,17 +203,6 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 	
 	// Reset Search
 	$scope.resetSearch=function(){
-		$scope.crashReportSearchForm={
-				"accountId":"0",
-				"reportNumber":"",
-				"crashDate":"",
-				"firstName":"",
-				"lastName":"",
-				"location":"",
-				"pageNumber":1,
-				"itemsPerPage":"10",
-				"addedDate":"",
-		};
-		$scope.getCrashReportsList();
+		$scope.init();
 	};
 }]);
