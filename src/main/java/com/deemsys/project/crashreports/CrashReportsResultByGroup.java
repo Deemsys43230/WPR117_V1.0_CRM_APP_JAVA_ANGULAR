@@ -11,6 +11,7 @@ public class CrashReportsResultByGroup {
 	private String reportId;
 	private String reportNumber;
 	private String crashDate;
+	private String county;
 	private String location;
 	private String addedDate;
 	private String addedDateTime;
@@ -33,6 +34,14 @@ public class CrashReportsResultByGroup {
 
 	public void setReportNumber(String reportNumber) {
 		this.reportNumber = reportNumber;
+	}
+
+	public String getCounty() {
+		return county;
+	}
+
+	public void setCounty(String county) {
+		this.county = county;
 	}
 
 	public String getLocation() {
@@ -100,12 +109,13 @@ public class CrashReportsResultByGroup {
 	}
 
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
-			String crashDate, String location, String addedDate, String addedDateTime,
+			String crashDate, String county, String location, String addedDate, String addedDateTime,
 			Integer status, String fileName, Integer noOfOccupants, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
+		this.county = county;
 		this.location = location;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;

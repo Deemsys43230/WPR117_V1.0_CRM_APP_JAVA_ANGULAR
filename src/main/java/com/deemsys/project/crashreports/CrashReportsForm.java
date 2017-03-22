@@ -21,6 +21,7 @@ public class CrashReportsForm {
 	private String reportNumber;
 	private String crashDate;
 	private MultipartFile crashReport;
+	private Integer countyId;
 	private String location;
 	private String fileName;
 	private String fileAccessPath;
@@ -59,6 +60,14 @@ public class CrashReportsForm {
 
 	public void setCrashReport(MultipartFile crashReport) {
 		this.crashReport = crashReport;
+	}
+
+	public Integer getCountyId() {
+		return countyId;
+	}
+
+	public void setCountyId(Integer countyId) {
+		this.countyId = countyId;
 	}
 
 	public String getLocation() {
@@ -118,13 +127,14 @@ public class CrashReportsForm {
 	}
 
 	public CrashReportsForm(String reportId, String reportNumber,
-			String crashDate, String location, String fileName, String fileAccessPath, String addedDate,
+			String crashDate, Integer countyId, String location, String fileName, String fileAccessPath, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
+		this.countyId = countyId;
 		this.location = location;
 		this.fileName = fileName;
 		this.fileAccessPath = fileAccessPath;

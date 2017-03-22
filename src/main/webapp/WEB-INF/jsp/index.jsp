@@ -67,10 +67,10 @@
                                 <input type="submit" name="submit" onclick="return checkValidation()" value="Sign In" class="btn-send">
                     	</form>
 			</div>
-			<div class="col-md-12" style="padding:20px;">
+			<!-- <div class="col-md-12" style="padding:20px;">
 			<p class="brown-text">Not what you are looking for?
 			<a href="/CRM">Click Here</a> to search and download your crash reports.</p>
-			</div> 
+			</div>  -->
 		</div>
 	</section>
 	<!-- /SERVICES -->

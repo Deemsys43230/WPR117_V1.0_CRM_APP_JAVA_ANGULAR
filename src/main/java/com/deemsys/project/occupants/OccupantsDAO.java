@@ -11,5 +11,6 @@ import com.deemsys.project.entity.Occupants;
  */
 public interface OccupantsDAO extends IGenericDAO<Occupants>{
 	public void deleteOccupantsByReportId(String reportId);
+	public List<OccupantsForm> getOccupantsFormByReportId(String reportId);
 	public List<Occupants> getOccupantsByReportId(String reportId);
 }

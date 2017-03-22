@@ -10,6 +10,12 @@ public class CrashReportSearchList {
 	private String reportId;
 	private String reportNumber;
 	private String crashDate;
+	private Integer crashSeverity;
+	private String address;
+	private String phoneNumber;
+	private String atFaultInsuranceCompany;
+	private String victimInsuranceCompany;
+	private String countyName;
 	private String location;
 	private String addedDate;
 	private String addedDateTime;
@@ -35,6 +41,42 @@ public class CrashReportSearchList {
 	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public Integer getCrashSeverity() {
+		return crashSeverity;
+	}
+	public void setCrashSeverity(Integer crashSeverity) {
+		this.crashSeverity = crashSeverity;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public String getAtFaultInsuranceCompany() {
+		return atFaultInsuranceCompany;
+	}
+	public void setAtFaultInsuranceCompany(String atFaultInsuranceCompany) {
+		this.atFaultInsuranceCompany = atFaultInsuranceCompany;
+	}
+	public String getVictimInsuranceCompany() {
+		return victimInsuranceCompany;
+	}
+	public void setVictimInsuranceCompany(String victimInsuranceCompany) {
+		this.victimInsuranceCompany = victimInsuranceCompany;
+	}
+	public String getCountyName() {
+		return countyName;
+	}
+	public void setCountyName(String countyName) {
+		this.countyName = countyName;
 	}
 	public String getCrashDate() {
 		return crashDate;

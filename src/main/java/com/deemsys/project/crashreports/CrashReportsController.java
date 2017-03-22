@@ -35,9 +35,9 @@ public class CrashReportsController {
 	
     
     @RequestMapping(value="/User/mergeCrashReports",method=RequestMethod.POST)
-   	public String mergeCrashReports(@RequestBody CrashReportsForm crashReportsForm,ModelMap model)
+   	public String mergeCrashReports(@RequestBody CrashReportsForm crashReportsForm,@RequestParam("isAddOrEdit") Integer isAddOrEdit,ModelMap model)
    	{
-    	crashReportsService.mergeCrashReports(crashReportsForm);
+    	crashReportsService.mergeCrashReports(crashReportsForm,isAddOrEdit);
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}

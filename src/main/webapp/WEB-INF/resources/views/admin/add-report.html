@@ -2,13 +2,28 @@
 <script src="resources/angular/components/datetime/datetimepicker.js"></script>
 <script src="resources/angular/components/datetime/moment.js"></script>
 <!-- SERVICES -->
-<section id="services" ng-cloak class="ng-cloak">
+<!-- <section id="services" ng-cloak class="ng-cloak">
 	<div class="container" style="width:90%;">
 	<div class="col-md-12  white-form">
 		<h3>{{title}}<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
-	<hr/>
+	<hr/> -->
 	<div class="container" ng-cloak class="ng-cloak">
 			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
+			  <div class="form-group">
+			      <label class="control-label col-sm-2">County:</label>
+			      <div class="col-sm-4">
+			         <select class="form-control" name="county" required ng-model="report.countyId">
+			         <option value="">-- Select --</option>
+			         <option ng-repeat="county in countyList" value="{{county.countyId}}" ng-selected="county.countyId==report.countyId">{{county.countyId}} - {{county.name}}</option>
+			         </select>
+			        <div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.county.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.county.$error.required">Please
+								Select County</span>
+						</div>
+					</div>	
+			      </div>
+			    </div>
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Crash Date:</label>
 			      <div class="col-sm-4">
@@ -29,12 +44,11 @@
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Report Number:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required report-number-exists>
+			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required>
 			      	 <div class="error-container">
 						<div ng-show="submitted || addCrashReportForm.reportNumber.$dirty">
 							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
 								Enter Report Number</span>
-							<span ng-cloak ng-show="!addCrashReportForm.reportNumber.$error.required&&addCrashReportForm.reportNumber.$error.reportNumberExists">Report Number Already Exist</span>
 						</div>
 					</div>	
 			      </div>
@@ -75,9 +89,10 @@
 			      </div>
 				    </div>
 				    <h4><u>Occupants</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-			    <div class="form-group" data-slide-number="{{$index}}" ng-repeat="occupant in report.occupantsForms track by $index" ng-if="occupant.status==1">
+			    <div class="form-group" data-slide-number="{{$index}}" ng-repeat="occupant in report.occupantsForms track by $index">
 			      <ng-form name="occupantsForm">
-			      <label class="control-label col-sm-2">First Name:</label>
+			      <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">First Name:</label>
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName" maxlength="50" required validate-name>
 			        <div class="error-container">
@@ -88,7 +103,7 @@
 						</div>
 					</div>	
 			      </div>
-			      <label class="control-label col-sm-2">Last Name:</label>
+			      <label class="control-label col-sm-3">Last Name:</label>
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName" maxlength="50" required validate-name>
 			        <div class="error-container">
@@ -99,7 +114,49 @@
 						</div>
 					</div>	
 			      </div>
+			      </div>
+			      <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">Crash Severity:</label>
+			      <div class="col-sm-3">          
+			        <select class="form-control" ng-model="occupant.crashSeverity" name="crashSeverity">
+			        <option value="0">-- Select --</option>
+			        <option value="1">1</option>
+			        <option value="2">2</option>
+			        <option value="3">3</option>
+			        </select>
+			        <div class="error-container"></div>
+			      </div>
+			      <label class="control-label col-sm-3">Address:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.address" placeholder="Enter Address" name="address" maxlength="200">
+			     	<div class="error-container"></div>
+			      </div>
+			      </div>
+			      <div class="col-sm-12 form-input-div">
+			       <label class="control-label col-sm-3">Phone Number:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.phoneNumber" placeholder="Enter Phone Number eg: (123)456-7890 or 123-456-7890" name="phoneNumber" maxlength="20" validate-mobile>
+			      	<div class="error-container">
+			      	<div ng-show="submitted || occupantsForm.phoneNumber.$dirty">
+							<span ng-cloak ng-show="!occupantsForm.phoneNumber.$error.required && occupantsForm.phoneNumber.$error.validateMobile">Enter Valid Phone Number</span>
+						</div>
+			      	</div>
+			      </div>
+			       <label class="control-label col-sm-3">At-Fault Insurance Company:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.atFaultInsuranceCompany" placeholder="Enter At-Fault Insurance Company" name="atFaultInsuranceCompany" maxlength="100">
+			      	<div class="error-container"></div>
+			      </div>
+			      </div>
+			      <div class="col-sm-12 form-input-div">
+			       <label class="control-label col-sm-3">Victim Insurance Company:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.victimInsuranceCompany" placeholder="Enter Victim Insurance Company" name="victimInsuranceCompany" maxlength="100">
+			      	<div class="error-container"></div>
+			      </div>
+			      <div class="col-sm-3"></div>
 			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			     </div>
 			    </ng-form>
 			    </div>
 			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
@@ -113,10 +170,10 @@
 			  </form>
 	</div>
 	
-
+<!-- 
 	</div>
 	</div>
-</section>
+</section> -->
 <!-- /SERVICES -->
 <script>
 $('#crashDateAdd').datetimepicker({

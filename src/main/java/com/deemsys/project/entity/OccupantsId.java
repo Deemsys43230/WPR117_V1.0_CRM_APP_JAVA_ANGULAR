@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 14 Mar, 2017 5:37:35 PM by Hibernate Tools 3.4.0.CR1
+// Generated 21 Mar, 2017 1:18:27 PM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,6 +14,11 @@ public class OccupantsId implements java.io.Serializable {
 	private String reportId;
 	private String firstName;
 	private String lastName;
+	private Integer crashSeverity;
+	private String address;
+	private String phoneNumber;
+	private String atFaultInsuranceCompany;
+	private String victimInsuranceCompany;
 	private Integer sequenceNo;
 	private Integer status;
 
@@ -25,10 +30,17 @@ public class OccupantsId implements java.io.Serializable {
 	}
 
 	public OccupantsId(String reportId, String firstName, String lastName,
+			Integer crashSeverity, String address, String phoneNumber,
+			String atFaultInsuranceCompany, String victimInsuranceCompany,
 			Integer sequenceNo, Integer status) {
 		this.reportId = reportId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.crashSeverity = crashSeverity;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.atFaultInsuranceCompany = atFaultInsuranceCompany;
+		this.victimInsuranceCompany = victimInsuranceCompany;
 		this.sequenceNo = sequenceNo;
 		this.status = status;
 	}
@@ -58,6 +70,51 @@ public class OccupantsId implements java.io.Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	@Column(name = "crash_severity")
+	public Integer getCrashSeverity() {
+		return this.crashSeverity;
+	}
+
+	public void setCrashSeverity(Integer crashSeverity) {
+		this.crashSeverity = crashSeverity;
+	}
+
+	@Column(name = "address", length = 200)
+	public String getAddress() {
+		return this.address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	@Column(name = "phone_number", length = 20)
+	public String getPhoneNumber() {
+		return this.phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	@Column(name = "at_fault_insurance_company", length = 100)
+	public String getAtFaultInsuranceCompany() {
+		return this.atFaultInsuranceCompany;
+	}
+
+	public void setAtFaultInsuranceCompany(String atFaultInsuranceCompany) {
+		this.atFaultInsuranceCompany = atFaultInsuranceCompany;
+	}
+
+	@Column(name = "victim_insurance_company", length = 45)
+	public String getVictimInsuranceCompany() {
+		return this.victimInsuranceCompany;
+	}
+
+	public void setVictimInsuranceCompany(String victimInsuranceCompany) {
+		this.victimInsuranceCompany = victimInsuranceCompany;
 	}
 
 	@Column(name = "sequence_no")
@@ -98,6 +155,30 @@ public class OccupantsId implements java.io.Serializable {
 						.getLastName() != null
 						&& castOther.getLastName() != null && this
 						.getLastName().equals(castOther.getLastName())))
+				&& ((this.getCrashSeverity() == castOther.getCrashSeverity()) || (this
+						.getCrashSeverity() != null
+						&& castOther.getCrashSeverity() != null && this
+						.getCrashSeverity()
+						.equals(castOther.getCrashSeverity())))
+				&& ((this.getAddress() == castOther.getAddress()) || (this
+						.getAddress() != null && castOther.getAddress() != null && this
+						.getAddress().equals(castOther.getAddress())))
+				&& ((this.getPhoneNumber() == castOther.getPhoneNumber()) || (this
+						.getPhoneNumber() != null
+						&& castOther.getPhoneNumber() != null && this
+						.getPhoneNumber().equals(castOther.getPhoneNumber())))
+				&& ((this.getAtFaultInsuranceCompany() == castOther
+						.getAtFaultInsuranceCompany()) || (this
+						.getAtFaultInsuranceCompany() != null
+						&& castOther.getAtFaultInsuranceCompany() != null && this
+						.getAtFaultInsuranceCompany().equals(
+								castOther.getAtFaultInsuranceCompany())))
+				&& ((this.getVictimInsuranceCompany() == castOther
+						.getVictimInsuranceCompany()) || (this
+						.getVictimInsuranceCompany() != null
+						&& castOther.getVictimInsuranceCompany() != null && this
+						.getVictimInsuranceCompany().equals(
+								castOther.getVictimInsuranceCompany())))
 				&& ((this.getSequenceNo() == castOther.getSequenceNo()) || (this
 						.getSequenceNo() != null
 						&& castOther.getSequenceNo() != null && this
@@ -116,6 +197,24 @@ public class OccupantsId implements java.io.Serializable {
 				+ (getFirstName() == null ? 0 : this.getFirstName().hashCode());
 		result = 37 * result
 				+ (getLastName() == null ? 0 : this.getLastName().hashCode());
+		result = 37
+				* result
+				+ (getCrashSeverity() == null ? 0 : this.getCrashSeverity()
+						.hashCode());
+		result = 37 * result
+				+ (getAddress() == null ? 0 : this.getAddress().hashCode());
+		result = 37
+				* result
+				+ (getPhoneNumber() == null ? 0 : this.getPhoneNumber()
+						.hashCode());
+		result = 37
+				* result
+				+ (getAtFaultInsuranceCompany() == null ? 0 : this
+						.getAtFaultInsuranceCompany().hashCode());
+		result = 37
+				* result
+				+ (getVictimInsuranceCompany() == null ? 0 : this
+						.getVictimInsuranceCompany().hashCode());
 		result = 37
 				* result
 				+ (getSequenceNo() == null ? 0 : this.getSequenceNo()

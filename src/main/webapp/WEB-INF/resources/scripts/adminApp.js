@@ -1,4 +1,4 @@
-var adminApp= angular.module('adminApp', ['ngRoute','oc.lazyLoad','ngCookies','requestModule','flash','ngAnimate','angularUtils.directives.dirPagination']);
+var adminApp= angular.module('adminApp', ['ngRoute','oc.lazyLoad','ngCookies','requestModule','flash','ngAnimate','angularUtils.directives.dirPagination','vAccordion']);
 
 adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
@@ -28,16 +28,16 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             break;
                         }
                         case 401:{
-                        	window.location.href = window.location.origin+"/CRM/logout?sessionout";
+                        	//window.location.href = window.location.origin+"/upload/logout?sessionout";
                             break;
                         }
                         case 403: {
-                        	window.location.href = window.location.origin+"/CRM/logout?sessionout";
+                        	//window.location.href = window.location.origin+"/upload/logout?sessionout";
                             break;
                         }
                         case 500: {
                         	alert("Please try again!");
-                        	window.location.href = window.location.origin+"/CRM/logout";
+                        	//window.location.href = window.location.origin+"/upload/logout";
                             break;
                         }
                         default : {
@@ -51,7 +51,7 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
         $routeProvider.
             when('/add-report', {
-                templateUrl: 'admin/add-report.html',
+                templateUrl: 'admin/add-report-main.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
                         return $ocLazyLoad.load({
@@ -129,6 +129,29 @@ adminApp.directive('validateName', function() {
 			return NAME_EXPR.test(modelValue);// ||USA_MOB_EXPR_WITH_BR.test(modelValue);
 		};
 	}
+	};
+});
+
+// Validate Mobile
+adminApp.directive('validateMobile', function() {
+	var USA_MOB_EXPR = /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/;
+	var USA_MOB_EXPR_NOSPACE = /^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/;
+	var USA_MOB_EXPR_NO = /^[0-9]{10}$/;
+	return {
+		require : 'ngModel',
+		restrict : '',
+		link : function(scope, elm, attrs, ngModel) {
+			ngModel.$validators.validateMobile = function(modelValue) {
+				if (modelValue == "" || modelValue == undefined) {
+					return true;
+				} else {
+					return USA_MOB_EXPR.test(modelValue)
+							|| USA_MOB_EXPR_NO.test(modelValue)
+							|| USA_MOB_EXPR_NOSPACE.test(modelValue);
+				}
+
+			};
+		}
 	};
 });
 

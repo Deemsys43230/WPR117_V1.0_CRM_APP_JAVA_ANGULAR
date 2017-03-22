@@ -85,7 +85,7 @@ public class CommonController {
 	public String getSearch(ModelMap model)
 	{
     	model.addAttribute("Success",true);
-		return "/search";
+		return "/index";
 	}
     
     // Login Failed

@@ -2782,6 +2782,10 @@ h3{
 }
 /* Error Message Ends*/
 
+.form-input-div{
+	margin-bottom: 10px;
+}
+
 /* Loader In CSS  */
 .loader {
   border: 16px solid #f3f3f3;

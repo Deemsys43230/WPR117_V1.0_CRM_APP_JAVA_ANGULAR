@@ -11,5 +11,6 @@
         <mapping class="com.deemsys.project.entity.Occupants" />
         <mapping class="com.deemsys.project.entity.OccupantsId" />
         <mapping class="com.deemsys.project.entity.CrashReportRestriction" />
+        <mapping class="com.deemsys.project.entity.County" />
     </session-factory>
 </hibernate-configuration>

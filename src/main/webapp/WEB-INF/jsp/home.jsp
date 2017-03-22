@@ -13,7 +13,9 @@
 	<link rel="stylesheet" href="resources/styles/font-awesome.css" />
 	<link rel="stylesheet" href="resources/styles/style.css" />
 	<link rel="stylesheet" href="resources/styles/responsive.css" />
-
+	<!-- V Accordion CSS  -->
+	<link rel="stylesheet" href="resources/angular/components/v-accordion/dist/v-accordion.css" />
+	
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="resources/images/icon/favicon.png">
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="resources/styles/icon/apple-touch-icon-144-precomposed.png">
@@ -99,5 +101,7 @@
     <link rel="stylesheet" href="resources/angular/angular-flash/angular-flash.css"/>
      <!-- dirPagination -->
     <script src="resources/angular/angular-utils-pagination/dirPagination.js"></script> 
+    <!-- V Accordion Js-->
+    <script type="text/javascript" src="resources/angular/components/v-accordion/dist/v-accordion.js"></script>
 </body>
 </html>

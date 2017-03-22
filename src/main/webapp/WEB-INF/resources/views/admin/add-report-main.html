@@ -1,0 +1,218 @@
+<link rel="stylesheet" href="resources/angular/components/datetime/datetimepicker.css"></link>
+<script src="resources/angular/components/datetime/datetimepicker.js"></script>
+<script src="resources/angular/components/datetime/moment.js"></script>
+<!-- SERVICES -->
+<section id="services" ng-cloak class="ng-cloak">
+	<div class="container" style="width: 90%;">
+		<div class="col-md-12  white-form">
+			<h3>
+				Add Report<span class="pull-right"><a href="#/reports"
+					class="btn btn-default"><i class="fa fa-reply"></i> Back to
+						Reports List</a></span>
+			</h3>
+			<hr />
+			<div class="container" ng-cloak class="ng-cloak">
+			<form name="uploadForm" novalidate>
+			<label class="control-label col-md-2">Upload Report:</label>
+			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
+			        <input type="file" class="form-control" id="crashReportFile" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" style="height: auto !important;">
+			      	<div class="error-container">
+						<div ng-show="submitted || uploadForm.crashReportFile.$dirty">
+							<span ng-cloak ng-show="uploadForm.crashReportFile.$error.required">Please
+								Select Report</span>
+								<span ng-cloak ng-show="!uploadForm.crashReportFile.$error.required&&uploadForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
+	                            <span ng-cloak ng-show="!uploadForm.crashReportFile.$error.required&&!uploadForm.crashReportFile.$error.validateFileType&&uploadForm.crashReportFile.$error.validateFileSize">File should be less than 10 MB</span>
+						</div>
+					</div>	
+			      </div>
+			      <div class="col-md-2" ng-cloak ng-show="!showCancel"><a href="" ng-click="isEdit=true;showCancel=true;clearFile();"><i class="fa fa-close fa-fw"></i> Cancel</a></div>
+			      <div class="col-md-5" ng-cloak ng-show="isEdit" style="padding-bottom: 2px;">
+			      	<span ng-cloak>{{report.fileName}} &nbsp;&nbsp;</span>
+			      <div class="error-container">
+			      </div>
+			      </div>
+			      <div class="col-md-2" ng-cloak ng-show="isEdit">
+			      <a href="" ng-click="changeFile()"><i class="fa fa-pencil fa-fw"></i> Change</a>
+			      </div>
+			      </form>
+			      </div>
+		<div class="container" ng-cloak class="ng-cloak">
+		<v-accordion id="accordionB" class="vAccordion--default" control="accordionB">
+
+        <v-pane id="{{ ::report.id }}" ng-repeat="report in reports" expanded="report.isExpanded">
+          <v-pane-header id="{{ ::report.id }}-header" aria-controls="{{ ::report.id }}-header">
+            <h5>{{ ::report.header }}</h5>
+          </v-pane-header>
+
+          <v-pane-content id="{{ ::report.id }}-content" aria-labelledby="{{ ::report.id }}-content">
+            <p>
+            <div class="container" ng-cloak class="ng-cloak">
+			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
+			  <div class="form-group">
+			      <label class="control-label col-sm-2">County:</label>
+			      <div class="col-sm-4">
+			         <select class="form-control" name="county" required ng-model="report.countyId">
+			         <option value="">-- Select --</option>
+			         <option ng-repeat="county in countyList" value="{{county.countyId}}" ng-selected="county.countyId==report.countyId">{{county.countyId}} - {{county.name}}</option>
+			         </select>
+			        <div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.county.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.county.$error.required">Please
+								Select County</span>
+						</div>
+					</div>	
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label class="control-label col-sm-2">Crash Date:</label>
+			      <div class="col-sm-4">
+			         <div class="input-group">
+					<input type="text" name="crashDate" id="{{'crashDateAdd'+$index}}" class="form-control calender-control"
+						ng-model="report.crashDate"
+						placeholder="Enter Crash Date" required readonly ng-focus="enableDatePicker('crashDateAdd'+$index)"> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="{{'crashDateCalenderAdd'+$index}}"> <span class="fa fa-calendar"></span></span>
+					</div>
+			        <div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.crashDate.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.crashDate.$error.required">Please
+								Enter Crash Date</span>
+						</div>
+					</div>	
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label class="control-label col-sm-2">Report Number:</label>
+			      <div class="col-sm-4">          
+			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required>
+			      	 <div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.reportNumber.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
+								Enter Report Number</span>
+						</div>
+					</div>	
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label class="control-label col-sm-2">Location:</label>
+			      <div class="col-sm-4">          
+			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
+			         <div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.location.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.location.$error.required">Please
+								Enter Location</span>
+						</div>
+					</div>	
+			      </div>
+			    </div>
+			    <div class="form-group">
+			    	<label class="control-label col-sm-2">Crash Severity:</label>
+			      <div class="col-sm-4">          
+			        <select class="form-control" ng-model="report.crashSeverity" name="crashSeverity">
+			        <option value="0">-- Select --</option>
+			        <option value="1">1</option>
+			        <option value="2">2</option>
+			        <option value="3">3</option>
+			        </select>
+			        <div class="error-container"></div>
+			      </div>
+			    </div>
+				   <h4><u>Occupants</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+			    <div class="form-group" data-slide-number="{{$index}}" ng-repeat="occupant in report.occupantsForms track by $index">
+			      <ng-form name="occupantsForm">
+			      <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">First Name:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName" maxlength="50" required validate-name>
+			        <div class="error-container">
+						<div ng-show="submitted || occupantsForm.firstName.$dirty">
+							<span ng-cloak ng-show="occupantsForm.firstName.$error.required">Please
+								Enter First Name</span>
+								<span ng-cloak ng-show="!occupantsForm.firstName.$error.required && occupantsForm.firstName.$error.validateName">Enter Valid First Name</span>
+						</div>
+					</div>	
+			      </div>
+			      <label class="control-label col-sm-3">Last Name:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName" maxlength="50" required validate-name>
+			        <div class="error-container">
+						<div ng-show="submitted || occupantsForm.lastName.$dirty">
+							<span ng-cloak ng-show="occupantsForm.lastName.$error.required">Please
+								Enter Last Name</span>
+							<span ng-cloak ng-show="!occupantsForm.lastName.$error.required && occupantsForm.lastName.$error.validateName">Enter Valid Last Name</span>
+						</div>
+					</div>	
+			      </div>
+			      </div>
+			      <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">Address:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.address" placeholder="Enter Address" name="address" maxlength="200">
+			     	<div class="error-container"></div>
+			      </div>
+			      <label class="control-label col-sm-3">Phone Number:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.phoneNumber" placeholder="Enter Phone Number eg: (123)456-7890 or 123-456-7890" name="phoneNumber" maxlength="20" validate-mobile>
+			      	<div class="error-container">
+			      	<div ng-show="submitted || occupantsForm.phoneNumber.$dirty">
+							<span ng-cloak ng-show="!occupantsForm.phoneNumber.$error.required && occupantsForm.phoneNumber.$error.validateMobile">Enter Valid Phone Number</span>
+						</div>
+			      	</div>
+			      </div>
+			      </div>
+			      <div class="col-sm-12 form-input-div">
+			       <label class="control-label col-sm-3">At-Fault Insurance Company:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.atFaultInsuranceCompany" placeholder="Enter At-Fault Insurance Company" name="atFaultInsuranceCompany" maxlength="100">
+			      	<div class="error-container"></div>
+			      </div>
+			      <label class="control-label col-sm-3">Victim Insurance Company:</label>
+			      <div class="col-sm-3">          
+			        <input type="text" class="form-control" ng-model="occupant.victimInsuranceCompany" placeholder="Enter Victim Insurance Company" name="victimInsuranceCompany" maxlength="100">
+			      	<div class="error-container"></div>
+			      </div>
+			      </div>
+			      <div class="col-sm-12">
+			      <div class="col-sm-10"></div>
+			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($parent.$index,$index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			     </div>
+			    </ng-form>
+			    </div>
+			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant($index);"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
+			  
+			  	<!--  <div class="form-group">  
+			  	  <div class="col-sm-offset-2 col-sm-10">
+			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
+			        <a href="#/reports" class="btn btn-default">Cancel</a>
+			      </div>
+			    </div> -->
+			  </form>
+	</div>
+	
+	</p>
+
+          </v-pane-content>
+        </v-pane>
+
+      </v-accordion>
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+	var id=document.getElementById('crashDateAdd0');
+	alert(id);
+$('#crashDateAdd0').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+	ignoreReadonly:true
+});
+
+$("#crashDateCalenderAdd0").click(function(){
+	alert("sds");
+	$('#crashDateAdd0').focus();
+});
+
+$('#crashDateAdd0').click(function(){
+	alert("dasds")
+});
+</script>

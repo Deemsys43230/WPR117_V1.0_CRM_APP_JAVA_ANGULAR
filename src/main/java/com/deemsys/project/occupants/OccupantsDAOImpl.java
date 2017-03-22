@@ -3,8 +3,13 @@ package com.deemsys.project.occupants;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -137,9 +142,25 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Occupants> getOccupantsByReportId(String reportId) {
+	public List<OccupantsForm> getOccupantsFormByReportId(String reportId) {
 		// TODO Auto-generated method stub
-		return this.sessionFactory.getCurrentSession().createCriteria(Occupants.class).add(Restrictions.eq("id.reportId", reportId)).list();
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(Occupants.class,"o1");
+		criteria.createAlias("o1.crashReports", "c1");
+		
+		ProjectionList projectionList = Projections.projectionList();
+		projectionList.add(Projections.property("o1.id.firstName"), "firstName");
+		projectionList.add(Projections.property("o1.id.lastName"), "lastName");
+		projectionList.add(Projections.property("o1.id.crashSeverity"), "crashSeverity");
+		projectionList.add(Projections.property("o1.id.address"), "address");
+		projectionList.add(Projections.property("o1.id.phoneNumber"), "phoneNumber");
+		projectionList.add(Projections.property("o1.id.atFaultInsuranceCompany"), "atFaultInsuranceCompany");
+		projectionList.add(Projections.property("o1.id.victimInsuranceCompany"), "victimInsuranceCompany");
+		projectionList.add(Projections.property("o1.id.status"), "status");
+		
+		criteria.setProjection(projectionList);
+		criteria.add(Restrictions.eq("o1.id.reportId", reportId));
+		List<OccupantsForm> occupantsForms = criteria.setResultTransformer(new AliasToBeanResultTransformer(OccupantsForm.class)).list();
+		return occupantsForms;
 	}
 
 	@Override
@@ -149,6 +170,13 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 		for (Occupants occupant : occupants) {
 			this.sessionFactory.getCurrentSession().delete(occupant);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Occupants> getOccupantsByReportId(String reportId) {
+		// TODO Auto-generated method stub
+		return this.sessionFactory.getCurrentSession().createCriteria(Occupants.class).add(Restrictions.eq("id.reportId", reportId)).list();
 	}
 
 	

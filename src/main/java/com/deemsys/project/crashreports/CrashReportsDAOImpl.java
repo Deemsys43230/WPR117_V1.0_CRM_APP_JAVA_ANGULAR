@@ -43,7 +43,6 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public void merge(CrashReports crashReports) {
 		// TODO Auto-generated method stub
-		crashReports.setFileName(crashReports.getReportId()+".pdf");
 		this.sessionFactory.getCurrentSession().merge(crashReports);
 	}	
 	
@@ -154,6 +153,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		// TODO Auto-generated method stub
 		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class,"c1");
 		criteria.createAlias("c1.occupantses", "o1");
+		criteria.createAlias("c1.county", "co1");
 		
 		if(crashReportSearchForm.getReportNumber()!=null && !crashReportSearchForm.getReportNumber().equals("")){
 			if(crashReportSearchForm.getSearchType()==0){
@@ -213,6 +213,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("c1.reportId"),"reportId");
 		projectionList.add(Projections.property("c1.reportNumber"),"reportNumber");
 		projectionList.add(Projections.property("c1.crashDate"),"crashDate");
+		projectionList.add(Projections.property("co1.name"),"countyName");
 		projectionList.add(Projections.property("c1.location"),"location");
 		projectionList.add(Projections.property("c1.noOfOccupants"),"noOfOccupants");
 		projectionList.add(Projections.property("c1.addedDate"),"addedDate");
@@ -222,6 +223,11 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		
 		projectionList.add(Projections.property("o1.id.firstName"),"firstName");
 		projectionList.add(Projections.property("o1.id.lastName"),"lastName");
+		projectionList.add(Projections.property("o1.id.crashSeverity"),"crashSeverity");
+		projectionList.add(Projections.property("o1.id.address"),"address");
+		projectionList.add(Projections.property("o1.id.phoneNumber"),"phoneNumber");
+		projectionList.add(Projections.property("o1.id.atFaultInsuranceCompany"),"atFaultInsuranceCompany");
+		projectionList.add(Projections.property("o1.id.victimInsuranceCompany"),"victimInsuranceCompany");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		
@@ -279,7 +285,6 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public Integer checkReportNumberExist(String reportId, String reportNumber) {
 		// TODO Auto-generated method stub
-		this.sessionFactory.getCurrentSession().createCriteria(Users.class).setProjection(Projections.max("userId")).uniqueResult();
 		CrashReports crashReports =(CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.and(Restrictions.ne("reportId", reportId),Restrictions.eq("reportNumber", reportNumber))).uniqueResult();
 		if(crashReports!=null){
 			return 1;
