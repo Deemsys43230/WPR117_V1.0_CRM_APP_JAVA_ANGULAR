@@ -47,9 +47,22 @@ myApp.factory("requestHandler",['$http',function($http){
 	                return results;
 	         });
 	    };
+	    
+	requestObj.postFileWithJson=function(requestURL,data1,param1,data2,param2){
+	        var fd = new FormData();
+	        fd.append(param1, data1);
+	        console.log(new Blob([JSON.stringify(data2)]));
+	        fd.append(param2,new Blob([JSON.stringify(data2)], {
+	            type: "application/json"
+	        }));
+	        return $http.post(requestURL,fd,{
+	             headers: {'Content-Type': undefined}
+	         }).then(function (results) {
+	                return results;
+	         });
+	    };
     
-    requestObj.postRequest=function(requestURL,params){      
-       
+    requestObj.postRequest=function(requestURL,params){ 
         requestURL=appURL+requestURL;
         return $http.post(requestURL,params).then(function (results) {
                 return results;

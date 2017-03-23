@@ -17,136 +17,161 @@ import com.deemsys.project.occupants.OccupantsForm;
  */
 public class CrashReportsForm {
 
+	private String id;
+	private String header;
+	private boolean isExpanded;
 	private String reportId;
 	private String reportNumber;
 	private String crashDate;
-	private MultipartFile crashReport;
 	private Integer countyId;
 	private String location;
+	private Integer crashSeverity;
 	private String fileName;
 	private String fileAccessPath;
 	private String addedDate;
 	private String addedDateTime;
+	private Integer pageType;
+	private Integer fromPage;
+	private Integer toPage;
 	private Integer status;
 	private List<OccupantsForm> occupantsForms;
-	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getHeader() {
+		return header;
+	}
+	public void setHeader(String header) {
+		this.header = header;
+	}
+	public boolean getIsExpanded() {
+		return isExpanded;
+	}
+	public void setIsExpanded(boolean isExpanded) {
+		this.isExpanded = isExpanded;
+	}
 	public String getReportId() {
 		return reportId;
 	}
-
 	public void setReportId(String reportId) {
 		this.reportId = reportId;
 	}
-
 	public String getReportNumber() {
 		return reportNumber;
 	}
-
 	public void setReportNumber(String reportNumber) {
 		this.reportNumber = reportNumber;
 	}
-
 	public String getCrashDate() {
 		return crashDate;
 	}
-
 	public void setCrashDate(String crashDate) {
 		this.crashDate = crashDate;
 	}
-
-	public MultipartFile getCrashReport() {
-		return crashReport;
-	}
-
-	public void setCrashReport(MultipartFile crashReport) {
-		this.crashReport = crashReport;
-	}
-
 	public Integer getCountyId() {
 		return countyId;
 	}
-
 	public void setCountyId(Integer countyId) {
 		this.countyId = countyId;
 	}
-
 	public String getLocation() {
 		return location;
 	}
-
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-	public String getAddedDate() {
-		return addedDate;
+	public Integer getCrashSeverity() {
+		return crashSeverity;
 	}
-
-	public void setAddedDate(String addedDate) {
-		this.addedDate = addedDate;
+	public void setCrashSeverity(Integer crashSeverity) {
+		this.crashSeverity = crashSeverity;
 	}
-
-	public String getAddedDateTime() {
-		return addedDateTime;
-	}
-
-	public void setAddedDateTime(String addedDateTime) {
-		this.addedDateTime = addedDateTime;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public List<OccupantsForm> getOccupantsForms() {
-		return occupantsForms;
-	}
-
-	public void setOccupantsForms(List<OccupantsForm> occupantsForms) {
-		this.occupantsForms = occupantsForms;
-	}
-
 	public String getFileName() {
 		return fileName;
 	}
-
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-
 	public String getFileAccessPath() {
 		return fileAccessPath;
 	}
-
 	public void setFileAccessPath(String fileAccessPath) {
 		this.fileAccessPath = fileAccessPath;
 	}
-
-	public CrashReportsForm(String reportId, String reportNumber,
-			String crashDate, Integer countyId, String location, String fileName, String fileAccessPath, String addedDate,
-			String addedDateTime, Integer status,
-			List<OccupantsForm> occupantsForms) {
+	public String getAddedDate() {
+		return addedDate;
+	}
+	public void setAddedDate(String addedDate) {
+		this.addedDate = addedDate;
+	}
+	public String getAddedDateTime() {
+		return addedDateTime;
+	}
+	public void setAddedDateTime(String addedDateTime) {
+		this.addedDateTime = addedDateTime;
+	}
+	public Integer getPageType() {
+		return pageType;
+	}
+	public void setPageType(Integer pageType) {
+		this.pageType = pageType;
+	}
+	public Integer getFromPage() {
+		return fromPage;
+	}
+	public void setFromPage(Integer fromPage) {
+		this.fromPage = fromPage;
+	}
+	public Integer getToPage() {
+		return toPage;
+	}
+	public void setToPage(Integer toPage) {
+		this.toPage = toPage;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public List<OccupantsForm> getOccupantsForms() {
+		return occupantsForms;
+	}
+	public void setOccupantsForms(List<OccupantsForm> occupantsForms) {
+		this.occupantsForms = occupantsForms;
+	}
+	public CrashReportsForm() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+	public CrashReportsForm(String id, String header, boolean isExpanded,
+			String reportId, String reportNumber, String crashDate,
+			Integer countyId, String location, Integer crashSeverity,
+			String fileName, String fileAccessPath, String addedDate,
+			String addedDateTime, Integer pageType, Integer fromPage,
+			Integer toPage, Integer status, List<OccupantsForm> occupantsForms) {
+		super();
+		this.id = id;
+		this.header = header;
+		this.isExpanded = isExpanded;
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.countyId = countyId;
 		this.location = location;
+		this.crashSeverity = crashSeverity;
 		this.fileName = fileName;
 		this.fileAccessPath = fileAccessPath;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
+		this.pageType = pageType;
+		this.fromPage = fromPage;
+		this.toPage = toPage;
 		this.status = status;
 		this.occupantsForms = occupantsForms;
-	}
-
-	public CrashReportsForm() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

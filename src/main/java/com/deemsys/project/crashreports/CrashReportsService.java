@@ -1,7 +1,11 @@
 package com.deemsys.project.crashreports;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +32,13 @@ import com.deemsys.project.entity.OccupantsId;
 import com.deemsys.project.login.LoginService;
 import com.deemsys.project.occupants.OccupantsDAO;
 import com.deemsys.project.occupants.OccupantsForm;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfImportedPage;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfWriter;
 /**
  * 
  * @author Deemsys
@@ -123,7 +134,7 @@ public class CrashReportsService {
 			occupantsForms.add(occupantsForm);
 		}
 		*/
-		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
+		CrashReportsForm crashReportsForm=new CrashReportsForm();//crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
 		
 		//End
 		
@@ -297,6 +308,45 @@ public class CrashReportsService {
 		
 		
 		return isExist;
+	}
+	
+	//Store Multi-Report File Temporary
+	public String storeFileTemp(MultipartFile report) throws IOException{		
+		String filePath=crmProperties.getProperty("tempFolder")+UUID.randomUUID().toString().replaceAll("-", "")+".pdf";
+		CRMConstants.saveTemporaryFile(report, filePath);
+		return filePath;
+	}
+	
+	//Split Multi Report File into Multi Files
+	public void splitFile(String inputFilePath,String outputFilePath,Integer fromPage,Integer toPage) throws DocumentException, IOException{
+	
+		OutputStream outputStream = new FileOutputStream(new File(crmProperties.getProperty("tempFolder")+outputFilePath));
+	 	Document document = new Document();
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+        document.open();
+        PdfContentByte cb = writer.getDirectContent();
+        PdfReader reader = new PdfReader(new FileInputStream(inputFilePath));
+            for (int i = fromPage; i <= toPage; i++) {
+                document.newPage();
+                //import the page from source PDF
+                PdfImportedPage page = writer.getImportedPage(reader, i);
+                //add the page to the destination PDF
+                cb.addTemplate(page, 0, 0);
+            }
+        outputStream.flush();
+        document.close();
+        outputStream.close();
+	}	
+		
+	public boolean checkForNumberOfPages(String inputFilePath,Integer totalPage) throws IOException{
+		PdfReader reader = new PdfReader(inputFilePath);
+        int n = reader.getNumberOfPages();
+        if(totalPage>n){
+        	return false;
+        }else{
+        	return true;
+        }
+        
 	}
 	
 }

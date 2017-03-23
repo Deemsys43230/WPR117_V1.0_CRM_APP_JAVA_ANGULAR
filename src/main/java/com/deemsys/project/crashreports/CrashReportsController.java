@@ -2,6 +2,9 @@
 package com.deemsys.project.crashreports;
 
 
+import java.io.IOException;
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.deemsys.project.AWS.AWSFileUpload;
+import com.deemsys.project.common.CRMProperties;
+import com.itextpdf.text.DocumentException;
 
 /**
  * 
@@ -24,6 +32,12 @@ public class CrashReportsController {
 	
 	@Autowired
 	CrashReportsService crashReportsService;
+	
+	@Autowired
+	AWSFileUpload awsFileUpload;
+	
+	@Autowired
+	CRMProperties crmProperties;
 
     @RequestMapping(value="/getCrashReports",method=RequestMethod.GET)
 	public String getCrashReports(@RequestParam("id") String id,ModelMap model)
@@ -125,4 +139,59 @@ public class CrashReportsController {
     	model.addAttribute("requestSuccess",true);
 		return "/returnPage";
 	}
+    
+    @RequestMapping(value="/User/submitCrashReports",method=RequestMethod.POST)
+   	public String uploadFileWithContent(@RequestPart("crashReport") MultipartFile crashReport, @RequestPart("crashReportFormList") CrashReportsFormList crashReportsFormList,ModelMap model) throws IOException, DocumentException
+   	{
+    	
+    	
+    	String multiReportFileName="";
+    	if(crashReportsFormList.getCrashReportsForms().size()>1){
+    		multiReportFileName=crashReportsService.storeFileTemp(crashReport);
+    		
+    		//Finding the total page numbers
+    		Integer totalPages=0;
+    		for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
+				totalPages+=(crashReportsForm.getToPage()-crashReportsForm.getFromPage())+1;
+			}
+    		
+    		//Check The Total Page Validation
+    		if(crashReportsService.checkForNumberOfPages(multiReportFileName, totalPages)){
+    			//Page Validation Success
+    			for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
+    				
+    				//Creating Split File
+    				String reportId=UUID.randomUUID().toString().replaceAll("-", "");
+    				crashReportsForm.setFileName(reportId+".pdf");
+    				crashReportsForm.setReportId(reportId);
+    				crashReportsService.splitFile(multiReportFileName,crashReportsForm.getFileName(), crashReportsForm.getFromPage(), crashReportsForm.getToPage());
+    				
+    				//Upload to AWS
+    				awsFileUpload.uploadFileToAWSS3(crmProperties.getProperty("tempFolder")+crashReportsForm.getFileName(), crashReportsForm.getFileName());
+    				
+    				//Save Crash Report
+    				try {
+						crashReportsService.saveCrashReports(crashReportsForm);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    				
+				}
+    		}else{
+    			//Page Validation Got Failed
+    			model.addAttribute("error",true);
+    			model.addAttribute("requestSuccess", true);
+    			model.addAttribute("errorDescription", "Please Check File Page Numbers");
+    			model.addAttribute("errorCode",1);
+    		}
+    		
+    		
+    	}else{
+    		//Single Report
+    	} 	
+    	
+		
+		return "/returnPage";
+   	}
 }
