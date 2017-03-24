@@ -12,16 +12,16 @@
 			</h3>
 			<hr />
 			<div class="container" ng-cloak class="ng-cloak">
-			<form name="uploadForm" novalidate>
+			<form name="forms.uploadForm" novalidate>
 			<label class="control-label col-md-2">Upload Report:</label>
 			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
 			        <input type="file" class="form-control" id="crashReportFile" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" style="height: auto !important;">
 			      	<div class="error-container">
-						<div ng-show="submitted || uploadForm.crashReportFile.$dirty">
-							<span ng-cloak ng-show="uploadForm.crashReportFile.$error.required">Please
+						<div ng-show="submitted || forms.uploadForm.crashReportFile.$dirty">
+							<span ng-cloak ng-show="forms.uploadForm.crashReportFile.$error.required">Please
 								Select Report</span>
-								<span ng-cloak ng-show="!uploadForm.crashReportFile.$error.required&&uploadForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
-	                            <span ng-cloak ng-show="!uploadForm.crashReportFile.$error.required&&!uploadForm.crashReportFile.$error.validateFileType&&uploadForm.crashReportFile.$error.validateFileSize">File should be less than 10 MB</span>
+								<span ng-cloak ng-show="!forms.uploadForm.crashReportFile.$error.required&&forms.uploadForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
+	                            <span ng-cloak ng-show="!forms.uploadForm.crashReportFile.$error.required&&!forms.uploadForm.crashReportFile.$error.validateFileType&&forms.uploadForm.crashReportFile.$error.validateFileSize">File should be less than 10 MB</span>
 						</div>
 					</div>	
 			      </div>
@@ -37,18 +37,71 @@
 			      </form>
 			      </div>
 		<div class="container" ng-cloak class="ng-cloak">
-		<v-accordion id="accordionB" class="vAccordion--default" control="accordionB">
+		<v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB">
 
-        <v-pane id="{{ ::report.id }}" ng-repeat="report in reports" expanded="report.isExpanded">
+        <v-pane id="{{ ::report.id }}" ng-repeat="report in reports track by $index" expanded="report.isExpanded">
           <v-pane-header id="{{ ::report.id }}-header" aria-controls="{{ ::report.id }}-header">
-            <h5>{{ ::report.header }}</h5>
+            <h5>{{ ::report.header }} {{$index+1}} <span class="btn btn-xs btn-danger pull-right" style="margin-right: 25px;!important" ng-click="removeReport($index)" ng-show="reports.length>1"><i class="fa fa-trash"></i> Remove</span><span class="pull-right" style="color:red;margin-right:50px;" ng-show="submitted && !forms.{{report.id}}.$valid">Validation Error</span></h5>
           </v-pane-header>
 
           <v-pane-content id="{{ ::report.id }}-content" aria-labelledby="{{ ::report.id }}-content">
             <p>
             <div class="container" ng-cloak class="ng-cloak">
-			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
-			  <div class="form-group">
+			  <ng-form class="form-horizontal" name="forms.{{report.id}}" novalidate>
+			  <div class="form-group from-group-override">
+			      <label class="control-label col-sm-2">Pages:</label>
+			      <div class="col-sm-2">
+			         <input type="radio" ng-model="report.pageType" value="1"/> All &nbsp;&nbsp;
+			         <input type="radio" ng-model="report.pageType" value="2"/> Custom
+			      </div>
+			      <label class="control-label col-sm-2" ng-show="report.pageType==2">Starting Page:</label>
+			       <div class="col-sm-2" ng-show="report.pageType==2">
+						<input type="text" class="form-control" name="fromPage" ng-model="report.fromPage" ng-required="report.pageType==2" validate-number>
+						<div class="error-container">
+						<div ng-show="submitted || forms.{{report.id}}.fromPage.$dirty">
+							<span ng-cloak ng-show="forms.{{report.id}}.fromPage.$error.required">Please
+								Enter From Page</span>
+							<span ng-cloak ng-show="!forms.{{report.id}}.fromPage.$error.required&&forms.{{report.id}}.fromPage.$error.validateNumber">Please
+								Enter Valid Page</span>
+						</div>
+						</div>	
+					</div>
+					<label class="control-label col-sm-2" ng-show="report.pageType==2">No. Of Pages:</label>
+					<div class="col-sm-2" ng-show="report.pageType==2">
+						 <select class="form-control" name="toPage" ng-model="report.toPage" ng-required="report.pageType==2">
+						 <option value="">-- Select --</option>
+						 <option value="1">1</option>
+						 <option value="2">2</option>
+						 <option value="3">3</option>
+						 <option value="4">4</option>
+						 <option value="5">5</option>
+						 <option value="6">6</option>
+						 <option value="7">7</option>
+						 <option value="8">8</option>
+						 <option value="9">9</option>
+						 <option value="10">10</option>
+						 <option value="11">11</option>
+						 <option value="12">12</option>
+						 <option value="13">13</option>
+						 <option value="14">14</option>
+						 <option value="15">15</option>
+						 <option value="16">16</option>
+						 <option value="17">17</option>
+						 <option value="18">18</option>
+						 <option value="19">19</option>
+						 <option value="20">20</option>
+						 
+						 </select>
+						<div class="error-container">
+						<div ng-show="submitted || forms.{{report.id}}.toPage.$dirty">
+							<span ng-cloak ng-show="forms.{{report.id}}.toPage.$error.required">Please
+								Select To Page</span>
+						</div>
+					</div>	
+			      </div>
+			  </div>
+			  <div><hr/></div>
+			  <div class="form-group from-group-override">
 			      <label class="control-label col-sm-2">County:</label>
 			      <div class="col-sm-4">
 			         <select class="form-control" name="county" required ng-model="report.countyId">
@@ -56,56 +109,52 @@
 			         <option ng-repeat="county in countyList" value="{{county.countyId}}" ng-selected="county.countyId==report.countyId">{{county.countyId}} - {{county.name}}</option>
 			         </select>
 			        <div class="error-container">
-						<div ng-show="submitted || addCrashReportForm.county.$dirty">
-							<span ng-cloak ng-show="addCrashReportForm.county.$error.required">Please
+						<div ng-show="submitted || forms.{{report.id}}.county.$dirty">
+							<span ng-cloak ng-show="forms.{{report.id}}.county.$error.required">Please
 								Select County</span>
 						</div>
 					</div>	
 			      </div>
-			    </div>
-			    <div class="form-group">
 			      <label class="control-label col-sm-2">Crash Date:</label>
 			      <div class="col-sm-4">
 			         <div class="input-group">
 					<input type="text" name="crashDate" id="{{'crashDateAdd'+$index}}" class="form-control calender-control"
 						ng-model="report.crashDate"
 						placeholder="Enter Crash Date" required readonly ng-focus="enableDatePicker('crashDateAdd'+$index)"> 
-					<span class="input-group-addon white-color-bg calender-control-span" id="{{'crashDateCalenderAdd'+$index}}"> <span class="fa fa-calendar"></span></span>
+					<span class="input-group-addon white-color-bg calender-control-span" id="{{'crashDateCalenderAdd'+$index}}" ng-click="enableDatePickerByIcon('crashDateAdd'+$index)"> <span class="fa fa-calendar"></span></span>
 					</div>
 			        <div class="error-container">
-						<div ng-show="submitted || addCrashReportForm.crashDate.$dirty">
-							<span ng-cloak ng-show="addCrashReportForm.crashDate.$error.required">Please
+						<div ng-show="submitted || forms.{{report.id}}.crashDate.$dirty">
+							<span ng-cloak ng-show="forms.{{report.id}}.crashDate.$error.required">Please
 								Enter Crash Date</span>
 						</div>
-					</div>	
+					</div>
 			      </div>
 			    </div>
-			    <div class="form-group">
+			    <div class="form-group from-group-override">
 			      <label class="control-label col-sm-2">Report Number:</label>
 			      <div class="col-sm-4">          
 			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required>
 			      	 <div class="error-container">
-						<div ng-show="submitted || addCrashReportForm.reportNumber.$dirty">
-							<span ng-cloak ng-show="addCrashReportForm.reportNumber.$error.required">Please
+						<div ng-show="submitted || forms.{{report.id}}.reportNumber.$dirty">
+							<span ng-cloak ng-show="forms.{{report.id}}.reportNumber.$error.required">Please
 								Enter Report Number</span>
 						</div>
 					</div>	
 			      </div>
-			    </div>
-			    <div class="form-group">
 			      <label class="control-label col-sm-2">Location:</label>
 			      <div class="col-sm-4">          
 			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
 			         <div class="error-container">
-						<div ng-show="submitted || addCrashReportForm.location.$dirty">
-							<span ng-cloak ng-show="addCrashReportForm.location.$error.required">Please
+						<div ng-show="submitted || forms.{{report.id}}.location.$dirty">
+							<span ng-cloak ng-show="forms.{{report.id}}.location.$error.required">Please
 								Enter Location</span>
 						</div>
 					</div>	
 			      </div>
 			    </div>
-			    <div class="form-group">
-			    	<label class="control-label col-sm-2">Crash Severity:</label>
+			    <div class="form-group from-group-override">
+			      	<label class="control-label col-sm-2">Crash Severity:</label>
 			      <div class="col-sm-4">          
 			        <select class="form-control" ng-model="report.crashSeverity" name="crashSeverity">
 			        <option value="0">-- Select --</option>
@@ -185,7 +234,7 @@
 			        <a href="#/reports" class="btn btn-default">Cancel</a>
 			      </div>
 			    </div> -->
-			  </form>
+			  </ng-form>
 	</div>
 	
 	</p>
@@ -194,25 +243,29 @@
         </v-pane>
 
       </v-accordion>
+      <div class="col-md-12"><a class="btn btn-info" href="" ng-click="addReport();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Report</a> <hr/></div>
+       <div class="form-group">  
+			  	  <div class="col-sm-offset-2 col-sm-10">
+			        <button type="button" class="btn btn-send" ng-click="submitted=true;saveCrashReport()" ng-disabled="reportSave">{{buttonText}}</button>
+			        <a href="#/reports" class="btn btn-default">Cancel</a>
+			      </div>
+			    </div>
 			</div>
 		</div>
 	</div>
 </section>
 <script>
-	var id=document.getElementById('crashDateAdd0');
-	alert(id);
-$('#crashDateAdd0').datetimepicker({
+/* $('#crashDateAdd0').datetimepicker({
 	pickTime : false,
 	format:'MM/DD/YYYY',
 	ignoreReadonly:true
 });
 
 $("#crashDateCalenderAdd0").click(function(){
-	alert("sds");
 	$('#crashDateAdd0').focus();
 });
 
 $('#crashDateAdd0').click(function(){
 	alert("dasds")
-});
+}); */
 </script>

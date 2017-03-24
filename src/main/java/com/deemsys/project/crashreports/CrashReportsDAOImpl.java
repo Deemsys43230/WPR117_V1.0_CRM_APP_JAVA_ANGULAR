@@ -247,7 +247,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	public void saveCrashReports(CrashReports crashReports) throws Exception {
 		// TODO Auto-generated method stub
 		try{
-			crashReports.setFileName(crashReports.getReportId()+"_"+crashReports.getReportNumber()+".pdf");
+			crashReports.setFileName(crashReports.getReportId()+".pdf");
 			this.sessionFactory.getCurrentSession().save(crashReports);
 		}catch(Exception ex){
 			ex.printStackTrace();

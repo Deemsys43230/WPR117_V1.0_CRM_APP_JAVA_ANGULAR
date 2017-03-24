@@ -221,9 +221,9 @@ function vAccordionController ($scope) {
   };
 
   ctrl.addPane = function addPane (paneToAdd) {
-    if (!$scope.allowMultiple) {
+	if (!$scope.allowMultiple) {
       if (ctrl.hasExpandedPane() && paneToAdd.isExpanded) {
-        throw new Error('The `multiple` attribute can\'t be found');
+       // throw new Error('The `multiple` attribute can\'t be found');
       }
     }
 

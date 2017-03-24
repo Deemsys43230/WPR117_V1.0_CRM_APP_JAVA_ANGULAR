@@ -11,6 +11,9 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	// For Check Report Number Already Exist
 	$scope.reportId="";
 	
+	//Forms Object
+	$scope.forms={};
+	var paneId=1;
 	
 	$scope.occupantListLength=0;
 	$scope.isEdit=false;
@@ -19,25 +22,20 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	$scope.buttonText="Submit";
 	$scope.title="Add Report";
 	$scope.reports=[{
-			"id": 'Report-1',
-	        "header": 'Report 1',
+			"id": 'Report_'+paneId,
+	        "header": 'Report',
 	        "isExpanded": true,
+	        "countyId":"",
 			"crashDate":"",
 			"reportNumber":"",
 			"location":"",
 			"crashSeverity":"0",
 			"fileName":"",
+			"pageType":"1",
+			"fromPage":"",
+			"toPage":"",
 			"occupantsForms":[{"firstName":"","lastName":"","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1}]
-			},{
-			"id": 'Report-2',
-		    "header": 'Report 2',
-			"crashDate":"",
-			"reportNumber":"",
-			"location":"",
-			"crashSeverity":"0",
-			"fileName":"",
-			"occupantsForms":[{"firstName":"","lastName":"","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1}]
-		 }];
+			}];
 	
 	// Get County List
 	$scope.getCountyList=function(){
@@ -62,34 +60,104 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		console.log($scope.reports);
 	};
 	
+	// Add Report 
+	$scope.addReport=function(){
+		paneId=paneId+1;
+		$scope.newReport={
+				"id": 'Report_'+paneId,
+		        "header": 'Report',
+		        "isExpanded": true,
+		        "countyId":"",
+				"crashDate":"",
+				"reportNumber":"",
+				"location":"",
+				"crashSeverity":"0",
+				"fileName":"",
+				"pageType":"1",
+				"fromPage":"",
+				"toPage":"",
+				"occupantsForms":[{"firstName":"","lastName":"","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1}]
+				};
+		$scope.reports.push($scope.newReport);
+	};
+	
+	// Remove Report
+	$scope.removeReport=function(index){
+		$scope.reports.splice(index,1);
+		/*$.each($scope.reports,function(key,value){
+			alert(value.id);
+			$scope.forms+"."+value.id+"."+$setPristine();
+		});*/
+		console.log($scope.reports);
+	};
+	
+	
 	// Save Crash Reports
 	$scope.saveCrashReport=function(){
-		$scope.reportSave=true;
-		$scope.buttonText="Submiting....";
-		requestHandler.postFileUpdate("User/uploadCrashReports.json",$scope.crashReportFile,"crashReport",$scope.report.reportNumber,"reportNumber","","reportId").then(function(response){
-			$scope.report.reportId=response.data.reportId;
-			requestHandler.postRequest("User/mergeCrashReports.json?isAddOrEdit=1",$scope.report).then(function(response){
+		var formsTrueCount=0;
+		console.log($scope.forms);
+		$.each($scope.forms,function(key,value){
+			console.log(value);
+			if(value!=undefined){
+				if(value.$valid){
+					formsTrueCount++;
+				}
+			}
+		});
+		console.log($scope.reports);
+		if($scope.reports.length+1==formsTrueCount){
+			$scope.reportSave=true;
+			$scope.buttonText="Submiting....";
+			/*$.each($scope.reports,function(key,value){
+				value.crashSeverity=parseInt(value.crashSeverity);
+				value.countyId=parseInt(value.countyId);
+				value.pageType=parseInt(value.pageType);
+				if(value.fromPage!=""){
+					value.fromPage=parseInt(value.fromPage);
+				}else{
+					value.fromPage=0;
+				}
+				if(value.toPage!=""){
+					value.toPage=parseInt(value.toPage);
+				}else{
+					value.toPage=0;
+				}
+			});*/
+			
+			$scope.crashReportsList={};
+			$scope.crashReportsList.crashReportsForms=$scope.reports;
+		
+			console.log($scope.reports);
+			requestHandler.postFileWithJson("User/submitCrashReports.json",$scope.crashReportFile,"crashReport",$scope.crashReportsList,"crashReportFormList").then(function(response) {
 				$scope.reportSave=false;
 				$scope.buttonText="Submit";
-				successMessage(Flash,"Successfully Added");
-				$location.path('/reports');
+				if(response.data.error){
+					alert(response.data.errorDescription);
+				}else{
+					alert("success");
+					successMessage(Flash,"Successfully Added");
+					$location.path('/reports');
+				}
 			});
-		});
+		}else{
+			// Some Forms Having Validation Error
+		}
+		
 	};
 	
 	// Date Picker
-	$.each($scope.reports,function(key,value){
-		// Set Max Date
-		//$('#crashDateAdd'+key).data("DateTimePicker").setMaxDate($rootScope.currentDate);
-	});
-	
 	$scope.enableDatePicker=function(id){
 		$('#'+id).datetimepicker({
 			pickTime : false,
 			format:'MM/DD/YYYY',
 			ignoreReadonly:true
 		});
-
+		
+		$('#'+id).data("DateTimePicker").setMaxDate($rootScope.currentDate);
+	};
+	
+	$scope.enableDatePickerByIcon=function(id){
+		$('#'+id).focus();
 	};
 	
 }]);

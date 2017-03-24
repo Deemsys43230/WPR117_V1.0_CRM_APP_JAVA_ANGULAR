@@ -146,17 +146,13 @@ public class CrashReportsController {
     	
     	
     	String multiReportFileName="";
-    	if(crashReportsFormList.getCrashReportsForms().size()>1){
     		multiReportFileName=crashReportsService.storeFileTemp(crashReport);
     		
-    		//Finding the total page numbers
-    		Integer totalPages=0;
-    		for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
-				totalPages+=(crashReportsForm.getToPage()-crashReportsForm.getFromPage())+1;
-			}
+    		// Total Pages Pdf
+    		Integer pdfTotalPages=crashReportsService.checkForNumberOfPages(multiReportFileName);
     		
     		//Check The Total Page Validation
-    		if(crashReportsService.checkForNumberOfPages(multiReportFileName, totalPages)){
+    		if(crashReportsService.checkPagesEntry(crashReportsFormList.getCrashReportsForms(), pdfTotalPages)){
     			//Page Validation Success
     			for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
     				
@@ -164,17 +160,32 @@ public class CrashReportsController {
     				String reportId=UUID.randomUUID().toString().replaceAll("-", "");
     				crashReportsForm.setFileName(reportId+".pdf");
     				crashReportsForm.setReportId(reportId);
-    				crashReportsService.splitFile(multiReportFileName,crashReportsForm.getFileName(), crashReportsForm.getFromPage(), crashReportsForm.getToPage());
+    				if(crashReportsForm.getPageType()==2){
+    					// Splitting File
+    					crashReportsService.splitFile(multiReportFileName,crashReportsForm.getFileName(), crashReportsForm.getFromPage(), (crashReportsForm.getFromPage()+crashReportsForm.getToPage())-1);
+        			}else{
+        				// Same File Without Splitting
+        				String fileName=multiReportFileName.substring(multiReportFileName.lastIndexOf("/")+1);
+        				crashReportsForm.setFileName(fileName);
+        			}
     				
     				//Upload to AWS
     				awsFileUpload.uploadFileToAWSS3(crmProperties.getProperty("tempFolder")+crashReportsForm.getFileName(), crashReportsForm.getFileName());
     				
     				//Save Crash Report
     				try {
-						crashReportsService.saveCrashReports(crashReportsForm);
+    					crashReportsService.saveCrashReports(crashReportsForm);
+    					model.addAttribute("error",false);
+		    			model.addAttribute("requestSuccess", true);
+		    			model.addAttribute("errorDescription", "");
+		    			model.addAttribute("errorCode",0);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						model.addAttribute("error",true);
+		    			model.addAttribute("requestSuccess", true);
+		    			model.addAttribute("errorDescription", e.toString());
+		    			model.addAttribute("errorCode",2);
 					}
     				
 				}
@@ -185,12 +196,7 @@ public class CrashReportsController {
     			model.addAttribute("errorDescription", "Please Check File Page Numbers");
     			model.addAttribute("errorCode",1);
     		}
-    		
-    		
-    	}else{
-    		//Single Report
-    	} 	
-    	
+    
 		
 		return "/returnPage";
    	}

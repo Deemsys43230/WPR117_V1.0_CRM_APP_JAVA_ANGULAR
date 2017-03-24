@@ -338,15 +338,31 @@ public class CrashReportsService {
         outputStream.close();
 	}	
 		
-	public boolean checkForNumberOfPages(String inputFilePath,Integer totalPage) throws IOException{
+	public Integer checkForNumberOfPages(String inputFilePath) throws IOException{
 		PdfReader reader = new PdfReader(inputFilePath);
-        int n = reader.getNumberOfPages();
-        if(totalPage>n){
-        	return false;
-        }else{
-        	return true;
-        }
-        
-	}
+        return reader.getNumberOfPages();
+    }
 	
+	public boolean checkPagesEntry(List<CrashReportsForm> crashReportsForms,Integer pdfTotalPages){
+		
+		Integer totalCorrectReports=0;
+		for (CrashReportsForm crashReportsForm : crashReportsForms) {
+			if(crashReportsForm.getPageType()==2){
+				if(crashReportsForm.getFromPage()<=pdfTotalPages){
+					Integer totalPages=(crashReportsForm.getFromPage()+crashReportsForm.getToPage())-1;
+					if(totalPages<=pdfTotalPages){
+						totalCorrectReports++;
+					}
+				}
+			}else{
+				totalCorrectReports++;
+			}
+		}
+		
+		if(totalCorrectReports==crashReportsForms.size()){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

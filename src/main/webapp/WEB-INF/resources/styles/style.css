@@ -2786,6 +2786,15 @@ h3{
 	margin-bottom: 10px;
 }
 
+.from-group-override{
+	margin-right: 0px !important;
+}
+
+.control-label{
+	padding-top: 0 !important;
+	margin-top: 0 !important;
+}
+
 /* Loader In CSS  */
 .loader {
   border: 16px solid #f3f3f3;
