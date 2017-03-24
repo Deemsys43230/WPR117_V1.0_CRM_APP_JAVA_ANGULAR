@@ -365,4 +365,9 @@ public class CrashReportsService {
 			return false;
 		}
 	}
+	
+	public void deleteFile(String fileLocation){
+		File file = new File(fileLocation);
+		file.delete();
+	}
 }

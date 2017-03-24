@@ -154,6 +154,7 @@ public class CrashReportsController {
     		//Check The Total Page Validation
     		if(crashReportsService.checkPagesEntry(crashReportsFormList.getCrashReportsForms(), pdfTotalPages)){
     			//Page Validation Success
+    			Integer reportSuccessCount=0;
     			for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
     				
     				//Creating Split File
@@ -170,7 +171,18 @@ public class CrashReportsController {
         			}
     				
     				//Upload to AWS
-    				awsFileUpload.uploadFileToAWSS3(crmProperties.getProperty("tempFolder")+crashReportsForm.getFileName(), crashReportsForm.getFileName());
+    				Integer status=awsFileUpload.uploadFileToAWSS3(crmProperties.getProperty("tempFolder")+crashReportsForm.getFileName(), crashReportsForm.getFileName());
+    				if(crashReportsForm.getPageType()==2){
+    					if(status==0){
+    						reportSuccessCount++;
+    						// Delete Splitted Temp File
+    						crashReportsService.deleteFile(crmProperties.getProperty("tempFolder")+crashReportsForm.getFileName());
+    					}
+    				}else{
+    					if(status==0){
+    						reportSuccessCount++;
+    					}
+    				}
     				
     				//Save Crash Report
     				try {
@@ -179,7 +191,7 @@ public class CrashReportsController {
 		    			model.addAttribute("requestSuccess", true);
 		    			model.addAttribute("errorDescription", "");
 		    			model.addAttribute("errorCode",0);
-					} catch (Exception e) {
+		    		} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						model.addAttribute("error",true);
@@ -189,6 +201,11 @@ public class CrashReportsController {
 					}
     				
 				}
+    			
+    			if(crashReportsFormList.getCrashReportsForms().size()==reportSuccessCount){
+    				// delete Main Temp File
+    				crashReportsService.deleteFile(multiReportFileName);
+    			}
     		}else{
     			//Page Validation Got Failed
     			model.addAttribute("error",true);

@@ -37,17 +37,18 @@
 			      </form>
 			      </div>
 		<div class="container" ng-cloak class="ng-cloak">
+		<form name="forms.ReportForm" novalidate>
 		<v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB">
 
         <v-pane id="{{ ::report.id }}" ng-repeat="report in reports track by $index" expanded="report.isExpanded">
           <v-pane-header id="{{ ::report.id }}-header" aria-controls="{{ ::report.id }}-header">
-            <h5>{{ ::report.header }} {{$index+1}} <span class="btn btn-xs btn-danger pull-right" style="margin-right: 25px;!important" ng-click="removeReport($index)" ng-show="reports.length>1"><i class="fa fa-trash"></i> Remove</span><span class="pull-right" style="color:red;margin-right:50px;" ng-show="submitted && !forms.{{report.id}}.$valid">Validation Error</span></h5>
+            <h5>{{ ::report.header }} {{$index+1}} <span class="btn btn-xs btn-danger pull-right" style="margin-right: 25px;!important" ng-click="removeReport($index)" ng-show="reports.length>1"><i class="fa fa-trash"></i> Remove</span></h5>
           </v-pane-header>
 
           <v-pane-content id="{{ ::report.id }}-content" aria-labelledby="{{ ::report.id }}-content">
             <p>
             <div class="container" ng-cloak class="ng-cloak">
-			  <ng-form class="form-horizontal" name="forms.{{report.id}}" novalidate>
+			  <ng-form class="form-horizontal" name="innerForm" novalidate>
 			  <div class="form-group from-group-override">
 			      <label class="control-label col-sm-2">Pages:</label>
 			      <div class="col-sm-2">
@@ -56,12 +57,12 @@
 			      </div>
 			      <label class="control-label col-sm-2" ng-show="report.pageType==2">Starting Page:</label>
 			       <div class="col-sm-2" ng-show="report.pageType==2">
-						<input type="text" class="form-control" name="fromPage" ng-model="report.fromPage" ng-required="report.pageType==2" validate-number>
+						<input type="text" class="form-control" name="fromPage" ng-model="report.fromPage" ng-required="report.pageType==2" maxlength="2" validate-number>
 						<div class="error-container">
-						<div ng-show="submitted || forms.{{report.id}}.fromPage.$dirty">
-							<span ng-cloak ng-show="forms.{{report.id}}.fromPage.$error.required">Please
+						<div ng-show="submitted || innerForm.fromPage.$dirty">
+							<span ng-cloak ng-show="innerForm.fromPage.$error.required">Please
 								Enter From Page</span>
-							<span ng-cloak ng-show="!forms.{{report.id}}.fromPage.$error.required&&forms.{{report.id}}.fromPage.$error.validateNumber">Please
+							<span ng-cloak ng-show="!innerForm.fromPage.$error.required&&innerForm.fromPage.$error.validateNumber">Please
 								Enter Valid Page</span>
 						</div>
 						</div>	
@@ -93,9 +94,9 @@
 						 
 						 </select>
 						<div class="error-container">
-						<div ng-show="submitted || forms.{{report.id}}.toPage.$dirty">
-							<span ng-cloak ng-show="forms.{{report.id}}.toPage.$error.required">Please
-								Select To Page</span>
+						<div ng-show="submitted || innerForm.toPage.$dirty">
+							<span ng-cloak ng-show="innerForm.toPage.$error.required">Please
+								Select No. of Pages</span>
 						</div>
 					</div>	
 			      </div>
@@ -109,8 +110,8 @@
 			         <option ng-repeat="county in countyList" value="{{county.countyId}}" ng-selected="county.countyId==report.countyId">{{county.countyId}} - {{county.name}}</option>
 			         </select>
 			        <div class="error-container">
-						<div ng-show="submitted || forms.{{report.id}}.county.$dirty">
-							<span ng-cloak ng-show="forms.{{report.id}}.county.$error.required">Please
+						<div ng-show="submitted || innerForm.county.$dirty">
+							<span ng-cloak ng-show="innerForm.county.$error.required">Please
 								Select County</span>
 						</div>
 					</div>	
@@ -124,8 +125,8 @@
 					<span class="input-group-addon white-color-bg calender-control-span" id="{{'crashDateCalenderAdd'+$index}}" ng-click="enableDatePickerByIcon('crashDateAdd'+$index)"> <span class="fa fa-calendar"></span></span>
 					</div>
 			        <div class="error-container">
-						<div ng-show="submitted || forms.{{report.id}}.crashDate.$dirty">
-							<span ng-cloak ng-show="forms.{{report.id}}.crashDate.$error.required">Please
+						<div ng-show="submitted || innerForm.crashDate.$dirty">
+							<span ng-cloak ng-show="innerForm.crashDate.$error.required">Please
 								Enter Crash Date</span>
 						</div>
 					</div>
@@ -136,8 +137,8 @@
 			      <div class="col-sm-4">          
 			        <input type="text" class="form-control" ng-model="report.reportNumber" placeholder="Enter Report Number" name="reportNumber" maxlength="100" required>
 			      	 <div class="error-container">
-						<div ng-show="submitted || forms.{{report.id}}.reportNumber.$dirty">
-							<span ng-cloak ng-show="forms.{{report.id}}.reportNumber.$error.required">Please
+						<div ng-show="submitted || innerForm.reportNumber.$dirty">
+							<span ng-cloak ng-show="innerForm.reportNumber.$error.required">Please
 								Enter Report Number</span>
 						</div>
 					</div>	
@@ -146,8 +147,8 @@
 			      <div class="col-sm-4">          
 			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
 			         <div class="error-container">
-						<div ng-show="submitted || forms.{{report.id}}.location.$dirty">
-							<span ng-cloak ng-show="forms.{{report.id}}.location.$error.required">Please
+						<div ng-show="submitted || innerForm.location.$dirty">
+							<span ng-cloak ng-show="innerForm.location.$error.required">Please
 								Enter Location</span>
 						</div>
 					</div>	
@@ -246,26 +247,32 @@
       <div class="col-md-12"><a class="btn btn-info" href="" ng-click="addReport();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Report</a> <hr/></div>
        <div class="form-group">  
 			  	  <div class="col-sm-offset-2 col-sm-10">
-			        <button type="button" class="btn btn-send" ng-click="submitted=true;saveCrashReport()" ng-disabled="reportSave">{{buttonText}}</button>
+			        <button type="button" class="btn btn-send" ng-click="submitted=true;saveCrashReportModal()" ng-disabled="reportSave">{{buttonText}}</button>
 			        <a href="#/reports" class="btn btn-default">Cancel</a>
+			        &nbsp;&nbsp;&nbsp;<span class="error-container" ng-show="isError">{{errorMsg}}</span>
 			      </div>
 			    </div>
+			    </form>
 			</div>
 		</div>
 	</div>
 </section>
-<script>
-/* $('#crashDateAdd0').datetimepicker({
-	pickTime : false,
-	format:'MM/DD/YYYY',
-	ignoreReadonly:true
-});
-
-$("#crashDateCalenderAdd0").click(function(){
-	$('#crashDateAdd0').focus();
-});
-
-$('#crashDateAdd0').click(function(){
-	alert("dasds")
-}); */
-</script>
+<div class="modal fade" id="reportSaveConfirmationModal" role="dialog"
+	data-backdrop="static" data-keyborad="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				Please Verify the details once again. Once click OK, you can't edit the details.
+				Click OK for save report. Click cancel for edit the details.
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-success" ng-click="saveCrashReport()" data-dismiss="modal">OK</button>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -22,8 +22,9 @@ public class AWSFileUpload {
 	@Autowired
 	CRMProperties crmProperties;
 	
-	public void uploadFileToAWSS3(String filePath,String fileName){
+	public Integer uploadFileToAWSS3(String filePath,String fileName){
 		
+		Integer isError=0;
 		String bucketName=crmProperties.getProperty("bucketName");
 		String folderName=crmProperties.getProperty("folderName");
 		try{
@@ -47,6 +48,7 @@ public class AWSFileUpload {
 		        System.out.println("AWS Error Code:   " + ase.getErrorCode());
 		        System.out.println("Error Type:       " + ase.getErrorType());
 		        System.out.println("Request ID:       " + ase.getRequestId());
+		        isError=1;
 		}catch(AmazonClientException ace){
 			 System.out.println("Caught an AmazonClientException, which " +
 		        		"means the client encountered " +
@@ -54,7 +56,10 @@ public class AWSFileUpload {
 		                "communicate with S3, " +
 		                "such as not being able to access the network.");
 		        System.out.println("Error Message: " + ace.getMessage());
+		        isError=1;
 		}
+		
+		return isError;
 	}
 	
 	// Aws File Delete

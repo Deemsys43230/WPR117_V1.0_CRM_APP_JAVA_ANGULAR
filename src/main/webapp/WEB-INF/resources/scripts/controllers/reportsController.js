@@ -11,6 +11,10 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	// For Check Report Number Already Exist
 	$scope.reportId="";
 	
+	// Show Error
+	$scope.isError=false;
+	$scope.errorMsg="";
+	
 	//Forms Object
 	$scope.forms={};
 	var paneId=1;
@@ -84,67 +88,56 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	// Remove Report
 	$scope.removeReport=function(index){
 		$scope.reports.splice(index,1);
-		/*$.each($scope.reports,function(key,value){
-			alert(value.id);
-			$scope.forms+"."+value.id+"."+$setPristine();
-		});*/
 		console.log($scope.reports);
 	};
 	
 	
-	// Save Crash Reports
-	$scope.saveCrashReport=function(){
+	// Save Crash Reports Modal
+	$scope.saveCrashReportModal=function(){
 		var formsTrueCount=0;
-		console.log($scope.forms);
 		$.each($scope.forms,function(key,value){
-			console.log(value);
 			if(value!=undefined){
 				if(value.$valid){
 					formsTrueCount++;
 				}
 			}
 		});
-		console.log($scope.reports);
-		if($scope.reports.length+1==formsTrueCount){
-			$scope.reportSave=true;
-			$scope.buttonText="Submiting....";
-			/*$.each($scope.reports,function(key,value){
-				value.crashSeverity=parseInt(value.crashSeverity);
-				value.countyId=parseInt(value.countyId);
-				value.pageType=parseInt(value.pageType);
-				if(value.fromPage!=""){
-					value.fromPage=parseInt(value.fromPage);
-				}else{
-					value.fromPage=0;
-				}
-				if(value.toPage!=""){
-					value.toPage=parseInt(value.toPage);
-				}else{
-					value.toPage=0;
-				}
-			});*/
-			
-			$scope.crashReportsList={};
-			$scope.crashReportsList.crashReportsForms=$scope.reports;
 		
-			console.log($scope.reports);
-			requestHandler.postFileWithJson("User/submitCrashReports.json",$scope.crashReportFile,"crashReport",$scope.crashReportsList,"crashReportFormList").then(function(response) {
-				$scope.reportSave=false;
-				$scope.buttonText="Submit";
-				if(response.data.error){
-					alert(response.data.errorDescription);
-				}else{
-					alert("success");
-					successMessage(Flash,"Successfully Added");
-					$location.path('/reports');
-				}
-			});
+		if(formsTrueCount==2){
+			$scope.isError=false;
+			$scope.errorMsg="";
+			$("#reportSaveConfirmationModal").modal('show');
 		}else{
 			// Some Forms Having Validation Error
+			$scope.isError=true;
+			$scope.errorMsg="Some of the fields having validation error";
 		}
 		
 	};
 	
+	// Save Crash Reports
+	$scope.saveCrashReport=function(){
+		$scope.reportSave=true;
+		$scope.buttonText="Submiting....";
+		$scope.crashReportsList={};
+		$scope.crashReportsList.crashReportsForms=$scope.reports;
+	
+		console.log($scope.reports);
+		requestHandler.postFileWithJson("User/submitCrashReports.json",$scope.crashReportFile,"crashReport",$scope.crashReportsList,"crashReportFormList").then(function(response) {
+			$scope.reportSave=false;
+			$scope.buttonText="Submit";
+			if(response.data.error){
+				$scope.isError=true;
+				$scope.errorMsg=response.data.errorDescription;
+			}else{
+				$scope.isError=false;
+				$scope.errorMsg="";
+				successMessage(Flash,"Successfully Added");
+				$location.path('/reports');
+			}
+		});
+	};
+
 	// Date Picker
 	$scope.enableDatePicker=function(id){
 		$('#'+id).datetimepicker({

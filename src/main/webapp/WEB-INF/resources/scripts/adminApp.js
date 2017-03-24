@@ -179,16 +179,8 @@ adminApp.directive('validateToFrom', function() {
 	restrict : 'A',
 	link : function(scope, elm, attrs, ngModel) {
 		ngModel.$validators.validateToFrom = function(modelValue) {
-			/*if(attrs.textId==1){
-				alert(attrs.toPage+"-->"+modelValue);
-				if(modelValue!=""&&attrs.toPage!=""){
-					return modelValue<=attrs.toPage;
-				}else{
-					return true;
-				}
-			}else if(attrs.textId==2){}*/
-				if(modelValue!=""&&attrs.fromPage!=""){
-					return modelValue>=parseInt(attrs.fromPage);
+			if(modelValue!=""&&attrs.fromPage!=""){
+				return modelValue>=parseInt(attrs.fromPage);
 				}else{
 					return true;
 				}
@@ -208,7 +200,6 @@ adminApp.directive('validateFromTo', function() {
 		console.log(attrs);
 		ngModel.$validators.validateFromTo = function(modelValue) {
 			if(modelValue!=""&&attrs.toPage!=""){
-				alert(attrs.toPage);
 				return modelValue<=attrs.toPage;
 			}else{
 				return true;
@@ -251,71 +242,6 @@ adminApp.directive('reportNumberExists',['$q','$timeout','requestHandler',functi
 							}
 					};
 } ]);
-
-// Loader
-adminApp.directive('loading', function () {
-    return {
-      restrict: 'E',
-      replace:true,
-      template: '<div class="loader"></div>',
-      link: function (scope, element, attr) {
-            scope.$watch('loading', function (val) {
-                if (val)
-                    $(element).show();
-                else
-                    $(element).hide();
-            });
-      }
-    };
-});
-
-// Ng Repeat Custom Directive
-adminApp.directive('tdRepeat', function(){
-	  return {
-	    transclude : 'E',
-	    compile : function(element, attr, linker){
-	      return function($scope, $element, $attr){
-	        var myLoop = $attr.tdRepeat,
-	            match = myLoop.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
-	            indexString = match[1],
-	            collectionString = match[2],
-	            parent = $element.parent(),
-	            elements = [];
-
-	        // $watchCollection is called everytime the collection is modified
-	        $scope.$watchCollection(collectionString, function(collection){
-	          var i, block, childScope;
-
-	          // check if elements have already been rendered
-	          if(elements.length > 0){
-	            // if so remove them from DOM, and destroy their scope
-	            for (i = 0; i < elements.length; i++) {
-	              elements[i].el.remove();
-	              elements[i].scope.$destroy();
-	            };
-	            elements = [];
-	          }
-
-	          for (i = 0; i < collection.length; i++) {
-	            // create a new scope for every element in the collection.
-	            childScope = $scope.$new();
-	            // pass the current element of the collection into that scope
-	            childScope[indexString] = collection[i];
-
-	            linker(childScope, function(clone){
-	              // clone the transcluded element, passing in the new scope.
-	              parent.append(clone); // add to DOM
-	              block = {};
-	              block.el = clone;
-	              block.scope = childScope;
-	              elements.push(block);
-	            });
-	          };
-	        });
-	      }
-	    }
-	  }
-	});
 
 //To Display success message
 //For User Messages
