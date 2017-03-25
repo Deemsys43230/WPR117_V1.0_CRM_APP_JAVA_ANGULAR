@@ -14,7 +14,6 @@ public class OccupantsForm {
 
 	private String firstName;
 	private String lastName;
-	private Integer crashSeverity;
 	private String address;
 	private String phoneNumber;
 	private String atFaultInsuranceCompany;
@@ -35,14 +34,6 @@ public class OccupantsForm {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public Integer getCrashSeverity() {
-		return crashSeverity;
-	}
-
-	public void setCrashSeverity(Integer crashSeverity) {
-		this.crashSeverity = crashSeverity;
 	}
 
 	public String getAddress() {
@@ -86,13 +77,12 @@ public class OccupantsForm {
 	}
 
 	public OccupantsForm(String firstName, String lastName,
-			Integer crashSeverity, String address, String phoneNumber,
+			String address, String phoneNumber,
 			String atFaultInsuranceCompany, String victimInsuranceCompany,
 			Integer status) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.crashSeverity = crashSeverity;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.atFaultInsuranceCompany = atFaultInsuranceCompany;

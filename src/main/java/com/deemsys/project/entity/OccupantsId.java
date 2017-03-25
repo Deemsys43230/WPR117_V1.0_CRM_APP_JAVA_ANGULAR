@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 21 Mar, 2017 1:18:27 PM by Hibernate Tools 3.4.0.CR1
+// Generated 25 Mar, 2017 1:14:05 PM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,7 +14,6 @@ public class OccupantsId implements java.io.Serializable {
 	private String reportId;
 	private String firstName;
 	private String lastName;
-	private Integer crashSeverity;
 	private String address;
 	private String phoneNumber;
 	private String atFaultInsuranceCompany;
@@ -30,13 +29,11 @@ public class OccupantsId implements java.io.Serializable {
 	}
 
 	public OccupantsId(String reportId, String firstName, String lastName,
-			Integer crashSeverity, String address, String phoneNumber,
-			String atFaultInsuranceCompany, String victimInsuranceCompany,
-			Integer sequenceNo, Integer status) {
+			String address, String phoneNumber, String atFaultInsuranceCompany,
+			String victimInsuranceCompany, Integer sequenceNo, Integer status) {
 		this.reportId = reportId;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.crashSeverity = crashSeverity;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.atFaultInsuranceCompany = atFaultInsuranceCompany;
@@ -70,15 +67,6 @@ public class OccupantsId implements java.io.Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	@Column(name = "crash_severity")
-	public Integer getCrashSeverity() {
-		return this.crashSeverity;
-	}
-
-	public void setCrashSeverity(Integer crashSeverity) {
-		this.crashSeverity = crashSeverity;
 	}
 
 	@Column(name = "address", length = 200)
@@ -155,11 +143,6 @@ public class OccupantsId implements java.io.Serializable {
 						.getLastName() != null
 						&& castOther.getLastName() != null && this
 						.getLastName().equals(castOther.getLastName())))
-				&& ((this.getCrashSeverity() == castOther.getCrashSeverity()) || (this
-						.getCrashSeverity() != null
-						&& castOther.getCrashSeverity() != null && this
-						.getCrashSeverity()
-						.equals(castOther.getCrashSeverity())))
 				&& ((this.getAddress() == castOther.getAddress()) || (this
 						.getAddress() != null && castOther.getAddress() != null && this
 						.getAddress().equals(castOther.getAddress())))
@@ -197,10 +180,6 @@ public class OccupantsId implements java.io.Serializable {
 				+ (getFirstName() == null ? 0 : this.getFirstName().hashCode());
 		result = 37 * result
 				+ (getLastName() == null ? 0 : this.getLastName().hashCode());
-		result = 37
-				* result
-				+ (getCrashSeverity() == null ? 0 : this.getCrashSeverity()
-						.hashCode());
 		result = 37 * result
 				+ (getAddress() == null ? 0 : this.getAddress().hashCode());
 		result = 37

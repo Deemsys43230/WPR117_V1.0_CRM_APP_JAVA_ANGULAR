@@ -150,7 +150,6 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 		ProjectionList projectionList = Projections.projectionList();
 		projectionList.add(Projections.property("o1.id.firstName"), "firstName");
 		projectionList.add(Projections.property("o1.id.lastName"), "lastName");
-		projectionList.add(Projections.property("o1.id.crashSeverity"), "crashSeverity");
 		projectionList.add(Projections.property("o1.id.address"), "address");
 		projectionList.add(Projections.property("o1.id.phoneNumber"), "phoneNumber");
 		projectionList.add(Projections.property("o1.id.atFaultInsuranceCompany"), "atFaultInsuranceCompany");

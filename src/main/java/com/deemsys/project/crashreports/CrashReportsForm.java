@@ -173,6 +173,25 @@ public class CrashReportsForm {
 		this.status = status;
 		this.occupantsForms = occupantsForms;
 	}
+	public CrashReportsForm(String reportId, String reportNumber,
+			String crashDate, Integer countyId, String location,
+			Integer crashSeverity, String fileName, String fileAccessPath, String addedDate,
+			String addedDateTime, Integer status,
+			List<OccupantsForm> occupantsForms) {
+		super();
+		this.reportId = reportId;
+		this.reportNumber = reportNumber;
+		this.crashDate = crashDate;
+		this.countyId = countyId;
+		this.location = location;
+		this.crashSeverity = crashSeverity;
+		this.fileName = fileName;
+		this.fileAccessPath = fileAccessPath;
+		this.addedDate = addedDate;
+		this.addedDateTime = addedDateTime;
+		this.status = status;
+		this.occupantsForms = occupantsForms;
+	}
 	
 	
 }

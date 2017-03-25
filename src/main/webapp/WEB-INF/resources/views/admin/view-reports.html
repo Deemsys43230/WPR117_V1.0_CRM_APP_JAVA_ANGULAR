@@ -53,9 +53,9 @@
 		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
 		            	<td width="16%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
 		            	<td width="20%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
-		            	<td width="34%"><label>Location:</label><br/>{{resultData.location}}</td>
+		            	<td width="24%"><label>Location:</label><br/>{{resultData.location}}</td>
 		            	<td width="16%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
-		            	<td width="14%"><!-- <a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-fw"></i> Edit</a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> Delete</a>&nbsp;|&nbsp;--><a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs"><i class="fa fa-eye fa-fw"></i> View Report</a></td>
+		            	<td width="24%"><a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-fw"></i> Edit</a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> Delete</a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs"><i class="fa fa-eye fa-fw"></i> View Report</a></td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
 		            	<td colspan="2">{{occupants.firstName}}</td>

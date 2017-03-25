@@ -6,7 +6,7 @@ var adminApp = angular.module('adminApp',['flash','requestModule']);
 
 
 //Add Reports Controller
-adminApp.controller('AddReportsController',['$rootScope','$scope','$http','requestHandler','$location','Flash',function($rootScope,$scope,$http,requestHandler,$location,Flash){
+adminApp.controller('AddReportsController',['$rootScope','$scope','$http','requestHandler','$location','Flash','$window',function($rootScope,$scope,$http,requestHandler,$location,Flash,$window){
 	
 	// For Check Report Number Already Exist
 	$scope.reportId="";
@@ -149,10 +149,27 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		$('#'+id).data("DateTimePicker").setMaxDate($rootScope.currentDate);
 	};
 	
+	// Date Picker Enable By Clicking ICon
 	$scope.enableDatePickerByIcon=function(id){
 		$('#'+id).focus();
 	};
 	
+
+    var openedWindows = [];
+	$scope.onChangeFile=function(){
+		
+       pdffile=document.getElementById("crashReportFile").files[0];
+       pdffile_url=URL.createObjectURL(pdffile);
+       console.log(openedWindows);
+		$.each(openedWindows,function(key,value){
+			value.close();
+		});
+		openedWindows=[];
+       var childWindow = window.open(pdffile_url,"_blank", "scrollbars=1,resizable=1,height=700,width=1000");
+       openedWindows.push(childWindow);
+    	 
+	};
+	 
 }]);
 
 // Edit Report Controller
@@ -182,9 +199,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		requestHandler.getRequest("getCrashReports.json?id="+$scope.reportId,"").then(function(response){
 			$scope.report=response.data.crashReportsForm;
 			$scope.report.countyId=$scope.report.countyId.toString();
-			$.each($scope.report.occupantsForms,function(key,value){
-				value.crashSeverity=value.crashSeverity.toString();
-			});
+			$scope.report.crashSeverity=$scope.report.crashSeverity.toString();
 			$scope.occupantListLength=$scope.report.occupantsForms.length;
 		});
 	};
@@ -210,7 +225,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		$scope.buttonText="Submiting....";
 		if($scope.isEdit){
 			console.log($scope.report);
-			requestHandler.postRequest("User/mergeCrashReports.json?isAddOrEdit=2",$scope.report).then(function(response){
+			requestHandler.postRequest("User/mergeCrashReports.json",$scope.report).then(function(response){
 				$scope.reportSave=false;
 				$scope.buttonText="Submit";
 				successMessage(Flash,"Successfully Updated");
@@ -219,7 +234,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		}else{
 			requestHandler.postFileUpdate("User/uploadCrashReports.json",$scope.crashReportFile,"crashReport",$scope.report.reportNumber,"reportNumber",$scope.report.reportId,"reportId").then(function(response){
 				$scope.report.reportId=response.data.reportId;
-				requestHandler.postRequest("User/mergeCrashReports.json?isAddOrEdit=2",$scope.report).then(function(response){
+				requestHandler.postRequest("User/mergeCrashReports.json",$scope.report).then(function(response){
 					$scope.reportSave=false;
 					$scope.buttonText="Submit";
 					successMessage(Flash,"Successfully Updated");

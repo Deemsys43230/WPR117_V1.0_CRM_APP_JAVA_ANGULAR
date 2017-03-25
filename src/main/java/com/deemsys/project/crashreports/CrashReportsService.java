@@ -100,10 +100,10 @@ public class CrashReportsService {
 				if(rowCount!=0){
 					crashReportsResultByGroupList.add(crashReportsResultByGroup);
 				}
-				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
+				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
 			}
 			// Set Occupants
-			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddress(), crashReportSearchList.getPhoneNumber(), crashReportSearchList.getAtFaultInsuranceCompany(), crashReportSearchList.getVictimInsuranceCompany(), 1));
+			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getAddress(), crashReportSearchList.getPhoneNumber(), crashReportSearchList.getAtFaultInsuranceCompany(), crashReportSearchList.getVictimInsuranceCompany(), 1));
 			rowCount++;
 		}
 		if(rowCount>0)
@@ -122,19 +122,8 @@ public class CrashReportsService {
 		//TODO: Convert Entity to Form
 		//Start
 		List<OccupantsForm> occupantsForms = occupantsDAO.getOccupantsFormByReportId(reportId);
-	/*	List<Occupants> occupants = occupantsDAO.getOccupantsByReportId(reportId);
-		for (Occupants occupant : occupants) {
-			OccupantsForm occupantsForm = new OccupantsForm(occupant.getId().getFirstName(), occupant.getId().getLastName(), 
-					occupant.getId().getCrashSeverity()!=null?occupant.getId().getCrashSeverity():null, 
-					occupant.getId().getAddress()!=null?occupant.getId().getAddress():"", 
-					occupant.getId().getPhoneNumber()!=null?occupant.getId().getPhoneNumber():"", 
-					occupant.getId().getAtFaultInsuranceCompany()!=null?occupant.getId().getAtFaultInsuranceCompany():"", 
-					occupant.getId().getVictimInsuranceCompany()!=null?occupant.getId().getVictimInsuranceCompany():"", 
-					occupant.getId().getStatus());
-			occupantsForms.add(occupantsForm);
-		}
-		*/
-		CrashReportsForm crashReportsForm=new CrashReportsForm();//crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
+	
+		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getLocation(), crashReports.getCrashSeverity(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
 		
 		//End
 		
@@ -142,7 +131,7 @@ public class CrashReportsService {
 	}
 	
 	//Merge an Entry (Save or Update)
-	public int mergeCrashReports(CrashReportsForm crashReportsForm,Integer isAddOrEdit)
+	public int mergeCrashReports(CrashReportsForm crashReportsForm)
 	{
 		//TODO: Convert Form to Entity Here
 		
@@ -163,7 +152,7 @@ public class CrashReportsService {
 				addedDateTime=CRMConstants.convertYearFormatWithTime24Hr(crashReportsForm.getAddedDateTime());
 			}
 			
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null, addedDate, addedDateTime, 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity() ,crashReportsForm.getOccupantsForms().size(), null, addedDate, addedDateTime, 1, null);
 			crashReports.setFileName(fileName);
 			crashReportsDAO.merge(crashReports);
 
@@ -175,19 +164,10 @@ public class CrashReportsService {
 			// Insert Occupants
 			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				PatientForm patientForm = new PatientForm(crashReportsForm.getReportNumber(), occupantsForm.getLastName()+", "+occupantsForm.getFirstName(), crashReportsForm.getCrashDate(), occupantsForm.getCrashSeverity()!=0?occupantsForm.getCrashSeverity().toString():"", occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(),
-														"","",0,"","","","",crashReportsForm.getCountyId(),"","","","","","",0,"",new Double(0),new Double(0),"","","","","",0,"",1,"",1,1);
-				patientForms.add(patientForm);
-				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getCrashSeverity(), occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(), sequenceNo, 1);
+				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(), sequenceNo, 1);
 				Occupants occupants = new Occupants(occupantsId, crashReports);
 				occupantsDAO.save(occupants);
 				sequenceNo++;
-			}
-			
-			// Insert Runner Report In CRO only On Save 1- Add Reports 2- EditReports
-			if(isAddOrEdit==1){
-				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), fileName, patientForms);
-				apiRequestService.saveRunnerReportInCRO(crashReportForm);
 			}
 			
 		} catch (Exception e) {
@@ -212,18 +192,25 @@ public class CrashReportsService {
 			Accounts accounts = accountsDAO.getAccountsById(loginService.getCurrentAccountId());
 			// County Data
 			County county = countyDAO.get(crashReportsForm.getCountyId());
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
 
 			crashReportsDAO.saveCrashReports(crashReports);
-			
+			// Patient Form
+			List<PatientForm> patientForms = new ArrayList<PatientForm>();
 			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getCrashSeverity(), occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(), sequenceNo, 1);
+				PatientForm patientForm = new PatientForm(crashReportsForm.getReportNumber(), occupantsForm.getLastName()+", "+occupantsForm.getFirstName(), crashReportsForm.getCrashDate(), crashReportsForm.getCrashSeverity()!=0?crashReportsForm.getCrashSeverity().toString():"", occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(),
+						"","",0,"","","","",crashReportsForm.getCountyId(),"","","","","","",0,"",new Double(0),new Double(0),"","","","","",0,"",1,"",1,1);
+				patientForms.add(patientForm);
+				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(), sequenceNo, 1);
 				Occupants occupants = new Occupants(occupantsId, crashReports);
 				occupantsDAO.save(occupants);
 				sequenceNo++;
 			}
 			
+			// Insert Runner Report In CRO only On Save
+			//CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), fileName, patientForms);
+			//apiRequestService.saveRunnerReportInCRO(crashReportForm);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
