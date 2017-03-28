@@ -25,6 +25,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	$scope.reportSave=false;
 	$scope.buttonText="Submit";
 	$scope.title="Add Report";
+	$scope.pageType="1";
 	$scope.reports=[{
 			"id": 'Report_'+paneId,
 	        "header": 'Report',
@@ -35,10 +36,9 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 			"location":"",
 			"crashSeverity":"0",
 			"fileName":"",
-			"pageType":"1",
 			"fromPage":"",
 			"toPage":"",
-			"occupantsForms":[{"firstName":"","lastName":"","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1}]
+			"occupantsForms":[{"firstName":"","lastName":"","address":"","phoneNumber":"","injuries":"","seatingPosition":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1}]
 			}];
 	
 	// Get County List
@@ -53,7 +53,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	
 	//Add Occupant
 	$scope.addOccupant=function(index){
-		$scope.newOccupant={"firstName":"","lastName":"","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1};
+		$scope.newOccupant={"firstName":"","lastName":"","address":"","phoneNumber":"","injuries":"","seatingPosition":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1};
 		$scope.reports[index].occupantsForms.push($scope.newOccupant);
 		console.log($scope.reports);
 	};
@@ -77,7 +77,6 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 				"location":"",
 				"crashSeverity":"0",
 				"fileName":"",
-				"pageType":"1",
 				"fromPage":"",
 				"toPage":"",
 				"occupantsForms":[{"firstName":"","lastName":"","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1}]
@@ -120,9 +119,10 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		$scope.reportSave=true;
 		$scope.buttonText="Submiting....";
 		$scope.crashReportsList={};
+		$scope.crashReportsList.pageType=parseInt($scope.pageType);
 		$scope.crashReportsList.crashReportsForms=$scope.reports;
 	
-		console.log($scope.reports);
+		console.log($scope.crashReportsList);
 		requestHandler.postFileWithJson("User/submitCrashReports.json",$scope.crashReportFile,"crashReport",$scope.crashReportsList,"crashReportFormList").then(function(response) {
 			$scope.reportSave=false;
 			$scope.buttonText="Submit";
@@ -158,16 +158,22 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
     var openedWindows = [];
 	$scope.onChangeFile=function(){
 		
-       pdffile=document.getElementById("crashReportFile").files[0];
-       pdffile_url=URL.createObjectURL(pdffile);
-       console.log(openedWindows);
+	    pdffile=document.getElementById("crashReportFile").files[0];
+		var blob = new Blob([pdffile], {type: 'application/pdf'});
+		
 		$.each(openedWindows,function(key,value){
 			value.close();
 		});
+		
 		openedWindows=[];
-       var childWindow = window.open(pdffile_url,"_blank", "scrollbars=1,resizable=1,height=700,width=1000");
-       openedWindows.push(childWindow);
-    	 
+		if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+		    window.navigator.msSaveOrOpenBlob(blob);
+		}
+		else {
+			pdffile_url=URL.createObjectURL(blob);
+		    var childWindow = window.open(pdffile_url,"_blank", "scrollbars=1,resizable=1,height=700,width=1000");
+		    openedWindows.push(childWindow);
+		}	 
 	};
 	 
 }]);

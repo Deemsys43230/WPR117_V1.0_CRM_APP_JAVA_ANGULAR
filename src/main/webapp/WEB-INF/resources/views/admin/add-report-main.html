@@ -13,8 +13,8 @@
 			<hr />
 			<div class="container" ng-cloak class="ng-cloak">
 			<form name="forms.uploadForm" novalidate>
-			<label class="control-label col-md-2">Upload Report:</label>
-			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
+				<label class="control-label col-md-2">Upload Report:</label>
+			      <div class="col-md-4" ng-cloak>          
 			        <input type="file" class="form-control" id="crashReportFile" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" ng-change="onChangeFile()" style="height: auto !important;">
 			      	<div class="error-container">
 						<div ng-show="submitted || forms.uploadForm.crashReportFile.$dirty">
@@ -25,15 +25,14 @@
 						</div>
 					</div>	
 			      </div>
-			      <div class="col-md-2" ng-cloak ng-show="!showCancel"><a href="" ng-click="isEdit=true;showCancel=true;clearFile();"><i class="fa fa-close fa-fw"></i> Cancel</a></div>
-			      <div class="col-md-5" ng-cloak ng-show="isEdit" style="padding-bottom: 2px;">
-			      	<span ng-cloak>{{report.fileName}} &nbsp;&nbsp;</span>
-			      <div class="error-container">
-			      </div>
-			      </div>
-			      <div class="col-md-2" ng-cloak ng-show="isEdit">
-			      <a href="" ng-click="changeFile()"><i class="fa fa-pencil fa-fw"></i> Change</a>
-			      </div>
+			      <div class="form-group">
+						<label class="control-label col-sm-2">Page Type:</label>
+						<div class="col-sm-2">
+							<input type="radio" ng-model="pageType" value="1" /> All
+							&nbsp;&nbsp; <input type="radio" ng-model="pageType"
+								value="2" /> Custom
+						</div>
+					</div>
 			      </form>
 			      </div>
 		<div class="container" ng-cloak class="ng-cloak">
@@ -49,15 +48,11 @@
             <p>
             <div class="container" ng-cloak class="ng-cloak">
 			  <ng-form class="form-horizontal" name="innerForm" novalidate>
-			  <div class="form-group from-group-override">
+			  <div class="form-group from-group-override" ng-show="pageType==2">
 			      <label class="control-label col-sm-2">Pages:</label>
-			      <div class="col-sm-2">
-			         <input type="radio" ng-model="report.pageType" value="1"/> All &nbsp;&nbsp;
-			         <input type="radio" ng-model="report.pageType" value="2"/> Custom
-			      </div>
-			      <label class="control-label col-sm-2" ng-show="report.pageType==2">Starting Page:</label>
-			       <div class="col-sm-2" ng-show="report.pageType==2">
-						<input type="text" class="form-control" name="fromPage" ng-model="report.fromPage" ng-required="report.pageType==2" maxlength="2" validate-number>
+			      <label class="control-label col-sm-2">Starting Page:</label>
+			       <div class="col-sm-2">
+						<input type="text" class="form-control" name="fromPage" ng-model="report.fromPage" ng-required="pageType==2" maxlength="2" validate-number>
 						<div class="error-container">
 						<div ng-show="submitted || innerForm.fromPage.$dirty">
 							<span ng-cloak ng-show="innerForm.fromPage.$error.required">Please
@@ -67,9 +62,9 @@
 						</div>
 						</div>	
 					</div>
-					<label class="control-label col-sm-2" ng-show="report.pageType==2">No. Of Pages:</label>
-					<div class="col-sm-2" ng-show="report.pageType==2">
-						 <select class="form-control" name="toPage" ng-model="report.toPage" ng-required="report.pageType==2">
+					<label class="control-label col-sm-2">No. Of Pages:</label>
+					<div class="col-sm-2">
+						 <select class="form-control" name="toPage" ng-model="report.toPage" ng-required="pageType==2">
 						 <option value="">-- Select --</option>
 						 <option value="1">1</option>
 						 <option value="2">2</option>
@@ -101,7 +96,7 @@
 					</div>	
 			      </div>
 			  </div>
-			  <div><hr/></div>
+			  <div ng-show="pageType==2"><hr/></div>
 			  <div class="form-group from-group-override">
 			      <label class="control-label col-sm-2">County:</label>
 			      <div class="col-sm-4">
@@ -159,9 +154,9 @@
 			      <div class="col-sm-4">          
 			        <select class="form-control" ng-model="report.crashSeverity" name="crashSeverity">
 			        <option value="0">-- Select --</option>
-			        <option value="1">1</option>
-			        <option value="2">2</option>
-			        <option value="3">3</option>
+			        <option value="1">1 - FATAL</option>
+			        <option value="2">2 - INJURY</option>
+			        <option value="3">3 - PDO</option>
 			        </select>
 			        <div class="error-container"></div>
 			      </div>
@@ -201,7 +196,7 @@
 			      </div>
 			      <label class="control-label col-sm-3">Phone Number:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.phoneNumber" placeholder="Enter Phone Number eg: (123)456-7890 or 123-456-7890" name="phoneNumber" maxlength="20" validate-mobile>
+			        <input type="text" class="form-control" ng-model="occupant.phoneNumber" placeholder="Enter Phone Number eg: (123) 456-7890 or 123-456-7890" name="phoneNumber" maxlength="20" validate-mobile>
 			      	<div class="error-container">
 			      	<div ng-show="submitted || occupantsForm.phoneNumber.$dirty">
 							<span ng-cloak ng-show="!occupantsForm.phoneNumber.$error.required && occupantsForm.phoneNumber.$error.validateMobile">Enter Valid Phone Number</span>
@@ -209,7 +204,7 @@
 			      	</div>
 			      </div>
 			      </div>
-			      <div class="col-sm-12 form-input-div">
+			     <div class="col-sm-12 form-input-div">
 			       <label class="control-label col-sm-3">At-Fault Insurance Company:</label>
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.atFaultInsuranceCompany" placeholder="Enter At-Fault Insurance Company" name="atFaultInsuranceCompany" maxlength="100">
@@ -219,6 +214,52 @@
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.victimInsuranceCompany" placeholder="Enter Victim Insurance Company" name="victimInsuranceCompany" maxlength="100">
 			      	<div class="error-container"></div>
+			      </div>
+			      </div>
+			        <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">Injuries:</label>
+			      <div class="col-sm-3">          
+			         <select class="form-control" ng-model="occupant.injuries" name="injuries" required>
+			        <option value="">-- Select --</option>
+			        <option value="1">1 - NO INJURY / NONE REPORTED</option>
+			        <option value="2">2 - POSSIBLE</option>
+			        <option value="3">3 - NON-INCAPACITATING</option>
+			        <option value="4">4 - INCAPACITATING</option>
+			        <option value="5">5 - FATAL</option>
+			        </select>
+			     	<div class="error-container">
+			     		<div ng-show="submitted || occupantsForm.injuries.$dirty">
+			     		<span ng-cloak ng-show="occupantsForm.injuries.$error.required">Please Select Injuries</span>
+			     		</div>
+			     	</div>
+			      </div>
+			      <label class="control-label col-sm-3">Seating Position:</label>
+			      <div class="col-sm-3">          
+			       <select class="form-control" ng-model="occupant.seatingPosition" name="seatingPosition" required>
+			        <option value="">-- Select --</option>
+			        <option value="1">1 -  FRONT - LEFT SIDE (MOTORCYCLE DRIVER)</option>
+			        <option value="2">2 - FRONT - MIDDLE</option>
+			        <option value="3">3 - FRONT - RIGHT SIDE</option>
+			        <option value="4">4 - SECOND - LEFT SIDE (MOTORCYCLE PASSENGER)</option>
+			        <option value="5">5 - SECOND - MIDDLE</option>
+			        <option value="6">6 - SECOND - RIGHT SIDE</option>
+			        <option value="6">7 - THIRD - LEFT SIDE (MOTORCYCLE SIDE CAR)</option>
+			        <option value="6">8 - THIRD - MIDDLE</option>
+			        <option value="6">9 - THIRD - RIGHT SIDE</option>
+			        <option value="6">10 - SLEEPER SECTION OF CAB (TRUCK)</option>
+			        <option value="6">11 - PASSENGER IN OTHER ENCLOSED CARGO AREA <br/>(NON-TRAILING UNIT SUCH AS A BUS, PICK-UP WITH CAP)</option>
+			        <option value="6">12 - PASSENGER IN UNENCLOSED CARGO AREA</option>
+			        <option value="6">13 - TRAILING UNIT</option>
+			        <option value="6">14 - RIDING ON VEHICLE EXTERIOR (NON-TRAILING UNIT)</option>
+			        <option value="6">15 - NON-MOTORIST</option>
+			        <option value="6">16 - OTHER</option>
+			        <option value="6">99 - UNKNOWN</option>
+			        </select>
+			     	<div class="error-container">
+			     		<div ng-show="submitted || occupantsForm.seatingPosition.$dirty">
+			     		<span ng-cloak ng-show="occupantsForm.seatingPosition.$error.required">Please Select Seating Position</span>
+			     		</div>
+			     	</div>
 			      </div>
 			      </div>
 			      <div class="col-sm-12">
@@ -266,8 +307,8 @@
 				<h4 class="modal-title">Confirmation</h4>
 			</div>
 			<div class="modal-body">
-				Please Verify the details once again. Once click OK, you can't edit the details.
-				Click OK for save report. Click cancel for edit the details.
+				Please verify the details. Once you Confirm the details, they cannot be updated.
+				Click Cancel to return to Details Verification.
 			</div>
 			<div class="modal-footer">
 			<button type="button" class="btn btn-success" ng-click="saveCrashReport()" data-dismiss="modal">OK</button>

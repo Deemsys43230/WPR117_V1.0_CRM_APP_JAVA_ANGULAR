@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 25 Mar, 2017 1:14:05 PM by Hibernate Tools 3.4.0.CR1
+// Generated 28 Mar, 2017 12:04:43 PM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -16,6 +16,8 @@ public class OccupantsId implements java.io.Serializable {
 	private String lastName;
 	private String address;
 	private String phoneNumber;
+	private String injuries;
+	private String seatingPosition;
 	private String atFaultInsuranceCompany;
 	private String victimInsuranceCompany;
 	private Integer sequenceNo;
@@ -29,13 +31,16 @@ public class OccupantsId implements java.io.Serializable {
 	}
 
 	public OccupantsId(String reportId, String firstName, String lastName,
-			String address, String phoneNumber, String atFaultInsuranceCompany,
+			String address, String phoneNumber, String injuries,
+			String seatingPosition, String atFaultInsuranceCompany,
 			String victimInsuranceCompany, Integer sequenceNo, Integer status) {
 		this.reportId = reportId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
+		this.injuries = injuries;
+		this.seatingPosition = seatingPosition;
 		this.atFaultInsuranceCompany = atFaultInsuranceCompany;
 		this.victimInsuranceCompany = victimInsuranceCompany;
 		this.sequenceNo = sequenceNo;
@@ -85,6 +90,24 @@ public class OccupantsId implements java.io.Serializable {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	@Column(name = "injuries", length = 4)
+	public String getInjuries() {
+		return this.injuries;
+	}
+
+	public void setInjuries(String injuries) {
+		this.injuries = injuries;
+	}
+
+	@Column(name = "seating_position", length = 4)
+	public String getSeatingPosition() {
+		return this.seatingPosition;
+	}
+
+	public void setSeatingPosition(String seatingPosition) {
+		this.seatingPosition = seatingPosition;
 	}
 
 	@Column(name = "at_fault_insurance_company", length = 100)
@@ -150,6 +173,15 @@ public class OccupantsId implements java.io.Serializable {
 						.getPhoneNumber() != null
 						&& castOther.getPhoneNumber() != null && this
 						.getPhoneNumber().equals(castOther.getPhoneNumber())))
+				&& ((this.getInjuries() == castOther.getInjuries()) || (this
+						.getInjuries() != null
+						&& castOther.getInjuries() != null && this
+						.getInjuries().equals(castOther.getInjuries())))
+				&& ((this.getSeatingPosition() == castOther
+						.getSeatingPosition()) || (this.getSeatingPosition() != null
+						&& castOther.getSeatingPosition() != null && this
+						.getSeatingPosition().equals(
+								castOther.getSeatingPosition())))
 				&& ((this.getAtFaultInsuranceCompany() == castOther
 						.getAtFaultInsuranceCompany()) || (this
 						.getAtFaultInsuranceCompany() != null
@@ -185,6 +217,12 @@ public class OccupantsId implements java.io.Serializable {
 		result = 37
 				* result
 				+ (getPhoneNumber() == null ? 0 : this.getPhoneNumber()
+						.hashCode());
+		result = 37 * result
+				+ (getInjuries() == null ? 0 : this.getInjuries().hashCode());
+		result = 37
+				* result
+				+ (getSeatingPosition() == null ? 0 : this.getSeatingPosition()
 						.hashCode());
 		result = 37
 				* result

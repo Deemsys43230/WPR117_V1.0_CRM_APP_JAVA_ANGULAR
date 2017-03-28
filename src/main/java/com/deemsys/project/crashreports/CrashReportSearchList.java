@@ -13,6 +13,8 @@ public class CrashReportSearchList {
 	private Integer crashSeverity;
 	private String address;
 	private String phoneNumber;
+	private String injuries;
+	private String seatingPosition;
 	private String atFaultInsuranceCompany;
 	private String victimInsuranceCompany;
 	private String countyName;
@@ -59,6 +61,18 @@ public class CrashReportSearchList {
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	public String getInjuries() {
+		return injuries;
+	}
+	public void setInjuries(String injuries) {
+		this.injuries = injuries;
+	}
+	public String getSeatingPosition() {
+		return seatingPosition;
+	}
+	public void setSeatingPosition(String seatingPosition) {
+		this.seatingPosition = seatingPosition;
 	}
 	public String getAtFaultInsuranceCompany() {
 		return atFaultInsuranceCompany;

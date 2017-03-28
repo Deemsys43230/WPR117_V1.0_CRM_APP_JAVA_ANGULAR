@@ -226,6 +226,8 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("o1.id.lastName"),"lastName");
 		projectionList.add(Projections.property("o1.id.address"),"address");
 		projectionList.add(Projections.property("o1.id.phoneNumber"),"phoneNumber");
+		projectionList.add(Projections.property("o1.id.injuries"),"injuries");
+		projectionList.add(Projections.property("o1.id.seatingPosition"),"seatingPosition");
 		projectionList.add(Projections.property("o1.id.atFaultInsuranceCompany"),"atFaultInsuranceCompany");
 		projectionList.add(Projections.property("o1.id.victimInsuranceCompany"),"victimInsuranceCompany");
 		
@@ -247,7 +249,6 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	public void saveCrashReports(CrashReports crashReports) throws Exception {
 		// TODO Auto-generated method stub
 		try{
-			crashReports.setFileName(crashReports.getReportId()+".pdf");
 			this.sessionFactory.getCurrentSession().save(crashReports);
 		}catch(Exception ex){
 			ex.printStackTrace();

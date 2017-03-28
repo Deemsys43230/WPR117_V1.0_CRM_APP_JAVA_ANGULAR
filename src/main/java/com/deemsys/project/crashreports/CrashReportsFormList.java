@@ -4,7 +4,16 @@ import java.util.List;
 
 public class CrashReportsFormList {
 	
+	private Integer pageType;
 	private List<CrashReportsForm> crashReportsForms;
+
+	public Integer getPageType() {
+		return pageType;
+	}
+
+	public void setPageType(Integer pageType) {
+		this.pageType = pageType;
+	}
 
 	public List<CrashReportsForm> getCrashReportsForms() {
 		return crashReportsForms;

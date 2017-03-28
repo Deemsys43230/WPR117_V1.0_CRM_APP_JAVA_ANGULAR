@@ -145,14 +145,15 @@ public class CrashReportsController {
    	{
     	
     	
-    	String multiReportFileName="";
-    		multiReportFileName=crashReportsService.storeFileTemp(crashReport);
+    	String multiReportFilePath="";
+    	multiReportFilePath=crashReportsService.storeFileTemp(crashReport);
+        String multiReportFileName=multiReportFilePath.substring(multiReportFilePath.lastIndexOf("/")+1);
     		
     		// Total Pages Pdf
-    		Integer pdfTotalPages=crashReportsService.checkForNumberOfPages(multiReportFileName);
+    		Integer pdfTotalPages=crashReportsService.checkForNumberOfPages(multiReportFilePath);
     		
     		//Check The Total Page Validation
-    		if(crashReportsService.checkPagesEntry(crashReportsFormList.getCrashReportsForms(), pdfTotalPages)){
+    		if(crashReportsService.checkPagesEntry(crashReportsFormList.getCrashReportsForms(), pdfTotalPages, crashReportsFormList.getPageType())){
     			//Page Validation Success
     			Integer reportSuccessCount=0;
     			for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
@@ -161,18 +162,15 @@ public class CrashReportsController {
     				String reportId=UUID.randomUUID().toString().replaceAll("-", "");
     				crashReportsForm.setFileName(reportId+".pdf");
     				crashReportsForm.setReportId(reportId);
-    				if(crashReportsForm.getPageType()==2){
+    				if(crashReportsFormList.getPageType()==2){
     					// Splitting File
-    					crashReportsService.splitFile(multiReportFileName,crashReportsForm.getFileName(), crashReportsForm.getFromPage(), (crashReportsForm.getFromPage()+crashReportsForm.getToPage())-1);
-        			}else{
-        				// Same File Without Splitting
-        				String fileName=multiReportFileName.substring(multiReportFileName.lastIndexOf("/")+1);
-        				crashReportsForm.setFileName(fileName);
-        			}
+    					crashReportsService.splitFile(multiReportFilePath,crashReportsForm.getFileName(), crashReportsForm.getFromPage(), (crashReportsForm.getFromPage()+crashReportsForm.getToPage())-1);
+    					multiReportFileName=crashReportsForm.getFileName();
+    				}
     				
     				//Upload to AWS
-    				Integer status=awsFileUpload.uploadFileToAWSS3(crmProperties.getProperty("tempFolder")+crashReportsForm.getFileName(), crashReportsForm.getFileName());
-    				if(crashReportsForm.getPageType()==2){
+    				Integer status=awsFileUpload.uploadFileToAWSS3(crmProperties.getProperty("tempFolder")+multiReportFileName, crashReportsForm.getFileName());
+    				if(crashReportsFormList.getPageType()==2){
     					if(status==0){
     						reportSuccessCount++;
     						// Delete Splitted Temp File
@@ -204,7 +202,7 @@ public class CrashReportsController {
     			
     			if(crashReportsFormList.getCrashReportsForms().size()==reportSuccessCount){
     				// delete Main Temp File
-    				crashReportsService.deleteFile(multiReportFileName);
+    				crashReportsService.deleteFile(multiReportFilePath);
     			}
     		}else{
     			//Page Validation Got Failed
