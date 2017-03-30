@@ -26,11 +26,11 @@
 					</div>	
 			      </div>
 			      <div class="form-group">
-						<label class="control-label col-sm-2">Page Type:</label>
-						<div class="col-sm-2">
-							<input type="radio" ng-model="pageType" value="1" /> All
+						<label class="control-label col-sm-2">Report Type:</label>
+						<div class="col-sm-4">
+							<input type="radio" ng-model="pageType" value="1" /> Single
 							&nbsp;&nbsp; <input type="radio" ng-model="pageType"
-								value="2" /> Custom
+								value="2" /> Multiple
 						</div>
 					</div>
 			      </form>
@@ -62,40 +62,7 @@
 						</div>
 						</div>	
 					</div>
-					<label class="control-label col-sm-2">No. Of Pages:</label>
-					<div class="col-sm-2">
-						 <select class="form-control" name="toPage" ng-model="report.toPage" ng-required="pageType==2">
-						 <option value="">-- Select --</option>
-						 <option value="1">1</option>
-						 <option value="2">2</option>
-						 <option value="3">3</option>
-						 <option value="4">4</option>
-						 <option value="5">5</option>
-						 <option value="6">6</option>
-						 <option value="7">7</option>
-						 <option value="8">8</option>
-						 <option value="9">9</option>
-						 <option value="10">10</option>
-						 <option value="11">11</option>
-						 <option value="12">12</option>
-						 <option value="13">13</option>
-						 <option value="14">14</option>
-						 <option value="15">15</option>
-						 <option value="16">16</option>
-						 <option value="17">17</option>
-						 <option value="18">18</option>
-						 <option value="19">19</option>
-						 <option value="20">20</option>
-						 
-						 </select>
-						<div class="error-container">
-						<div ng-show="submitted || innerForm.toPage.$dirty">
-							<span ng-cloak ng-show="innerForm.toPage.$error.required">Please
-								Select No. of Pages</span>
-						</div>
-					</div>	
-			      </div>
-			  </div>
+				</div>
 			  <div ng-show="pageType==2"><hr/></div>
 			  <div class="form-group from-group-override">
 			      <label class="control-label col-sm-2">County:</label>
@@ -268,8 +235,43 @@
 			     </div>
 			    </ng-form>
 			    </div>
-			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant($index);"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
-			  
+			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant($index);"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a></div>
+			  <div class="col-md-12" style="margin-top:10px;" ng-show="pageType==2">
+			  <label class="control-label col-sm-2">No. Of Pages:</label>
+					<div class="col-sm-2">
+						 <select class="form-control" name="toPage" ng-model="report.toPage" ng-required="pageType==2">
+						 <option value="">-- Select --</option>
+						 <option value="1">1</option>
+						 <option value="2">2</option>
+						 <option value="3">3</option>
+						 <option value="4">4</option>
+						 <option value="5">5</option>
+						 <option value="6">6</option>
+						 <option value="7">7</option>
+						 <option value="8">8</option>
+						 <option value="9">9</option>
+						 <option value="10">10</option>
+						 <option value="11">11</option>
+						 <option value="12">12</option>
+						 <option value="13">13</option>
+						 <option value="14">14</option>
+						 <option value="15">15</option>
+						 <option value="16">16</option>
+						 <option value="17">17</option>
+						 <option value="18">18</option>
+						 <option value="19">19</option>
+						 <option value="20">20</option>
+						 
+						 </select>
+						<div class="error-container">
+						<div ng-show="submitted || innerForm.toPage.$dirty">
+							<span ng-cloak ng-show="innerForm.toPage.$error.required">Please
+								Select No. of Pages</span>
+						</div>
+					</div>
+			      </div>
+			  </div>
+			  <div class="col-md-12"><hr/></div>
 			  	<!--  <div class="form-group">  
 			  	  <div class="col-sm-offset-2 col-sm-10">
 			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
@@ -311,7 +313,7 @@
 				Click Cancel to return to Details Verification.
 			</div>
 			<div class="modal-footer">
-			<button type="button" class="btn btn-success" ng-click="saveCrashReport()" data-dismiss="modal">OK</button>
+			<button type="button" class="btn btn-success" ng-click="saveCrashReport()" data-dismiss="modal">Confirm</button>
 			<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
