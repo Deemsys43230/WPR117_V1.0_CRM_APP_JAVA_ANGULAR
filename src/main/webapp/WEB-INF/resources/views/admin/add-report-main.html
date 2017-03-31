@@ -107,13 +107,8 @@
 			      </div>
 			      <label class="control-label col-sm-2">Location:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
-			         <div class="error-container">
-						<div ng-show="submitted || innerForm.location.$dirty">
-							<span ng-cloak ng-show="innerForm.location.$error.required">Please
-								Enter Location</span>
-						</div>
-					</div>	
+			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100">
+			         <div class="error-container"></div>	
 			      </div>
 			    </div>
 			    <div class="form-group from-group-override">
@@ -124,6 +119,7 @@
 			        <option value="1">1 - FATAL</option>
 			        <option value="2">2 - INJURY</option>
 			        <option value="3">3 - PDO</option>
+			        <option value="4">X - NOT AVAILABLE</option>
 			        </select>
 			        <div class="error-container"></div>
 			      </div>
@@ -193,6 +189,7 @@
 			        <option value="3">3 - NON-INCAPACITATING</option>
 			        <option value="4">4 - INCAPACITATING</option>
 			        <option value="5">5 - FATAL</option>
+			        <option value="6">X - NOT AVAILABLE</option>
 			        </select>
 			     	<div class="error-container">
 			     		<div ng-show="submitted || occupantsForm.injuries.$dirty">
@@ -210,17 +207,18 @@
 			        <option value="4">4 - SECOND - LEFT SIDE (MOTORCYCLE PASSENGER)</option>
 			        <option value="5">5 - SECOND - MIDDLE</option>
 			        <option value="6">6 - SECOND - RIGHT SIDE</option>
-			        <option value="6">7 - THIRD - LEFT SIDE (MOTORCYCLE SIDE CAR)</option>
-			        <option value="6">8 - THIRD - MIDDLE</option>
-			        <option value="6">9 - THIRD - RIGHT SIDE</option>
-			        <option value="6">10 - SLEEPER SECTION OF CAB (TRUCK)</option>
-			        <option value="6">11 - PASSENGER IN OTHER ENCLOSED CARGO AREA <br/>(NON-TRAILING UNIT SUCH AS A BUS, PICK-UP WITH CAP)</option>
-			        <option value="6">12 - PASSENGER IN UNENCLOSED CARGO AREA</option>
-			        <option value="6">13 - TRAILING UNIT</option>
-			        <option value="6">14 - RIDING ON VEHICLE EXTERIOR (NON-TRAILING UNIT)</option>
-			        <option value="6">15 - NON-MOTORIST</option>
-			        <option value="6">16 - OTHER</option>
-			        <option value="6">99 - UNKNOWN</option>
+			        <option value="7">7 - THIRD - LEFT SIDE (MOTORCYCLE SIDE CAR)</option>
+			        <option value="8">8 - THIRD - MIDDLE</option>
+			        <option value="9">9 - THIRD - RIGHT SIDE</option>
+			        <option value="10">10 - SLEEPER SECTION OF CAB (TRUCK)</option>
+			        <option value="11">11 - PASSENGER IN OTHER ENCLOSED CARGO AREA <br/>(NON-TRAILING UNIT SUCH AS A BUS, PICK-UP WITH CAP)</option>
+			        <option value="12">12 - PASSENGER IN UNENCLOSED CARGO AREA</option>
+			        <option value="13">13 - TRAILING UNIT</option>
+			        <option value="14">14 - RIDING ON VEHICLE EXTERIOR (NON-TRAILING UNIT)</option>
+			        <option value="15">15 - NON-MOTORIST</option>
+			        <option value="16">16 - OTHER</option>
+			        <option value="17">99 - UNKNOWN</option>
+			        <option value="18">X - NOT AVAILABLE</option>
 			        </select>
 			     	<div class="error-container">
 			     		<div ng-show="submitted || occupantsForm.seatingPosition.$dirty">
