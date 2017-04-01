@@ -170,7 +170,8 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		    window.navigator.msSaveOrOpenBlob(blob);
 		}
 		else {
-			pdffile_url=URL.createObjectURL(blob);
+			window.URL = window.URL || window.webkitURL;
+			pdffile_url=window.URL.createObjectURL(blob);
 		    var childWindow = window.open(pdffile_url,"_blank", "scrollbars=1,resizable=1,height=700,width=1000");
 		    openedWindows.push(childWindow);
 		}	 
@@ -265,14 +266,17 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 }]);
 
 //View Report Controller
-adminApp.controller('ViewReportController',['$rootScope','$scope','$http','requestHandler','Flash',function($rootScope,$scope,$http,requestHandler,Flash){
+adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','requestHandler','Flash',function($rootScope,$scope,$http,$q,requestHandler,Flash){
 
 	$scope.getCrashReportsList=function(){
+		var defer=$q.defer();
 		$scope.crashReportSearchForm.pageNumber=1;
 		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 			$scope.crashReportsResultList=response.data.crashReportsResult;
+			defer.resolve(response);
 		});
+		return defer.promise;
 	};
     
 	$scope.secondarySearch=function(){
@@ -287,7 +291,14 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 	});
 
 	$scope.$watch("crashReportSearchForm.itemsPerPage",function(){
-		$scope.getCrashReportsList();
+		var promise=$scope.getCrashReportsList();
+		if(promise!=null){
+			promise.then(function(reponse){
+				setTimeout(function(){
+					 $('html,body').animate({scrollTop: $('#noOfRows').offset().top},'slow');
+				},1000);
+			});
+		}
 	});
 	
     $scope.init=function(){

@@ -2795,6 +2795,14 @@ h3{
 	margin-top: 0 !important;
 }
 
+/* Dir Pagination CSS */
+.margin-top-30{
+    margin-top: 30px !important;
+}
+.makeLink{
+	cursor: pointer;
+}
+
 /* Loader In CSS  */
 .loader {
   border: 16px solid #f3f3f3;

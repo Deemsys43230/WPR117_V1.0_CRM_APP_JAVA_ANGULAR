@@ -210,9 +210,25 @@
     }
 
     function dirPaginationControlsTemplateInstaller($templateCache) {
-        $templateCache.put('angularUtils.directives.dirPagination.template', '<div class="col-md-5 margin-top-5">Showing {{pagination.startRecord}} - {{pagination.endRecord}} of {{total}} records</div><div class="col-md-7="><div class="pull-right"><ul class="pagination" ng-if="1 < pages.length || !autoHide"><li ng-if="boundaryLinks" ng-class="{ disabled : pagination.current == 1 }"><a href="" ng-click="setCurrent(1)">First</a></li><li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }"><a href="" ng-click="setCurrent(pagination.current - 1)">Previous</a></li><li ng-repeat="pageNumber in pages track by $index" ng-class="{ active : pagination.current == pageNumber, disabled : pageNumber == \'...\' || ( ! autoHide && pages.length === 1 ) }"><a href="" ng-click="setCurrent(pageNumber)">{{ pageNumber }}</a></li><li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }"><a href="" ng-click="setCurrent(pagination.current + 1)">Next</a></li><li ng-if="boundaryLinks"  ng-class="{ disabled : pagination.current == pagination.last }"><a href="" ng-click="setCurrent(pagination.last)">Last</a></li></ul></div></div>');
+        $templateCache.put('angularUtils.directives.dirPagination.template', '<div class="col-md-5"><ul class="pagination" ng-if="1 < pages.length || !autoHide"><li ng-if="boundaryLinks" ng-class="{ disabled : pagination.current == 1 }"><a href="" ng-click="setCurrent(1)">&laquo;</a></li><li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }"><a href="" ng-click="setCurrent(pagination.current - 1)">&lsaquo;</a></li><li ng-repeat="pageNumber in pages track by $index" ng-class="{ active : pagination.current == pageNumber, disabled : pageNumber == \'...\' || ( ! autoHide && pages.length === 1 ) }"><a href="" ng-click="setCurrent(pageNumber)">{{ pageNumber }}</a></li><li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }"><a href="" ng-click="setCurrent(pagination.current + 1)">&rsaquo;</a></li><li ng-if="boundaryLinks"  ng-class="{ disabled : pagination.current == pagination.last }"><a href="" ng-click="setCurrent(pagination.last)">&raquo;</a></li></ul><div class="input-group col-md-4" style="margin-top:-15px;margin-bottom:20px;" ng-if="1 < pages.length || !autoHide"><input type="text" id="gotoPage" class="form-control"  ng-model="gotoPage" placeholder="Page No"/><span class="input-group-addon makeLink"><span class="makeLink" id="paginationGo" ng-click="setCurrent(gotoPage)">Go</span></span></div> </div><div class="col-md-4 margin-top-30">Showing {{pagination.startRecord}} - {{pagination.endRecord}} of {{total}} records</div>');
     }
 
+    //Enter key press
+    /*alert(document.getElementById("gotoPage"));
+    document.getElementById("gotoPage").onkeydown(function(e){
+    	console.log(e);
+    	if(e.keyCode===13){
+    		alert("yes");
+    	}
+    });*/
+    $(document).on("keydown",function(e){
+    	if(e.target.id=='gotoPage'){
+    		if(e.keyCode===13){
+    			$("#paginationGo").click();
+    		}
+    	}
+    });
+    
     function dirPaginationControlsDirective(paginationService, paginationTemplate) {
 
         var numberRegex = /^\d+$/;
@@ -290,12 +306,10 @@
                     num = parseInt(num, 10);
                     paginationService.setCurrentPage(paginationId, num);
                 }
-
-              	
-                	/* setTimeout(function(){
+             /*   setTimeout(function(){
             			 $('html,body').animate({scrollTop: $('#noOfRows').offset().top},'slow');
-            		 },1000);
-                	 */
+            	},1000);*/
+                	 
         };
 
             function goToPage(num) {
@@ -334,7 +348,6 @@
                     totalItems = paginationService.getCollectionLength(paginationId);
                 scope.total= totalItems;
                 scope.pagination.size = itemsPerPage;
-                
                 scope.pagination.startRecord = (scope.pagination.current-1)* itemsPerPage+1;
                 scope.pagination.endRecord=scope.pagination.current*itemsPerPage;
                 if(totalItems==0)
