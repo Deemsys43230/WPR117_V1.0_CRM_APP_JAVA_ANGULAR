@@ -74,7 +74,7 @@
     		<div class="col-md-3 pull-right no-padding">
 						<label>Number of Records</label> <select
 							class="form-control input-sm option-bold"
-							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
+							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows" ng-change="itemsPerPageFilterChange()"
 							id="noOfRows">
 							<option value="10">Show 10 Per Page</option>
 							<option value="25">Show 25 Per Page</option>

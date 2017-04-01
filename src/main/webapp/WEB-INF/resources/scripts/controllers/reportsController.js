@@ -290,8 +290,8 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 		$scope.secondarySearch();
 	});
 
-	$scope.$watch("crashReportSearchForm.itemsPerPage",function(){
-		var promise=$scope.getCrashReportsList();
+    $scope.itemsPerPageFilterChange=function(){
+    	var promise=$scope.getCrashReportsList();
 		if(promise!=null){
 			promise.then(function(reponse){
 				setTimeout(function(){
@@ -299,7 +299,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 				},1000);
 			});
 		}
-	});
+    };
 	
     $scope.init=function(){
     	$scope.deleteText="Yes";
