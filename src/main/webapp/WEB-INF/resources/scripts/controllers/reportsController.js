@@ -117,7 +117,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	// Save Crash Reports
 	$scope.saveCrashReport=function(){
 		$scope.reportSave=true;
-		$scope.buttonText="Submiting....";
+		$scope.buttonText="Submitting....";
 		$scope.crashReportsList={};
 		$scope.crashReportsList.pageType=parseInt($scope.pageType);
 		$scope.crashReportsList.crashReportsForms=$scope.reports;
@@ -229,7 +229,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	
 	$scope.saveCrashReport=function(){
 		$scope.reportSave=true;
-		$scope.buttonText="Submiting....";
+		$scope.buttonText="Submitting....";
 		if($scope.isEdit){
 			console.log($scope.report);
 			requestHandler.postRequest("User/mergeCrashReports.json",$scope.report).then(function(response){
