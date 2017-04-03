@@ -41,8 +41,7 @@
 	<section id="services">
 		<div class="container">
 			<div class="col-md-6">
-			<p class="brown-text">This page is for the Police Department officials to upload
-				crash reports. (Sign in required)</p>
+			<p class="brown-text">This page is for uploading runner crash reports. <br/>(Sign In required)</p>
 			<hr />	
 		</div>
 		

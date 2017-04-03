@@ -209,8 +209,11 @@ public class CrashReportsService {
 			}
 			
 			// Insert Runner Report In CRO only On Save
-			//CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), crashReportsForm.getFileName(), patientForms);
-		//	apiRequestService.saveRunnerReportInCRO(crashReportForm);
+			if(Integer.parseInt(crmProperties.getProperty("sentToCRO"))==1){
+				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), crashReportsForm.getFileName(), patientForms);
+				apiRequestService.saveRunnerReportInCRO(crashReportForm);
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

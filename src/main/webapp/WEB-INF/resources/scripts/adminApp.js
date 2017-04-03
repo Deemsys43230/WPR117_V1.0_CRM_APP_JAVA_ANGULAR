@@ -28,16 +28,16 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             break;
                         }
                         case 401:{
-                        	//window.location.href = window.location.origin+"/upload/logout?sessionout";
+                        	window.location.href = "logout?sessionout";
                             break;
                         }
                         case 403: {
-                        	//window.location.href = window.location.origin+"/upload/logout?sessionout";
+                        	window.location.href = "logout?sessionout";
                             break;
                         }
                         case 500: {
                         	alert("Please try again!");
-                        	//window.location.href = window.location.origin+"/upload/logout";
+                        	window.location.href = "logout";
                             break;
                         }
                         default : {
