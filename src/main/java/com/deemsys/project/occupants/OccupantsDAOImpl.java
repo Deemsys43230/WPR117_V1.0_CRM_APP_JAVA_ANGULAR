@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
@@ -152,6 +153,8 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 		projectionList.add(Projections.property("o1.id.lastName"), "lastName");
 		projectionList.add(Projections.property("o1.id.address"), "address");
 		projectionList.add(Projections.property("o1.id.phoneNumber"), "phoneNumber");
+		projectionList.add(Projections.property("o1.id.injuries"), "injuries");
+		projectionList.add(Projections.property("o1.id.seatingPosition"), "seatingPosition");
 		projectionList.add(Projections.property("o1.id.atFaultInsuranceCompany"), "atFaultInsuranceCompany");
 		projectionList.add(Projections.property("o1.id.victimInsuranceCompany"), "victimInsuranceCompany");
 		projectionList.add(Projections.property("o1.id.status"), "status");
@@ -165,10 +168,8 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 	@Override
 	public void deleteOccupantsByReportId(String reportId) {
 		// TODO Auto-generated method stub
-		List<Occupants> occupants=this.getOccupantsByReportId(reportId);
-		for (Occupants occupant : occupants) {
-			this.sessionFactory.getCurrentSession().delete(occupant);
-		}
+		Query deleteQuery=this.sessionFactory.getCurrentSession().createQuery("Delete from Occupants where crashReports.reportId='"+reportId+"'");
+		deleteQuery.executeUpdate();
 	}
 
 	@SuppressWarnings("unchecked")

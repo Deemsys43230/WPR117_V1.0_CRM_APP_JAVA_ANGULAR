@@ -103,7 +103,7 @@ public class AccountsService {
 		//Logic Starts
 
 		try {
-			Accounts accounts=new Accounts(accountsForm.getAccountId(), accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), new Date(), accountsForm.getStatus(), null, null);
+			Accounts accounts=new Accounts(accountsForm.getAccountId(), accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), new Date(), accountsForm.getStatus(), null, null, null, null,null,null);
 			accountsDAO.saveAccount(accounts);
 			
 			UsersForm usersForm = new UsersForm(null, CRMConstants.CRM_USER_ROLE_ID, accounts.getAccountId(), accountsForm.getUsername(), accountsForm.getUsername(), 1, 1);
@@ -126,7 +126,7 @@ public class AccountsService {
 		
 		//Logic Starts
 		
-		Accounts accounts=new Accounts(accountsForm.getAccountId(), accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), CRMConstants.convertYearFormatWithTime(accountsForm.getAddedDateTime()), accountsForm.getStatus(), null, null);
+		Accounts accounts=new Accounts(accountsForm.getAccountId(), accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), CRMConstants.convertYearFormatWithTime(accountsForm.getAddedDateTime()), accountsForm.getStatus(), null, null, null, null,null,null);
 
 		accountsDAO.update(accounts);
 		

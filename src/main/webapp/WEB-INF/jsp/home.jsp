@@ -95,6 +95,8 @@
 	<script type="text/javascript" src="resources/js/scripts.js"></script><!-- Scripts -->
 	<!-- For Date Picker -->
 	<script src="resources/angular/components/datetime/moment.js"></script>
+	<!-- Services -->
+	<script type="text/javascript" src="scripts/services/reportSearchService.js"></script>
 	<!-- Directive -->
 	<script type="text/javascript" src="scripts/directives/fileUpload.js"></script>
 	<script src="resources/angular/angular-flash/angular-flash.min.js"></script>

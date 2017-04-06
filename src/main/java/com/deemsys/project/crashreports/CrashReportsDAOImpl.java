@@ -7,12 +7,14 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,6 +23,7 @@ import com.deemsys.project.common.BasicQuery;
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.entity.CrashReports;
 import com.deemsys.project.entity.Users;
+import com.deemsys.project.entity.VerificationLog;
 
 /**
  * 
@@ -180,8 +183,8 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 			}
 		}
 		
-		if(crashReportSearchForm.getAddedDate()!=null && !crashReportSearchForm.getAddedDate().equals("")){
-			Criterion addedDateCriterion = Restrictions.eq("addedDate", CRMConstants.convertYearFormat(crashReportSearchForm.getAddedDate()));
+		if(crashReportSearchForm.getAddedOnFromDate()!=null && !crashReportSearchForm.getAddedOnFromDate().equals("")){
+			Criterion addedDateCriterion = Restrictions.between("addedDate", CRMConstants.convertYearFormat(crashReportSearchForm.getAddedOnFromDate()),CRMConstants.convertYearFormat(crashReportSearchForm.getAddedOnToDate()));
 			criteria.add(addedDateCriterion);
 		}
 		
@@ -205,8 +208,28 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 			}
 		}
 		
-		if(!crashReportSearchForm.getAccountId().equals("0"))
-		  criteria.add(Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId()));
+		// Report Type Restriction My Reports, Checking Reports
+		if(!crashReportSearchForm.getSearchType().equals("0")){
+			if(crashReportSearchForm.getReportType()==1){
+				criteria.add(Restrictions.eq("accountsByAccountId.accountId", crashReportSearchForm.getAccountId()));
+			}else if(crashReportSearchForm.getReportType()==2){
+				criteria.add(Restrictions.eq("accountsByVerifyAccountId.accountId", crashReportSearchForm.getAccountId()));
+			}
+		}
+		 
+		// Verified Status 4 - all
+		if(crashReportSearchForm.getVerifiedStatus()!=null&&crashReportSearchForm.getVerifiedStatus()!=4){
+			Criterion verifiedStatusCriterion = Restrictions.eq("c1.verifiedStatus", crashReportSearchForm.getVerifiedStatus());
+			criteria.add(verifiedStatusCriterion);
+		}
+		
+		// Latest Verified Log Time
+		criteria.createAlias("c1.verificationLogs", "VL",Criteria.LEFT_JOIN);
+		
+		DetachedCriteria maxVerificationLogId=DetachedCriteria.forClass(VerificationLog.class,"DVL").add(Restrictions.eqProperty("DVL.crashReports.reportId", "c1.reportId"))
+				.setProjection(Projections.max("DVL.verificationLogId"));
+		
+		criteria.add(Restrictions.or(Subqueries.propertyEq("VL.verificationLogId", maxVerificationLogId), Restrictions.isNull("VL.verifiedDateTime")));
 		
 		ProjectionList projectionList = Projections.projectionList();
 		
@@ -221,6 +244,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("c1.addedDateTime"),"addedDateTime");
 		projectionList.add(Projections.property("c1.fileName"),"fileName");
 		projectionList.add(Projections.property("c1.status"),"status");
+		projectionList.add(Projections.property("c1.verifiedStatus"),"verifiedStatus");
 		
 		projectionList.add(Projections.property("o1.id.firstName"),"firstName");
 		projectionList.add(Projections.property("o1.id.lastName"),"lastName");
@@ -230,6 +254,9 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		projectionList.add(Projections.property("o1.id.seatingPosition"),"seatingPosition");
 		projectionList.add(Projections.property("o1.id.atFaultInsuranceCompany"),"atFaultInsuranceCompany");
 		projectionList.add(Projections.property("o1.id.victimInsuranceCompany"),"victimInsuranceCompany");
+		
+		// Latest Verification Log Time
+		projectionList.add(Projections.property("VL.verifiedDateTime"),"lastVerifiedDateTime");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		

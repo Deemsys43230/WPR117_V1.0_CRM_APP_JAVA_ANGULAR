@@ -2540,7 +2540,7 @@ padding-right:50px !important;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); }
     
 .btn-xs.hint--top{
-	width:25px!important;
+	/* width:25px!important; */
 	text-align:center;
 }
 
@@ -2795,12 +2795,168 @@ h3{
 	margin-top: 0 !important;
 }
 
+.margin-bottom-20{
+    margin-bottom: 20px !important;
+}
+
 /* Dir Pagination CSS */
 .margin-top-30{
     margin-top: 30px !important;
 }
 .makeLink{
 	cursor: pointer;
+}
+
+/* tooptip */
+
+/*! Hint.css - v1.3.5 - 2015-06-16
+* http://kushagragour.in/lab/hint/
+* Copyright (c) 2015 Kushagra Gour; Licensed MIT */
+
+.hint, [data-hint] {
+  position: relative;
+  display: inline-block;
+  }
+  .hint:before, .hint:after, [data-hint]:before, [data-hint]:after {
+    position: absolute;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1000000;
+    pointer-events: none;
+    -webkit-transition: 0.3s ease;
+    -moz-transition: 0.3s ease;
+    transition: 0.3s ease;
+    -webkit-transition-delay: 0ms;
+    -moz-transition-delay: 0ms;
+    transition-delay: 0ms; }
+  .hint:hover:before, .hint:hover:after, .hint:focus:before, .hint:focus:after, [data-hint]:hover:before, [data-hint]:hover:after, [data-hint]:focus:before, [data-hint]:focus:after {
+    visibility: visible;
+    opacity: 1; }
+  .hint:hover:before, .hint:hover:after, [data-hint]:hover:before, [data-hint]:hover:after {
+    -webkit-transition-delay: 100ms;
+    -moz-transition-delay: 100ms;
+    transition-delay: 100ms; }
+  .hint:before, [data-hint]:before {
+    content: '';
+    position: absolute;
+    background: transparent;
+    border: 6px solid transparent;
+    z-index: 1000001; }
+  .hint:after, [data-hint]:after {
+    content: attr(data-hint);
+    background: #383838;
+    color: white;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 12px;
+    white-space: nowrap; }
+
+.hint--top:before {
+  border-top-color: #383838; }
+
+.hint--bottom:before {
+  border-bottom-color: #383838; }
+
+.hint--left:before {
+  border-left-color: #383838; }
+
+.hint--right:before {
+  border-right-color: #383838; }
+
+.hint--top:before {
+  margin-bottom: -12px; }
+.hint--top:after {
+  margin-right: -10px; }
+.hint--top:before, .hint--top:after {
+  right: 25%;
+    bottom: 100% }
+.hint--top:hover:after, .hint--top:hover:before, .hint--top:focus:after, .hint--top:focus:before {
+  -webkit-transform: translateY(-8px);
+  -moz-transform: translateY(-8px);
+  transform: translateY(-8px); }
+
+/* Left Align Start */
+
+.hint--lefter:before {
+   border-top-color: #383838; }
+.hint--lefter:before {
+  margin-bottom: -12px; }
+.hint--lefter:after {
+  margin-right: -70px; }
+.hint--lefter:before, .hint--lefter:after {
+  bottom: 100%;
+  right: 0%; }
+.hint--lefter:hover:after, .hint--lefter:hover:before, .hint--lefter:focus:after, .hint--lefter:focus:before {
+  -webkit-transform: translateY(-8px);
+  -moz-transform: translateY(-8px);
+  transform: translateY(-8px); }
+
+/* Left Align End */
+.hint, [data-hint] {
+}
+.hint:after, [data-hint]:after {
+    text-shadow: 0 -1px 0px black;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); 
+ }
+
+/* Labels With info */
+.label-success {
+    padding: 3px 7px!important;
+    border: 1px solid #4cae4c;
+    color: #4cae4c;
+    font-size: 11px;
+    background-color: #fff;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.label-danger {
+    padding: 3px 7px!important;
+    border: 1px solid #d9534f;
+    color: #d9534f;
+    font-size: 11px;
+    background-color: #fff;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.label-primary{
+    font-weight: bold;
+    padding: 3px 7px!important;
+    border: 1px solid #428bca;
+    color: #428bca;
+    font-size: 11px;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.label-warning{
+    font-weight: bold;
+    padding: 3px 7px!important;
+    border: 1px solid #f0ad4e;
+    color: #f0ad4e;
+    font-size: 11px;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+/* Menu Radio Button */
+.menu-radio input[type="radio"] {
+    opacity:0.011;
+    z-index:100;
+}
+
+.menu-radio span {
+    margin-left:-13px !important;
+} 
+
+.menu-radio>.btn-default.active{
+    color: #fff !important;
+    background-color: #428bca !important;
+    border-color: #428bca !important;
 }
 
 /* Loader In CSS  */

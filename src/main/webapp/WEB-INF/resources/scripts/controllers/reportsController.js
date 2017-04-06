@@ -2,7 +2,7 @@
  * Created by user on 18/5/16.
  */
 
-var adminApp = angular.module('adminApp',['flash','requestModule']);
+var adminApp = angular.module('adminApp',['flash','requestModule','ReportSearchModule']);
 
 
 //Add Reports Controller
@@ -105,7 +105,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		if(formsTrueCount==2){
 			$scope.isError=false;
 			$scope.errorMsg="";
-			$("#reportSaveConfirmationModal").modal('show');
+			$scope.saveCrashReport();
 		}else{
 			// Some Forms Having Validation Error
 			$scope.isError=true;
@@ -133,7 +133,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 				$scope.isError=false;
 				$scope.errorMsg="";
 				successMessage(Flash,"Successfully Added");
-				$location.path('/reports');
+				$location.path("/reports").replace().reloadOnSearch(false);
 			}
 		});
 	};
@@ -184,6 +184,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	
 	// For Check Report Number Already Exist
 	$scope.reportId=$routeParams.id;
+	$scope.reportType=$routeParams.reportType;
 	// Get County List
 	$scope.getCountyList=function(){
 		requestHandler.getRequest("User/getAllCountys.json","").then(function(response){
@@ -198,9 +199,16 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	
 	$scope.isEdit=true;
 	$scope.showCancel=true;
-	$scope.title="Edit Report";
+	
 	$scope.reportSave=false;
-	$scope.buttonText="Submit";
+	if($scope.reportType==1){
+		$scope.title="Edit Report";
+		$scope.buttonText="Submit";
+	}else{
+		$scope.title="Verify Report";
+		$scope.buttonText="Verified";
+	}
+	
 	
 	$scope.getReport=function(){
 		requestHandler.getRequest("getCrashReports.json?id="+$scope.reportId,"").then(function(response){
@@ -215,7 +223,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	
 	//Add Occupant
 	$scope.addOccupant=function(){
-		$scope.newOccupant={"firstName":"","lastName":"","crashSeverity":"0","address":"","phoneNumber":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1};
+		$scope.newOccupant={"firstName":"","lastName":"","address":"","phoneNumber":"","injuries":"","seatingPosition":"","atFaultInsuranceCompany":"","victimInsuranceCompany":"","status":1};
 		$scope.report.occupantsForms.push($scope.newOccupant);
 		console.log($scope.report.occupantsForms);
 	};
@@ -227,16 +235,41 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		console.log($scope.report.occupantsForms);
 	};
 	
+	// Report Save Confirmation Modal
+	$scope.saveCrashReportModal=function(){
+		if($scope.reportType==2){
+			$("#reportSaveConfirmationModal").modal('show');
+		}else{
+			$scope.saveCrashReport();
+		}
+	};
+	
+	// Save Updated Report
 	$scope.saveCrashReport=function(){
+		// Hide Modal If report for Verification
+		if($scope.reportType==2){
+			$("#reportSaveConfirmationModal").modal('hide');
+		}
 		$scope.reportSave=true;
 		$scope.buttonText="Submitting....";
+		if($scope.reportType==1){
+			$scope.report.isChecker=false;
+		}else{
+			$scope.report.isChecker=true;
+		}
+		
+		// Hide Modal
+		 $('body').removeClass('modal-open');
+		 $('body').removeAttr('style');
+		 $('.modal-backdrop').hide();
+		 
 		if($scope.isEdit){
 			console.log($scope.report);
 			requestHandler.postRequest("User/mergeCrashReports.json",$scope.report).then(function(response){
 				$scope.reportSave=false;
 				$scope.buttonText="Submit";
 				successMessage(Flash,"Successfully Updated");
-				$location.path('/reports');
+				$location.path("/reports");
 			});
 		}else{
 			requestHandler.postFileUpdate("User/uploadCrashReports.json",$scope.crashReportFile,"crashReport",$scope.report.reportNumber,"reportNumber",$scope.report.reportId,"reportId").then(function(response){
@@ -245,7 +278,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 					$scope.reportSave=false;
 					$scope.buttonText="Submit";
 					successMessage(Flash,"Successfully Updated");
-					$location.path('/reports');
+					$location.path("/reports");
 				});
 			});
 		}
@@ -263,35 +296,103 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	    angular.element("input[type='file']").val(null);
 	    $scope.crashReportFile="";
 	};
+	
+	// Reject Report From Verification
+	$scope.rejectReportModal=function(){
+		$("#rejectReportModal").modal('show');
+	};
+	
+	$scope.rejectReport=function(){
+		$("#rejectReportModal").modal('hide');
+		$('body').removeClass('modal-open');
+		$('body').removeAttr('style');
+		$('.modal-backdrop').hide();
+		
+		requestHandler.postRequest("User/rejectReportFromVerification.json?reportId="+$scope.reportId+"&rejectNotes="+$scope.rejectNotes,"").then(function(response){
+			$scope.reportSave=false;
+			$scope.buttonText="Verified";
+			successMessage(Flash,"Successfully Updated");
+			$location.path('/reports');
+		});
+	};
 }]);
 
 //View Report Controller
-adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','requestHandler','Flash',function($rootScope,$scope,$http,$q,requestHandler,Flash){
+adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','requestHandler','Flash','reportSearchService',function($rootScope,$scope,$http,$q,requestHandler,Flash,reportSearchService){
 
 	$scope.getCrashReportsList=function(){
+		
+		$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
+		$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
+		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+			$scope.searchReportsList($scope.crashReportSearchForm);
+		}
+		// To Avoid Main Search Parameter Override
+		angular.copy($scope.patient,$scope.mainSearchParam);
+		
+		// Set To Service
+		reportSearchService.setReportNumber($scope.crashReportSearchForm.reportNumber);
+		reportSearchService.setCrashDate($scope.crashReportSearchForm.crashDate);
+		reportSearchService.setAddedOnFromDate($scope.crashReportSearchForm.addedOnFromDate);
+		reportSearchService.setAddedOnToDate($scope.crashReportSearchForm.addedOnToDate);
+		reportSearchService.setFirstName($scope.crashReportSearchForm.firstName);
+		reportSearchService.setLastName($scope.crashReportSearchForm.lastName);
+		reportSearchService.setItemsPerPage($scope.crashReportSearchForm.itemsPerPage);
+		reportSearchService.setPageNumber($scope.crashReportSearchForm.pageNumber);
+	};
+    
+	$scope.searchReportsList=function(searchObj){
 		var defer=$q.defer();
-		$scope.crashReportSearchForm.pageNumber=1;
-		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
+		requestHandler.postRequest("User/searchCrashReports.json",searchObj).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 			$scope.crashReportsResultList=response.data.crashReportsResult;
 			defer.resolve(response);
 		});
 		return defer.promise;
 	};
-    
+	
 	$scope.secondarySearch=function(){
-		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
-			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
-			$scope.crashReportsResultList=response.data.crashReportsResult;
-		});
+		reportSearchService.setReportType($scope.crashReportSearchForm.reportType);
+    	reportSearchService.setVerifiedStatus($scope.crashReportSearchForm.verifiedStatus);
+    	reportSearchService.setPageNumber($scope.crashReportSearchForm.pageNumber);
+    	reportSearchService.setItemsPerPage($scope.crashReportSearchForm.itemsPerPage);
+    	
+		$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
+		$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
+		
+		// Set Main SearchParam
+    	$scope.mainSearchParam.reportType=$scope.crashReportSearchForm.reportType;
+    	$scope.mainSearchParam.verifiedStatus=$scope.crashReportSearchForm.verifiedStatus;
+    	$scope.mainSearchParam.pageNumber=$scope.crashReportSearchForm.pageNumber;
+    	$scope.mainSearchParam.itemsPerPage=$scope.crashReportSearchForm.itemsPerPage;
+    	
+		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+			// Copy Mainsearchparam to Patient
+			angular.copy($scope.mainSearchParam,$scope.patient);
+			return $scope.searchReportsList($scope.crashReportSearchForm);
+		}
+		
+		return null;
 	};
 	
     $scope.$watch("crashReportSearchForm.pageNumber",function(){
-		$scope.secondarySearch();
+    	$scope.mainSearchParam.pageNumber=$scope.crashReportSearchForm.pageNumber;
+    	reportSearchService.setPageNumber($scope.crashReportSearchForm.pageNumber);
+    	// Copy Mainsearchparam to Patient
+		angular.copy($scope.mainSearchParam,$scope.patient);
+		
+    	var promise=$scope.searchReportsList($scope.crashReportSearchForm);
+    	/*if(promise!=null){
+			promise.then(function(reponse){
+				setTimeout(function(){
+					 $('html,body').animate({scrollTop: $('#noOfRows').offset().top},'slow');
+				},1000);
+			});
+		}*/
 	});
 
     $scope.itemsPerPageFilterChange=function(){
-    	var promise=$scope.getCrashReportsList();
+    	var promise=$scope.secondarySearch();
 		if(promise!=null){
 			promise.then(function(reponse){
 				setTimeout(function(){
@@ -305,21 +406,35 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
     	$scope.deleteText="Yes";
     	$scope.isDeleting=false;
 		$scope.totalRecords=0;
+
+		// Main Search Param
+		$scope.mainSearchParam={};
+		
 		$scope.crashReportSearchForm={
-				"accountId":"0",
-				"reportNumber":"",
-				"crashDate":"",
-				"firstName":"",
-				"lastName":"",
-				"location":"",
-				"pageNumber":1,
-				"itemsPerPage":"10",
-				"addedDate":"",
-				"searchType":1
+				"reportNumber":reportSearchService.getReportNumber(),
+				"crashDate":reportSearchService.getCrashDate(),
+				"firstName":reportSearchService.getFirstName(),
+				"lastName":reportSearchService.getLastName(),
+				"addedOnFromDate":reportSearchService.getAddedOnFromDate(),
+				"addedOnToDate":reportSearchService.getAddedOnToDate(),
+				"reportType":reportSearchService.getReportType(),
+				"verifiedStatus":reportSearchService.getVerifiedStatus(),
+				"pageNumber":reportSearchService.getPageNumber(),
+				"itemsPerPage":reportSearchService.getItemsPerPage(),
+				"searchType":reportSearchService.getSearchType()
 		};
 		// Set Max Date
 		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
-		$scope.getCrashReportsList();
+		$('#addedOnFromDate').data("DateTimePicker").setMaxDate($rootScope.currentDate);
+		$('#addedOnToDate').data("DateTimePicker").setMaxDate($rootScope.currentDate);
+		
+		$scope.oldPageNumber= $scope.crashReportSearchForm.pageNumber;
+		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+			// To Avoid Main Search Parameter Override
+			angular.copy($scope.patient,$scope.mainSearchParam);
+			$scope.searchReportsList($scope.crashReportSearchForm);
+		}
+		
 	};
 	
 	$scope.init();
@@ -343,8 +458,49 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 		$("#deleteReportModal").modal('show');
 	};
 	
+	// Check All
+	$scope.checkAllReports=function(){
+		if($scope.crashReportsResultList.crashReportsResult.length>0){
+			$.each($scope.crashReportsResultList.crashReportsResult, function(index,value) {
+				if(value.verifiedStatus!=2){
+					value.selected=$scope.isCheckedAllReports;
+				}
+			});
+			//$("input:checkbox").prop('checked', $(this).prop("checked"));
+		}
+	};	
+	
+	// Send To Verification Modal Confirm
+	$scope.sendToVerificationModal=function(fromLocation,reportId){
+		$scope.fromType=fromLocation;
+		$scope.sendVerificationReportId=reportId;
+		$("#sendToVerificationModal").modal('show');
+	};
+	
+	// Send To Verification
+	$scope.sendToVerification=function(){
+		$("#sendToVerificationModal").modal('hide');
+		var reportIdArray=[];
+		if($scope.fromType==0){
+			$.each($scope.crashReportsResultList.crashReportsResult, function(index,value) {
+					if(value.selected){
+						reportIdArray.push(value.reportId);
+					}
+			});
+		}else{
+			reportIdArray.push($scope.sendVerificationReportId);
+		}
+		
+		console.log(reportIdArray);
+		requestHandler.postRequest('/User/sendReportToVerification.json?reportId='+reportIdArray,"").then(function(response){
+			successMessage(Flash,"Successfully Sent");
+			$scope.searchReportsList($scope.crashReportSearchForm);
+		});
+	};
+	
 	// Reset Search
 	$scope.resetSearch=function(){
+		reportSearchService.resetSearchData();
 		$scope.init();
 	};
 }]);

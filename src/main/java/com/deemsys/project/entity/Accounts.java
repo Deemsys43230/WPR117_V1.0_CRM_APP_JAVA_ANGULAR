@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 28 Mar, 2017 12:04:43 PM by Hibernate Tools 3.4.0.CR1
+// Generated 5 Apr, 2017 1:14:47 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -30,7 +30,16 @@ public class Accounts implements java.io.Serializable {
 	private Date addedDateTime;
 	private Integer status;
 	private Set<Users> userses = new HashSet<Users>(0);
-	private Set<CrashReports> crashReportses = new HashSet<CrashReports>(0);
+	private Set<CheckerUploaderMapping> checkerUploaderMappingsForUploaderAccountId = new HashSet<CheckerUploaderMapping>(
+			0);
+	private Set<CheckerUploaderMapping> checkerUploaderMappingsForCheckerAccountId = new HashSet<CheckerUploaderMapping>(
+			0);
+	private Set<CrashReports> crashReportsesForVerifyAccountId = new HashSet<CrashReports>(
+			0);
+	private Set<CrashReports> crashReportsesForAccountId = new HashSet<CrashReports>(
+			0);
+	private Set<VerificationLog> verificationLogs = new HashSet<VerificationLog>(
+			0);
 
 	public Accounts() {
 	}
@@ -39,10 +48,21 @@ public class Accounts implements java.io.Serializable {
 		this.accountId = accountId;
 	}
 
-	public Accounts(String accountId, String firstName, String lastName,
-			String middleName, String emailId, String phoneNumber,
-			Date addedDateTime, Integer status, Set<Users> userses,
-			Set<CrashReports> crashReportses) {
+	public Accounts(
+			String accountId,
+			String firstName,
+			String lastName,
+			String middleName,
+			String emailId,
+			String phoneNumber,
+			Date addedDateTime,
+			Integer status,
+			Set<Users> userses,
+			Set<CheckerUploaderMapping> checkerUploaderMappingsForUploaderAccountId,
+			Set<CheckerUploaderMapping> checkerUploaderMappingsForCheckerAccountId,
+			Set<CrashReports> crashReportsesForVerifyAccountId,
+			Set<CrashReports> crashReportsesForAccountId,
+			Set<VerificationLog> verificationLogs) {
 		this.accountId = accountId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -52,7 +72,11 @@ public class Accounts implements java.io.Serializable {
 		this.addedDateTime = addedDateTime;
 		this.status = status;
 		this.userses = userses;
-		this.crashReportses = crashReportses;
+		this.checkerUploaderMappingsForUploaderAccountId = checkerUploaderMappingsForUploaderAccountId;
+		this.checkerUploaderMappingsForCheckerAccountId = checkerUploaderMappingsForCheckerAccountId;
+		this.crashReportsesForVerifyAccountId = crashReportsesForVerifyAccountId;
+		this.crashReportsesForAccountId = crashReportsesForAccountId;
+		this.verificationLogs = verificationLogs;
 	}
 
 	@Id
@@ -138,13 +162,53 @@ public class Accounts implements java.io.Serializable {
 		this.userses = userses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accounts")
-	public Set<CrashReports> getCrashReportses() {
-		return this.crashReportses;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accountsByUploaderAccountId")
+	public Set<CheckerUploaderMapping> getCheckerUploaderMappingsForUploaderAccountId() {
+		return this.checkerUploaderMappingsForUploaderAccountId;
 	}
 
-	public void setCrashReportses(Set<CrashReports> crashReportses) {
-		this.crashReportses = crashReportses;
+	public void setCheckerUploaderMappingsForUploaderAccountId(
+			Set<CheckerUploaderMapping> checkerUploaderMappingsForUploaderAccountId) {
+		this.checkerUploaderMappingsForUploaderAccountId = checkerUploaderMappingsForUploaderAccountId;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accountsByCheckerAccountId")
+	public Set<CheckerUploaderMapping> getCheckerUploaderMappingsForCheckerAccountId() {
+		return this.checkerUploaderMappingsForCheckerAccountId;
+	}
+
+	public void setCheckerUploaderMappingsForCheckerAccountId(
+			Set<CheckerUploaderMapping> checkerUploaderMappingsForCheckerAccountId) {
+		this.checkerUploaderMappingsForCheckerAccountId = checkerUploaderMappingsForCheckerAccountId;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accountsByVerifyAccountId")
+	public Set<CrashReports> getCrashReportsesForVerifyAccountId() {
+		return this.crashReportsesForVerifyAccountId;
+	}
+
+	public void setCrashReportsesForVerifyAccountId(
+			Set<CrashReports> crashReportsesForVerifyAccountId) {
+		this.crashReportsesForVerifyAccountId = crashReportsesForVerifyAccountId;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accountsByAccountId")
+	public Set<CrashReports> getCrashReportsesForAccountId() {
+		return this.crashReportsesForAccountId;
+	}
+
+	public void setCrashReportsesForAccountId(
+			Set<CrashReports> crashReportsesForAccountId) {
+		this.crashReportsesForAccountId = crashReportsesForAccountId;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accounts")
+	public Set<VerificationLog> getVerificationLogs() {
+		return this.verificationLogs;
+	}
+
+	public void setVerificationLogs(Set<VerificationLog> verificationLogs) {
+		this.verificationLogs = verificationLogs;
 	}
 
 }

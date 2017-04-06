@@ -6,12 +6,16 @@ public class CrashReportSearchForm {
 	private String reportNumber;
 	private String crashDate;
 	private String location;
-	private String addedDate;
+	private String addedOnFromDate;
+	private String addedOnToDate;
 	private String firstName;
 	private String lastName;
 	private Integer searchType;
 	private Integer pageNumber;
 	private Integer itemsPerPage;
+	
+	private Integer reportType;
+	private Integer verifiedStatus;
 	
 	public String getAccountId() {
 		return accountId;
@@ -37,11 +41,17 @@ public class CrashReportSearchForm {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public String getAddedDate() {
-		return addedDate;
+	public String getAddedOnFromDate() {
+		return addedOnFromDate;
 	}
-	public void setAddedDate(String addedDate) {
-		this.addedDate = addedDate;
+	public void setAddedOnFromDate(String addedOnFromDate) {
+		this.addedOnFromDate = addedOnFromDate;
+	}
+	public String getAddedOnToDate() {
+		return addedOnToDate;
+	}
+	public void setAddedOnToDate(String addedOnToDate) {
+		this.addedOnToDate = addedOnToDate;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -73,19 +83,36 @@ public class CrashReportSearchForm {
 	public void setItemsPerPage(Integer itemsPerPage) {
 		this.itemsPerPage = itemsPerPage;
 	}
+	
+	public Integer getReportType() {
+		return reportType;
+	}
+	public void setReportType(Integer reportType) {
+		this.reportType = reportType;
+	}
+	public Integer getVerifiedStatus() {
+		return verifiedStatus;
+	}
+	public void setVerifiedStatus(Integer verifiedStatus) {
+		this.verifiedStatus = verifiedStatus;
+	}
 	public CrashReportSearchForm(String accountId,String reportNumber, String crashDate, String location,
-			String addedDate, String firstName, String lastName, Integer searchType,Integer pageNumber,Integer itemsPerPage) {
+			String addedOnFromDate, String addedOnToDate, String firstName, String lastName, Integer searchType,Integer pageNumber,Integer itemsPerPage,
+			Integer reportType,Integer verifiedStatus) {
 		super();
 		this.accountId = accountId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.location = location;
-		this.addedDate = addedDate;
+		this.addedOnFromDate = addedOnFromDate;
+		this.addedOnToDate = addedOnToDate;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.searchType = searchType;
 		this.pageNumber = pageNumber;
 		this.itemsPerPage = itemsPerPage;
+		this.reportType = reportType;
+		this.verifiedStatus = verifiedStatus;
 	}
 	public CrashReportSearchForm() {
 		super();

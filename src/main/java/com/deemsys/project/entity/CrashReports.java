@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 28 Mar, 2017 12:04:43 PM by Hibernate Tools 3.4.0.CR1
+// Generated 5 Apr, 2017 1:14:47 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -24,7 +24,8 @@ import javax.persistence.TemporalType;
 public class CrashReports implements java.io.Serializable {
 
 	private String reportId;
-	private Accounts accounts;
+	private Accounts accountsByVerifyAccountId;
+	private Accounts accountsByAccountId;
 	private County county;
 	private String reportNumber;
 	private Date crashDate;
@@ -34,7 +35,10 @@ public class CrashReports implements java.io.Serializable {
 	private String fileName;
 	private Date addedDate;
 	private Date addedDateTime;
+	private Integer verifiedStatus;
 	private Integer status;
+	private Set<VerificationLog> verificationLogs = new HashSet<VerificationLog>(
+			0);
 	private Set<Occupants> occupantses = new HashSet<Occupants>(0);
 
 	public CrashReports() {
@@ -44,13 +48,15 @@ public class CrashReports implements java.io.Serializable {
 		this.reportId = reportId;
 	}
 
-	public CrashReports(String reportId, Accounts accounts, County county,
-			String reportNumber, Date crashDate, String location,
-			Integer crashSeverity, Integer noOfOccupants, String fileName,
-			Date addedDate, Date addedDateTime, Integer status,
-			Set<Occupants> occupantses) {
+	public CrashReports(String reportId, Accounts accountsByVerifyAccountId,
+			Accounts accountsByAccountId, County county, String reportNumber,
+			Date crashDate, String location, Integer crashSeverity,
+			Integer noOfOccupants, String fileName, Date addedDate,
+			Date addedDateTime, Integer verifiedStatus, Integer status,
+			Set<VerificationLog> verificationLogs, Set<Occupants> occupantses) {
 		this.reportId = reportId;
-		this.accounts = accounts;
+		this.accountsByVerifyAccountId = accountsByVerifyAccountId;
+		this.accountsByAccountId = accountsByAccountId;
 		this.county = county;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
@@ -60,7 +66,9 @@ public class CrashReports implements java.io.Serializable {
 		this.fileName = fileName;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
+		this.verifiedStatus = verifiedStatus;
 		this.status = status;
+		this.verificationLogs = verificationLogs;
 		this.occupantses = occupantses;
 	}
 
@@ -75,13 +83,23 @@ public class CrashReports implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "account_id")
-	public Accounts getAccounts() {
-		return this.accounts;
+	@JoinColumn(name = "verify_account_id")
+	public Accounts getAccountsByVerifyAccountId() {
+		return this.accountsByVerifyAccountId;
 	}
 
-	public void setAccounts(Accounts accounts) {
-		this.accounts = accounts;
+	public void setAccountsByVerifyAccountId(Accounts accountsByVerifyAccountId) {
+		this.accountsByVerifyAccountId = accountsByVerifyAccountId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "account_id")
+	public Accounts getAccountsByAccountId() {
+		return this.accountsByAccountId;
+	}
+
+	public void setAccountsByAccountId(Accounts accountsByAccountId) {
+		this.accountsByAccountId = accountsByAccountId;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -169,6 +187,15 @@ public class CrashReports implements java.io.Serializable {
 		this.addedDateTime = addedDateTime;
 	}
 
+	@Column(name = "verified_status")
+	public Integer getVerifiedStatus() {
+		return this.verifiedStatus;
+	}
+
+	public void setVerifiedStatus(Integer verifiedStatus) {
+		this.verifiedStatus = verifiedStatus;
+	}
+
 	@Column(name = "status")
 	public Integer getStatus() {
 		return this.status;
@@ -176,6 +203,15 @@ public class CrashReports implements java.io.Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crashReports")
+	public Set<VerificationLog> getVerificationLogs() {
+		return this.verificationLogs;
+	}
+
+	public void setVerificationLogs(Set<VerificationLog> verificationLogs) {
+		this.verificationLogs = verificationLogs;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crashReports")

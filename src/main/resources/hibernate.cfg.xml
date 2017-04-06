@@ -12,5 +12,7 @@
         <mapping class="com.deemsys.project.entity.OccupantsId" />
         <mapping class="com.deemsys.project.entity.CrashReportRestriction" />
         <mapping class="com.deemsys.project.entity.County" />
+        <mapping class="com.deemsys.project.entity.VerificationLog" />
+        <mapping class="com.deemsys.project.entity.CheckerUploaderMapping" />
     </session-factory>
 </hibernate-configuration>

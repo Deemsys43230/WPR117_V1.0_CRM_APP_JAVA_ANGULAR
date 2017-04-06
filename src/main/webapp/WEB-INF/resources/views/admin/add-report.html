@@ -8,7 +8,7 @@
 		<h3>{{title}}<span class="pull-right"><a href="#/reports" class="btn btn-default"><i class="fa fa-reply"></i> Back to Reports List</a></span></h3>
 	<hr/> 
 	<div class="container" ng-cloak class="ng-cloak">
-			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
+			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReportModal()">
 			  <div class="form-group">
 			      <label class="control-label col-sm-2">County:</label>
 			      <div class="col-sm-4">
@@ -56,12 +56,8 @@
 			    <div class="form-group">
 			      <label class="control-label col-sm-2">Location:</label>
 			      <div class="col-sm-4">          
-			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100" required>
+			        <input type="text" class="form-control" ng-model="report.location" placeholder="Enter Location" name="location" maxlength="100">
 			         <div class="error-container">
-						<div ng-show="submitted || addCrashReportForm.location.$dirty">
-							<span ng-cloak ng-show="addCrashReportForm.location.$error.required">Please
-								Enter Location</span>
-						</div>
 					</div>	
 			      </div>
 			    </div>
@@ -135,7 +131,7 @@
 			      </div>
 			      <label class="control-label col-sm-3">Phone Number:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.phoneNumber" placeholder="Enter Phone Number eg: (123)456-7890 or 123-456-7890" name="phoneNumber" maxlength="20" validate-mobile>
+			        <input type="text" class="form-control" ng-model="occupant.phoneNumber" placeholder="Enter Phone Number eg: (123) 456-7890 or 123-456-7890" name="phoneNumber" maxlength="20" validate-mobile>
 			      	<div class="error-container">
 			      	<div ng-show="submitted || occupantsForm.phoneNumber.$dirty">
 							<span ng-cloak ng-show="!occupantsForm.phoneNumber.$error.required && occupantsForm.phoneNumber.$error.validateMobile">Enter Valid Phone Number</span>
@@ -143,22 +139,72 @@
 			      	</div>
 			      </div>
 			      </div>
-			      <div class="col-sm-12 form-input-div">
-			       <label class="control-label col-sm-3">At-Fault Insurance Company:</label>
+			     <div class="col-sm-12 form-input-div">
+			     <!--   <label class="control-label col-sm-3">At-Fault Insurance Company:</label>
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.atFaultInsuranceCompany" placeholder="Enter At-Fault Insurance Company" name="atFaultInsuranceCompany" maxlength="100">
 			      	<div class="error-container"></div>
-			      </div>
-			      <label class="control-label col-sm-3">Victim Insurance Company:</label>
+			      </div> -->
+			      <label class="control-label col-sm-3">Insurance Company:</label>
 			      <div class="col-sm-3">          
-			        <input type="text" class="form-control" ng-model="occupant.victimInsuranceCompany" placeholder="Enter Victim Insurance Company" name="victimInsuranceCompany" maxlength="100">
+			        <input type="text" class="form-control" ng-model="occupant.victimInsuranceCompany" placeholder="Enter Insurance Company" name="victimInsuranceCompany" maxlength="100">
 			      	<div class="error-container"></div>
 			      </div>
+			      <label class="control-label col-sm-3">Injuries:</label>
+			      <div class="col-sm-3">          
+			         <select class="form-control" ng-model="occupant.injuries" name="injuries" required>
+			        <option value="">-- Select --</option>
+			        <option value="1">1 - NO INJURY / NONE REPORTED</option>
+			        <option value="2">2 - POSSIBLE</option>
+			        <option value="3">3 - NON-INCAPACITATING</option>
+			        <option value="4">4 - INCAPACITATING</option>
+			        <option value="5">5 - FATAL</option>
+			        <option value="6">X - NOT AVAILABLE</option>
+			        </select>
+			     	<div class="error-container">
+			     		<div ng-show="submitted || occupantsForm.injuries.$dirty">
+			     		<span ng-cloak ng-show="occupantsForm.injuries.$error.required">Please Select Injuries</span>
+			     		</div>
+			     	</div>
 			      </div>
-			      <div class="col-sm-12">
-			      <div class="col-sm-10"></div>
+			      </div>
+			        <div class="col-sm-12 form-input-div">
+			       <label class="control-label col-sm-3">Seating Position:</label>
+			      <div class="col-sm-3">          
+			       <select class="form-control" ng-model="occupant.seatingPosition" name="seatingPosition" required>
+			        <option value="">-- Select --</option>
+			        <option value="1">1 -  FRONT - LEFT SIDE (MOTORCYCLE DRIVER)</option>
+			        <option value="2">2 - FRONT - MIDDLE</option>
+			        <option value="3">3 - FRONT - RIGHT SIDE</option>
+			        <option value="4">4 - SECOND - LEFT SIDE (MOTORCYCLE PASSENGER)</option>
+			        <option value="5">5 - SECOND - MIDDLE</option>
+			        <option value="6">6 - SECOND - RIGHT SIDE</option>
+			        <option value="7">7 - THIRD - LEFT SIDE (MOTORCYCLE SIDE CAR)</option>
+			        <option value="8">8 - THIRD - MIDDLE</option>
+			        <option value="9">9 - THIRD - RIGHT SIDE</option>
+			        <option value="10">10 - SLEEPER SECTION OF CAB (TRUCK)</option>
+			        <option value="11">11 - PASSENGER IN OTHER ENCLOSED CARGO AREA <br/>(NON-TRAILING UNIT SUCH AS A BUS, PICK-UP WITH CAP)</option>
+			        <option value="12">12 - PASSENGER IN UNENCLOSED CARGO AREA</option>
+			        <option value="13">13 - TRAILING UNIT</option>
+			        <option value="14">14 - RIDING ON VEHICLE EXTERIOR (NON-TRAILING UNIT)</option>
+			        <option value="15">15 - NON-MOTORIST</option>
+			        <option value="16">16 - OTHER</option>
+			        <option value="17">99 - UNKNOWN</option>
+			        <option value="18">X - NOT AVAILABLE</option>
+			        </select>
+			     	<div class="error-container">
+			     		<div ng-show="submitted || occupantsForm.seatingPosition.$dirty">
+			     		<span ng-cloak ng-show="occupantsForm.seatingPosition.$error.required">Please Select Seating Position</span>
+			     		</div>
+			     	</div>
+			      </div>
+			      <div class="col-sm-4"></div>
 			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($parent.$index,$index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
-			     </div>
+			      </div>
+			    <!--   <div class="col-sm-12">
+			      <div class="col-sm-10"></div>
+			      
+			     </div> -->
 			    </ng-form>
 			    </div>
 			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant($index);"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>
@@ -166,6 +212,7 @@
 			  	 <div class="form-group">  
 			  	  <div class="col-sm-offset-2 col-sm-10">
 			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
+			        <a href="" class="btn btn-danger" ng-show="reportType==2" ng-click="rejectReportModal()">Reject</a>
 			        <a href="#/reports" class="btn btn-default">Cancel</a>
 			      </div>
 			    </div>
@@ -176,6 +223,55 @@
 	</div>
 </section> 
 <!-- /SERVICES -->
+<!-- Reject Report Modal -->
+<div class="modal fade" id="rejectReportModal" role="dialog" data-backdrop="static" data-keyboard=false>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Reject Details</h4>
+			</div>
+			<div class="modal-body">
+				<form name="rejectReportForm" novalidate>
+				<label>Report Number :</label> {{report.reportNumber}}
+				<br/>
+				<label>Rejection Notes</label>
+				<textarea rows="5" cols="5" ng-model="rejectNotes" class="form-control" name="rejectNotes" required></textarea>
+				<div class="error-container">
+						<div ng-show="rejectReportForm.rejectNotes.$dirty">
+							<span ng-cloak ng-show="rejectReportForm.rejectNotes.$error.required">Please
+								Enter Rejection Notes</span>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" ng-click="rejectReport()" ng-disabled="rejectReportForm.$invalid">Save</button>
+				<button type="close" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Report Save Confirmation Modal -->
+<div class="modal fade" id="reportSaveConfirmationModal" role="dialog"
+	data-backdrop="static" data-keyborad="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				Please verify the details. Once you Confirm the details, they cannot be updated.
+				Click Cancel to return to Details Verification.
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-success" ng-click="saveCrashReport()" data-dismiss="modal">Confirm</button>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 $('#crashDateAdd').datetimepicker({
 	pickTime : false,

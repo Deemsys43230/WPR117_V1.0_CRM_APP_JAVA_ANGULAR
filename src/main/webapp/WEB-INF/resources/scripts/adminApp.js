@@ -65,7 +65,7 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'AddReportsController'
-            }).when('/edit-report/:id', {
+            }).when('/edit-report/:id/:reportType', {
                 templateUrl: 'admin/add-report.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
@@ -93,7 +93,8 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                     }]
 
                 },
-                controller:'ViewReportController'
+                controller:'ViewReportController',
+                reloadOnSearch:false,
             }).when('/changepassword', {
                 templateUrl: 'admin/change-password.html',
                 resolve: {

@@ -26,6 +26,8 @@ public class CrashReportSearchList {
 	private Integer status;
 	private String fileName;
 	private Integer noOfOccupants;
+	private Integer verifiedStatus;
+	private String lastVerifiedDateTime;
 	public String getReportId() {
 		return reportId;
 	}
@@ -140,9 +142,21 @@ public class CrashReportSearchList {
 	public void setNoOfOccupants(Integer noOfOccupants) {
 		this.noOfOccupants = noOfOccupants;
 	}
+	public Integer getVerifiedStatus() {
+		return verifiedStatus;
+	}
+	public void setVerifiedStatus(Integer verifiedStatus) {
+		this.verifiedStatus = verifiedStatus;
+	}
+	public String getLastVerifiedDateTime() {
+		return lastVerifiedDateTime;
+	}
+	public void setLastVerifiedDateTime(Date lastVerifiedDateTime) {
+		this.lastVerifiedDateTime = CRMConstants.convertUSAFormatWithTime(lastVerifiedDateTime);
+	}
 	public CrashReportSearchList(String reportId, String reportNumber,
 			String crashDate, String location, String addedDate, String addedDateTime,
-			String firstName, String lastName, Integer status, String fileName,Integer noOfOccupants) {
+			String firstName, String lastName, Integer status, String fileName,Integer noOfOccupants,Integer verifiedStatus) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -155,6 +169,7 @@ public class CrashReportSearchList {
 		this.status = status;
 		this.fileName = fileName;
 		this.noOfOccupants = noOfOccupants;
+		this.verifiedStatus = verifiedStatus;
 	}
 	public CrashReportSearchList() {
 		super();

@@ -10,7 +10,7 @@
 		</div>
 		<div class="col-md-12 search-block">
 		<form>
-			  <div class="form-group col-md-2">
+			  <div class="form-group col-md-3">
 			    <label for="carshDate">Crash Date:</label>
 			    <div class="input-group">
 					<input type="text" name="crashDate" id="crashDateReportList" class="form-control calender-control"
@@ -19,51 +19,95 @@
 					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalenderReportList"> <span class="fa fa-calendar"></span></span>
 					</div>
 			  </div>
-			  <div class="form-group col-md-2">
+			  <div class="form-group col-md-3">
 			    <label for="reportNumber">Report Number:</label>
 			    <input type="text" class="form-control" id="reportNumber" ng-model="crashReportSearchForm.reportNumber" placeholder="Report Number" maxlength="100">
 			  </div>
-			  <div class="form-group col-md-2">
+			  <div class="form-group col-md-3">
 			    <label for="carshDate">First Name:</label>
 			    <input type="text" class="form-control" id="firstName" ng-model="crashReportSearchForm.firstName" placeholder="First Name" maxlength="50">
 			  </div>
-			  <div class="form-group col-md-2">
+			  <div class="form-group col-md-3">
 			    <label for="reportNumber">Last Name:</label>
 			    <input type="text" class="form-control" id="lastName" ng-model="crashReportSearchForm.lastName" placeholder="Last Name" maxlength="50">
 			  </div>
-			  <div class="form-group col-md-2">
-			    <label for="carshDate">Location:</label>
-			    <input type="text" class="form-control" id="location" ng-model="crashReportSearchForm.location" placeholder="Location" maxlength="100">
-			  </div>
-			  <div class="form-group col-md-2">
+			  <div class="form-group col-md-3">
+			    <label for="addedOnFromDate">Added On From Date:</label>
+			    <div class="input-group">
+					<input type="text" name="addedOnFromDate" id="addedOnFromDate" class="form-control calender-control"
+						ng-model="crashReportSearchForm.addedOnFromDate"
+						placeholder="From Date"> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="addedOnFromDateCalender"> <span class="fa fa-calendar"></span></span>
+					</div>
+			   </div>
+			   <div class="form-group col-md-3">
+			    <label for="addedOnFromDate">Added On To Date:</label>
+			    <div class="input-group">
+					<input type="text" name="addedOnToDate" id="addedOnToDate" class="form-control calender-control"
+						ng-model="crashReportSearchForm.addedOnToDate"
+						placeholder="To Date"> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="addedOnToDateCalender"> <span class="fa fa-calendar"></span></span>
+					</div>
+			   </div>
+			  <div class="form-group col-md-3">
 			    <button type="button" class="btn btn-send" style="margin-top:32px;" ng-click="getCrashReportsList()">Search</button>
 			    <button type="button" class="btn btn-default" style="margin-top:32px;" ng-click="resetSearch()">Reset</button>
 			  </div>
 		</form>
 		</div>
+		<div class="col-md-12 margin-bottom-20">
+		<div class="col-md-6 menu-radio">
+		<label class="btn btn-default" ng-class="{'active':crashReportSearchForm.reportType==1}">
+      			<input name="reportType" id="myReport" value="1" class="active" type="radio" data-ng-model="crashReportSearchForm.reportType" ng-change="secondarySearch();"/><span>Uploaded</span>
+    	</label>
+    	<label class="btn btn-default" ng-class="{'active':crashReportSearchForm.reportType==2}">
+      			<input name="reportType" id="pendingReport" value="2" class="active" type="radio" data-ng-model="crashReportSearchForm.reportType" ng-change="secondarySearch();"/><span>Pending</span>
+    	</label>
+		</div>
+		<div class="col-md-6 pull-right">
+		<div class="col-md-6"><a class="btn btn-warning btn-sm" ng-click="sendToVerificationModal(0,'');"><i class="fa fa-paper-plane fa-fw"></i> Send To Verification</a></div>
+		<div class="col-md-2">Status</div>
+		<div class="col-md-3">
+		<select class="form-control input-sm" ng-change="secondarySearch();" name="verifiedStatus" ng-model="crashReportSearchForm.verifiedStatus">
+				          	<option value="4">All</option>
+				          	<option value="0">New</option>
+				          	<option value="1">Pending</option>
+				          	<option value="2">Verified</option>
+				          	<option value="3">Rejected</option>
+				     	</select>
+		</div>
+		</div>
+		</div>
 		<table class="table table-bordered" ng-cloak>
 		        <thead>
 		            <tr class="report-table-header">
-		                <th colspan="2">First Name</th>
-		                <th colspan="2">Last Name</th>
+		            	<th><input type="checkbox" ng-model="isCheckedAllReports" id="checkAllReports" ng-change="checkAllReports()"></th>
+		                <th colspan="3">First Name</th>
+		                <th colspan="3">Last Name</th>
 		                <th>Action</th>
 		            </tr>
 		        </thead>
 		        <tbody>
 		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
-		            	<td width="16%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
-		            	<td width="20%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
-		            	<td width="34%"><label>Location:</label><br/>{{resultData.location}}</td>
-		            	<td width="16%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
-		            	<td width="14%"><!-- <a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-fw"></i> Edit</a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-fw"></i> Delete</a>&nbsp;|&nbsp; --><a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs"><i class="fa fa-eye fa-fw"></i> View Report</a></td>
+		            	<td width="2%"><input type="checkbox" ng-model="resultData.selected"></td>
+		            	<td width="12%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
+		            	<td width="16%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
+		            	<td width="12%"><label>Added Date:</label><br/>{{resultData.addedDate}}</td>
+		            	<td width="16%"><label>Last Verification:</label><br/>{{resultData.lastVerifiedDateTime}}</td>
+		            	<td width="12%"><label>Status:</label><br/><span class="label-primary" ng-show="resultData.verifiedStatus==0">New</span><span class="label-warning" ng-show="resultData.verifiedStatus==1">Pending</span><span class="label-success" ng-show="resultData.verifiedStatus==2">Verified</span><span class="label-danger" ng-show="resultData.verifiedStatus==3">Rejected</span></td>
+		            	<td width="12%"><label>No. of Occ.:</label><br/>{{resultData.noOfOccupants}}</td>
+		            	<td width="18%">
+		            	<span ng-show="crashReportSearchForm.reportType==1"><span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs hint--top" data-hint="Delete"><i class="fa fa-trash fa-fw"></i></a>&nbsp;|&nbsp;</span> <a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report"><i class="fa fa-eye fa-fw"></i></a><span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1">&nbsp;|&nbsp; <a href="" class="btn btn-success btn-xs hint--top" data-hint="Send To Verification" ng-click="sendToVerificationModal(1,resultData.reportId);"><i class="fa fa-paper-plane fa-fw"></i></a></span></span>
+		            	<span ng-show="crashReportSearchForm.reportType==2"><span ng-show="resultData.verifiedStatus==1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp;</span> <a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report"><i class="fa fa-eye fa-fw"></i></a></span>
+		            	</td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
-		            	<td colspan="2">{{occupants.firstName}}</td>
-		                <td colspan="3">{{occupants.lastName}}</td>
+		            	<td colspan="4">{{occupants.firstName}}</td>
+		                <td colspan="4">{{occupants.lastName}}</td>
 		            </tr>
 		            <tr ng-repeat-end=""></tr>
 		           	<tr ng-show="totalRecords==0">
-							<td colspan="5"><center>
+							<td colspan="8"><center>
 							<strong>No Records Found!!!</strong>
 						</center></td>
 						</tr>
@@ -105,6 +149,24 @@
 		</div>
 	</div>
 </div>
+<!-- Send To Verification Confirmation Modal -->
+<div class="modal fade" id="sendToVerificationModal" role="dialog" data-backdrop="static" data-keyboard=false>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				Do you want to send to verification?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" ng-click="sendToVerification()">Yes</button>
+				<button type="close" class="btn btn-danger" data-dismiss="modal">No</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 $('#crashDateReportList').datetimepicker({
 	pickTime : false,
@@ -112,5 +174,21 @@ $('#crashDateReportList').datetimepicker({
 });
 $("#crashDateCalenderReportList").click(function(){
 	$('#crashDateReportList').focus();
+});
+
+$('#addedOnFromDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+});
+$("#addedOnFromDateCalender").click(function(){
+	$('#addedOnFromDate').focus();
+});
+
+$('#addedOnToDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+});
+$("#addedOnToDateCalender").click(function(){
+	$('#addedOnToDate').focus();
 });
 </script>

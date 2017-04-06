@@ -34,6 +34,9 @@ public class CrashReportsForm {
 	private Integer fromPage;
 	private Integer toPage;
 	private Integer status;
+	private boolean isChecker;
+	private String verifyAccountId;
+	private Integer verifiedStatus;
 	private List<OccupantsForm> occupantsForms;
 	public String getId() {
 		return id;
@@ -143,6 +146,24 @@ public class CrashReportsForm {
 	public void setOccupantsForms(List<OccupantsForm> occupantsForms) {
 		this.occupantsForms = occupantsForms;
 	}
+	public boolean getIsChecker() {
+		return isChecker;
+	}
+	public void setIsChecker(boolean isChecker) {
+		this.isChecker = isChecker;
+	}
+	public String getVerifyAccountId() {
+		return verifyAccountId;
+	}
+	public void setVerifyAccountId(String verifyAccountId) {
+		this.verifyAccountId = verifyAccountId;
+	}
+	public Integer getVerifiedStatus() {
+		return verifiedStatus;
+	}
+	public void setVerifiedStatus(Integer verifiedStatus) {
+		this.verifiedStatus = verifiedStatus;
+	}
 	public CrashReportsForm() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -173,13 +194,14 @@ public class CrashReportsForm {
 		this.status = status;
 		this.occupantsForms = occupantsForms;
 	}
-	public CrashReportsForm(String reportId, String reportNumber,
+	public CrashReportsForm(String reportId, String verifyAccountId, String reportNumber,
 			String crashDate, Integer countyId, String location,
 			Integer crashSeverity, String fileName, String fileAccessPath, String addedDate,
-			String addedDateTime, Integer status,
+			String addedDateTime, Integer verifiedStatus, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
+		this.verifyAccountId = verifyAccountId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.countyId = countyId;
@@ -189,6 +211,7 @@ public class CrashReportsForm {
 		this.fileAccessPath = fileAccessPath;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
+		this.verifiedStatus = verifiedStatus;
 		this.status = status;
 		this.occupantsForms = occupantsForms;
 	}

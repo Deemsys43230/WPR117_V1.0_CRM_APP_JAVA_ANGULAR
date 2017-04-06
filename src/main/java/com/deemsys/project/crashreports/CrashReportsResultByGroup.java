@@ -19,6 +19,8 @@ public class CrashReportsResultByGroup {
 	private Integer status;
 	private String fileName;
 	private Integer noOfOccupants;
+	private Integer verifiedStatus;
+	private String lastVerifiedDateTime;
 	private List<OccupantsForm> occupantsForms;
 	
 	public String getReportId() {
@@ -101,6 +103,22 @@ public class CrashReportsResultByGroup {
 		this.fileName = fileName;
 	}
 
+	public Integer getVerifiedStatus() {
+		return verifiedStatus;
+	}
+
+	public void setVerifiedStatus(Integer verifiedStatus) {
+		this.verifiedStatus = verifiedStatus;
+	}
+
+	public String getLastVerifiedDateTime() {
+		return lastVerifiedDateTime;
+	}
+
+	public void setLastVerifiedDateTime(String lastVerifiedDateTime) {
+		this.lastVerifiedDateTime = lastVerifiedDateTime;
+	}
+
 	public List<OccupantsForm> getOccupantsForms() {
 		return occupantsForms;
 	}
@@ -119,7 +137,7 @@ public class CrashReportsResultByGroup {
 
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
 			String crashDate, String county, String location, Integer crashSeverity, String addedDate, String addedDateTime,
-			Integer status, String fileName, Integer noOfOccupants, List<OccupantsForm> occupantsForms) {
+			Integer status, String fileName, Integer noOfOccupants, Integer verifiedStatus, String lastVerifiedDateTime, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -132,6 +150,8 @@ public class CrashReportsResultByGroup {
 		this.status = status;
 		this.fileName = fileName;
 		this.noOfOccupants = noOfOccupants;
+		this.verifiedStatus = verifiedStatus;
+		this.lastVerifiedDateTime = lastVerifiedDateTime;
 		this.occupantsForms = occupantsForms;
 	}
 

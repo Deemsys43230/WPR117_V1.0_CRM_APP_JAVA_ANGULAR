@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -81,17 +82,21 @@ public class CRMConstants {
 	// Convert To USA Month Format With Time
 	public static String convertUSAFormatWithTime(Date date)
 	{
+		String USAFormatWithTime="";
 		SimpleDateFormat monthFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
 		Date dateformat=new Date();
 		try {
-			dateformat =yearFormat.parse(yearFormat.format(date));
+			if(date!=null && !date.equals("")){
+				dateformat =yearFormat.parse(yearFormat.format(date));
+				USAFormatWithTime=monthFormat.format(dateformat);
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return monthFormat.format(dateformat);
+		return USAFormatWithTime;
 	}
 	
 	// Convert To Year Format With Time
@@ -176,4 +181,8 @@ public class CRMConstants {
 		
 	}
 
+	public static Date getCurrentDateTime(){
+		LocalDateTime currentLocalDateTime = new LocalDateTime();
+		return currentLocalDateTime.toDate();
+	}
 }

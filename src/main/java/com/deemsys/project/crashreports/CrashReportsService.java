@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,10 +20,12 @@ import com.deemsys.project.APIRequest.CrashReportForm;
 import com.deemsys.project.APIRequest.PatientForm;
 import com.deemsys.project.AWS.AWSFileUpload;
 import com.deemsys.project.accounts.AccountsDAO;
+import com.deemsys.project.checkeruploadermapping.CheckerUploaderMappingDAO;
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.common.CRMProperties;
 import com.deemsys.project.county.CountyDAO;
 import com.deemsys.project.entity.Accounts;
+import com.deemsys.project.entity.CheckerUploaderMapping;
 import com.deemsys.project.entity.County;
 import com.deemsys.project.entity.CrashReports;
 import com.deemsys.project.entity.Occupants;
@@ -32,10 +33,11 @@ import com.deemsys.project.entity.OccupantsId;
 import com.deemsys.project.login.LoginService;
 import com.deemsys.project.occupants.OccupantsDAO;
 import com.deemsys.project.occupants.OccupantsForm;
+import com.deemsys.project.verificationlog.VerificationLogForm;
+import com.deemsys.project.verificationlog.VerificationLogService;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -79,14 +81,22 @@ public class CrashReportsService {
 	@Autowired
 	APIRequestService apiRequestService;
 	
+	@Autowired
+	VerificationLogService verificationLogService;
+	
+	@Autowired
+	CheckerUploaderMappingDAO checkerUploaderMappingDAO;
+	
 	//Get All Entries
 	public CrashReportsSearchResult searchCrashReportsList(CrashReportSearchForm crashReportSearchForm)
 	{
 		CrashReportsSearchResult crashReportsSearchResult = new CrashReportsSearchResult();
 		
-		if(!crashReportSearchForm.getAccountId().equals("0"))
-		  crashReportSearchForm.setAccountId(loginService.getCurrentAccountId());
-		
+		if(!crashReportSearchForm.getSearchType().equals("0")){
+			String currentAccountId=loginService.getCurrentAccountId();
+			crashReportSearchForm.setAccountId(currentAccountId);
+		}
+		  
 		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReports(crashReportSearchForm);
 		
 		String reportId="";
@@ -100,7 +110,7 @@ public class CrashReportsService {
 				if(rowCount!=0){
 					crashReportsResultByGroupList.add(crashReportsResultByGroup);
 				}
-				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
+				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), crashReportSearchList.getVerifiedStatus(), crashReportSearchList.getLastVerifiedDateTime(), new ArrayList<OccupantsForm>());
 			}
 			// Set Occupants
 			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getAddress(), crashReportSearchList.getPhoneNumber(), crashReportSearchList.getInjuries(), crashReportSearchList.getSeatingPosition(), crashReportSearchList.getAtFaultInsuranceCompany(), crashReportSearchList.getVictimInsuranceCompany(), 1));
@@ -122,8 +132,11 @@ public class CrashReportsService {
 		//TODO: Convert Entity to Form
 		//Start
 		List<OccupantsForm> occupantsForms = occupantsDAO.getOccupantsFormByReportId(reportId);
-	
-		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getLocation(), crashReports.getCrashSeverity(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
+		String verifiyAccountId=null;
+		if(crashReports.getAccountsByVerifyAccountId()!=null){
+			verifiyAccountId=crashReports.getAccountsByVerifyAccountId().getAccountId();
+		}
+		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), verifiyAccountId, crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getLocation(), crashReports.getCrashSeverity(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getVerifiedStatus(), crashReports.getStatus(), occupantsForms);
 		
 		//End
 		
@@ -138,7 +151,7 @@ public class CrashReportsService {
 		//Logic Starts
 		try {
 			String fileName=crashReportsForm.getReportId()+".pdf";
-			Accounts accounts = accountsDAO.getAccountsById(loginService.getCurrentAccountId());
+			
 			// County Data
 			County county = countyDAO.get(crashReportsForm.getCountyId());
 			
@@ -151,8 +164,29 @@ public class CrashReportsService {
 			if(crashReportsForm.getAddedDateTime()!=null){
 				addedDateTime=CRMConstants.convertYearFormatWithTime24Hr(crashReportsForm.getAddedDateTime());
 			}
-			
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity() ,crashReportsForm.getOccupantsForms().size(), null, addedDate, addedDateTime, 1, null);
+			/*
+			// Get Verified Accounts Details
+			Accounts verifiedAccounts=new Accounts();
+			if(crashReportsForm.getVerifyAccountId()!=null&&!crashReportsForm.getVerifyAccountId().equals("")){
+				verifiedAccounts.setAccountId(crashReportsForm.getVerifyAccountId());
+			}
+			*/
+			CrashReports crashReports=crashReportsDAO.getReportsByReportId(crashReportsForm.getReportId());
+			crashReports.setReportId(crashReportsForm.getReportId());
+			crashReports.setCounty(county);
+			crashReports.setReportNumber(crashReportsForm.getReportNumber());
+			crashReports.setCrashDate(CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()));
+			crashReports.setLocation(crashReportsForm.getLocation());
+			crashReports.setCrashSeverity(crashReportsForm.getCrashSeverity());
+			crashReports.setNoOfOccupants(crashReportsForm.getOccupantsForms().size());
+			crashReports.setAddedDate(addedDate);
+			crashReports.setAddedDateTime(addedDateTime);
+			Integer verifiedStatus = crashReportsForm.getVerifiedStatus();
+			if(crashReportsForm.getIsChecker()){
+				verifiedStatus=Integer.parseInt(crmProperties.getProperty("verifiedSuccessfully"));
+			}
+			crashReports.setVerifiedStatus(verifiedStatus);
+			crashReports.setStatus(1);
 			crashReports.setFileName(fileName);
 			crashReportsDAO.merge(crashReports);
 
@@ -164,12 +198,31 @@ public class CrashReportsService {
 			// Insert Occupants
 			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
+				// Is Checker is True
+				if(crashReportsForm.getIsChecker()){
+					PatientForm patientForm = new PatientForm(crashReportsForm.getReportNumber(), occupantsForm.getLastName()+", "+occupantsForm.getFirstName(), crashReportsForm.getCrashDate(), crashReportsForm.getCrashSeverity()!=0?crashReportsForm.getCrashSeverity().toString():"", occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(),
+							"","",0,"","","","",crashReportsForm.getCountyId(),"","","","","","",0,"",new Double(0),new Double(0),occupantsForm.getInjuries(),"","","","",0,occupantsForm.getSeatingPosition(),1,"",1,1);
+					patientForms.add(patientForm);
+				}
+				
 				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getInjuries(), occupantsForm.getSeatingPosition(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(), sequenceNo, 1);
 				Occupants occupants = new Occupants(occupantsId, crashReports);
 				occupantsDAO.save(occupants);
 				sequenceNo++;
 			}
 			
+			if(crashReportsForm.getIsChecker()){
+				// Put Entry In Verification Log as Verified
+				VerificationLogForm verificationLogForm = new VerificationLogForm(null, loginService.getCurrentAccountId(), "", crashReportsForm.getReportId(), crmProperties.getProperty("verificationSuccessNotes"), CRMConstants.convertUSAFormatWithTime(CRMConstants.getCurrentDateTime()), Integer.parseInt(crmProperties.getProperty("verifiedSuccessfully")), 1);
+				verificationLogService.saveVerificationLog(verificationLogForm);
+			}
+			
+			// Insert Runner Report In CRO only On Save
+			if(Integer.parseInt(crmProperties.getProperty("sentToCRO"))==1&&crashReportsForm.getIsChecker()){
+				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), crashReportsForm.getFileName(), patientForms);
+				apiRequestService.saveRunnerReportInCRO(crashReportForm);
+			}
+						
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -192,27 +245,17 @@ public class CrashReportsService {
 			Accounts accounts = accountsDAO.getAccountsById(loginService.getCurrentAccountId());
 			// County Data
 			County county = countyDAO.get(crashReportsForm.getCountyId());
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), null, accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), Integer.parseInt(crmProperties.getProperty("newlyAddedReport")), 1, null,null);
 			crashReports.setFileName(crashReportsForm.getFileName());
 			crashReportsDAO.saveCrashReports(crashReports);
-			// Patient Form
-			List<PatientForm> patientForms = new ArrayList<PatientForm>();
 			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
-				PatientForm patientForm = new PatientForm(crashReportsForm.getReportNumber(), occupantsForm.getLastName()+", "+occupantsForm.getFirstName(), crashReportsForm.getCrashDate(), crashReportsForm.getCrashSeverity()!=0?crashReportsForm.getCrashSeverity().toString():"", occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(),
-						"","",0,"","","","",crashReportsForm.getCountyId(),"","","","","","",0,"",new Double(0),new Double(0),occupantsForm.getInjuries(),"","","","",0,occupantsForm.getSeatingPosition(),1,"",1,1);
-				patientForms.add(patientForm);
 				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getAddress(), occupantsForm.getPhoneNumber(), occupantsForm.getInjuries(), occupantsForm.getSeatingPosition(), occupantsForm.getAtFaultInsuranceCompany(), occupantsForm.getVictimInsuranceCompany(), sequenceNo, 1);
 				Occupants occupants = new Occupants(occupantsId, crashReports);
 				occupantsDAO.save(occupants);
 				sequenceNo++;
 			}
 			
-			// Insert Runner Report In CRO only On Save
-			if(Integer.parseInt(crmProperties.getProperty("sentToCRO"))==1){
-				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), crashReportsForm.getFileName(), patientForms);
-				apiRequestService.saveRunnerReportInCRO(crashReportForm);
-			}
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -359,5 +402,36 @@ public class CrashReportsService {
 	public void deleteFile(String fileLocation){
 		File file = new File(fileLocation);
 		file.delete();
+	}
+	
+	// Send Report To Verification
+	public Integer sendToVerification(List<String> reportIds){
+		
+		// Get Verify Account Id
+		CheckerUploaderMapping checkerUploaderMapping = checkerUploaderMappingDAO.getCheckerUploaderMappingByUploader(loginService.getCurrentAccountId());
+		Accounts accounts = accountsDAO.getAccountsById(checkerUploaderMapping.getId().getCheckerAccountId());
+		for (String reportId : reportIds) {
+			CrashReports crashReports = crashReportsDAO.getReportsByReportId(reportId);
+			crashReports.setAccountsByVerifyAccountId(accounts);
+			crashReports.setVerifiedStatus(Integer.parseInt(crmProperties.getProperty("verificationPending")));
+			crashReportsDAO.update(crashReports);
+			
+			// Verification Log
+			VerificationLogForm verificationLogForm = new VerificationLogForm(null, loginService.getCurrentAccountId(), "", reportId, crmProperties.getProperty("verificationSendNotes"), CRMConstants.convertUSAFormatWithTime(CRMConstants.getCurrentDateTime()), Integer.parseInt(crmProperties.getProperty("verificationPending")), 1);
+			verificationLogService.saveVerificationLog(verificationLogForm);
+		}
+			
+		return 1;
+	}
+
+	public void rejectFromVerification(String reportId,String rejectNotes) {
+		// TODO Auto-generated method stub
+		CrashReports crashReports = crashReportsDAO.getReportsByReportId(reportId);
+		crashReports.setVerifiedStatus(Integer.parseInt(crmProperties.getProperty("rejectedFromVerification")));
+		crashReportsDAO.update(crashReports);
+		
+		// Verification Log
+		VerificationLogForm verificationLogForm = new VerificationLogForm(null, loginService.getCurrentAccountId(), "", reportId, rejectNotes, CRMConstants.convertUSAFormatWithTime(CRMConstants.getCurrentDateTime()), Integer.parseInt(crmProperties.getProperty("rejectedFromVerification")), 1);
+		verificationLogService.saveVerificationLog(verificationLogForm);
 	}
 }

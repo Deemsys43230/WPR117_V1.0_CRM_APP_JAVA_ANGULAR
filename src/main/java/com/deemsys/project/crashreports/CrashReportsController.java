@@ -3,6 +3,7 @@ package com.deemsys.project.crashreports;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -214,5 +215,23 @@ public class CrashReportsController {
     
 		
 		return "/returnPage";
+   	}
+    
+    // Send Report To Verification
+    @RequestMapping(value="/User/sendReportToVerification",method=RequestMethod.POST)
+   	public String sendReportToVerification(@RequestParam("reportId") List<String> reportIds,ModelMap model)
+   	{
+    	crashReportsService.sendToVerification(reportIds);
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
+    
+    // Report failed the Verification, Reject the Report
+    @RequestMapping(value="/User/rejectReportFromVerification",method=RequestMethod.POST)
+   	public String rejectReportFromVerification(@RequestParam("reportId") String reportId,@RequestParam("rejectNotes") String rejectNotes,ModelMap model)
+   	{
+    	crashReportsService.rejectFromVerification(reportId,rejectNotes);
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
    	}
 }
