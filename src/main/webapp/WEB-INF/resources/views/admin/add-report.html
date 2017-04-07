@@ -212,7 +212,7 @@
 			  	 <div class="form-group">  
 			  	  <div class="col-sm-offset-2 col-sm-10">
 			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
-			        <a href="" class="btn btn-danger" ng-show="reportType==2" ng-click="rejectReportModal()">Reject</a>
+			        <a href="" class="btn btn-reject" ng-show="reportType==2" ng-disabled="reportSave" ng-click="rejectReportModal()">Reject</a>
 			        <a href="#/reports" class="btn btn-default">Cancel</a>
 			      </div>
 			    </div>

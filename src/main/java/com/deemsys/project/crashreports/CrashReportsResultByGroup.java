@@ -21,6 +21,7 @@ public class CrashReportsResultByGroup {
 	private Integer noOfOccupants;
 	private Integer verifiedStatus;
 	private String lastVerifiedDateTime;
+	private String lastVerifiedNotes;
 	private List<OccupantsForm> occupantsForms;
 	
 	public String getReportId() {
@@ -119,6 +120,14 @@ public class CrashReportsResultByGroup {
 		this.lastVerifiedDateTime = lastVerifiedDateTime;
 	}
 
+	public String getLastVerifiedNotes() {
+		return lastVerifiedNotes;
+	}
+
+	public void setLastVerifiedNotes(String lastVerifiedNotes) {
+		this.lastVerifiedNotes = lastVerifiedNotes;
+	}
+
 	public List<OccupantsForm> getOccupantsForms() {
 		return occupantsForms;
 	}
@@ -137,7 +146,8 @@ public class CrashReportsResultByGroup {
 
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
 			String crashDate, String county, String location, Integer crashSeverity, String addedDate, String addedDateTime,
-			Integer status, String fileName, Integer noOfOccupants, Integer verifiedStatus, String lastVerifiedDateTime, List<OccupantsForm> occupantsForms) {
+			Integer status, String fileName, Integer noOfOccupants, Integer verifiedStatus, String lastVerifiedDateTime,
+			String lastVerifiedNotes, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -152,6 +162,7 @@ public class CrashReportsResultByGroup {
 		this.noOfOccupants = noOfOccupants;
 		this.verifiedStatus = verifiedStatus;
 		this.lastVerifiedDateTime = lastVerifiedDateTime;
+		this.lastVerifiedNotes = lastVerifiedNotes;
 		this.occupantsForms = occupantsForms;
 	}
 

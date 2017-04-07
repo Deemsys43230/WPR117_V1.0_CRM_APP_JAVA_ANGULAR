@@ -55,7 +55,7 @@
 			  </div>
 		</form>
 		</div>
-		<div class="col-md-12 margin-bottom-20">
+		<div class="col-md-12 margin-bottom-20 no-padding">
 		<div class="col-md-6 menu-radio">
 		<label class="btn btn-default" ng-class="{'active':crashReportSearchForm.reportType==1}">
       			<input name="reportType" id="myReport" value="1" class="active" type="radio" data-ng-model="crashReportSearchForm.reportType" ng-change="secondarySearch();"/><span>Uploaded</span>
@@ -65,9 +65,9 @@
     	</label>
 		</div>
 		<div class="col-md-6 pull-right">
-		<div class="col-md-6"><a class="btn btn-warning btn-sm" ng-click="sendToVerificationModal(0,'');"><i class="fa fa-paper-plane fa-fw"></i> Send To Verification</a></div>
-		<div class="col-md-2">Status</div>
-		<div class="col-md-3">
+		<div class="col-md-7 text-right"><a class="btn btn-warning btn-sm" ng-click="sendToVerificationModal(0,'');" ng-disabled="isDisableSendButton"><i class="fa fa-paper-plane fa-fw"></i> Send To Verification</a></div>
+		<div class="col-md-2 text-right">Status</div>
+		<div class="col-md-3 text-right">
 		<select class="form-control input-sm" ng-change="secondarySearch();" name="verifiedStatus" ng-model="crashReportSearchForm.verifiedStatus">
 				          	<option value="4">All</option>
 				          	<option value="0">New</option>
@@ -81,7 +81,7 @@
 		<table class="table table-bordered" ng-cloak>
 		        <thead>
 		            <tr class="report-table-header">
-		            	<th><input type="checkbox" ng-model="isCheckedAllReports" id="checkAllReports" ng-change="checkAllReports()"></th>
+		            	<th><input type="checkbox" ng-model="isCheckedAllReports" id="checkAllReports" ng-change="checkAllReports()" ng-disabled="crashReportSearchForm.reportType==2"></th>
 		                <th colspan="3">First Name</th>
 		                <th colspan="3">Last Name</th>
 		                <th>Action</th>
@@ -89,7 +89,7 @@
 		        </thead>
 		        <tbody>
 		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
-		            	<td width="2%"><input type="checkbox" ng-model="resultData.selected"></td>
+		            	<td width="2%"><span ng-show="crashReportSearchForm.reportType==1"><input type="checkbox" ng-model="resultData.selected" ng-change="isCheckedIndividual()" ng-disabled="resultData.verifiedStatus==2||resultData.verifiedStatus==1"></span><span ng-show="crashReportSearchForm.reportType==2"><input type="checkbox" ng-model="resultData.selected" ng-disabled="true"></span></td>
 		            	<td width="12%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
 		            	<td width="16%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
 		            	<td width="12%"><label>Added Date:</label><br/>{{resultData.addedDate}}</td>
@@ -97,8 +97,10 @@
 		            	<td width="12%"><label>Status:</label><br/><span class="label-primary" ng-show="resultData.verifiedStatus==0">New</span><span class="label-warning" ng-show="resultData.verifiedStatus==1">Pending</span><span class="label-success" ng-show="resultData.verifiedStatus==2">Verified</span><span class="label-danger" ng-show="resultData.verifiedStatus==3">Rejected</span></td>
 		            	<td width="12%"><label>No. of Occ.:</label><br/>{{resultData.noOfOccupants}}</td>
 		            	<td width="18%">
-		            	<span ng-show="crashReportSearchForm.reportType==1"><span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs hint--top" data-hint="Delete"><i class="fa fa-trash fa-fw"></i></a>&nbsp;|&nbsp;</span> <a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report"><i class="fa fa-eye fa-fw"></i></a><span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1">&nbsp;|&nbsp; <a href="" class="btn btn-success btn-xs hint--top" data-hint="Send To Verification" ng-click="sendToVerificationModal(1,resultData.reportId);"><i class="fa fa-paper-plane fa-fw"></i></a></span></span>
-		            	<span ng-show="crashReportSearchForm.reportType==2"><span ng-show="resultData.verifiedStatus==1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp;</span> <a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report"><i class="fa fa-eye fa-fw"></i></a></span>
+		            	<span ng-show="crashReportSearchForm.reportType==1"><span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs hint--top" data-hint="Delete"><i class="fa fa-trash fa-fw"></i></a>&nbsp;|&nbsp;</span> <span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1"><a href="" class="btn btn-success btn-xs hint--top" data-hint="Send To Verification" ng-click="sendToVerificationModal(1,resultData.reportId);"><i class="fa fa-paper-plane fa-fw"></i></a>&nbsp;|&nbsp;</span></span>
+		            	<span ng-show="crashReportSearchForm.reportType==2"><span ng-show="resultData.verifiedStatus==1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|</span></span>
+		            	<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report"><i class="fa fa-file fa-fw"></i></a> |
+		            	<a href="" style="color:#fff;" class="btn btn-primary btn-xs hint--top" data-hint="View Logs" ng-click="viewLogs(resultData.reportId);"><i class="fa fa-eye fa-fw"></i></a>
 		            	</td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
@@ -163,6 +165,37 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success" ng-click="sendToVerification()">Yes</button>
 				<button type="close" class="btn btn-danger" data-dismiss="modal">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- View Logs List Modal -->
+<div class="modal fade" id="viewLogsListModal" role="dialog" data-backdrop="static" data-keyboard=false>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">View Logs</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered">
+				<thead>
+				<tr class="report-table-header"><th width="15%">Log By</th><th width="60%">Notes</th><th width="15%">Date & Time</th><th width="10%">Status</th></tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="verificationLog in verificationLogList">
+				<td>{{verificationLog.verifiedUserFullname}}</td>
+				<td>{{verificationLog.verifiedNotes}}</td>
+				<td>{{verificationLog.verifiedDateTime}}</td>
+				<td>
+				<span class="label-primary" ng-show="verificationLog.verifiedStatus==0">New</span><span class="label-warning" ng-show="verificationLog.verifiedStatus==1">Pending</span><span class="label-success" ng-show="verificationLog.verifiedStatus==2">Verified</span><span class="label-danger" ng-show="verificationLog.verifiedStatus==3">Rejected</span>
+				</td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="close" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

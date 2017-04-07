@@ -109,7 +109,7 @@ adminApp.service('reportSearchService',function(){
 		addedOnFromDate="";
 		addedOnToDate="";
 		reportType=1;
-		verifiedStatus=4;
+		verifiedStatus="4";
 		pageNumber=1;
 		itemsPerPage="10";
 		searchType=1;

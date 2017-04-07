@@ -133,7 +133,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 				$scope.isError=false;
 				$scope.errorMsg="";
 				successMessage(Flash,"Successfully Added");
-				$location.path("/reports").replace().reloadOnSearch(false);
+				$location.path("/reports");
 			}
 		});
 	};
@@ -328,7 +328,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 			$scope.searchReportsList($scope.crashReportSearchForm);
 		}
 		// To Avoid Main Search Parameter Override
-		angular.copy($scope.patient,$scope.mainSearchParam);
+		angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
 		
 		// Set To Service
 		reportSearchService.setReportNumber($scope.crashReportSearchForm.reportNumber);
@@ -346,6 +346,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 		requestHandler.postRequest("User/searchCrashReports.json",searchObj).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 			$scope.crashReportsResultList=response.data.crashReportsResult;
+			$scope.crashReportsResultListOriginal=angular.copy($scope.crashReportsResultList);
 			defer.resolve(response);
 		});
 		return defer.promise;
@@ -368,7 +369,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
     	
 		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
 			// Copy Mainsearchparam to Patient
-			angular.copy($scope.mainSearchParam,$scope.patient);
+			angular.copy($scope.mainSearchParam,$scope.crashReportSearchForm);
 			return $scope.searchReportsList($scope.crashReportSearchForm);
 		}
 		
@@ -379,7 +380,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
     	$scope.mainSearchParam.pageNumber=$scope.crashReportSearchForm.pageNumber;
     	reportSearchService.setPageNumber($scope.crashReportSearchForm.pageNumber);
     	// Copy Mainsearchparam to Patient
-		angular.copy($scope.mainSearchParam,$scope.patient);
+		angular.copy($scope.mainSearchParam,$scope.crashReportSearchForm);
 		
     	var promise=$scope.searchReportsList($scope.crashReportSearchForm);
     	/*if(promise!=null){
@@ -403,6 +404,8 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
     };
 	
     $scope.init=function(){
+    	$scope.crashReportsResultListOriginal=[];
+    	$scope.isDisableSendButton=true;
     	$scope.deleteText="Yes";
     	$scope.isDeleting=false;
 		$scope.totalRecords=0;
@@ -431,7 +434,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 		$scope.oldPageNumber= $scope.crashReportSearchForm.pageNumber;
 		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
 			// To Avoid Main Search Parameter Override
-			angular.copy($scope.patient,$scope.mainSearchParam);
+			angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
 			$scope.searchReportsList($scope.crashReportSearchForm);
 		}
 		
@@ -462,13 +465,32 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 	$scope.checkAllReports=function(){
 		if($scope.crashReportsResultList.crashReportsResult.length>0){
 			$.each($scope.crashReportsResultList.crashReportsResult, function(index,value) {
-				if(value.verifiedStatus!=2){
+				if(value.verifiedStatus!=2&&value.verifiedStatus!=1){
 					value.selected=$scope.isCheckedAllReports;
+					$scope.isDisableSendButton=!$scope.isCheckedAllReports;
 				}
 			});
 			//$("input:checkbox").prop('checked', $(this).prop("checked"));
 		}
 	};	
+	
+	// 
+	$scope.isCheckedIndividual=function(){
+		var isSelected=false;
+		$.each($scope.crashReportsResultList.crashReportsResult, function(index,value) {
+			if(value.verifiedStatus!=2&&value.verifiedStatus!=1){
+				if(value.selected){
+					isSelected=true;
+				}
+			}
+		});
+		
+		if(isSelected){
+			$scope.isDisableSendButton=false;
+		}else{
+			$scope.isDisableSendButton=true;
+		}
+	};
 	
 	// Send To Verification Modal Confirm
 	$scope.sendToVerificationModal=function(fromLocation,reportId){
@@ -497,6 +519,15 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 			$scope.searchReportsList($scope.crashReportSearchForm);
 		});
 	};
+	
+	// View Logs
+	$scope.viewLogs=function(reportId){
+		requestHandler.getRequest('/User/getVerificationLogsByReport.json?reportId='+reportId,"").then(function(response){
+			$scope.verificationLogList=response.data.verificationLogForms;
+			$("#viewLogsListModal").modal('show');
+		});
+	};
+	
 	
 	// Reset Search
 	$scope.resetSearch=function(){

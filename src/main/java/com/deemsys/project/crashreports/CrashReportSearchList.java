@@ -28,6 +28,7 @@ public class CrashReportSearchList {
 	private Integer noOfOccupants;
 	private Integer verifiedStatus;
 	private String lastVerifiedDateTime;
+	private String lastVerifiedNotes;
 	public String getReportId() {
 		return reportId;
 	}
@@ -153,6 +154,12 @@ public class CrashReportSearchList {
 	}
 	public void setLastVerifiedDateTime(Date lastVerifiedDateTime) {
 		this.lastVerifiedDateTime = CRMConstants.convertUSAFormatWithTime(lastVerifiedDateTime);
+	}
+	public String getLastVerifiedNotes() {
+		return lastVerifiedNotes;
+	}
+	public void setLastVerifiedNotes(String lastVerifiedNotes) {
+		this.lastVerifiedNotes = lastVerifiedNotes;
 	}
 	public CrashReportSearchList(String reportId, String reportNumber,
 			String crashDate, String location, String addedDate, String addedDateTime,

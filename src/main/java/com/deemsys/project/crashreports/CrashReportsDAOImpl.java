@@ -58,7 +58,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public CrashReports update(CrashReports entity) {
 		// TODO Auto-generated method stub
-		this.sessionFactory.getCurrentSession().merge(entity);
+		this.sessionFactory.getCurrentSession().update(entity);
 		return null;
 	}
 
@@ -257,6 +257,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		
 		// Latest Verification Log Time
 		projectionList.add(Projections.property("VL.verifiedDateTime"),"lastVerifiedDateTime");
+		projectionList.add(Projections.property("VL.verifiedNotes"),"lastVerifiedNotes");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		
