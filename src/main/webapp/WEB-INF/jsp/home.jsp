@@ -82,7 +82,9 @@
     <script type="text/javascript" src="resources/angular/angular-route-1.4.5.js"></script>
     <script type="text/javascript" src="resources/angular/ocLazyLoad.min.js"></script>
     <script type="text/javascript" src="resources/angular/angular-cookies-1.4.5.js"></script>
-
+    
+	<script src="resources/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	
 	<script type="text/javascript" src="resources/js/jquery.parallax.js"></script><!-- Parallax -->
 	<script type="text/javascript" src="resources/js/smoothscroll.js"></script><!-- Smooth Scroll -->
 	<script type="text/javascript" src="resources/js/masonry.pkgd.min.js"></script><!-- masonry -->

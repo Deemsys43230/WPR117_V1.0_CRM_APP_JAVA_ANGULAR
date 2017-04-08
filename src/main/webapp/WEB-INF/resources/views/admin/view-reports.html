@@ -55,15 +55,16 @@
 			  </div>
 		</form>
 		</div>
-		<div class="col-md-12 margin-bottom-20 no-padding">
-		<div class="col-md-6 menu-radio">
+		<div class="col-md-12 no-padding">
+		<div class="col-md-6"></div>
+		<!-- <div class="col-md-6 menu-radio">
 		<label class="btn btn-default" ng-class="{'active':crashReportSearchForm.reportType==1}">
       			<input name="reportType" id="myReport" value="1" class="active" type="radio" data-ng-model="crashReportSearchForm.reportType" ng-change="secondarySearch();"/><span>Uploaded</span>
     	</label>
     	<label class="btn btn-default" ng-class="{'active':crashReportSearchForm.reportType==2}">
       			<input name="reportType" id="pendingReport" value="2" class="active" type="radio" data-ng-model="crashReportSearchForm.reportType" ng-change="secondarySearch();"/><span>Pending</span>
     	</label>
-		</div>
+		</div> -->
 		<div class="col-md-6 pull-right">
 		<div class="col-md-7 text-right"><a class="btn btn-warning btn-sm" ng-click="sendToVerificationModal(0,'');" ng-disabled="isDisableSendButton"><i class="fa fa-paper-plane fa-fw"></i> Send To Verification</a></div>
 		<div class="col-md-2 text-right">Status</div>
@@ -78,7 +79,12 @@
 		</div>
 		</div>
 		</div>
-		<table class="table table-bordered" ng-cloak>
+	 <ul class="nav nav-tabs">
+	  <li ng-class="{'active':crashReportSearchForm.reportType==1}"><a data-toggle="tab" href="" ng-click="crashReportSearchForm.reportType=1;secondarySearch();">Uploaded <i class="fa fa-file fa-fw"></i></a></li>
+	  <li ng-class="{'active':crashReportSearchForm.reportType==2}"><a data-toggle="tab" href="" ng-click="crashReportSearchForm.reportType=2;secondarySearch();">Pending <i class="fa fa-file fa-fw"></i></a></li>
+	</ul>
+
+		<table class="table table-bordered" style="margin-top:15px;" ng-cloak>
 		        <thead>
 		            <tr class="report-table-header">
 		            	<th><input type="checkbox" ng-model="isCheckedAllReports" id="checkAllReports" ng-change="checkAllReports()" ng-disabled="crashReportSearchForm.reportType==2"></th>
@@ -190,6 +196,9 @@
 				<td>
 				<span class="label-primary" ng-show="verificationLog.verifiedStatus==0">New</span><span class="label-warning" ng-show="verificationLog.verifiedStatus==1">Pending</span><span class="label-success" ng-show="verificationLog.verifiedStatus==2">Verified</span><span class="label-danger" ng-show="verificationLog.verifiedStatus==3">Rejected</span>
 				</td>
+				</tr>
+				<tr ng-show="verificationLogList.length==0">
+				<td colspan="4"><center><strong>No Logs Found!!!</strong></center></td>
 				</tr>
 				</tbody>
 				</table>

@@ -1,4 +1,4 @@
-var adminApp= angular.module('adminApp', ['ngRoute','oc.lazyLoad','ngCookies','requestModule','flash','ngAnimate','angularUtils.directives.dirPagination','vAccordion']);
+var adminApp= angular.module('adminApp', ['ngRoute','oc.lazyLoad','ngCookies','requestModule','flash','ngAnimate','angularUtils.directives.dirPagination','vAccordion','ui.bootstrap']);
 
 adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
