@@ -300,10 +300,11 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	}
 
 	@Override
-	public Integer checkReportNumberExist(String reportNumber) {
+	public Integer checkReportNumberExist(String reportNumber,String crashDate,Integer countyId) {
 		// TODO Auto-generated method stub
-		CrashReports crashReports =(CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.eq("reportNumber", reportNumber)).uniqueResult();
-		if(crashReports!=null){
+		Criterion reportNumberAndDateCriterion=Restrictions.and(Restrictions.eq("reportNumber", reportNumber), Restrictions.eq("crashDate", CRMConstants.convertYearFormat(crashDate)));
+		List<CrashReports> crashReports = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.and(reportNumberAndDateCriterion, Restrictions.eq("county.countyId", countyId))).list();
+		if(crashReports.size()>0){
 			return 1;
 		}else{
 			return 0;
@@ -312,10 +313,12 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	}
 
 	@Override
-	public Integer checkReportNumberExist(String reportId, String reportNumber) {
+	public Integer checkReportNumberExist(String reportId, String reportNumber,String crashDate,Integer countyId) {
 		// TODO Auto-generated method stub
-		CrashReports crashReports =(CrashReports) this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.and(Restrictions.ne("reportId", reportId),Restrictions.eq("reportNumber", reportNumber))).uniqueResult();
-		if(crashReports!=null){
+		Criterion reportNumberReportIdCriterion=Restrictions.and(Restrictions.ne("reportId", reportId),Restrictions.eq("reportNumber", reportNumber));
+		Criterion crashDateAndCountyCriterion=Restrictions.and(Restrictions.eq("county.countyId", countyId), Restrictions.eq("crashDate", CRMConstants.convertYearFormat(crashDate)));
+		List<CrashReports> crashReports = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).add(Restrictions.and(reportNumberReportIdCriterion,crashDateAndCountyCriterion)).list();
+		if(crashReports.size()>0){
 			return 1;
 		}else{
 			return 0;

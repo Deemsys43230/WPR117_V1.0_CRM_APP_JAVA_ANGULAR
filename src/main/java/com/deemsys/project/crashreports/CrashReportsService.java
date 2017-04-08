@@ -330,17 +330,43 @@ public class CrashReportsService {
 	}
 	
 	//Check Report Number Exist
-	public Integer checkReportNumberIsExist(String reportId,String reportNumber)
+	public Integer checkReportNumberIsExist(String reportId,String reportNumber,String crashDate, Integer countyId)
 	{
 		Integer isExist=null;
-		if(reportId!=null){
-			isExist = crashReportsDAO.checkReportNumberExist(reportId, reportNumber);
+		if(reportId!=null&&!reportId.equals("")){
+			isExist = crashReportsDAO.checkReportNumberExist(reportId, reportNumber, crashDate, countyId);
 		}else{
-			isExist = crashReportsDAO.checkReportNumberExist(reportNumber);
+			isExist = crashReportsDAO.checkReportNumberExist(reportNumber, crashDate, countyId);
 		}
 		
 		
 		return isExist;
+	}
+	
+	// Check Report Number Exist Multiple
+	public CrashReportsFormList checkReportNumberIsExistMultiple(CrashReportsFormList crashReportsFormList)
+	{
+		CrashReportsFormList crashReportsFormList2 = new CrashReportsFormList();
+		List<CrashReportsForm> crashReportsForms = new ArrayList<CrashReportsForm>();
+		for (CrashReportsForm crashReportsForm : crashReportsFormList.getCrashReportsForms()) {
+			Integer isExist = crashReportsDAO.checkReportNumberExist(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId());;
+			if(isExist==1){
+				crashReportsForm.setReportNumberExist(true);
+			}else{
+				crashReportsForm.setReportNumberExist(false);
+			}
+			
+			if(crashReportsFormList.getPageType()==1){
+				crashReportsForm.setFromPage(0);
+				crashReportsForm.setToPage(0);
+			}
+			crashReportsForms.add(crashReportsForm);
+		}
+		
+		crashReportsFormList2.setCrashReportsForms(crashReportsForms);
+		crashReportsFormList2.setPageType(crashReportsFormList.getPageType());
+		
+		return crashReportsFormList2;
 	}
 	
 	//Store Multi-Report File Temporary

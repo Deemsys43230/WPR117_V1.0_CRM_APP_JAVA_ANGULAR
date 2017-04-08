@@ -6,7 +6,7 @@ var adminApp = angular.module('adminApp',['flash','requestModule','ReportSearchM
 
 
 //Add Reports Controller
-adminApp.controller('AddReportsController',['$rootScope','$scope','$http','requestHandler','$location','Flash','$window',function($rootScope,$scope,$http,requestHandler,$location,Flash,$window){
+adminApp.controller('AddReportsController',['$rootScope','$scope','$http','requestHandler','$location','Flash','$window','$q',function($rootScope,$scope,$http,requestHandler,$location,Flash,$window,$q){
 	
 	// For Check Report Number Already Exist
 	$scope.reportId="";
@@ -105,13 +105,50 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		if(formsTrueCount==2){
 			$scope.isError=false;
 			$scope.errorMsg="";
-			$scope.saveCrashReport();
+			$scope.checkReportNumberExist();
 		}else{
 			// Some Forms Having Validation Error
 			$scope.isError=true;
 			$scope.errorMsg="Some of the fields having validation error";
 		}
 		
+	};
+	
+	$scope.emptyPageValues=function(){
+		$.each($scope.reports,function(key,value){
+			value.fromPage="";
+			value.toPage="";
+		});
+	};
+	
+	// Check Reportnumber Exist
+	$scope.checkReportNumberExist=function(){
+		var isSuccessCount=0;
+		$scope.crashReportsList={};
+		$scope.crashReportsList.pageType=parseInt($scope.pageType);
+		$scope.crashReportsList.crashReportsForms=$scope.reports;
+		requestHandler.postRequest("User/checkReportNumberExistMultipleReport.json",$scope.crashReportsList).then(function(response){
+			$scope.reports=response.data.crashReportsList.crashReportsForms;
+			$scope.pageType=response.data.crashReportsList.pageType;
+			$.each($scope.reports,function(key,value){
+				if(value.toPage!=null){
+					value.toPage=value.toPage.toString();
+				}
+				value.countyId=value.countyId.toString();
+				value.crashSeverity=value.crashSeverity.toString();
+				if(!value.reportNumberExist){
+					isSuccessCount++;
+				}else{
+					$scope.isError=true;
+					$scope.errorMsg="Some Reports Already Exist";
+				}
+			});
+			
+			// Call Submit
+			if(isSuccessCount==$scope.reports.length){
+				$scope.saveCrashReport();
+			}
+		});
 	};
 	
 	// Save Crash Reports
@@ -237,11 +274,25 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	
 	// Report Save Confirmation Modal
 	$scope.saveCrashReportModal=function(){
-		if($scope.reportType==2){
-			$("#reportSaveConfirmationModal").modal('show');
-		}else{
-			$scope.saveCrashReport();
-		}
+		$scope.reportSave=true;
+		$scope.buttonText="Submitting....";
+		requestHandler.getRequest("User/checkReportNumberExist.json?reportId="+$scope.report.reportId+"&crashDate="+$scope.report.crashDate+"&reportNumber="+$scope.report.reportNumber+"&countyId="+$scope.report.countyId,"").then(function(response){
+			$scope.reportSave=false;
+			$scope.buttonText="Submit";
+			if(response.data.isExist==1){
+				$scope.isError=true;
+				$scope.errorMsg="Report Already Exist";
+			}else{
+				$scope.isError=false;
+				$scope.errorMsg="";
+				if($scope.reportType==2){
+					$("#reportSaveConfirmationModal").modal('show');
+				}else{
+					$scope.saveCrashReport();
+				}
+			}
+		});
+		
 	};
 	
 	// Save Updated Report

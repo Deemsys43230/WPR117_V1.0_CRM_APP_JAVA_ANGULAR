@@ -216,6 +216,7 @@
 			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
 			        <a href="" class="btn btn-reject" ng-show="reportType==2" ng-disabled="reportSave" ng-click="rejectReportModal()">Reject</a>
 			        <a href="#/reports" class="btn btn-default">Cancel</a>
+			        &nbsp;&nbsp;&nbsp;<span class="error-container" ng-show="isError">{{errorMsg}}</span>
 			      </div>
 			    </div>
 			  </form>

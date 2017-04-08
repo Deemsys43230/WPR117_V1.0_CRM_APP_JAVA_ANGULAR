@@ -134,12 +134,20 @@ public class CrashReportsController {
  
     // Check Report Number Already Exist
     @RequestMapping(value="/User/checkReportNumberExist",method=RequestMethod.GET)
-	public String checkReportNumberAlreadyExist(@RequestParam("reportNumber") String reportNumber,@RequestParam("reportId") String reportId,ModelMap model)
+	public String checkReportNumberAlreadyExist(@RequestParam("reportNumber") String reportNumber,@RequestParam("reportId") String reportId,@RequestParam("crashDate") String crashDate,@RequestParam("countyId") Integer countyId,ModelMap model)
 	{
-    	model.addAttribute("isExist",crashReportsService.checkReportNumberIsExist(reportId,reportNumber));
+    	model.addAttribute("isExist",crashReportsService.checkReportNumberIsExist(reportId,reportNumber,crashDate,countyId));
     	model.addAttribute("requestSuccess",true);
 		return "/returnPage";
 	}
+    
+    @RequestMapping(value="/User/checkReportNumberExistMultipleReport",method=RequestMethod.POST)
+   	public String checkReportNumberAlreadyExistMultiple(@RequestBody CrashReportsFormList crashReportsFormList,ModelMap model)
+   	{
+       	model.addAttribute("crashReportsList",crashReportsService.checkReportNumberIsExistMultiple(crashReportsFormList));
+       	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
     
     @RequestMapping(value="/User/submitCrashReports",method=RequestMethod.POST)
    	public String uploadFileWithContent(@RequestPart("crashReport") MultipartFile crashReport, @RequestPart("crashReportFormList") CrashReportsFormList crashReportsFormList,ModelMap model) throws IOException, DocumentException

@@ -30,7 +30,7 @@
 						<div class="col-sm-4">
 							<input type="radio" ng-model="pageType" value="1" /> Single
 							&nbsp;&nbsp; <input type="radio" ng-model="pageType"
-								value="2" /> Multiple
+								value="2" ng-change="emptyPageValues();"/> Multiple
 						</div>
 					</div>
 			      </form>
@@ -41,7 +41,7 @@
 
         <v-pane id="{{ ::report.id }}" ng-repeat="report in reports track by $index" expanded="report.isExpanded">
           <v-pane-header id="{{ ::report.id }}-header" aria-controls="{{ ::report.id }}-header">
-            <h5>{{ ::report.header }} {{$index+1}} <span class="btn btn-xs btn-danger pull-right" style="margin-right: 25px;!important" ng-click="removeReport($index)" ng-show="reports.length>1"><i class="fa fa-trash"></i> Remove</span></h5>
+            <h5>{{ ::report.header }} {{$index+1}}  <span class="btn btn-xs btn-danger pull-right" style="margin-right: 25px;!important" ng-click="removeReport($index)" ng-show="reports.length>1"><i class="fa fa-trash"></i> Remove</span><span class="pull-right" style="color: red;margin-right: 25px;!important" ng-show="report.reportNumberExist">Report Already Exist</span></h5>
           </v-pane-header>
 
           <v-pane-content id="{{ ::report.id }}-content" aria-labelledby="{{ ::report.id }}-content">

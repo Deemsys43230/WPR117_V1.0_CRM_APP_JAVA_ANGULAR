@@ -37,6 +37,7 @@ public class CrashReportsForm {
 	private boolean isChecker;
 	private String verifyAccountId;
 	private Integer verifiedStatus;
+	private boolean reportNumberExist;
 	private List<OccupantsForm> occupantsForms;
 	public String getId() {
 		return id;
@@ -163,6 +164,12 @@ public class CrashReportsForm {
 	}
 	public void setVerifiedStatus(Integer verifiedStatus) {
 		this.verifiedStatus = verifiedStatus;
+	}
+	public boolean getReportNumberExist() {
+		return reportNumberExist;
+	}
+	public void setReportNumberExist(boolean reportNumberExist) {
+		this.reportNumberExist = reportNumberExist;
 	}
 	public CrashReportsForm() {
 		super();
