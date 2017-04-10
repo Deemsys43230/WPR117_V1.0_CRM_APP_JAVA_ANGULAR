@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.deemsys.project.AWS.AWSFileUpload;
 import com.deemsys.project.common.CRMProperties;
+import com.deemsys.project.login.LoginService;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -40,6 +41,9 @@ public class CrashReportsController {
 	@Autowired
 	CRMProperties crmProperties;
 
+	@Autowired
+	LoginService loginService;
+	
     @RequestMapping(value="/getCrashReports",method=RequestMethod.GET)
 	public String getCrashReports(@RequestParam("id") String id,ModelMap model)
 	{
@@ -239,6 +243,16 @@ public class CrashReportsController {
    	public String rejectReportFromVerification(@RequestParam("reportId") String reportId,@RequestParam("rejectNotes") String rejectNotes,ModelMap model)
    	{
     	crashReportsService.rejectFromVerification(reportId,rejectNotes);
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
+    
+    // Get Count of Pending Reports
+    @RequestMapping(value="/User/getPendingReportsCount",method=RequestMethod.GET)
+   	public String getCountOfPendingCrashReportss(ModelMap model)
+   	{
+    	CrashReportSearchForm crashReportSearchForm = new CrashReportSearchForm(loginService.getCurrentAccountId(), "", "", "", "", "", "", "", 1, 1, 10, 2, null);
+    	model.addAttribute("pendingReportsCount",crashReportsService.getCountOfPendingCrashReports(crashReportSearchForm));
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}

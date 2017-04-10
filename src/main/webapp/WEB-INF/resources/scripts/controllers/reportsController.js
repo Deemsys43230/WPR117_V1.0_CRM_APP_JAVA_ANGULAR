@@ -489,6 +489,13 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 		}
     };
 	
+    // Get Count of Pending Reports
+    $scope.getCountOfPendingReports=function(){
+    	requestHandler.getRequest("User/getPendingReportsCount.json","").then(function(response){
+    		$scope.pendingReportsCount=response.data.pendingReportsCount;
+    	});
+    };
+    
     $scope.init=function(){
     	$scope.crashReportsResultListOriginal=[];
     	$scope.isDisableSendButton=true;
@@ -524,6 +531,8 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 			$scope.searchReportsList($scope.crashReportSearchForm);
 		}
 		
+		// get Count Of Pending Reports
+		$scope.getCountOfPendingReports();
 	};
 	
 	$scope.init();

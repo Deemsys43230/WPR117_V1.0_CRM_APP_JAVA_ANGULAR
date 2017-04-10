@@ -67,8 +67,8 @@
 		</div> -->
 		<div class="col-md-6 pull-right">
 		<div class="col-md-7 text-right"><a class="btn btn-warning btn-sm" ng-click="sendToVerificationModal(0,'');" ng-disabled="isDisableSendButton"><i class="fa fa-paper-plane fa-fw"></i> Send To Verification</a></div>
-		<div class="col-md-2 text-right">Status</div>
-		<div class="col-md-3 text-right">
+		<div class="col-md-2 text-right">Status:</div>
+		<div class="col-md-3 text-right" ng-show="crashReportSearchForm.reportType==1">
 		<select class="form-control input-sm" ng-change="secondarySearch();" name="verifiedStatus" ng-model="crashReportSearchForm.verifiedStatus">
 				          	<option value="4">All</option>
 				          	<option value="0">New</option>
@@ -77,11 +77,14 @@
 				          	<option value="3">Rejected</option>
 				     	</select>
 		</div>
+		<div class="col-md-3" ng-show="crashReportSearchForm.reportType==2">
+			<span class="label label-warning">Pending</span>
+		</div>
 		</div>
 		</div>
 	 <ul class="nav nav-tabs">
 	  <li ng-class="{'active':crashReportSearchForm.reportType==1}"><a data-toggle="tab" href="" ng-click="crashReportSearchForm.reportType=1;secondarySearch();">Uploaded <i class="fa fa-file fa-fw"></i></a></li>
-	  <li ng-class="{'active':crashReportSearchForm.reportType==2}"><a data-toggle="tab" href="" ng-click="crashReportSearchForm.reportType=2;secondarySearch();">Pending <i class="fa fa-file fa-fw"></i></a></li>
+	  <li ng-class="{'active':crashReportSearchForm.reportType==2}"><a data-toggle="tab" href="" ng-click="crashReportSearchForm.reportType=2;secondarySearch();">Pending <i class="fa fa-file fa-fw"></i> <span class="badge badge-warning">{{pendingReportsCount}}</span></a></li>
 	</ul>
 
 		<table class="table table-bordered" style="margin-top:15px;" ng-cloak>
@@ -100,7 +103,7 @@
 		            	<td width="16%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
 		            	<td width="12%"><label>Added Date:</label><br/>{{resultData.addedDate}}</td>
 		            	<td width="16%"><label>Last Verification:</label><br/>{{resultData.lastVerifiedDateTime}}</td>
-		            	<td width="12%"><label>Status:</label><br/><span class="label-primary" ng-show="resultData.verifiedStatus==0">New</span><span class="label-warning" ng-show="resultData.verifiedStatus==1">Pending</span><span class="label-success" ng-show="resultData.verifiedStatus==2">Verified</span><span class="label-danger" ng-show="resultData.verifiedStatus==3">Rejected</span></td>
+		            	<td width="12%"><label>Status:</label><br/><span class="label label-primary" ng-show="resultData.verifiedStatus==0">New</span><span class="label label-warning" ng-show="resultData.verifiedStatus==1">Pending</span><span class="label label-success" ng-show="resultData.verifiedStatus==2">Verified</span><span class="label label-danger" ng-show="resultData.verifiedStatus==3">Rejected</span></td>
 		            	<td width="12%"><label>No. of Occ.:</label><br/>{{resultData.noOfOccupants}}</td>
 		            	<td width="18%">
 		            	<span ng-show="crashReportSearchForm.reportType==1"><span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1"><a href="#/edit-report/{{resultData.reportId}}/{{crashReportSearchForm.reportType}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp; <a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs hint--top" data-hint="Delete"><i class="fa fa-trash fa-fw"></i></a>&nbsp;|&nbsp;</span> <span ng-show="resultData.verifiedStatus!=2 && resultData.verifiedStatus!=1"><a href="" class="btn btn-success btn-xs hint--top" data-hint="Send To Verification" ng-click="sendToVerificationModal(1,resultData.reportId);"><i class="fa fa-paper-plane fa-fw"></i></a>&nbsp;|&nbsp;</span></span>

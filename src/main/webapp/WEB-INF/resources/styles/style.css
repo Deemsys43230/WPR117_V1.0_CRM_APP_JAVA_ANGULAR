@@ -2966,6 +2966,17 @@ h3{
     border-radius: 3px;
 }
 
+/* Badges */
+.badge-warning{
+    font-weight: bold;
+    padding: 3px 7px!important;
+    border: 1px solid #f0ad4e;
+    color: #fff;
+    font-size: 11px;
+    background-color: #f0ad4e;
+}
+
+
 /* Menu Radio Button */
 .menu-radio input[type="radio"] {
     opacity:0.011;

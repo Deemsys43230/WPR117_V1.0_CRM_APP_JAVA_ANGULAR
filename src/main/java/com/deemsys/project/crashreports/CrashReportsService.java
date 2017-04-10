@@ -460,4 +460,11 @@ public class CrashReportsService {
 		VerificationLogForm verificationLogForm = new VerificationLogForm(null, loginService.getCurrentAccountId(), "", reportId, rejectNotes, CRMConstants.convertUSAFormatWithTime(CRMConstants.getCurrentDateTime()), Integer.parseInt(crmProperties.getProperty("rejectedFromVerification")), 1);
 		verificationLogService.saveVerificationLog(verificationLogForm);
 	}
+
+	public Long getCountOfPendingCrashReports(
+			CrashReportSearchForm crashReportSearchForm) {
+		// TODO Auto-generated method stub
+		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReports(crashReportSearchForm);
+		return crashReportsSearchResultSet.getTotalRecords();
+	}
 }

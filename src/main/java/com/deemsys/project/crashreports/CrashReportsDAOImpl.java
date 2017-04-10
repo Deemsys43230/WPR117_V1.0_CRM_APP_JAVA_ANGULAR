@@ -218,10 +218,17 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}
 		 
 		// Verified Status 4 - all
-		if(crashReportSearchForm.getVerifiedStatus()!=null&&crashReportSearchForm.getVerifiedStatus()!=4){
-			Criterion verifiedStatusCriterion = Restrictions.eq("c1.verifiedStatus", crashReportSearchForm.getVerifiedStatus());
-			criteria.add(verifiedStatusCriterion);
+		if(crashReportSearchForm.getReportType()==1){
+			if(crashReportSearchForm.getVerifiedStatus()!=null&&crashReportSearchForm.getVerifiedStatus()!=4){
+				Criterion verifiedStatusCriterion = Restrictions.eq("c1.verifiedStatus", crashReportSearchForm.getVerifiedStatus());
+				criteria.add(verifiedStatusCriterion);
+			}
+		}else if(crashReportSearchForm.getReportType()==2){
+		    // 1 - Pending Reports
+			Criterion verifiedStatusCriterion = Restrictions.eq("c1.verifiedStatus", 1);
+		    criteria.add(verifiedStatusCriterion);
 		}
+		
 		
 		// Latest Verified Log Time
 		criteria.createAlias("c1.verificationLogs", "VL",Criteria.LEFT_JOIN);
