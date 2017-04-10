@@ -251,7 +251,9 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		requestHandler.getRequest("getCrashReports.json?id="+$scope.reportId,"").then(function(response){
 			$scope.report=response.data.crashReportsForm;
 			$scope.report.countyId=$scope.report.countyId.toString();
-			$scope.report.crashSeverity=$scope.report.crashSeverity.toString();
+			if($scope.report.crashSeverity!=null){
+				$scope.report.crashSeverity=$scope.report.crashSeverity.toString();	
+			}
 			$scope.occupantListLength=$scope.report.occupantsForms.length;
 		});
 	};

@@ -219,7 +219,7 @@ public class CrashReportsService {
 			
 			// Insert Runner Report In CRO only On Save
 			if(Integer.parseInt(crmProperties.getProperty("sentToCRO"))==1&&crashReportsForm.getIsChecker()){
-				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), crashReportsForm.getFileName(), patientForms);
+				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), crashReportsForm.getFileName(), Integer.parseInt(crmProperties.getProperty("reportFrom")), patientForms);
 				apiRequestService.saveRunnerReportInCRO(crashReportForm);
 			}
 						
