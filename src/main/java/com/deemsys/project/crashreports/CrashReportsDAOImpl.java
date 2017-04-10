@@ -43,7 +43,6 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public void merge(CrashReports crashReports) {
 		// TODO Auto-generated method stub
-		crashReports.setFileName(crashReports.getReportId()+".pdf");
 		this.sessionFactory.getCurrentSession().merge(crashReports);
 	}	
 	
@@ -154,6 +153,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		// TODO Auto-generated method stub
 		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class,"c1");
 		criteria.createAlias("c1.occupantses", "o1");
+		criteria.createAlias("c1.county", "co1");
 		
 		if(crashReportSearchForm.getReportNumber()!=null && !crashReportSearchForm.getReportNumber().equals("")){
 			if(crashReportSearchForm.getSearchType()==0){
@@ -222,6 +222,10 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		
 		projectionList.add(Projections.property("o1.id.firstName"),"firstName");
 		projectionList.add(Projections.property("o1.id.lastName"),"lastName");
+		
+		// County Details
+		projectionList.add(Projections.property("co1.countyId"),"countyId");
+		projectionList.add(Projections.property("co1.name"),"countyName");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		

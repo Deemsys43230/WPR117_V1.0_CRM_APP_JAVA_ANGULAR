@@ -11,6 +11,8 @@ public class CrashReportSearchList {
 	private String reportNumber;
 	private String crashDate;
 	private String location;
+	private Integer countyId;
+	private String countyName;
 	private String addedDate;
 	private String addedDateTime;
 	private String firstName;
@@ -41,6 +43,18 @@ public class CrashReportSearchList {
 	}
 	public void setCrashDate(Date crashDate) {
 		this.crashDate = CRMConstants.convertMonthFormat(crashDate);
+	}
+	public Integer getCountyId() {
+		return countyId;
+	}
+	public void setCountyId(Integer countyId) {
+		this.countyId = countyId;
+	}
+	public String getCountyName() {
+		return countyName;
+	}
+	public void setCountyName(String countyName) {
+		this.countyName = countyName;
 	}
 	public String getAddedDate() {
 		return addedDate;

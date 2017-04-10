@@ -22,11 +22,13 @@ public class CrashReportsForm {
 	private String crashDate;
 	private MultipartFile crashReport;
 	private String location;
+	private Integer countyId;
 	private String fileName;
 	private String fileAccessPath;
 	private String addedDate;
 	private String addedDateTime;
 	private Integer status;
+	private boolean isEdit;
 	private List<OccupantsForm> occupantsForms;
 	
 	public String getReportId() {
@@ -69,6 +71,14 @@ public class CrashReportsForm {
 		this.location = location;
 	}
 
+	public Integer getCountyId() {
+		return countyId;
+	}
+
+	public void setCountyId(Integer countyId) {
+		this.countyId = countyId;
+	}
+
 	public String getAddedDate() {
 		return addedDate;
 	}
@@ -91,6 +101,14 @@ public class CrashReportsForm {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public boolean isEdit() {
+		return isEdit;
+	}
+
+	public void setEdit(boolean isEdit) {
+		this.isEdit = isEdit;
 	}
 
 	public List<OccupantsForm> getOccupantsForms() {
@@ -118,13 +136,14 @@ public class CrashReportsForm {
 	}
 
 	public CrashReportsForm(String reportId, String reportNumber,
-			String crashDate, String location, String fileName, String fileAccessPath, String addedDate,
+			String crashDate, Integer countyId, String location, String fileName, String fileAccessPath, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
+		this.countyId = countyId;
 		this.location = location;
 		this.fileName = fileName;
 		this.fileAccessPath = fileAccessPath;

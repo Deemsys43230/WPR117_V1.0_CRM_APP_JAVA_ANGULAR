@@ -28,6 +28,16 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 			"occupantsForms":[{"firstName":"","lastName":"","status":1}]
 	};
 	
+	// Get County List
+	$scope.getCountyList=function(){
+		requestHandler.getRequest("User/getAllCountys.json","").then(function(response){
+				$scope.countyList=response.data.countyForms;
+		});
+	};
+	
+	// Call get County List
+	$scope.getCountyList();
+	
 	//Add Occupant
 	$scope.addOccupant=function(){
 		$scope.newOccupant={"firstName":"","lastName":"","status":1};
@@ -44,6 +54,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	
 	// Save Crash Reports
 	$scope.saveCrashReport=function(){
+		$scope.report.isEdit=false;
 		$scope.reportSave=true;
 		$scope.buttonText="Submiting....";
 		requestHandler.postFileUpdate("User/uploadCrashReports.json",$scope.crashReportFile,"crashReport",$scope.report.reportNumber,"reportNumber","","reportId").then(function(response){
@@ -67,6 +78,16 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	// Set Max Date
 	$('#crashDateAdd').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 	
+	// Get County List
+	$scope.getCountyList=function(){
+		requestHandler.getRequest("User/getAllCountys.json","").then(function(response){
+				$scope.countyList=response.data.countyForms;
+		});
+	};
+	
+	// Call get County List
+	$scope.getCountyList();
+	
 	$scope.isEdit=true;
 	$scope.showCancel=true;
 	$scope.title="Edit Report";
@@ -76,6 +97,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	$scope.getReport=function(){
 		requestHandler.getRequest("getCrashReports.json?id="+$scope.reportId,"").then(function(response){
 			$scope.report=response.data.crashReportsForm;
+			$scope.report.countyId=$scope.report.countyId.toString();
 			$scope.occupantListLength=$scope.report.occupantsForms.length;
 		});
 	};
@@ -97,6 +119,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	};
 	
 	$scope.saveCrashReport=function(){
+		$scope.report.isEdit=true;
 		$scope.reportSave=true;
 		$scope.buttonText="Submiting....";
 		if($scope.isEdit){
