@@ -461,10 +461,8 @@ public class CrashReportsService {
 		verificationLogService.saveVerificationLog(verificationLogForm);
 	}
 
-	public Long getCountOfPendingCrashReports(
-			CrashReportSearchForm crashReportSearchForm) {
+	public Long getCountOfPendingCrashReports() {
 		// TODO Auto-generated method stub
-		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReports(crashReportSearchForm);
-		return crashReportsSearchResultSet.getTotalRecords();
+		return crashReportsDAO.getReportsCountBasedOnVerifiedStatus(loginService.getCurrentAccountId(), Integer.parseInt(crmProperties.getProperty("verificationPending")));
 	}
 }

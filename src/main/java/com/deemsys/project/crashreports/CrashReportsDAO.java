@@ -15,4 +15,5 @@ public interface CrashReportsDAO extends IGenericDAO<CrashReports>{
 	public void deleteCrashReports(CrashReports crashReports);
 	public Integer checkReportNumberExist(String reportNumber,String crashDate,Integer countyId);
 	public Integer checkReportNumberExist(String reportId,String reportNumber,String crashDate,Integer countyId);
+	public Long getReportsCountBasedOnVerifiedStatus(String verifyAccountId,Integer verifiedStatus);
 }

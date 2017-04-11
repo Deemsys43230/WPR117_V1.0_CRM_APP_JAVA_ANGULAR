@@ -251,8 +251,7 @@ public class CrashReportsController {
     @RequestMapping(value="/User/getPendingReportsCount",method=RequestMethod.GET)
    	public String getCountOfPendingCrashReportss(ModelMap model)
    	{
-    	CrashReportSearchForm crashReportSearchForm = new CrashReportSearchForm(loginService.getCurrentAccountId(), "", "", "", "", "", "", "", 1, 1, 10, 2, null);
-    	model.addAttribute("pendingReportsCount",crashReportsService.getCountOfPendingCrashReports(crashReportSearchForm));
+    	model.addAttribute("pendingReportsCount",crashReportsService.getCountOfPendingCrashReports());
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}

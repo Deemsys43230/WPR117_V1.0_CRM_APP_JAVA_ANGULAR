@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.validator.Var;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -330,6 +331,15 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}else{
 			return 0;
 		}
+	}
+
+	@Override
+	public Long getReportsCountBasedOnVerifiedStatus(String verifyAccountId,Integer verifiedStatus) {
+		// TODO Auto-generated method stub
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class);
+		criteria.add(Restrictions.and(Restrictions.eq("accountsByVerifyAccountId.accountId", verifyAccountId), Restrictions.eq("verifiedStatus", verifiedStatus)));
+		criteria.setProjection(Projections.count("reportId"));
+		return (Long) criteria.uniqueResult();
 	}
 
 	

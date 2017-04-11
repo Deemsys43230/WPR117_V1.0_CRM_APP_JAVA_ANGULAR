@@ -432,6 +432,8 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 	};
     
 	$scope.searchReportsList=function(searchObj){
+		$scope.isDisableSendButton=true;
+		$scope.isCheckedAllReports=false;
 		var defer=$q.defer();
 		requestHandler.postRequest("User/searchCrashReports.json",searchObj).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
@@ -573,7 +575,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 		}
 	};	
 	
-	// 
+	// Check Individual Checkbox for Enable or Disable Button
 	$scope.isCheckedIndividual=function(){
 		var isSelected=false;
 		$.each($scope.crashReportsResultList.crashReportsResult, function(index,value) {
@@ -588,6 +590,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','$q','
 			$scope.isDisableSendButton=false;
 		}else{
 			$scope.isDisableSendButton=true;
+			$scope.isCheckedAllReports=false;
 		}
 	};
 	
