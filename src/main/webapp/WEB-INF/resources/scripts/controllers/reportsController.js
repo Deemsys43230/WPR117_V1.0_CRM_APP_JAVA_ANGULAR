@@ -361,21 +361,23 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		
 	    pdffile=document.getElementById("crashReportFile").files[0];
 		var blob = new Blob([pdffile], {type: 'application/pdf'});
-		
 		$.each(openedWindows,function(key,value){
 			value.close();
 		});
 		
 		openedWindows=[];
-		if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-		    window.navigator.msSaveOrOpenBlob(blob);
+		if(pdffile!=undefined){
+			if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+			    window.navigator.msSaveOrOpenBlob(blob);
+			}
+			else {
+				window.URL = window.URL || window.webkitURL;
+				pdffile_url=window.URL.createObjectURL(blob);
+			    var childWindow = window.open(pdffile_url,"_blank", "scrollbars=1,resizable=1,height=700,width=1000");
+			    openedWindows.push(childWindow);
+			}	
 		}
-		else {
-			window.URL = window.URL || window.webkitURL;
-			pdffile_url=window.URL.createObjectURL(blob);
-		    var childWindow = window.open(pdffile_url,"_blank", "scrollbars=1,resizable=1,height=700,width=1000");
-		    openedWindows.push(childWindow);
-		}	 
+		 
 	};
 	
 	

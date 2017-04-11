@@ -90,9 +90,10 @@
 			      <div class="col-sm-4">          
 			        <select class="form-control" ng-model="report.crashSeverity" name="crashSeverity">
 			        <option value="0">-- Select --</option>
-			        <option value="1">1</option>
-			        <option value="2">2</option>
-			        <option value="3">3</option>
+			        <option value="1">1 - FATAL</option>
+			        <option value="2">2 - INJURY</option>
+			        <option value="3">3 - PDO</option>
+			        <option value="4">X - NOT AVAILABLE</option>
 			        </select>
 			        <div class="error-container"></div>
 			      </div>
@@ -201,7 +202,7 @@
 			     	</div>
 			      </div>
 			      <div class="col-sm-4"></div>
-			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($parent.$index,$index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
 			      </div>
 			    <!--   <div class="col-sm-12">
 			      <div class="col-sm-10"></div>
@@ -216,6 +217,7 @@
 			        <button type="submit" class="btn btn-send" ng-click="submitted=true" ng-disabled="reportSave">{{buttonText}}</button>
 			        <a href="" class="btn btn-reject" ng-show="reportType==2" ng-disabled="reportSave" ng-click="rejectReportModal()">Reject</a>
 			        <a href="#/reports" class="btn btn-default">Cancel</a>
+			        &nbsp;&nbsp;&nbsp;<span class="error-container" ng-show="addCrashReportForm.$invalid" ng-cloak>Some of the fields having validation error</span>
 			        &nbsp;&nbsp;&nbsp;<span class="error-container" ng-show="isError">{{errorMsg}}</span>
 			      </div>
 			    </div>
