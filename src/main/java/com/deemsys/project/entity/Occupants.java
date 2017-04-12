@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 10 Apr, 2017 12:35:32 PM by Hibernate Tools 3.4.0.CR1
+// Generated 12 Apr, 2017 10:12:48 AM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -35,6 +35,8 @@ public class Occupants implements java.io.Serializable {
 			@AttributeOverride(name = "reportId", column = @Column(name = "report_id", nullable = false, length = 32)),
 			@AttributeOverride(name = "firstName", column = @Column(name = "first_name", length = 50)),
 			@AttributeOverride(name = "lastName", column = @Column(name = "last_name", length = 50)),
+			@AttributeOverride(name = "injuries", column = @Column(name = "injuries", length = 4)),
+			@AttributeOverride(name = "seatingPosition", column = @Column(name = "seating_position", length = 4)),
 			@AttributeOverride(name = "sequenceNo", column = @Column(name = "sequence_no")),
 			@AttributeOverride(name = "status", column = @Column(name = "status")) })
 	public OccupantsId getId() {

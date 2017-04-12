@@ -25,7 +25,9 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 			"reportNumber":"",
 			"location":"",
 			"fileName":"",
-			"occupantsForms":[{"firstName":"","lastName":"","status":1}]
+			"crashSeverity":"",
+			"countyId":"",
+			"occupantsForms":[{"firstName":"","lastName":"","injuries":"","seatingPosition":"","status":1}]
 	};
 	
 	// Get County List
@@ -40,7 +42,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	
 	//Add Occupant
 	$scope.addOccupant=function(){
-		$scope.newOccupant={"firstName":"","lastName":"","status":1};
+		$scope.newOccupant={"firstName":"","lastName":"","injuries":"","seatingPosition":"","status":1};
 		$scope.report.occupantsForms.push($scope.newOccupant);
 		console.log($scope.report.occupantsForms);
 	};
@@ -98,6 +100,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		requestHandler.getRequest("getCrashReports.json?id="+$scope.reportId,"").then(function(response){
 			$scope.report=response.data.crashReportsForm;
 			$scope.report.countyId=$scope.report.countyId.toString();
+			$scope.report.crashSeverity=$scope.report.crashSeverity.toString();
 			$scope.occupantListLength=$scope.report.occupantsForms.length;
 		});
 	};
@@ -106,7 +109,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	
 	//Add Occupant
 	$scope.addOccupant=function(){
-		$scope.newOccupant={"firstName":"","lastName":"","status":1};
+		$scope.newOccupant={"firstName":"","lastName":"","injuries":"","seatingPosition":"","status":1};
 		$scope.report.occupantsForms.push($scope.newOccupant);
 		console.log($scope.report.occupantsForms);
 	};

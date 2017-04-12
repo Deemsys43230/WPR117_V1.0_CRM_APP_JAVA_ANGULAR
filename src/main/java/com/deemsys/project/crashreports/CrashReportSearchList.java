@@ -13,10 +13,13 @@ public class CrashReportSearchList {
 	private String location;
 	private Integer countyId;
 	private String countyName;
+	private Integer crashSeverity;
 	private String addedDate;
 	private String addedDateTime;
 	private String firstName;
 	private String lastName;
+	private String injuries;
+	private String seatingPosition;
 	private Integer status;
 	private String fileName;
 	private Integer noOfOccupants;
@@ -56,6 +59,12 @@ public class CrashReportSearchList {
 	public void setCountyName(String countyName) {
 		this.countyName = countyName;
 	}
+	public Integer getCrashSeverity() {
+		return crashSeverity;
+	}
+	public void setCrashSeverity(Integer crashSeverity) {
+		this.crashSeverity = crashSeverity;
+	}
 	public String getAddedDate() {
 		return addedDate;
 	}
@@ -79,6 +88,18 @@ public class CrashReportSearchList {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public String getInjuries() {
+		return injuries;
+	}
+	public void setInjuries(String injuries) {
+		this.injuries = injuries;
+	}
+	public String getSeatingPosition() {
+		return seatingPosition;
+	}
+	public void setSeatingPosition(String seatingPosition) {
+		this.seatingPosition = seatingPosition;
 	}
 	public Integer getStatus() {
 		return status;

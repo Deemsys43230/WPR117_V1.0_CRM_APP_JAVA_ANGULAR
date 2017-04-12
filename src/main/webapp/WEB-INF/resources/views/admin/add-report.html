@@ -9,6 +9,29 @@
 	<hr/>
 	<div class="container" ng-cloak class="ng-cloak">
 			  <form class="form-horizontal" name="addCrashReportForm" novalidate ng-submit="addCrashReportForm.$valid && saveCrashReport()">
+			       <div class="form-group" ng-cloak>
+			      <label class="control-label col-md-2">Upload Report:</label>
+			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
+			        <input type="file" class="form-control" id="crashReportFile" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" style="height: auto !important;">
+			      	<div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.crashReportFile.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.crashReportFile.$error.required">Please
+								Select Report</span>
+								<span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&addCrashReportForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
+	                            <span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&!addCrashReportForm.crashReportFile.$error.validateFileType&&addCrashReportForm.crashReportFile.$error.validateFileSize">File should be less than 10 MB</span>
+						</div>
+					</div>	
+			      </div>
+			      <div class="col-md-2" ng-cloak ng-show="!showCancel"><a href="" ng-click="isEdit=true;showCancel=true;clearFile();"><i class="fa fa-close fa-fw"></i> Cancel</a></div>
+			      <div class="col-md-5" ng-cloak ng-show="isEdit" style="padding-bottom: 2px;">
+			      	<span ng-cloak>{{report.fileName}} &nbsp;&nbsp;</span>
+			      <div class="error-container">
+			      </div>
+			      </div>
+			      <div class="col-md-2" ng-cloak ng-show="isEdit">
+			      <a href="" ng-click="changeFile()"><i class="fa fa-pencil fa-fw"></i> Change</a>
+			      </div>
+				    </div>
 			    <div class="form-group">
 			     <label class="control-label col-sm-2">County:</label>
 			      <div class="col-sm-4">
@@ -62,33 +85,29 @@
 					</div>	
 			      </div>
 			    </div>
-			    <div class="form-group" ng-cloak>
-			      <label class="control-label col-md-2">Upload Report:</label>
-			      <div class="col-md-4" ng-cloak ng-show="!isEdit">          
-			        <input type="file" class="form-control" id="crashReportFile" file-model="crashReportFile" valid-file validate-file-type name="crashReportFile" ng-model="crashReportFile" ng-required="!isEdit" style="height: auto !important;">
-			      	<div class="error-container">
-						<div ng-show="submitted || addCrashReportForm.crashReportFile.$dirty">
-							<span ng-cloak ng-show="addCrashReportForm.crashReportFile.$error.required">Please
-								Select Report</span>
-								<span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&addCrashReportForm.crashReportFile.$error.validateFileType">Please Choose Vaild File</span>
-	                            <span ng-cloak ng-show="!addCrashReportForm.crashReportFile.$error.required&&!addCrashReportForm.crashReportFile.$error.validateFileType&&addCrashReportForm.crashReportFile.$error.validateFileSize">File should be less than 10 MB</span>
+			  <div class="form-group">
+			      <label class="control-label col-sm-2">Crash Severity:</label>
+			      <div class="col-sm-4">          
+			          <select class="form-control" ng-model="report.crashSeverity" name="crashSeverity" required>
+			        <option value="">-- Select --</option>
+			        <option value="1">1 - FATAL</option>
+			        <option value="2">2 - INJURY</option>
+			        <option value="3">3 - PDO</option>
+			        <option value="4">X - NOT AVAILABLE</option>
+			        </select>
+			      	 <div class="error-container">
+						<div ng-show="submitted || addCrashReportForm.crashSeverity.$dirty">
+							<span ng-cloak ng-show="addCrashReportForm.crashSeverity.$error.required">Please
+								Select Crash Severity</span>
 						</div>
 					</div>	
 			      </div>
-			      <div class="col-md-2" ng-cloak ng-show="!showCancel"><a href="" ng-click="isEdit=true;showCancel=true;clearFile();"><i class="fa fa-close fa-fw"></i> Cancel</a></div>
-			      <div class="col-md-5" ng-cloak ng-show="isEdit" style="padding-bottom: 2px;">
-			      	<span ng-cloak>{{report.fileName}} &nbsp;&nbsp;</span>
-			      <div class="error-container">
-			      </div>
-			      </div>
-			      <div class="col-md-2" ng-cloak ng-show="isEdit">
-			      <a href="" ng-click="changeFile()"><i class="fa fa-pencil fa-fw"></i> Change</a>
-			      </div>
-				    </div>
+			   </div>
 				    <h4><u>Occupants</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 			    <div class="form-group" data-slide-number="{{$index}}" ng-repeat="occupant in report.occupantsForms track by $index" ng-if="occupant.status==1">
 			      <ng-form name="occupantsForm">
-			      <label class="control-label col-sm-2">First Name:</label>
+			      <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">First Name:</label>
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.firstName" placeholder="Enter First Name" name="firstName" maxlength="50" required validate-name>
 			        <div class="error-container">
@@ -99,7 +118,7 @@
 						</div>
 					</div>	
 			      </div>
-			      <label class="control-label col-sm-2">Last Name:</label>
+			      <label class="control-label col-sm-3">Last Name:</label>
 			      <div class="col-sm-3">          
 			        <input type="text" class="form-control" ng-model="occupant.lastName" placeholder="Enter Last Name" name="lastName" maxlength="50" required validate-name>
 			        <div class="error-container">
@@ -110,7 +129,54 @@
 						</div>
 					</div>	
 			      </div>
-			      <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			      </div>
+			      <div class="col-sm-12 form-input-div">
+			      <label class="control-label col-sm-3">Injuries:</label>
+			      <div class="col-sm-3">          
+			         <select class="form-control" ng-model="occupant.injuries" name="injuries">
+			        <option value="">-- Select --</option>
+			        <option value="1">1 - NO INJURY / NONE REPORTED</option>
+			        <option value="2">2 - POSSIBLE</option>
+			        <option value="3">3 - NON-INCAPACITATING</option>
+			        <option value="4">4 - INCAPACITATING</option>
+			        <option value="5">5 - FATAL</option>
+			        <option value="6">X - NOT AVAILABLE</option>
+			        </select>
+			     	<div class="error-container">
+			     	</div>
+			      </div>
+			      <label class="control-label col-sm-3">Seating Position:</label>
+			      <div class="col-sm-3">          
+			       <select class="form-control" ng-model="occupant.seatingPosition" name="seatingPosition">
+			        <option value="">-- Select --</option>
+			        <option value="1">1 -  FRONT - LEFT SIDE (MOTORCYCLE DRIVER)</option>
+			        <option value="2">2 - FRONT - MIDDLE</option>
+			        <option value="3">3 - FRONT - RIGHT SIDE</option>
+			        <option value="4">4 - SECOND - LEFT SIDE (MOTORCYCLE PASSENGER)</option>
+			        <option value="5">5 - SECOND - MIDDLE</option>
+			        <option value="6">6 - SECOND - RIGHT SIDE</option>
+			        <option value="7">7 - THIRD - LEFT SIDE (MOTORCYCLE SIDE CAR)</option>
+			        <option value="8">8 - THIRD - MIDDLE</option>
+			        <option value="9">9 - THIRD - RIGHT SIDE</option>
+			        <option value="10">10 - SLEEPER SECTION OF CAB (TRUCK)</option>
+			        <option value="11">11 - PASSENGER IN OTHER ENCLOSED CARGO AREA <br/>(NON-TRAILING UNIT SUCH AS A BUS, PICK-UP WITH CAP)</option>
+			        <option value="12">12 - PASSENGER IN UNENCLOSED CARGO AREA</option>
+			        <option value="13">13 - TRAILING UNIT</option>
+			        <option value="14">14 - RIDING ON VEHICLE EXTERIOR (NON-TRAILING UNIT)</option>
+			        <option value="15">15 - NON-MOTORIST</option>
+			        <option value="16">16 - OTHER</option>
+			        <option value="17">99 - UNKNOWN</option>
+			        <option value="18">X - NOT AVAILABLE</option>
+			        </select>
+			     	<div class="error-container">
+			     	</div>
+			      </div>
+			      </div>
+			      <div class="col-md-12 form-input-div">
+			       <div class="col-sm-10"></div>
+			       <div class="col-sm-2" ng-show="report.occupantsForms.length>1"><a href="" ng-click="removeOccupant($index)"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a></div>
+			      </div>
+			      
 			    </ng-form>
 			    </div>
 			    <div class="col-md-12"><a style="font-size:14px;" href="" ng-click="addOccupant();"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add One More Occupant</a> <hr/></div>

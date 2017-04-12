@@ -13,6 +13,7 @@ public class CrashReportsResultByGroup {
 	private String crashDate;
 	private String location;
 	private Integer countyId;
+	private Integer crashSeverity;
 	private String countyName;
 	private String addedDate;
 	private String addedDateTime;
@@ -69,6 +70,14 @@ public class CrashReportsResultByGroup {
 		this.crashDate = crashDate;
 	}
 
+	public Integer getCrashSeverity() {
+		return crashSeverity;
+	}
+
+	public void setCrashSeverity(Integer crashSeverity) {
+		this.crashSeverity = crashSeverity;
+	}
+
 	public String getAddedDate() {
 		return addedDate;
 	}
@@ -118,7 +127,7 @@ public class CrashReportsResultByGroup {
 	}
 
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
-			String crashDate, Integer countyId, String countyName, String location, String addedDate, String addedDateTime,
+			String crashDate, Integer countyId, String countyName, String location, Integer crashSeverity, String addedDate, String addedDateTime,
 			Integer status, String fileName, Integer noOfOccupants, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
@@ -127,6 +136,7 @@ public class CrashReportsResultByGroup {
 		this.countyId = countyId;
 		this.countyName = countyName;
 		this.location = location;
+		this.crashSeverity = crashSeverity;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
 		this.status = status;

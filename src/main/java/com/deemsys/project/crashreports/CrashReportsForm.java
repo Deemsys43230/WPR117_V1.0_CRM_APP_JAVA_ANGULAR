@@ -23,6 +23,7 @@ public class CrashReportsForm {
 	private MultipartFile crashReport;
 	private String location;
 	private Integer countyId;
+	private Integer crashSeverity;
 	private String fileName;
 	private String fileAccessPath;
 	private String addedDate;
@@ -79,6 +80,14 @@ public class CrashReportsForm {
 		this.countyId = countyId;
 	}
 
+	public Integer getCrashSeverity() {
+		return crashSeverity;
+	}
+
+	public void setCrashSeverity(Integer crashSeverity) {
+		this.crashSeverity = crashSeverity;
+	}
+
 	public String getAddedDate() {
 		return addedDate;
 	}
@@ -103,11 +112,11 @@ public class CrashReportsForm {
 		this.status = status;
 	}
 
-	public boolean isEdit() {
+	public boolean getIsEdit() {
 		return isEdit;
 	}
 
-	public void setEdit(boolean isEdit) {
+	public void setIsEdit(boolean isEdit) {
 		this.isEdit = isEdit;
 	}
 
@@ -136,7 +145,7 @@ public class CrashReportsForm {
 	}
 
 	public CrashReportsForm(String reportId, String reportNumber,
-			String crashDate, Integer countyId, String location, String fileName, String fileAccessPath, String addedDate,
+			String crashDate, Integer countyId, Integer crashSeverity, String location, String fileName, String fileAccessPath, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
@@ -144,6 +153,7 @@ public class CrashReportsForm {
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.countyId = countyId;
+		this.crashSeverity = crashSeverity;
 		this.location = location;
 		this.fileName = fileName;
 		this.fileAccessPath = fileAccessPath;

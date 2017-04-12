@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 10 Apr, 2017 12:35:32 PM by Hibernate Tools 3.4.0.CR1
+// Generated 12 Apr, 2017 10:12:48 AM by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,6 +14,8 @@ public class OccupantsId implements java.io.Serializable {
 	private String reportId;
 	private String firstName;
 	private String lastName;
+	private String injuries;
+	private String seatingPosition;
 	private Integer sequenceNo;
 	private Integer status;
 
@@ -25,10 +27,13 @@ public class OccupantsId implements java.io.Serializable {
 	}
 
 	public OccupantsId(String reportId, String firstName, String lastName,
-			Integer sequenceNo, Integer status) {
+			String injuries, String seatingPosition, Integer sequenceNo,
+			Integer status) {
 		this.reportId = reportId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.injuries = injuries;
+		this.seatingPosition = seatingPosition;
 		this.sequenceNo = sequenceNo;
 		this.status = status;
 	}
@@ -58,6 +63,24 @@ public class OccupantsId implements java.io.Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	@Column(name = "injuries", length = 4)
+	public String getInjuries() {
+		return this.injuries;
+	}
+
+	public void setInjuries(String injuries) {
+		this.injuries = injuries;
+	}
+
+	@Column(name = "seating_position", length = 4)
+	public String getSeatingPosition() {
+		return this.seatingPosition;
+	}
+
+	public void setSeatingPosition(String seatingPosition) {
+		this.seatingPosition = seatingPosition;
 	}
 
 	@Column(name = "sequence_no")
@@ -98,6 +121,15 @@ public class OccupantsId implements java.io.Serializable {
 						.getLastName() != null
 						&& castOther.getLastName() != null && this
 						.getLastName().equals(castOther.getLastName())))
+				&& ((this.getInjuries() == castOther.getInjuries()) || (this
+						.getInjuries() != null
+						&& castOther.getInjuries() != null && this
+						.getInjuries().equals(castOther.getInjuries())))
+				&& ((this.getSeatingPosition() == castOther
+						.getSeatingPosition()) || (this.getSeatingPosition() != null
+						&& castOther.getSeatingPosition() != null && this
+						.getSeatingPosition().equals(
+								castOther.getSeatingPosition())))
 				&& ((this.getSequenceNo() == castOther.getSequenceNo()) || (this
 						.getSequenceNo() != null
 						&& castOther.getSequenceNo() != null && this
@@ -116,6 +148,12 @@ public class OccupantsId implements java.io.Serializable {
 				+ (getFirstName() == null ? 0 : this.getFirstName().hashCode());
 		result = 37 * result
 				+ (getLastName() == null ? 0 : this.getLastName().hashCode());
+		result = 37 * result
+				+ (getInjuries() == null ? 0 : this.getInjuries().hashCode());
+		result = 37
+				* result
+				+ (getSeatingPosition() == null ? 0 : this.getSeatingPosition()
+						.hashCode());
 		result = 37
 				* result
 				+ (getSequenceNo() == null ? 0 : this.getSequenceNo()

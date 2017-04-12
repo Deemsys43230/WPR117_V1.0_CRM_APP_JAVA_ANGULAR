@@ -14,6 +14,8 @@ public class OccupantsForm {
 
 	private String firstName;
 	private String lastName;
+	private String injuries;
+	private String seatingPosition;
 	private Integer status;
 	
 	public String getFirstName() {
@@ -32,6 +34,22 @@ public class OccupantsForm {
 		this.lastName = lastName;
 	}
 
+	public String getInjuries() {
+		return injuries;
+	}
+
+	public void setInjuries(String injuries) {
+		this.injuries = injuries;
+	}
+
+	public String getSeatingPosition() {
+		return seatingPosition;
+	}
+
+	public void setSeatingPosition(String seatingPosition) {
+		this.seatingPosition = seatingPosition;
+	}
+
 	public Integer getStatus() {
 		return status;
 	}
@@ -40,10 +58,13 @@ public class OccupantsForm {
 		this.status = status;
 	}
 
-	public OccupantsForm(String firstName, String lastName, Integer status) {
+	public OccupantsForm(String firstName, String lastName, String injuries,
+			String seatingPosition, Integer status) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.injuries = injuries;
+		this.seatingPosition = seatingPosition;
 		this.status = status;
 	}
 

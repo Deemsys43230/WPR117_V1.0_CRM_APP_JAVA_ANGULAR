@@ -2743,6 +2743,16 @@ padding-right:50px !important;
 .calender-control-span{
 	cursor:pointer;
 }
+
+.form-input-div{
+	margin-bottom: 10px;
+}
+
+.control-label {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
 /* For angular Js, Hide any validation error message before the page fully loads*/
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
