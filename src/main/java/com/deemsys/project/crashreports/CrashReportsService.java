@@ -160,8 +160,8 @@ public class CrashReportsService {
 			Integer sequenceNo=1;
 			for (OccupantsForm occupantsForm : crashReportsForm.getOccupantsForms()) {
 				if(!crashReportsForm.getIsEdit()){
-					PatientForm patientForm = new PatientForm(crashReportsForm.getReportNumber(), occupantsForm.getLastName()+", "+occupantsForm.getFirstName(), crashReportsForm.getCrashDate(), "", "", "", "", "",
-							"","",0,"","","","",crashReportsForm.getCountyId(),"","","","","","",0,"",new Double(0),new Double(0),"","","","","",0,"",1,"",1,1);
+					PatientForm patientForm = new PatientForm(crashReportsForm.getReportNumber(), occupantsForm.getLastName()+", "+occupantsForm.getFirstName(), crashReportsForm.getCrashDate(), crashReportsForm.getCrashSeverity().toString(), "", "", "", "",
+							"","",0,"","","","",crashReportsForm.getCountyId(),"","","","","","",0,"",new Double(0),new Double(0),occupantsForm.getInjuries(),"","","","",0,occupantsForm.getSeatingPosition(),1,"",1,1);
 					patientForms.add(patientForm);
 				}
 				OccupantsId occupantsId = new OccupantsId(crashReports.getReportId(), occupantsForm.getFirstName(), occupantsForm.getLastName(), occupantsForm.getInjuries(), occupantsForm.getSeatingPosition(), sequenceNo, 1);
