@@ -2767,6 +2767,27 @@ padding-right:50px !important;
   display: none !important;
 }
 
+.margin-top-50{
+	margin-top:50px;
+}
+
+.min-height-500{
+	min-height:500px;
+}
+
+.min-height-200{
+	min-height:200px;
+}
+
+.width-90{
+	width:90%;
+}
+
+.min-content-container{
+	min-height:200px;
+	width:90%;
+}
+
 /* Override Bootstrap Font Size */
 h5{
 	font-size: 16px !important;
@@ -2780,6 +2801,11 @@ h3{
 	font-size: 26px !important;
 }
 
+select{
+	-webkit-box-sizing: border-box !important;
+-moz-box-sizing: border-box !important;
+-ms-box-sizing: border-box !important;
+}
 /* Error Message */
 .error-message{
     position: relative;

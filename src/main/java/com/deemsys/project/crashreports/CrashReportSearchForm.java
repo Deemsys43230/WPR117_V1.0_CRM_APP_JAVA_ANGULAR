@@ -12,6 +12,7 @@ public class CrashReportSearchForm {
 	private Integer searchType;
 	private Integer pageNumber;
 	private Integer itemsPerPage;
+	private Integer reportType;
 	
 	public String getAccountId() {
 		return accountId;
@@ -73,8 +74,14 @@ public class CrashReportSearchForm {
 	public void setItemsPerPage(Integer itemsPerPage) {
 		this.itemsPerPage = itemsPerPage;
 	}
+	public Integer getReportType() {
+		return reportType;
+	}
+	public void setReportType(Integer reportType) {
+		this.reportType = reportType;
+	}
 	public CrashReportSearchForm(String accountId,String reportNumber, String crashDate, String location,
-			String addedDate, String firstName, String lastName, Integer searchType,Integer pageNumber,Integer itemsPerPage) {
+			String addedDate, String firstName, String lastName, Integer searchType,Integer pageNumber,Integer itemsPerPage, Integer reportType) {
 		super();
 		this.accountId = accountId;
 		this.reportNumber = reportNumber;
@@ -86,6 +93,7 @@ public class CrashReportSearchForm {
 		this.searchType = searchType;
 		this.pageNumber = pageNumber;
 		this.itemsPerPage = itemsPerPage;
+		this.reportType = reportType;
 	}
 	public CrashReportSearchForm() {
 		super();

@@ -25,9 +25,11 @@ import com.deemsys.project.entity.County;
 import com.deemsys.project.entity.CrashReports;
 import com.deemsys.project.entity.Occupants;
 import com.deemsys.project.entity.OccupantsId;
+import com.deemsys.project.entity.PoliceDepartment;
 import com.deemsys.project.login.LoginService;
 import com.deemsys.project.occupants.OccupantsDAO;
 import com.deemsys.project.occupants.OccupantsForm;
+import com.deemsys.project.policeDepartment.PoliceDepartmentDAO;
 /**
  * 
  * @author Deemsys
@@ -66,6 +68,9 @@ public class CrashReportsService {
 	CountyDAO countyDAO;
 	
 	@Autowired
+	PoliceDepartmentDAO policeDepartmentDAO;
+	
+	@Autowired
 	APIRequestService apiRequestService;
 	
 	//Get All Entries
@@ -73,8 +78,10 @@ public class CrashReportsService {
 	{
 		CrashReportsSearchResult crashReportsSearchResult = new CrashReportsSearchResult();
 		
-		if(!crashReportSearchForm.getAccountId().equals("0"))
-		  crashReportSearchForm.setAccountId(loginService.getCurrentAccountId());
+		if(crashReportSearchForm.getSearchType()==1&&crashReportSearchForm.getReportType()==1){
+			String currentAccountId=loginService.getCurrentAccountId();
+			crashReportSearchForm.setAccountId(currentAccountId);
+		}
 		
 		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReports(crashReportSearchForm);
 		
@@ -117,7 +124,7 @@ public class CrashReportsService {
 			occupantsForms.add(occupantsForm);
 		}
 		
-		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getCrashSeverity(), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
+		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getPoliceDepartment().getPoliceDepartmentId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getCrashSeverity(), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
 		
 		//End
 		
@@ -147,7 +154,9 @@ public class CrashReportsService {
 			}
 			
 			String fileName=crashReportsForm.getReportId()+".pdf";
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), fileName, addedDate, addedDateTime, 1, null);
+			
+			// Police Department
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, accounts.getPoliceDepartment(), county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), fileName, addedDate, addedDateTime, 1, null);
 
 			crashReportsDAO.merge(crashReports);
 
@@ -199,7 +208,8 @@ public class CrashReportsService {
 			// County 
 			County county = countyDAO.get(crashReportsForm.getCountyId());
 			
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
+			// Police Department
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, accounts.getPoliceDepartment(), county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
 
 			crashReportsDAO.saveCrashReports(crashReports);
 			

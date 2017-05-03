@@ -205,7 +205,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 			}
 		}
 		
-		if(!crashReportSearchForm.getAccountId().equals("0"))
+		if(crashReportSearchForm.getReportType()==1&&crashReportSearchForm.getSearchType()==1)
 		  criteria.add(Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId()));
 		
 		ProjectionList projectionList = Projections.projectionList();

@@ -90,7 +90,8 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 				"pageNumber":1,
 				"itemsPerPage":"10",
 				"addedDate":"",
-				"searchType":0
+				"searchType":0,
+				"reportType":2
 		};
 		// Set Max Date
 		$('#crashDateSearch').data("DateTimePicker").setMaxDate($rootScope.currentDate);

@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +20,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.deemsys.project.common.BasicQuery;
+import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.entity.Users;
 
 /**
@@ -33,7 +39,7 @@ public class LoginDAOImpl implements LoginDAO,UserDetailsService{
 	
 	@Autowired
 	SessionFactory sessionFactory;
-
+	
 	@Override
 	public void save(Users entity) {
 		// TODO Auto-generated method stub
@@ -147,11 +153,26 @@ public class LoginDAOImpl implements LoginDAO,UserDetailsService{
 	}
 
 	//Function that overrides the default spring security
+	// User Name will be combined with police department Id while login by Login Form
+	// User Name alone will be return while getting oauth
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		Users userLoginDetails=this.getByUsername(username);
+		
+		String splitUserDetails[]=username.split(CRMConstants.USERNAME_DELIMETER);
+		String userName=splitUserDetails[0];
+		String departmentId="";
+		
+		if(splitUserDetails.length<=1){
+			// Getting Department Id By User Oauth Login
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+			departmentId=request.getParameter(CRMConstants.DEPARTMENT_PARAMETER);
+		}else{
+			// Getting Department Id By User Form Login
+			departmentId=splitUserDetails[1];
+		}
+		Users userLoginDetails=this.getByUsernameAndDepartment(userName,Integer.parseInt(departmentId));
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 		
 		if(userLoginDetails!=null)
@@ -190,6 +211,14 @@ public class LoginDAOImpl implements LoginDAO,UserDetailsService{
 		return (Users) this.sessionFactory.getCurrentSession().createCriteria(Users.class).add(Restrictions.eq("username", username)).uniqueResult();
 	}
 
+	@Override
+	public Users getByUsernameAndDepartment(String username,Integer departmentId) {
+		// TODO Auto-generated method stub
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(Users.class,"u1");
+		criteria.createAlias("u1.accounts", "a1");
+		criteria.add(Restrictions.and(Restrictions.eq("u1.username", username),Restrictions.eq("a1.policeDepartment.policeDepartmentId", departmentId)));
+		return (Users) criteria.uniqueResult();
+	}
 	
 
 }

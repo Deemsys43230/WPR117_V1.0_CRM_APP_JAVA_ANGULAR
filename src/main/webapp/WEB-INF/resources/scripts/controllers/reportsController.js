@@ -26,7 +26,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 			"location":"",
 			"fileName":"",
 			"crashSeverity":"",
-			"countyId":"",
+			"countyId":"50",
 			"occupantsForms":[{"firstName":"","lastName":"","injuries":"","seatingPosition":"","status":1}]
 	};
 	
@@ -160,35 +160,78 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 }]);
 
 //View Report Controller
-adminApp.controller('ViewReportController',['$rootScope','$scope','$http','requestHandler','Flash',function($rootScope,$scope,$http,requestHandler,Flash){
+adminApp.controller('ViewReportController',['$rootScope','$scope','$http','requestHandler','Flash','$q',function($rootScope,$scope,$http,requestHandler,Flash,$q){
 
 	$scope.getCrashReportsList=function(){
-		$scope.crashReportSearchForm.pageNumber=1;
-		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
-			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
-			$scope.crashReportsResultList=response.data.crashReportsResult;
-		});
+		
+		$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
+		$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
+		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+			$scope.searchReportsList($scope.crashReportSearchForm);
+		}
+		// To Avoid Main Search Parameter Override
+		angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
+		
 	};
     
-	$scope.secondarySearch=function(){
-		requestHandler.postRequest("User/searchCrashReports.json",$scope.crashReportSearchForm).then(function(response){
+	$scope.searchReportsList=function(searchObj){
+		var defer=$q.defer();
+		requestHandler.postRequest("User/searchCrashReports.json",searchObj).then(function(response){
 			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 			$scope.crashReportsResultList=response.data.crashReportsResult;
+			$scope.crashReportsResultListOriginal=angular.copy($scope.crashReportsResultList);
+			defer.resolve(response);
 		});
+		return defer.promise;
+	};
+	
+	$scope.secondarySearch=function(){
+		
+		$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
+		$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
+		
+		// Set Main SearchParam
+    	$scope.mainSearchParam.reportType=$scope.crashReportSearchForm.reportType;
+    	$scope.mainSearchParam.verifiedStatus=$scope.crashReportSearchForm.verifiedStatus;
+    	$scope.mainSearchParam.pageNumber=$scope.crashReportSearchForm.pageNumber;
+    	$scope.mainSearchParam.itemsPerPage=$scope.crashReportSearchForm.itemsPerPage;
+    	
+		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+			// Copy Mainsearchparam to Patient
+			angular.copy($scope.mainSearchParam,$scope.crashReportSearchForm);
+			return $scope.searchReportsList($scope.crashReportSearchForm);
+		}
+		
+		return null;
 	};
 	
     $scope.$watch("crashReportSearchForm.pageNumber",function(){
-		$scope.secondarySearch();
+    	$scope.mainSearchParam.pageNumber=$scope.crashReportSearchForm.pageNumber;
+    	// Copy Mainsearchparam to Patient
+		angular.copy($scope.mainSearchParam,$scope.crashReportSearchForm);
+		
+    	var promise=$scope.searchReportsList($scope.crashReportSearchForm);
 	});
 
-	$scope.$watch("crashReportSearchForm.itemsPerPage",function(){
-		$scope.getCrashReportsList();
-	});
+    $scope.itemsPerPageFilterChange=function(){
+    	var promise=$scope.secondarySearch();
+		if(promise!=null){
+			promise.then(function(reponse){
+				setTimeout(function(){
+					 $('html,body').animate({scrollTop: $('#noOfRows').offset().top},'slow');
+				},1000);
+			});
+		}
+    };
+	
 	
     $scope.init=function(){
+    	$scope.crashReportsResultListOriginal=[];
     	$scope.deleteText="Yes";
     	$scope.isDeleting=false;
 		$scope.totalRecords=0;
+		// Main Search Param
+		$scope.mainSearchParam={};
 		$scope.crashReportSearchForm={
 				"accountId":"0",
 				"reportNumber":"",
@@ -199,11 +242,19 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 				"pageNumber":1,
 				"itemsPerPage":"10",
 				"addedDate":"",
-				"searchType":1
+				"searchType":1,
+				"reportType":1
 		};
 		// Set Max Date
 		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
-		$scope.getCrashReportsList();
+		
+		$scope.oldPageNumber= $scope.crashReportSearchForm.pageNumber;
+		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+			// To Avoid Main Search Parameter Override
+			angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
+			$scope.searchReportsList($scope.crashReportSearchForm);
+		}
+		
 	};
 	
 	$scope.init();

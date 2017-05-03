@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 12 Apr, 2017 10:12:48 AM by Hibernate Tools 3.4.0.CR1
+// Generated 29 Apr, 2017 1:50:04 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,6 +24,7 @@ import javax.persistence.TemporalType;
 public class Accounts implements java.io.Serializable {
 
 	private String accountId;
+	private PoliceDepartment policeDepartment;
 	private String firstName;
 	private String lastName;
 	private String middleName;
@@ -39,11 +42,12 @@ public class Accounts implements java.io.Serializable {
 		this.accountId = accountId;
 	}
 
-	public Accounts(String accountId, String firstName, String lastName,
-			String middleName, String emailId, String phoneNumber,
-			Date addedDateTime, Integer status, Set<Users> userses,
-			Set<CrashReports> crashReportses) {
+	public Accounts(String accountId, PoliceDepartment policeDepartment,
+			String firstName, String lastName, String middleName,
+			String emailId, String phoneNumber, Date addedDateTime,
+			Integer status, Set<Users> userses, Set<CrashReports> crashReportses) {
 		this.accountId = accountId;
+		this.policeDepartment = policeDepartment;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.middleName = middleName;
@@ -63,6 +67,16 @@ public class Accounts implements java.io.Serializable {
 
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "police_department_id")
+	public PoliceDepartment getPoliceDepartment() {
+		return this.policeDepartment;
+	}
+
+	public void setPoliceDepartment(PoliceDepartment policeDepartment) {
+		this.policeDepartment = policeDepartment;
 	}
 
 	@Column(name = "first_name", length = 45)

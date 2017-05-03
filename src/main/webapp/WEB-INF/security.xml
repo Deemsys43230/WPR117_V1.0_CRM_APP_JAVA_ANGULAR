@@ -130,21 +130,45 @@
 		</beans:constructor-arg>
 	</beans:bean>
 	
-	<!-- Normal Form Login -->
-	<http auto-config="true" use-expressions="true">
+	<!-- Normal Form Login With Customer Filter -->
+	<http auto-config="false" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
 			<!-- access denied page -->
+			<custom-filter before="FORM_LOGIN_FILTER" ref="exUsernamePasswordAuthenticationFilter"/>
 			<access-denied-handler error-page="/redirect" />
-			<form-login 
+			<!-- <form-login 
 			    login-page="/user-login" 
 			    default-target-url="/home"
 				authentication-failure-url="/login-failed?error=1" 
 				username-parameter="username"
 				password-parameter="password"
-				always-use-default-target="true" />
+				always-use-default-target="true" /> -->
 			<session-management invalid-session-url="/logout" />
 			<logout logout-success-url="/logout" delete-cookies="JSESSIONID" invalidate-session="true"/>
 					<!-- enable csrf protection -->
 	</http>
+	<beans:bean id="successHandler"
+		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/home"></beans:property>
+		<beans:property name="alwaysUseDefaultTargetUrl" value="true"></beans:property>
+	</beans:bean>
+	<beans:bean id="failureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login-failed?error=1"></beans:property>
+	</beans:bean>
+	<beans:bean id="loginUrlAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/user-login"></beans:property>
+	</beans:bean>
+	<beans:bean id="exUsernamePasswordAuthenticationFilter"
+		class="com.deemsys.project.login.ExUsernamePasswordAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationSuccessHandler"
+			ref="successHandler" />
+		<beans:property name="authenticationFailureHandler"
+			ref="failureHandler" />
+		<beans:property name="usernameParameter" value="username"></beans:property>
+		<beans:property name="passwordParameter" value="password"></beans:property>
+	</beans:bean>
 
 	<global-method-security
 		pre-post-annotations="enabled" proxy-target-class="true">

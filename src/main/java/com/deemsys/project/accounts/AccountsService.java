@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.entity.Accounts;
+import com.deemsys.project.entity.PoliceDepartment;
 import com.deemsys.project.entity.Users;
 import com.deemsys.project.login.PasswordEncryptor;
 import com.deemsys.project.users.UsersDAO;
 import com.deemsys.project.users.UsersForm;
 import com.deemsys.project.users.UsersService;
+import com.deemsys.project.policeDepartment.PoliceDepartmentDAO;
 /**
  * 
  * @author Deemsys
@@ -44,6 +46,9 @@ public class AccountsService {
 	@Autowired
 	PasswordEncryptor passwordEncryptor;
 	
+	@Autowired
+	PoliceDepartmentDAO policeDepartmentDAO;
+	
 	//Get All Entries
 	public List<AccountsForm> getAccountsList()
 	{
@@ -56,7 +61,7 @@ public class AccountsService {
 		for (Accounts accounts : accountss) {
 			//TODO: Fill the List
 			Users users = usersDAO.getByAccountId(accounts.getAccountId());
-			AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus());
+			AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus());
 			accountsForms.add(accountsForm);
 		}
 		
@@ -72,7 +77,7 @@ public class AccountsService {
 		//TODO: Convert Entity to Form
 		//Start
 		Users users = usersDAO.getByAccountId(accountId);
-		AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus());
+		AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus());
 		
 		//End
 		
@@ -103,7 +108,8 @@ public class AccountsService {
 		//Logic Starts
 
 		try {
-			Accounts accounts=new Accounts(accountsForm.getAccountId(), accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), new Date(), accountsForm.getStatus(), null, null);
+			PoliceDepartment policeDepartment = policeDepartmentDAO.get(accountsForm.getPoliceDepartmentId());
+			Accounts accounts=new Accounts(accountsForm.getAccountId(), policeDepartment, accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), new Date(), accountsForm.getStatus(), null, null);
 			accountsDAO.saveAccount(accounts);
 			
 			UsersForm usersForm = new UsersForm(null, CRMConstants.CRM_USER_ROLE_ID, accounts.getAccountId(), accountsForm.getUsername(), accountsForm.getUsername(), 1, 1);
@@ -125,8 +131,8 @@ public class AccountsService {
 		//TODO: Convert Form to Entity Here	
 		
 		//Logic Starts
-		
-		Accounts accounts=new Accounts(accountsForm.getAccountId(), accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), CRMConstants.convertYearFormatWithTime(accountsForm.getAddedDateTime()), accountsForm.getStatus(), null, null);
+		PoliceDepartment policeDepartment = policeDepartmentDAO.get(accountsForm.getPoliceDepartmentId());
+		Accounts accounts=new Accounts(accountsForm.getAccountId(), policeDepartment, accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), CRMConstants.convertYearFormatWithTime(accountsForm.getAddedDateTime()), accountsForm.getStatus(), null, null);
 
 		accountsDAO.update(accounts);
 		

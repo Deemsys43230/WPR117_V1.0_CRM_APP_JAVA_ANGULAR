@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 12 Apr, 2017 10:12:48 AM by Hibernate Tools 3.4.0.CR1
+// Generated 29 Apr, 2017 1:50:04 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -25,6 +25,7 @@ public class CrashReports implements java.io.Serializable {
 
 	private String reportId;
 	private Accounts accounts;
+	private PoliceDepartment policeDepartment;
 	private County county;
 	private String reportNumber;
 	private Date crashDate;
@@ -44,13 +45,15 @@ public class CrashReports implements java.io.Serializable {
 		this.reportId = reportId;
 	}
 
-	public CrashReports(String reportId, Accounts accounts, County county,
+	public CrashReports(String reportId, Accounts accounts,
+			PoliceDepartment policeDepartment, County county,
 			String reportNumber, Date crashDate, String location,
 			Integer crashSeverity, Integer noOfOccupants, String fileName,
 			Date addedDate, Date addedDateTime, Integer status,
 			Set<Occupants> occupantses) {
 		this.reportId = reportId;
 		this.accounts = accounts;
+		this.policeDepartment = policeDepartment;
 		this.county = county;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
@@ -82,6 +85,16 @@ public class CrashReports implements java.io.Serializable {
 
 	public void setAccounts(Accounts accounts) {
 		this.accounts = accounts;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "police_department_id")
+	public PoliceDepartment getPoliceDepartment() {
+		return this.policeDepartment;
+	}
+
+	public void setPoliceDepartment(PoliceDepartment policeDepartment) {
+		this.policeDepartment = policeDepartment;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

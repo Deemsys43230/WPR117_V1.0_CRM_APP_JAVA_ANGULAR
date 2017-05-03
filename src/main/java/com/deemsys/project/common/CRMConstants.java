@@ -15,14 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class CRMConstants {
 	
-	@Autowired
-	CRMProperties crmProperties;
-	
 	public static Integer CRM_ADMIN_ROLE_ID=1;
 	public static Integer CRM_USER_ROLE_ID=2;
 	
 	public static String CRM_ADMIN_ROLE="ROLE_ADMIN";
 	public static String CRM_USER_ROLE="ROLE_USER";
+	
+	// Login Additional Parameter Name
+	public static String DEPARTMENT_PARAMETER="department";
+	public static String USERNAME_DELIMETER=":";
 	
 	// Convert Year Format
 	public static Date convertYearFormat(String date)

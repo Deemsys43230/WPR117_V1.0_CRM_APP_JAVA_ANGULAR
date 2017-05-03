@@ -32,7 +32,7 @@
 
     <!-- SLIDER -->
     <div class="container" style="width:92%;">
-		<img src="resources/images/slider/01.jpg" style="width:100%;"/>
+		<img src="resources/images/slider/main.jpg" style="width:100%;"/>
 	</div>
 <body>
 
@@ -54,7 +54,17 @@
 		                             </c:if>
 						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
 						<div id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
-                            <h5>Username<span class="text-red"><sup>*</sup></span></h5>
+						<h5>Police Department<span class="text-red"><sup>*</sup></span></h5>
+						<select id="department" name="department" class="form-control">
+							<option value="">-- Select --</option>
+							<option value="1">Boardman</option>
+							<option value="2">Fairborn</option>
+						</select>
+						<div class="error-container" >
+                                 <span id="department_error"></span>
+                              	</div>
+						<h5>Username<span class="text-red"><sup>*</sup></span></h5>
+                           	<%--  <input type="hidden" class="form-control-login" name="department" id="department" value="${departmentId}"> --%>
                                 <input type="text" class="form-control" name="username" placeholder="Username" id="username" maxlength="25">
                                 <div class="error-container" >
                                  <span id="username_error"></span>
@@ -112,9 +122,11 @@
 	}
 	
 	function checkValidation(){
+		var department=document.getElementById("department").value;
 		var username=document.getElementById("username").value;
 		var password=document.getElementById("password").value;
-	
+		
+		document.getElementById("department_error").innerText="";
 		document.getElementById("username_error").innerText="";
 		document.getElementById("password_error").innerText="";
 		
@@ -126,6 +138,10 @@
 		if(password==""){
 			error=true;
 			document.getElementById("password_error").innerText="Please Enter Password";
+		}
+		if(department==""){
+			error=true;
+			document.getElementById("department_error").innerText="Please Select Department";
 		}
 		if(error){
 			return false;

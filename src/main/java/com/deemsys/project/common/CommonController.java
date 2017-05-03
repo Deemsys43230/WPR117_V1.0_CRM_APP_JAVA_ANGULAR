@@ -78,6 +78,7 @@ public class CommonController {
 	public String getHomePage(ModelMap model)
 	{
     	model.addAttribute("Success",true);
+    	model.addAttribute("departmentId",loginService.getCurrentAccountPoliceDepartmentId());
 		return "/home";
 	}
    	
@@ -87,6 +88,13 @@ public class CommonController {
     	model.addAttribute("Success",true);
 		return "/search";
 	}
+    
+    /*@RequestMapping(value={"/index","/"},method=RequestMethod.GET)
+	public String getSearch(ModelMap model)
+	{
+    	model.addAttribute("Success",true);
+		return "/index";
+	}*/
     
     // Login Failed
  	@RequestMapping(value="/login-failed",method=RequestMethod.GET)
@@ -103,4 +111,27 @@ public class CommonController {
        	model.addAttribute("Success",true);
    		return "/index";
    	}
+ 	
+ 	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)
+ 	public String getIndexMain(ModelMap model)
+ 	{
+     	model.addAttribute("Success",true);
+ 		return "/ohio-main";
+ 	}
+ 	 
+    @RequestMapping(value={"/boardman"},method=RequestMethod.GET)
+ 	public String getBoardman(ModelMap model)
+ 	{
+    	model.addAttribute("departmentId",1);
+     	model.addAttribute("Success",true);
+ 		return "/index";
+ 	}
+    
+    @RequestMapping(value={"/fairborn"},method=RequestMethod.GET)
+ 	public String getFairborn(ModelMap model)
+ 	{
+    	model.addAttribute("departmentId",2);
+     	model.addAttribute("Success",true);
+ 		return "/index";
+ 	}
 }

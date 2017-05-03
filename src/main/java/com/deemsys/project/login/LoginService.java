@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deemsys.project.common.CRMConstants;
+import com.deemsys.project.entity.Accounts;
 import com.deemsys.project.entity.Users;
 import com.deemsys.project.users.UsersDAO;
 
@@ -36,12 +37,19 @@ public class LoginService {
 	
 	public Integer getCurrentUserId(){
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return usersDAO.getByUsername(user.getUsername()).getUserId();
+		return usersDAO.getByUsername(this.splitUserName(user.getUsername())).getUserId();
 	}
 	
 	public String getCurrentAccountId(){
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return usersDAO.getByUsername(user.getUsername()).getAccounts().getAccountId();
+		return usersDAO.getByUsername(this.splitUserName(user.getUsername())).getAccounts().getAccountId();
+	}
+	
+	public Integer getCurrentAccountPoliceDepartmentId(){
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Accounts accounts=usersDAO.getByUsername(this.splitUserName(user.getUsername())).getAccounts();
+		
+		return accounts.getPoliceDepartment().getPoliceDepartmentId();
 	}
 	
 	public Integer checkUsernameExist(String username){
@@ -52,4 +60,10 @@ public class LoginService {
 			return 1;
 		}
 	}
+	
+	public String splitUserName(String combinedUserName){
+		String splittedUserName[]=combinedUserName.split(CRMConstants.USERNAME_DELIMETER);
+		
+		return splittedUserName[0];
+	};
 }

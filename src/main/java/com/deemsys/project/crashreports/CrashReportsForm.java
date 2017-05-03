@@ -18,6 +18,7 @@ import com.deemsys.project.occupants.OccupantsForm;
 public class CrashReportsForm {
 
 	private String reportId;
+	private Integer policeDepartmentId;
 	private String reportNumber;
 	private String crashDate;
 	private MultipartFile crashReport;
@@ -38,6 +39,14 @@ public class CrashReportsForm {
 
 	public void setReportId(String reportId) {
 		this.reportId = reportId;
+	}
+
+	public Integer getPoliceDepartmentId() {
+		return policeDepartmentId;
+	}
+
+	public void setPoliceDepartmentId(Integer policeDepartmentId) {
+		this.policeDepartmentId = policeDepartmentId;
 	}
 
 	public String getReportNumber() {
@@ -144,12 +153,13 @@ public class CrashReportsForm {
 		this.fileAccessPath = fileAccessPath;
 	}
 
-	public CrashReportsForm(String reportId, String reportNumber,
+	public CrashReportsForm(String reportId, Integer policeDepartmentId, String reportNumber,
 			String crashDate, Integer countyId, Integer crashSeverity, String location, String fileName, String fileAccessPath, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
+		this.policeDepartmentId = policeDepartmentId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.countyId = countyId;

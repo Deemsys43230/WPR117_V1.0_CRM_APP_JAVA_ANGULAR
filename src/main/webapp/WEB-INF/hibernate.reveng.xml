@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="CRM_boardman" match-name="accounts"/>
+  <table-filter match-catalog="CRM_boardman" match-name="county"/>
+  <table-filter match-catalog="CRM_boardman" match-name="crash_report_restriction"/>
+  <table-filter match-catalog="CRM_boardman" match-name="crash_reports"/>
+  <table-filter match-catalog="CRM_boardman" match-name="occupants"/>
+  <table-filter match-catalog="CRM_boardman" match-name="police_department"/>
+  <table-filter match-catalog="CRM_boardman" match-name="roles"/>
+  <table-filter match-catalog="CRM_boardman" match-name="users"/>
+</hibernate-reverse-engineering>

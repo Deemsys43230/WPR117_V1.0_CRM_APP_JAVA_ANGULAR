@@ -9,4 +9,6 @@ import com.deemsys.project.entity.Users;
  */
 public interface LoginDAO extends IGenericDAO<Users>{
 	public Users getByUsername(String username);
+
+	public Users getByUsernameAndDepartment(String username, Integer departmentId);
 }
