@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <head>
 	<meta charset="UTF-8">
 	
@@ -32,7 +33,7 @@
 
     <!-- SLIDER -->
     <div class="container" style="width:92%;">
-		<img src="resources/images/slider/main.jpg" style="width:100%;"/>
+		<img src="resources/images/slider/${departmentId}.jpg" style="width:100%;"/>
 	</div>
 <body>
 
@@ -43,6 +44,11 @@
 			<div class="col-md-6">
 			<p class="brown-text">This page is for the Police Department officials to upload
 				crash reports. (Sign in required)</p>
+				<%--  <sec:authorize access="isAuthenticated()">
+    				<script>
+    					window.location.href=window.location.origin+"/CRM/home";
+    				</script>
+ 				</sec:authorize> --%>
 			<hr />	
 		</div>
 		
@@ -54,15 +60,14 @@
 		                             </c:if>
 						<form class="contact-form" name="indexjobForm" action="j_spring_security_check" method="post" novalidate>
 						<div id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
-						<h5>Police Department<span class="text-red"><sup>*</sup></span></h5>
+						
+						<!-- <h5>Police Department<span class="text-red"><sup>*</sup></span></h5>
 						<select id="department" name="department" class="form-control">
 							<option value="">-- Select --</option>
 							<option value="1">Boardman</option>
 							<option value="2">Fairborn</option>
-						</select>
-						<div class="error-container" >
-                                 <span id="department_error"></span>
-                              	</div>
+						</select> -->
+						<input type="hidden" value="${departmentId}" name="department" id="department">
 						<h5>Username<span class="text-red"><sup>*</sup></span></h5>
                            	<%--  <input type="hidden" class="form-control-login" name="department" id="department" value="${departmentId}"> --%>
                                 <input type="text" class="form-control" name="username" placeholder="Username" id="username" maxlength="25">
@@ -122,11 +127,9 @@
 	}
 	
 	function checkValidation(){
-		var department=document.getElementById("department").value;
 		var username=document.getElementById("username").value;
 		var password=document.getElementById("password").value;
 		
-		document.getElementById("department_error").innerText="";
 		document.getElementById("username_error").innerText="";
 		document.getElementById("password_error").innerText="";
 		
@@ -139,10 +142,7 @@
 			error=true;
 			document.getElementById("password_error").innerText="Please Enter Password";
 		}
-		if(department==""){
-			error=true;
-			document.getElementById("department_error").innerText="Please Select Department";
-		}
+		
 		if(error){
 			return false;
 		}else{

@@ -5,6 +5,7 @@ package com.deemsys.project.common;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deemsys.project.login.LoginService;
 
@@ -32,7 +34,7 @@ public class CommonController {
 	public String getIndex(ModelMap model)
 	{
     	model.addAttribute("Success",true);
-		return "/index";
+		return "/ohio-main";
 	}
     
     @RequestMapping(value={"/upload/"},method=RequestMethod.GET)
@@ -98,10 +100,21 @@ public class CommonController {
     
     // Login Failed
  	@RequestMapping(value="/login-failed",method=RequestMethod.GET)
- 	public String getLogin(ModelMap model)
+ 	public void getLogin(HttpServletRequest request,HttpServletResponse response,ModelMap model)
  	{
      	model.addAttribute("failed",true);
- 		return "/index";
+     	String departmentId=(String) request.getSession().getAttribute("LAST_DEPARTMENT");
+ 		//model.addAttribute("departmentId",departmentId);
+ 		try{
+	 		if(departmentId.equals("1")){
+	 			response.sendRedirect("boardman?error=1");
+			}else if(departmentId.equals("2")){
+	 			response.sendRedirect("fairborn?error=1");
+			}
+ 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
  	}
  	
  	// Logout
@@ -109,7 +122,7 @@ public class CommonController {
    	public String logout(ModelMap model)
    	{
        	model.addAttribute("Success",true);
-   		return "/index";
+   		return "/search";
    	}
  	
  	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)

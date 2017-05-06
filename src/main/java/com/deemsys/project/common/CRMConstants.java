@@ -24,6 +24,7 @@ public class CRMConstants {
 	// Login Additional Parameter Name
 	public static String DEPARTMENT_PARAMETER="department";
 	public static String USERNAME_DELIMETER=":";
+	public static String USERNAME_PARAMETER="username";
 	
 	// Convert Year Format
 	public static Date convertYearFormat(String date)

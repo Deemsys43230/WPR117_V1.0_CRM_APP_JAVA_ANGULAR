@@ -34,6 +34,7 @@
 			<h4>Police Departments</h4>
 				<hr />
 		</div>
+		<div class="col-md-12" id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
 		<div class="col-md-12">
 			<div class="col-md-3"><label>Police Department:</label></div>
 			<div class="col-md-4">
@@ -88,6 +89,12 @@
 	<script type="text/javascript" src="resources/js/bootstrap.min.js"></script><!-- Bootstrap -->
 </body>
 <script type="text/javascript">
+if(location.search=='?sessionout'){
+	document.getElementById('sessionout').style.display = 'inline';
+}else{
+	document.getElementById('sessionout').style.display = 'none';
+}
+
 function goToLoginPage(){
 	var redirectUrl=$("#policeDepartment").val();
 	$("#ploiceDepartment_error").text("");

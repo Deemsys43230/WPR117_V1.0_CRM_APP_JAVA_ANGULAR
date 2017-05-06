@@ -152,7 +152,7 @@
 		<beans:property name="alwaysUseDefaultTargetUrl" value="true"></beans:property>
 	</beans:bean>
 	<beans:bean id="failureHandler"
-		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		class="com.deemsys.project.login.UserNameCachingAuthenticationFailureHandler">
 		<beans:property name="defaultFailureUrl" value="/login-failed?error=1"></beans:property>
 	</beans:bean>
 	<beans:bean id="loginUrlAuthenticationEntryPoint"
