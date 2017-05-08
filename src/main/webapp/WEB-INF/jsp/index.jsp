@@ -33,7 +33,7 @@
 
     <!-- SLIDER -->
     <div class="container" style="width:92%;">
-		<img src="resources/images/slider/${departmentId}.jpg" style="width:100%;"/>
+		<img src="${departmentBannerImage}" style="width:100%;"/>
 	</div>
 <body>
 

@@ -154,6 +154,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class,"c1");
 		criteria.createAlias("c1.occupantses", "o1");
 		criteria.createAlias("c1.county", "co1");
+		criteria.createAlias("c1.policeDepartment", "p1");
 		
 		if(crashReportSearchForm.getReportNumber()!=null && !crashReportSearchForm.getReportNumber().equals("")){
 			if(crashReportSearchForm.getSearchType()==0){
@@ -229,6 +230,9 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		// County Details
 		projectionList.add(Projections.property("co1.countyId"),"countyId");
 		projectionList.add(Projections.property("co1.name"),"countyName");
+		
+		// Police Department Id
+		projectionList.add(Projections.property("p1.policeDepartmentId"),"departmentId");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		

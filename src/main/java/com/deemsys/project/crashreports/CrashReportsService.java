@@ -96,7 +96,7 @@ public class CrashReportsService {
 				if(rowCount!=0){
 					crashReportsResultByGroupList.add(crashReportsResultByGroup);
 				}
-				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyId(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
+				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyId(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getDepartmentId()+crmProperties.getProperty("innerFolderName")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
 			}
 			// Set Occupants
 			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getInjuries(), crashReportSearchList.getSeatingPosition(), 1));
@@ -156,7 +156,8 @@ public class CrashReportsService {
 			String fileName=crashReportsForm.getReportId()+".pdf";
 			
 			// Police Department
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, accounts.getPoliceDepartment(), county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), fileName, addedDate, addedDateTime, 1, null);
+			PoliceDepartment policeDepartment = accounts.getPoliceDepartment();
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, policeDepartment, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), fileName, addedDate, addedDateTime, 1, null);
 
 			crashReportsDAO.merge(crashReports);
 
@@ -181,7 +182,7 @@ public class CrashReportsService {
 			
 			// Insert Runner Report In CRO only On Save
 			if(Integer.parseInt(crmProperties.getProperty("sentToCRO"))==1&&!crashReportsForm.getIsEdit()){
-				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), fileName, Integer.parseInt(crmProperties.getProperty("reportFrom")), patientForms);
+				CrashReportForm crashReportForm = new CrashReportForm(crashReportsForm.getReportNumber(), crashReportsForm.getCrashDate(), crashReportsForm.getCountyId().toString(), fileName, policeDepartment.getPoliceDepartmentId(), policeDepartment.getCode(), patientForms);
 				apiRequestService.saveRunnerReportInCRO(crashReportForm);
 			}
 			
@@ -248,7 +249,7 @@ public class CrashReportsService {
 				// Write File Temp Folder
 				File file=CRMConstants.saveTemporaryFile(crashReport, filePath);
 				// Upload File To AWS S3
-				awsFileUpload.uploadFileToAWSS3(filePath, fileName);
+				awsFileUpload.uploadFileToAWSS3(filePath, fileName,loginService.getCurrentAccountPoliceDepartmentId());
 				
 				// File Delete in Temp Folder
 				file.delete();
@@ -283,7 +284,7 @@ public class CrashReportsService {
 		String fileName=crashReports.getFileName();
 		// Delete File In AWS S3
 		try {
-			awsFileUpload.deleteFileFromAWSS3(fileName);
+			awsFileUpload.deleteFileFromAWSS3(fileName,crashReports.getPoliceDepartment().getPoliceDepartmentId());
 			// Delete In DB
 			crashReportsDAO.deleteCrashReports(crashReports);
 		} catch (IOException e) {

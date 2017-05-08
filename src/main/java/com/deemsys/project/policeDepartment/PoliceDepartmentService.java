@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deemsys.project.common.CRMConstants;
+import com.deemsys.project.county.CountyDAO;
+import com.deemsys.project.entity.County;
 import com.deemsys.project.entity.PoliceDepartment;
 /**
  * 
@@ -29,6 +31,9 @@ public class PoliceDepartmentService {
 	@Autowired
 	PoliceDepartmentDAO policeDepartmentDAO;
 	
+	@Autowired
+	CountyDAO countyDAO;
+	
 	//Get All Entries
 	public List<PoliceDepartmentForm> getPoliceDepartmentList()
 	{
@@ -40,7 +45,7 @@ public class PoliceDepartmentService {
 		
 		for (PoliceDepartment policeDepartment : policeDepartments) {
 			//TODO: Fill the List
-			PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getName(), policeDepartment.getCode(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
+			PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
 			policeDepartmentForms.add(policeDepartmentForm);
 		}
 		
@@ -55,7 +60,7 @@ public class PoliceDepartmentService {
 		//TODO: Convert Entity to Form
 		//Start
 		
-		PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getName(), policeDepartment.getCode(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
+		PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
 		
 		//End
 		
@@ -68,8 +73,10 @@ public class PoliceDepartmentService {
 		//TODO: Convert Form to Entity Here
 		
 		//Logic Starts
+		// County 
+		County county = countyDAO.get(policeDepartmentForm.getCountyId());
 		
-		PoliceDepartment policeDepartment=new PoliceDepartment(policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
+		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
 		policeDepartment.setPoliceDepartmentId(policeDepartmentForm.getPoliceDepartmentId());
 		//Logic Ends
 		
@@ -85,7 +92,8 @@ public class PoliceDepartmentService {
 		
 		//Logic Starts
 		
-		PoliceDepartment policeDepartment=new PoliceDepartment(policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
+		County county = countyDAO.get(policeDepartmentForm.getCountyId());
+		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
 		
 		//Logic Ends
 		
@@ -100,7 +108,9 @@ public class PoliceDepartmentService {
 		
 		//Logic Starts
 		
-		PoliceDepartment policeDepartment=new PoliceDepartment(policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
+		County county = countyDAO.get(policeDepartmentForm.getCountyId());
+		
+		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
 		policeDepartment.setPoliceDepartmentId(policeDepartmentForm.getPoliceDepartmentId());
 		
 		//Logic Ends

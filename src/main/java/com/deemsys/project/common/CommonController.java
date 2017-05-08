@@ -30,6 +30,9 @@ public class CommonController {
 	@Autowired
 	LoginService loginService;
 	
+	@Autowired
+	CRMProperties crmProperties;
+	
     @RequestMapping(value={"/upload"},method=RequestMethod.GET)
 	public String getIndex(ModelMap model)
 	{
@@ -80,7 +83,9 @@ public class CommonController {
 	public String getHomePage(ModelMap model)
 	{
     	model.addAttribute("Success",true);
-    	model.addAttribute("departmentId",loginService.getCurrentAccountPoliceDepartmentId());
+    	Integer departmentId=loginService.getCurrentAccountPoliceDepartmentId();
+    	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+departmentId.toString()+"/banner/banner.jpg");
+    	model.addAttribute("departmentId",departmentId);
 		return "/home";
 	}
    	
@@ -106,9 +111,9 @@ public class CommonController {
      	String departmentId=(String) request.getSession().getAttribute("LAST_DEPARTMENT");
  		//model.addAttribute("departmentId",departmentId);
  		try{
-	 		if(departmentId.equals("1")){
+	 		if(departmentId.equals("2")){
 	 			response.sendRedirect("boardman?error=1");
-			}else if(departmentId.equals("2")){
+			}else if(departmentId.equals("3")){
 	 			response.sendRedirect("fairborn?error=1");
 			}
  		} catch (IOException e) {
@@ -135,7 +140,8 @@ public class CommonController {
     @RequestMapping(value={"/boardman"},method=RequestMethod.GET)
  	public String getBoardman(ModelMap model)
  	{
-    	model.addAttribute("departmentId",1);
+    	model.addAttribute("departmentId",2);
+    	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"2/banner/banner.jpg");
      	model.addAttribute("Success",true);
  		return "/index";
  	}
@@ -143,7 +149,8 @@ public class CommonController {
     @RequestMapping(value={"/fairborn"},method=RequestMethod.GET)
  	public String getFairborn(ModelMap model)
  	{
-    	model.addAttribute("departmentId",2);
+    	model.addAttribute("departmentId",3);
+    	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"3/banner/banner.jpg");
      	model.addAttribute("Success",true);
  		return "/index";
  	}

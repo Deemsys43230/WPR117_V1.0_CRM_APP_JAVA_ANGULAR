@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.deemsys.project.login.LoginService;
+
 /**
  * 
  * @author Deemsys
@@ -21,6 +23,9 @@ public class PoliceDepartmentController {
 	@Autowired
 	PoliceDepartmentService policeDepartmentService;
 
+	@Autowired
+	LoginService loginService;
+	
     @RequestMapping(value="/getPoliceDepartment",method=RequestMethod.GET)
 	public String getPoliceDepartment(@RequestParam("id") Integer id,ModelMap model)
 	{
@@ -67,4 +72,11 @@ public class PoliceDepartmentController {
    		return "/returnPage";
    	}
 	
+    @RequestMapping(value="/getCurrentUserPoliceDepartment",method=RequestMethod.GET)
+   	public String getCurrentUserPoliceDepartment(ModelMap model)
+   	{
+       	model.addAttribute("policeDepartmentForm",policeDepartmentService.getPoliceDepartment(loginService.getCurrentAccountPoliceDepartmentId()));
+       	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
 }

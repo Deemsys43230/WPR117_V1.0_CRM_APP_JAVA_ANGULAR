@@ -22,10 +22,11 @@ public class AWSFileUpload {
 	@Autowired
 	CRMProperties crmProperties;
 	
-	public void uploadFileToAWSS3(String filePath,String fileName){
+	public void uploadFileToAWSS3(String filePath,String fileName,Integer departmentId){
 		
 		String bucketName=crmProperties.getProperty("bucketName");
 		String folderName=crmProperties.getProperty("folderName");
+		String innerFolderName=crmProperties.getProperty("innerFolderName");
 		try{
 		// credentials object identifying user for authentication
 		// user must have AWSConnector and AmazonS3FullAccess
@@ -35,7 +36,7 @@ public class AWSFileUpload {
 		AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
 		System.out.println("Creating Connection.........................");
 		// Upload File to S3 Bucket Folder
-		s3Client.putObject(new PutObjectRequest(bucketName, folderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
+		s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+innerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
 		System.out.println("File Uploaded...............................");
 		}catch(AmazonServiceException ase){
 			 System.out.println("Caught an AmazonServiceException, which " +
@@ -58,7 +59,7 @@ public class AWSFileUpload {
 	}
 	
 	// Aws File Delete
-	public void deleteFileFromAWSS3(String fileName) throws IOException {
+	public void deleteFileFromAWSS3(String fileName,Integer departmentId) throws IOException {
 
 		try {
 			// credentials object identifying user for authentication
@@ -68,12 +69,13 @@ public class AWSFileUpload {
 					crmProperties.getProperty("secretKey"));
 			String bucketName = crmProperties.getProperty("bucketName");
 			String folderName = crmProperties.getProperty("folderName");
+			String innerFolderName=crmProperties.getProperty("innerFolderName");
 			// create a client connection based on credentials
 			AmazonS3 s3client = new AmazonS3Client(credentials);
 			System.out.println("Create Connection..........................");
 
 			// Upload file to folder and set it to public
-			s3client.deleteObject(bucketName, folderName+fileName);
+			s3client.deleteObject(bucketName, folderName+departmentId.toString()+innerFolderName+fileName);
 			System.out.println("File Deleted..........................");
 		} catch (AmazonServiceException ase) {
 			System.out.println("Caught an AmazonServiceException, which "

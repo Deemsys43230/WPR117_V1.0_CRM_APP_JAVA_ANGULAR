@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 29 Apr, 2017 1:50:04 PM by Hibernate Tools 3.4.0.CR1
+// Generated 8 May, 2017 6:47:14 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,14 +23,19 @@ public class County implements java.io.Serializable {
 	private Integer countyId;
 	private String name;
 	private Integer status;
+	private Set<PoliceDepartment> policeDepartments = new HashSet<PoliceDepartment>(
+			0);
 	private Set<CrashReports> crashReportses = new HashSet<CrashReports>(0);
 
 	public County() {
 	}
 
-	public County(String name, Integer status, Set<CrashReports> crashReportses) {
+	public County(String name, Integer status,
+			Set<PoliceDepartment> policeDepartments,
+			Set<CrashReports> crashReportses) {
 		this.name = name;
 		this.status = status;
+		this.policeDepartments = policeDepartments;
 		this.crashReportses = crashReportses;
 	}
 
@@ -61,6 +66,15 @@ public class County implements java.io.Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "county")
+	public Set<PoliceDepartment> getPoliceDepartments() {
+		return this.policeDepartments;
+	}
+
+	public void setPoliceDepartments(Set<PoliceDepartment> policeDepartments) {
+		this.policeDepartments = policeDepartments;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "county")

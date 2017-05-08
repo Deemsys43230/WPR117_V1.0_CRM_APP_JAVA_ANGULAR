@@ -26,7 +26,7 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 			"location":"",
 			"fileName":"",
 			"crashSeverity":"",
-			"countyId":"50",
+			"countyId":"",
 			"occupantsForms":[{"firstName":"","lastName":"","injuries":"","seatingPosition":"","status":1}]
 	};
 	
@@ -37,8 +37,16 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 		});
 	};
 	
+	// Get Police Department Details
+	$scope.getPoliceDepartment=function(){
+		requestHandler.getRequest("/getCurrentUserPoliceDepartment.json","").then(function(response){
+			$scope.report.countyId=response.data.policeDepartmentForm.countyId.toString();
+		});
+	};
+	
 	// Call get County List
 	$scope.getCountyList();
+	$scope.getPoliceDepartment();
 	
 	//Add Occupant
 	$scope.addOccupant=function(){

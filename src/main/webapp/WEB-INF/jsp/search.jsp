@@ -30,7 +30,7 @@
 	
 </head>
 	<div class="container" style="width:92%;">
-		<img src="resources/images/slider/main2.jpg" style="width:100%;"/>
+		<img src="resources/images/slider/main.jpg" style="width:100%;"/>
 	</div>
 <body ng-app="commonApp" ng-cloak>
 

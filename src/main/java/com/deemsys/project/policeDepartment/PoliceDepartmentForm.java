@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PoliceDepartmentForm {
 
 	private Integer policeDepartmentId;
+	private Integer countyId;
 	private String name;
 	private String code;
 	private String createdDateTime;
@@ -24,6 +25,14 @@ public class PoliceDepartmentForm {
 
 	public void setPoliceDepartmentId(Integer policeDepartmentId) {
 		this.policeDepartmentId = policeDepartmentId;
+	}
+
+	public Integer getCountyId() {
+		return countyId;
+	}
+
+	public void setCountyId(Integer countyId) {
+		this.countyId = countyId;
 	}
 
 	public String getName() {
@@ -58,10 +67,11 @@ public class PoliceDepartmentForm {
 		this.status = status;
 	}
 
-	public PoliceDepartmentForm(Integer policeDepartmentId, String name,
+	public PoliceDepartmentForm(Integer policeDepartmentId, Integer countyId, String name,
 			String code, String createdDateTime, Integer status) {
 		super();
 		this.policeDepartmentId = policeDepartmentId;
+		this.countyId = countyId;
 		this.name = name;
 		this.code = code;
 		this.createdDateTime = createdDateTime;
