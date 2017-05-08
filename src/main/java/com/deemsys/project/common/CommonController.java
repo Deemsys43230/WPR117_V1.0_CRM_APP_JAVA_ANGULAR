@@ -119,10 +119,10 @@ public class CommonController {
  	
  	// Logout
  	@RequestMapping(value="/logout",method=RequestMethod.GET)
-   	public String logout(ModelMap model)
+   	public String logout(HttpServletRequest request,ModelMap model)
    	{
        	model.addAttribute("Success",true);
-   		return "/search";
+        return "/ohio-main";
    	}
  	
  	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)

@@ -178,4 +178,16 @@ public class CRMConstants {
 		
 	}
 
+	// Split User Name From Security Principal
+	public static String splitUserName(String combinedUserName){
+		String splittedUserName[]=combinedUserName.split(CRMConstants.USERNAME_DELIMETER);
+		
+		return splittedUserName[0];
+	};
+	
+	public static String[] splitDepartmentId(String combinedUserName){
+		String splittedUserName[]=combinedUserName.split(CRMConstants.USERNAME_DELIMETER);
+		
+		return splittedUserName;
+	};
 }

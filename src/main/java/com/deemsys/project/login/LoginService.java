@@ -37,17 +37,17 @@ public class LoginService {
 	
 	public Integer getCurrentUserId(){
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return usersDAO.getByUsername(this.splitUserName(user.getUsername())).getUserId();
+		return usersDAO.getByUsername(CRMConstants.splitUserName(user.getUsername())).getUserId();
 	}
 	
 	public String getCurrentAccountId(){
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return usersDAO.getByUsername(this.splitUserName(user.getUsername())).getAccounts().getAccountId();
+		return usersDAO.getByUsername(CRMConstants.splitUserName(user.getUsername())).getAccounts().getAccountId();
 	}
 	
 	public Integer getCurrentAccountPoliceDepartmentId(){
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Accounts accounts=usersDAO.getByUsername(this.splitUserName(user.getUsername())).getAccounts();
+		Accounts accounts=usersDAO.getByUsername(CRMConstants.splitUserName(user.getUsername())).getAccounts();
 		
 		return accounts.getPoliceDepartment().getPoliceDepartmentId();
 	}
@@ -61,9 +61,5 @@ public class LoginService {
 		}
 	}
 	
-	public String splitUserName(String combinedUserName){
-		String splittedUserName[]=combinedUserName.split(CRMConstants.USERNAME_DELIMETER);
-		
-		return splittedUserName[0];
-	};
+	
 }
