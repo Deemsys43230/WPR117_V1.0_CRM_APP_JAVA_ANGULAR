@@ -3,12 +3,14 @@ package com.deemsys.project.crashreports;
 public class CrashReportSearchForm {
 	
 	private String accountId;
+	private Integer policeDepartmentId;
 	private String reportNumber;
 	private String crashDate;
 	private String location;
-	private String addedDate;
 	private String firstName;
 	private String lastName;
+	private String addedOnFromDate;
+	private String addedOnToDate;
 	private Integer searchType;
 	private Integer pageNumber;
 	private Integer itemsPerPage;
@@ -19,6 +21,12 @@ public class CrashReportSearchForm {
 	}
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
+	}
+	public Integer getPoliceDepartmentId() {
+		return policeDepartmentId;
+	}
+	public void setPoliceDepartmentId(Integer policeDepartmentId) {
+		this.policeDepartmentId = policeDepartmentId;
 	}
 	public String getReportNumber() {
 		return reportNumber;
@@ -38,12 +46,6 @@ public class CrashReportSearchForm {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public String getAddedDate() {
-		return addedDate;
-	}
-	public void setAddedDate(String addedDate) {
-		this.addedDate = addedDate;
-	}
 	public String getFirstName() {
 		return firstName;
 	}
@@ -55,6 +57,18 @@ public class CrashReportSearchForm {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public String getAddedOnFromDate() {
+		return addedOnFromDate;
+	}
+	public void setAddedOnFromDate(String addedOnFromDate) {
+		this.addedOnFromDate = addedOnFromDate;
+	}
+	public String getAddedOnToDate() {
+		return addedOnToDate;
+	}
+	public void setAddedOnToDate(String addedOnToDate) {
+		this.addedOnToDate = addedOnToDate;
 	}
 	public Integer getSearchType() {
 		return searchType;
@@ -80,16 +94,18 @@ public class CrashReportSearchForm {
 	public void setReportType(Integer reportType) {
 		this.reportType = reportType;
 	}
-	public CrashReportSearchForm(String accountId,String reportNumber, String crashDate, String location,
-			String addedDate, String firstName, String lastName, Integer searchType,Integer pageNumber,Integer itemsPerPage, Integer reportType) {
+	public CrashReportSearchForm(String accountId, Integer policeDepartmentId, String reportNumber, String crashDate, String location,
+		 String firstName, String lastName, String addedOnFromDate, String addedOnToDate, Integer searchType,Integer pageNumber,Integer itemsPerPage, Integer reportType) {
 		super();
 		this.accountId = accountId;
+		this.policeDepartmentId = policeDepartmentId;
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.location = location;
-		this.addedDate = addedDate;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.addedOnFromDate = addedOnFromDate;
+		this.addedOnToDate = addedOnToDate;
 		this.searchType = searchType;
 		this.pageNumber = pageNumber;
 		this.itemsPerPage = itemsPerPage;

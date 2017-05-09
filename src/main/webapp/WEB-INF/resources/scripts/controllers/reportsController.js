@@ -172,13 +172,25 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 
 	$scope.getCrashReportsList=function(){
 		
-		$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
-		$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
-		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
-			$scope.searchReportsList($scope.crashReportSearchForm);
+		if($scope.crashReportSearchForm.addedOnFromDate!=''){
+			if($scope.crashReportSearchForm.addedOnToDate==''){
+				$scope.addedToDateError=true;
+			}else{
+				$scope.addedToDateError=false;
+			}
+		}else{
+			$scope.addedToDateError=false;
 		}
-		// To Avoid Main Search Parameter Override
-		angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
+		
+		if(!$scope.addedToDateError){
+			$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
+			$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
+			if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
+				$scope.searchReportsList($scope.crashReportSearchForm);
+			}
+			// To Avoid Main Search Parameter Override
+			angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
+		}
 		
 	};
     
@@ -234,6 +246,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 	
 	
     $scope.init=function(){
+    	$scope.addedToDateError=false;
     	$scope.crashReportsResultListOriginal=[];
     	$scope.deleteText="Yes";
     	$scope.isDeleting=false;
@@ -247,14 +260,17 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 				"firstName":"",
 				"lastName":"",
 				"location":"",
+				"addedOnFromDate":"",
+				"addedOnToDate":"",
 				"pageNumber":1,
 				"itemsPerPage":"10",
-				"addedDate":"",
 				"searchType":1,
 				"reportType":1
 		};
 		// Set Max Date
 		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
+		$('#addedOnFromDate').data("DateTimePicker").setMaxDate($rootScope.currentDate);
+		$('#addedOnToDate').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 		
 		$scope.oldPageNumber= $scope.crashReportSearchForm.pageNumber;
 		if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
@@ -284,6 +300,21 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 	$scope.deleteReportModal=function(reportId){
 		$scope.reportId=reportId;
 		$("#deleteReportModal").modal('show');
+	};
+	
+	// Reset Added On To Date
+	$scope.resetToDate=function(){
+		if($scope.crashReportSearchForm.addedOnToDate<$scope.crashReportSearchForm.addedOnFromDate){
+			$scope.crashReportSearchForm.addedOnToDate="";
+		}
+	};
+	
+	// Report Details on Modal
+	$scope.getReport=function(reportId){
+		requestHandler.getRequest("getCrashReports.json?id="+reportId,"").then(function(response){
+			$scope.reportDetails=response.data.crashReportsForm;
+			$("#viewReportDetailsModal").modal('show');
+		});
 	};
 	
 	// Reset Search

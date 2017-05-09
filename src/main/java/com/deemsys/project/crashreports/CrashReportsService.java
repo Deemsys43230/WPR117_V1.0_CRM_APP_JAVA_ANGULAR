@@ -81,6 +81,7 @@ public class CrashReportsService {
 		if(crashReportSearchForm.getSearchType()==1&&crashReportSearchForm.getReportType()==1){
 			String currentAccountId=loginService.getCurrentAccountId();
 			crashReportSearchForm.setAccountId(currentAccountId);
+			crashReportSearchForm.setPoliceDepartmentId(loginService.getCurrentAccountPoliceDepartmentId());
 		}
 		
 		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReports(crashReportSearchForm);
@@ -99,7 +100,7 @@ public class CrashReportsService {
 				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyId(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getDepartmentId()+crmProperties.getProperty("innerFolderName")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
 			}
 			// Set Occupants
-			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getInjuries(), crashReportSearchList.getSeatingPosition(), 1));
+			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getInjuries(), CRMConstants.getInjuriesText(crashReportSearchList.getInjuries()), crashReportSearchList.getSeatingPosition(), CRMConstants.getSeatingPositionText(crashReportSearchList.getSeatingPosition()), 1));
 			rowCount++;
 		}
 		if(rowCount>0)
@@ -120,11 +121,11 @@ public class CrashReportsService {
 		List<OccupantsForm> occupantsForms = new ArrayList<OccupantsForm>();
 		List<Occupants> occupants = occupantsDAO.getOccupantsByReportId(reportId);
 		for (Occupants occupant : occupants) {
-			OccupantsForm occupantsForm = new OccupantsForm(occupant.getId().getFirstName(), occupant.getId().getLastName(), occupant.getId().getInjuries(), occupant.getId().getSeatingPosition(), occupant.getId().getStatus());
+			OccupantsForm occupantsForm = new OccupantsForm(occupant.getId().getFirstName(), occupant.getId().getLastName(), occupant.getId().getInjuries(), CRMConstants.getInjuriesText(occupant.getId().getInjuries()), occupant.getId().getSeatingPosition(), CRMConstants.getSeatingPositionText(occupant.getId().getSeatingPosition()), occupant.getId().getStatus());
 			occupantsForms.add(occupantsForm);
 		}
 		
-		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getPoliceDepartment().getPoliceDepartmentId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getCrashSeverity(), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
+		CrashReportsForm crashReportsForm=new CrashReportsForm(crashReports.getReportId(), crashReports.getPoliceDepartment().getPoliceDepartmentId(), crashReports.getReportNumber(), CRMConstants.convertMonthFormat(crashReports.getCrashDate()), crashReports.getCounty().getCountyId(), crashReports.getCounty().getName(), crashReports.getCrashSeverity(), CRMConstants.getCrashSeverityText(crashReports.getCrashSeverity()), crashReports.getLocation(), crashReports.getFileName(), crmProperties.getProperty("bucketURL")+crashReports.getFileName(), CRMConstants.convertMonthFormat(crashReports.getAddedDate()), CRMConstants.convertUSAFormatWithTime(crashReports.getAddedDateTime()), crashReports.getStatus(), occupantsForms);
 		
 		//End
 		

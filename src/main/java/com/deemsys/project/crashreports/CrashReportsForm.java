@@ -24,7 +24,9 @@ public class CrashReportsForm {
 	private MultipartFile crashReport;
 	private String location;
 	private Integer countyId;
+	private String countyName;
 	private Integer crashSeverity;
+	private String crashSeverityText;
 	private String fileName;
 	private String fileAccessPath;
 	private String addedDate;
@@ -89,12 +91,28 @@ public class CrashReportsForm {
 		this.countyId = countyId;
 	}
 
+	public String getCountyName() {
+		return countyName;
+	}
+
+	public void setCountyName(String countyName) {
+		this.countyName = countyName;
+	}
+
 	public Integer getCrashSeverity() {
 		return crashSeverity;
 	}
 
 	public void setCrashSeverity(Integer crashSeverity) {
 		this.crashSeverity = crashSeverity;
+	}
+
+	public String getCrashSeverityText() {
+		return crashSeverityText;
+	}
+
+	public void setCrashSeverityText(String crashSeverityText) {
+		this.crashSeverityText = crashSeverityText;
 	}
 
 	public String getAddedDate() {
@@ -154,7 +172,7 @@ public class CrashReportsForm {
 	}
 
 	public CrashReportsForm(String reportId, Integer policeDepartmentId, String reportNumber,
-			String crashDate, Integer countyId, Integer crashSeverity, String location, String fileName, String fileAccessPath, String addedDate,
+			String crashDate, Integer countyId, String countyName, Integer crashSeverity, String crashSeverityText, String location, String fileName, String fileAccessPath, String addedDate,
 			String addedDateTime, Integer status,
 			List<OccupantsForm> occupantsForms) {
 		super();
@@ -163,7 +181,9 @@ public class CrashReportsForm {
 		this.reportNumber = reportNumber;
 		this.crashDate = crashDate;
 		this.countyId = countyId;
+		this.countyName = countyName;
 		this.crashSeverity = crashSeverity;
+		this.crashSeverityText = crashSeverityText;
 		this.location = location;
 		this.fileName = fileName;
 		this.fileAccessPath = fileAccessPath;

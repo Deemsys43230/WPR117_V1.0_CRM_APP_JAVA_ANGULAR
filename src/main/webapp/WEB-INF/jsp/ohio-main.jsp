@@ -36,8 +36,8 @@
 		</div>
 		<div class="col-md-12" id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
 		<div class="col-md-12">
-			<div class="col-md-3"><label>Police Department:</label></div>
-			<div class="col-md-4">
+			<div class="col-md-4"><label>Select Your Police Department:</label></div>
+			<div class="col-md-5">
 			<select id="policeDepartment" name="policeDepartment" class="form-control">
 			<option value="">-- Select --</option>
 			<option value="boardman">Boardman</option>
@@ -46,7 +46,7 @@
 			<span id="ploiceDepartment_error" style="color:red;"></span>
 			</div>
 			<div class="col-md-1"></div>
-			<div class="col-md-3"><a class="btn btn-default" onclick="goToLoginPage()">Go !</a></div>
+			<div class="col-md-2"><a class="btn btn-default" onclick="goToLoginPage()">Go !</a></div>
 		</div>
 	</div>
 </section>

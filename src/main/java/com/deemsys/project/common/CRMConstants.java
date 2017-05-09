@@ -190,4 +190,131 @@ public class CRMConstants {
 		
 		return splittedUserName;
 	};
+	
+	// Get Crash Severity Text
+	public static String getCrashSeverityText(Integer crashSeverity){
+		String crashSeverityText="";
+		switch (crashSeverity) {
+		case 1:
+			crashSeverityText="1 - FATAL";
+			break;
+		case 2:
+			crashSeverityText="2 - INJURY";
+			break;
+		case 3:
+			crashSeverityText="3 - PDO";
+			break;
+		case 4:
+			crashSeverityText="X - NOT AVAILABLE";
+			break;
+		default:
+			crashSeverityText="";
+			break;
+		}
+		return crashSeverityText;
+	}
+	
+	// Get Injuries Text
+	public static String getInjuriesText(String injury){
+		String injuriesText="";
+		Integer injuryCheck=0;
+		if(injury!=null&&!injury.equals("")){
+			injuryCheck=Integer.parseInt(injury);
+		}
+		
+		switch (injuryCheck) {
+		case 1:
+			injuriesText="1 - NO INJURY / NONE REPORTED";
+			break;
+		case 2:
+			injuriesText="2 - POSSIBLE";
+			break;
+		case 3:
+			injuriesText="3 - NON-INCAPACITATING";
+			break;
+		case 4:
+			injuriesText="4 - INCAPACITATING";
+			break;
+		case 5:
+			injuriesText="5 - FATAL";
+			break;
+		case 6:
+			injuriesText="X - NOT AVAILABLE";
+			break;
+		default:
+			injuriesText="";
+			break;
+		}
+		return injuriesText;
+	}
+	
+	// Get Seating Position Text
+	public static String getSeatingPositionText(String seatingPosition){
+		String seatingPositionText="";
+		Integer seatingPositionCheck=0;
+		if(seatingPosition!=null&&!seatingPosition.equals("")){
+			seatingPositionCheck=Integer.parseInt(seatingPosition);
+		}
+		
+		switch (seatingPositionCheck) {
+		case 1:
+			seatingPositionText="1 - FRONT - LEFT SIDE (MOTORCYCLE DRIVER)";
+			break;
+		case 2:
+			seatingPositionText="2 - FRONT - MIDDLE";
+			break;
+		case 3:
+			seatingPositionText="3 - FRONT - RIGHT SIDE";
+			break;
+		case 4:
+			seatingPositionText="4 - SECOND - LEFT SIDE (MOTORCYCLE PASSENGER)";
+			break;
+		case 5:
+			seatingPositionText="5 - SECOND - MIDDLE";
+			break;
+		case 6:
+			seatingPositionText="6 - SECOND - RIGHT SIDE";
+			break;
+		case 7:
+			seatingPositionText="7 - THIRD - LEFT SIDE (MOTORCYCLE SIDE CAR)";
+			break;
+		case 8:
+			seatingPositionText="8 - THIRD - MIDDLE";
+			break;
+		case 9:
+			seatingPositionText="9 - THIRD - RIGHT SIDE";
+			break;
+		case 10:
+			seatingPositionText="10 - SLEEPER SECTION OF CAB (TRUCK)";
+			break;
+		case 11:
+			seatingPositionText="11 - PASSENGER IN OTHER ENCLOSED CARGO AREA (NON-TRAILING UNIT SUCH AS A BUS, PICK-UP WITH CAP)";
+			break;
+		case 12:
+			seatingPositionText="12 - PASSENGER IN UNENCLOSED CARGO AREA";
+			break;
+		case 13:
+			seatingPositionText="13 - TRAILING UNIT";
+			break;
+		case 14:
+			seatingPositionText="14 - RIDING ON VEHICLE EXTERIOR (NON-TRAILING UNIT)";
+			break;
+		case 15:
+			seatingPositionText="15 - NON-MOTORIST";
+			break;
+		case 16:
+			seatingPositionText="16 - OTHER";
+			break;
+		case 17:
+			seatingPositionText="99 - UNKNOWN";
+			break;
+		case 18:
+			seatingPositionText="X - NOT AVAILABLE";
+			break;
+		default:
+			seatingPositionText="";
+			break;
+		}
+		return seatingPositionText;
+	}
 }

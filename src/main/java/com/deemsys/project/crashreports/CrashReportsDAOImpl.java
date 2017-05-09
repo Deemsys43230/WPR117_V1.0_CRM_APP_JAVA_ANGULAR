@@ -181,8 +181,8 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 			}
 		}
 		
-		if(crashReportSearchForm.getAddedDate()!=null && !crashReportSearchForm.getAddedDate().equals("")){
-			Criterion addedDateCriterion = Restrictions.eq("addedDate", CRMConstants.convertYearFormat(crashReportSearchForm.getAddedDate()));
+		if(crashReportSearchForm.getAddedOnFromDate()!=null && !crashReportSearchForm.getAddedOnFromDate().equals("")){
+			Criterion addedDateCriterion = Restrictions.between("addedDate", CRMConstants.convertYearFormat(crashReportSearchForm.getAddedOnFromDate()), CRMConstants.convertYearFormat(crashReportSearchForm.getAddedOnToDate()));
 			criteria.add(addedDateCriterion);
 		}
 		
@@ -207,7 +207,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}
 		
 		if(crashReportSearchForm.getReportType()==1&&crashReportSearchForm.getSearchType()==1)
-		  criteria.add(Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId()));
+		  criteria.add(Restrictions.or(Restrictions.eq("p1.policeDepartmentId", crashReportSearchForm.getPoliceDepartmentId()),Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId())));
 		
 		ProjectionList projectionList = Projections.projectionList();
 		
