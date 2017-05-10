@@ -241,6 +241,8 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		// Set Order
 		criteria.addOrder(Order.desc("c1.addedDateTime"));
 		
+		criteria.addOrder(Order.asc("o1.id.sequenceNo"));
+		
 		List<CrashReportSearchList> crashReportSearchLists = criteria.setResultTransformer(new AliasToBeanResultTransformer(CrashReportSearchList.class)).setFirstResult((crashReportSearchForm.getPageNumber()-1)*crashReportSearchForm.getItemsPerPage()).setMaxResults(crashReportSearchForm.getItemsPerPage()).list();
 		
 		CrashReportsSearchResultSet crashReportsSearchResultSet = new CrashReportsSearchResultSet(totalNoOfRecords, crashReportSearchLists);

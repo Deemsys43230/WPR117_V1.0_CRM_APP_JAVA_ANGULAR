@@ -54,7 +54,7 @@
 				</div>-->
 				<!-- /SOCIAL ICONS -->
 				<div class="col-sm-12 copyright text-center">
-					<p>&copy; 2017 <a href="">Deemsys Inc</a>. All Rights Reserved.</p>
+					<p>&copy; 2017 Deemsys Inc. All Rights Reserved.</p>
 				</div>
 			</div>
 		</div>

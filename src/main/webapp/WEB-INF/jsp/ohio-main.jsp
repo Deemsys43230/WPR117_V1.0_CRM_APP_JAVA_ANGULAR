@@ -31,7 +31,8 @@
 <section id="services">
 	<div class="container search-form min-content-container">
 		<div class="col-md-12">
-			<h4>Police Departments</h4>
+			<h4>Police Departments <span class="pull-right"><a href="/CRM/" class="btn btn-default"><i class="fa fa-reply"> Back to Search</i></a></span></h4>
+			
 				<hr />
 		</div>
 		<div class="col-md-12" id="sessionout" style="color:#FF0000">Your Session has been expired. Please login again!<br/><br/></div>
@@ -72,7 +73,7 @@
 				</div>-->
 				<!-- /SOCIAL ICONS -->
 				<div class="col-sm-12 copyright text-center" >
-					<p>&copy; 2017 <a href="">Deemsys Inc</a>. All Rights Reserved.</p>
+					<p>&copy; 2017 Deemsys Inc. All Rights Reserved.</p>
 				</div>
 			</div>
 		</div>

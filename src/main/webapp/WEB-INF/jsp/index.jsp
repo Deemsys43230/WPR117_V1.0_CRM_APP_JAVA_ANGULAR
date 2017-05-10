@@ -53,7 +53,7 @@
 		</div>
 		
 				<div class="col-md-6 login-form">
-						<h4>Sign In</h4>
+						<h4>Sign In <span class="pull-right"><a href="/CRM/ohio" class="btn btn-default"><i class="fa fa-reply"> Back</i></a></span></h4>
 						<hr/>
 						<c:if test="${not empty param['error']}">
 		                            <div style="color:#FF0000;padding-left:20px;"><i class="fa fa-exclamation-triangle"></i>&nbsp;${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}<br/><br/></div>
@@ -97,7 +97,7 @@
 				</div>-->
 				<!-- /SOCIAL ICONS -->
 				<div class="col-sm-12 copyright text-center">
-					<p>&copy; 2017 <a href="">Deemsys Inc</a>. All Rights Reserved.</p>
+					<p>&copy; 2017 Deemsys Inc. All Rights Reserved.</p>
 				</div>
 			</div>
 		</div>
