@@ -38,16 +38,18 @@ angular.module('adminApp').directive('validateFileType',function(){
 	    require:'ngModel',
 	    link:function(scope,el,attrs,ngModel){
 	      el.bind('change',function(){
-	    	 var fileSize=el[0].files[0].size;
-	    	  var value = el.val(),
-              ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();   
-	          ngModel.$validators.validateFileType = function() {
-	        	  return validFormats.indexOf(ext) !== -1;
-	          };
-	          
-	          ngModel.$validators.validateFileSize=function(){
-	        	  return fileSize<10000000;
-	          };
+	    	if(el[0].files.length!=0){
+	    		 var fileSize=el[0].files[0].size;
+		    	  var value = el.val(),
+	              ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();   
+		          ngModel.$validators.validateFileType = function() {
+		        	  return validFormats.indexOf(ext) !== -1;
+		          };
+		          
+		          ngModel.$validators.validateFileSize=function(){
+		        	  return fileSize<10000000;
+		          };
+	    	}
 	      });
 	    }
 	  };
