@@ -77,7 +77,6 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 	};
 	
 	$scope.init=function(){
-
 		$scope.totalRecords=0;
 		$scope.isAccessable=1;
 		$scope.crashReportSearchForm={
@@ -93,6 +92,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 				"reportType":2,
 				"addedOnFromDate":"",
 				"addedOnToDate":"",
+				"policeDepartmentId":$("#departmentId").val()
 		};
 		// Set Max Date
 		$('#crashDateSearch').data("DateTimePicker").setMaxDate($rootScope.currentDate);

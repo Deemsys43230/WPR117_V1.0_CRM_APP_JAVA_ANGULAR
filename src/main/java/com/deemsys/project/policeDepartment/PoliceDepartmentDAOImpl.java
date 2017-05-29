@@ -62,10 +62,11 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 		return this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PoliceDepartment> find(String paramName, String paramValue) {
 		// TODO Auto-generated method stub
-		return null;
+		return this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).add(Restrictions.eq(paramName, paramValue)).list();
 	}
 
 	@Override
@@ -133,6 +134,12 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 	public List<PoliceDepartment> getActiveList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public PoliceDepartment getPoliceDepartmentByLink(String departmentLink) {
+		// TODO Auto-generated method stub
+		return (PoliceDepartment) this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).add(Restrictions.eq("link", departmentLink)).uniqueResult();
 	}
 
 	

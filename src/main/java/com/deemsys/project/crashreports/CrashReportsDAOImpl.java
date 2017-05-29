@@ -207,7 +207,13 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}
 		
 		if(crashReportSearchForm.getReportType()==1&&crashReportSearchForm.getSearchType()==1)
-		  criteria.add(Restrictions.or(Restrictions.eq("p1.policeDepartmentId", crashReportSearchForm.getPoliceDepartmentId()),Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId())));
+		{
+			criteria.add(Restrictions.or(Restrictions.eq("p1.policeDepartmentId", crashReportSearchForm.getPoliceDepartmentId()),Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId())));
+		}else if(crashReportSearchForm.getSearchType()==0){
+			if(crashReportSearchForm.getPoliceDepartmentId()!=null&&!crashReportSearchForm.getPoliceDepartmentId().equals(""))
+				criteria.add(Restrictions.eq("p1.policeDepartmentId", crashReportSearchForm.getPoliceDepartmentId()));
+		}
+		  
 		
 		ProjectionList projectionList = Projections.projectionList();
 		

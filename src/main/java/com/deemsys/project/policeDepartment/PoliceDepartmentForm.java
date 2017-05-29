@@ -16,6 +16,8 @@ public class PoliceDepartmentForm {
 	private Integer countyId;
 	private String name;
 	private String code;
+	private String loginLink;
+	private String searchLink;
 	private String createdDateTime;
 	private Integer status;
 	
@@ -51,6 +53,22 @@ public class PoliceDepartmentForm {
 		this.code = code;
 	}
 
+	public String getLoginLink() {
+		return loginLink;
+	}
+
+	public void setLoginLink(String loginLink) {
+		this.loginLink = loginLink;
+	}
+
+	public String getSearchLink() {
+		return searchLink;
+	}
+
+	public void setSearchLink(String searchLink) {
+		this.searchLink = searchLink;
+	}
+
 	public String getCreatedDateTime() {
 		return createdDateTime;
 	}
@@ -68,12 +86,14 @@ public class PoliceDepartmentForm {
 	}
 
 	public PoliceDepartmentForm(Integer policeDepartmentId, Integer countyId, String name,
-			String code, String createdDateTime, Integer status) {
+			String code, String loginLink, String searchLink, String createdDateTime, Integer status) {
 		super();
 		this.policeDepartmentId = policeDepartmentId;
 		this.countyId = countyId;
 		this.name = name;
 		this.code = code;
+		this.loginLink = loginLink;
+		this.searchLink = searchLink;
 		this.createdDateTime = createdDateTime;
 		this.status = status;
 	}

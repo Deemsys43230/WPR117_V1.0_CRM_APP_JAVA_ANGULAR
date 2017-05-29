@@ -30,8 +30,9 @@
 	
 </head>
 	<div class="container" style="width:92%;">
-		<img src="resources/images/slider/main.jpg" style="width:100%;"/>
+		<img src="${departmentBannerImage}" style="width:100%;"/>
 	</div>
+	<input type="hidden" id="departmentId" value="${departmentId}">
 <body ng-app="commonApp" ng-cloak>
 
 

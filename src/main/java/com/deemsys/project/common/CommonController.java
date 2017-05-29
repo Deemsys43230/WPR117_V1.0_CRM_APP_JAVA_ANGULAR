@@ -11,11 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deemsys.project.login.LoginService;
+import com.deemsys.project.policeDepartment.PoliceDepartmentForm;
+import com.deemsys.project.policeDepartment.PoliceDepartmentService;
 
 /**
  * 
@@ -32,6 +35,9 @@ public class CommonController {
 	
 	@Autowired
 	CRMProperties crmProperties;
+	
+	@Autowired
+	PoliceDepartmentService policeDepartmentService;
 	
     @RequestMapping(value={"/upload"},method=RequestMethod.GET)
 	public String getIndex(ModelMap model)
@@ -93,6 +99,8 @@ public class CommonController {
 	public String getSearch(ModelMap model)
 	{
     	model.addAttribute("Success",true);
+    	model.addAttribute("departmentId","");
+    	model.addAttribute("departmentBannerImage","resources/images/slider/main.jpg");
 		return "/search";
 	}
     
@@ -136,22 +144,67 @@ public class CommonController {
      	model.addAttribute("Success",true);
  		return "/ohio-main";
  	}
+ 	
+ 	// Police Department Wise Search Link
+ 	@RequestMapping(value={"/{department}"},method=RequestMethod.GET)
+  	public String getDepartmentSearch(@PathVariable("department") String department,ModelMap model)
+  	{
+ 		PoliceDepartmentForm policeDepartmentForm;
+		try {
+			boolean isSearch=department.contains("_");
+			if(isSearch){
+				policeDepartmentForm = policeDepartmentService.getPoliceDepartmentByLink("searchLink",department);
+			}else{
+				policeDepartmentForm = policeDepartmentService.getPoliceDepartmentByLink("loginLink",department);
+			}
+			model.addAttribute("departmentId",policeDepartmentForm.getPoliceDepartmentId());
+	     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+policeDepartmentForm.getPoliceDepartmentId()+"/banner/banner.jpg");
+	      	model.addAttribute("Success",true);
+	      	if(isSearch){
+	      		return "/search";
+	      	}else{
+	      		return "/index";
+	      	}
+	     } catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			model.addAttribute("error",e.toString());
+			model.addAttribute("Success",false);
+			System.out.println("Error--->>"+e.toString());
+			return "404";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			model.addAttribute("error",e.toString());
+			model.addAttribute("Success",false);
+			System.out.println("Error--->>"+e.toString());
+			return "404";
+		}
+   }
  	 
-    @RequestMapping(value={"/boardman"},method=RequestMethod.GET)
- 	public String getBoardman(ModelMap model)
+   /* @RequestMapping(value={"/{department}"},method=RequestMethod.GET)
+ 	public String getPoliceDepartmentLogin(@PathVariable("department") String department,ModelMap model)
  	{
-    	model.addAttribute("departmentId",2);
-    	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"2/banner/banner.jpg");
+    	//model.addAttribute("departmentId",2);
+    	//model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"2/banner/banner.jpg");
+    	PoliceDepartmentForm policeDepartmentForm = policeDepartmentService.getPoliceDepartmentByLink(department);
+     	model.addAttribute("departmentId",policeDepartmentForm.getPoliceDepartmentId());
+     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+policeDepartmentForm.getPoliceDepartmentId()+"/banner/banner.jpg");
      	model.addAttribute("Success",true);
  		return "/index";
- 	}
+ 	}*/
     
-    @RequestMapping(value={"/fairborn"},method=RequestMethod.GET)
+   /* @RequestMapping(value={"/fairborn"},method=RequestMethod.GET)
  	public String getFairborn(ModelMap model)
  	{
     	model.addAttribute("departmentId",3);
     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"3/banner/banner.jpg");
      	model.addAttribute("Success",true);
  		return "/index";
+ 	}
+    */
+    @RequestMapping(value={"/404"},method=RequestMethod.GET)
+ 	public String pageNotFound(ModelMap model)
+ 	{
+     	model.addAttribute("Success",true);
+ 		return "/404";
  	}
 }

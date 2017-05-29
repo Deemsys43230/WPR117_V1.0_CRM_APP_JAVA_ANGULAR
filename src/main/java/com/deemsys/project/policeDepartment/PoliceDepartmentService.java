@@ -45,7 +45,7 @@ public class PoliceDepartmentService {
 		
 		for (PoliceDepartment policeDepartment : policeDepartments) {
 			//TODO: Fill the List
-			PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
+			PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(), policeDepartment.getSearchLink(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
 			policeDepartmentForms.add(policeDepartmentForm);
 		}
 		
@@ -60,11 +60,33 @@ public class PoliceDepartmentService {
 		//TODO: Convert Entity to Form
 		//Start
 		
-		PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
+		PoliceDepartmentForm policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(), policeDepartment.getSearchLink(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
 		
 		//End
 		
 		return policeDepartmentForm;
+	}
+	
+	public PoliceDepartmentForm getPoliceDepartmentByLink(String departmentLink,String departmentValue) throws NullPointerException,Exception
+	{
+		PoliceDepartmentForm policeDepartmentForm=null;
+		try{
+			List<PoliceDepartment> policeDepartments=policeDepartmentDAO.find(departmentLink, departmentValue);
+			
+			//TODO: Convert Entity to Form
+			//Start
+			for (PoliceDepartment policeDepartment : policeDepartments) {
+				policeDepartmentForm=new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(), policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(), policeDepartment.getSearchLink(), CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()), policeDepartment.getStatus());
+			}
+			
+			
+			return policeDepartmentForm;
+		}catch(NullPointerException nullPointerException){
+			throw nullPointerException;
+		}catch (Exception e) {
+			// TODO: handle exception
+			throw e;
+		}
 	}
 	
 	//Merge an Entry (Save or Update)
@@ -76,7 +98,7 @@ public class PoliceDepartmentService {
 		// County 
 		County county = countyDAO.get(policeDepartmentForm.getCountyId());
 		
-		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
+		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), policeDepartmentForm.getLoginLink(), policeDepartmentForm.getSearchLink(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
 		policeDepartment.setPoliceDepartmentId(policeDepartmentForm.getPoliceDepartmentId());
 		//Logic Ends
 		
@@ -93,7 +115,7 @@ public class PoliceDepartmentService {
 		//Logic Starts
 		
 		County county = countyDAO.get(policeDepartmentForm.getCountyId());
-		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
+		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), policeDepartmentForm.getLoginLink(), policeDepartmentForm.getSearchLink(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
 		
 		//Logic Ends
 		
@@ -110,7 +132,7 @@ public class PoliceDepartmentService {
 		
 		County county = countyDAO.get(policeDepartmentForm.getCountyId());
 		
-		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
+		PoliceDepartment policeDepartment=new PoliceDepartment(county, policeDepartmentForm.getName(), policeDepartmentForm.getCode(), policeDepartmentForm.getLoginLink(), policeDepartmentForm.getSearchLink(), CRMConstants.convertYearFormatWithTime(policeDepartmentForm.getCreatedDateTime()), policeDepartmentForm.getStatus(), null, null);
 		policeDepartment.setPoliceDepartmentId(policeDepartmentForm.getPoliceDepartmentId());
 		
 		//Logic Ends

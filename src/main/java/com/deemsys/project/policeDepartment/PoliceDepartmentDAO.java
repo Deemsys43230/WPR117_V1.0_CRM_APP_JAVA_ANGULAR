@@ -8,5 +8,5 @@ import com.deemsys.project.entity.PoliceDepartment;
  *
  */
 public interface PoliceDepartmentDAO extends IGenericDAO<PoliceDepartment>{
-
+	public PoliceDepartment getPoliceDepartmentByLink(String departmentLink);
 }

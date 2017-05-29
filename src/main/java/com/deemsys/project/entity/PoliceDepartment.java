@@ -1,6 +1,6 @@
 package com.deemsys.project.entity;
 
-// Generated 8 May, 2017 6:47:14 PM by Hibernate Tools 3.4.0.CR1
+// Generated 29 May, 2017 1:29:31 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -29,6 +29,8 @@ public class PoliceDepartment implements java.io.Serializable {
 	private County county;
 	private String name;
 	private String code;
+	private String loginLink;
+	private String searchLink;
 	private Date createdDateTime;
 	private Integer status;
 	private Set<Accounts> accountses = new HashSet<Accounts>(0);
@@ -38,11 +40,14 @@ public class PoliceDepartment implements java.io.Serializable {
 	}
 
 	public PoliceDepartment(County county, String name, String code,
-			Date createdDateTime, Integer status, Set<Accounts> accountses,
+			String loginLink, String searchLink, Date createdDateTime,
+			Integer status, Set<Accounts> accountses,
 			Set<CrashReports> crashReportses) {
 		this.county = county;
 		this.name = name;
 		this.code = code;
+		this.loginLink = loginLink;
+		this.searchLink = searchLink;
 		this.createdDateTime = createdDateTime;
 		this.status = status;
 		this.accountses = accountses;
@@ -86,6 +91,24 @@ public class PoliceDepartment implements java.io.Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	@Column(name = "login_link", length = 45)
+	public String getLoginLink() {
+		return this.loginLink;
+	}
+
+	public void setLoginLink(String loginLink) {
+		this.loginLink = loginLink;
+	}
+
+	@Column(name = "search_link", length = 45)
+	public String getSearchLink() {
+		return this.searchLink;
+	}
+
+	public void setSearchLink(String searchLink) {
+		this.searchLink = searchLink;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
