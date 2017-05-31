@@ -67,11 +67,11 @@ public class PoliceDepartmentService {
 		return policeDepartmentForm;
 	}
 	
-	public PoliceDepartmentForm getPoliceDepartmentByLink(String departmentLink,String departmentValue) throws NullPointerException,Exception
+	public PoliceDepartmentForm getPoliceDepartmentByLink(String departmentLinkParam,String departmentValue) throws NullPointerException,Exception
 	{
 		PoliceDepartmentForm policeDepartmentForm=null;
 		try{
-			List<PoliceDepartment> policeDepartments=policeDepartmentDAO.find(departmentLink, departmentValue);
+			List<PoliceDepartment> policeDepartments=policeDepartmentDAO.find(departmentLinkParam, departmentValue);
 			
 			//TODO: Convert Entity to Form
 			//Start

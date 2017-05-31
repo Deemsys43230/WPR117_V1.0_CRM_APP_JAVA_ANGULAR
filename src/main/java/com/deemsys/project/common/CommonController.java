@@ -158,7 +158,7 @@ public class CommonController {
 				policeDepartmentForm = policeDepartmentService.getPoliceDepartmentByLink("loginLink",department);
 			}
 			model.addAttribute("departmentId",policeDepartmentForm.getPoliceDepartmentId());
-	     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+policeDepartmentForm.getPoliceDepartmentId()+"/banner/banner.jpg");
+	     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+policeDepartmentForm.getPoliceDepartmentId()+crmProperties.getProperty("bannerLocation"));
 	      	model.addAttribute("Success",true);
 	      	if(isSearch){
 	      		return "/search";
@@ -180,27 +180,6 @@ public class CommonController {
 		}
    }
  	 
-   /* @RequestMapping(value={"/{department}"},method=RequestMethod.GET)
- 	public String getPoliceDepartmentLogin(@PathVariable("department") String department,ModelMap model)
- 	{
-    	//model.addAttribute("departmentId",2);
-    	//model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"2/banner/banner.jpg");
-    	PoliceDepartmentForm policeDepartmentForm = policeDepartmentService.getPoliceDepartmentByLink(department);
-     	model.addAttribute("departmentId",policeDepartmentForm.getPoliceDepartmentId());
-     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+policeDepartmentForm.getPoliceDepartmentId()+"/banner/banner.jpg");
-     	model.addAttribute("Success",true);
- 		return "/index";
- 	}*/
-    
-   /* @RequestMapping(value={"/fairborn"},method=RequestMethod.GET)
- 	public String getFairborn(ModelMap model)
- 	{
-    	model.addAttribute("departmentId",3);
-    	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+"3/banner/banner.jpg");
-     	model.addAttribute("Success",true);
- 		return "/index";
- 	}
-    */
     @RequestMapping(value={"/404"},method=RequestMethod.GET)
  	public String pageNotFound(ModelMap model)
  	{
