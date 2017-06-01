@@ -602,7 +602,6 @@
 		/* font-family:  'Open Sans', Arial, Helvetice Neue, sans-serif; */
 		font-size: 18px;
 		font-weight: 400;
-		line-height: 1.7857;
 		color: #555;
 		background-color: #f5f5f5;
 		min-height: 800px;
@@ -2821,6 +2820,16 @@ select{
     margin-bottom: 10px;
 }
 /* Error Message Ends*/
+
+.small-text{
+	font-size: 80% !important;
+}
+
+.div-center{
+	text-align:center;
+	min-height: 200px;
+	padding-top:50px;
+}
 
 /* Loader In CSS  */
 .loader {

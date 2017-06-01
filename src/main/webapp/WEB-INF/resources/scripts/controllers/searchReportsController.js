@@ -17,6 +17,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 		if($scope.isAccessable==1){
 			$scope.crashReportSearchForm.pageNumber=1;
 			requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
+				$scope.isSearched=true;
 				$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 				$scope.crashReportsResultList=response.data.crashReportsResult;
 				console.log($scope.crashReportsResultList);
@@ -28,6 +29,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
     $scope.secondarySearch=function(){
     	if($scope.isAccessable==1){
     		requestHandler.postRequest("searchCrashReportsAllUser.json",$scope.crashReportSearchForm).then(function(response){
+    			$scope.isSearched=true;
 				$scope.totalRecords=response.data.crashReportsResult.totalRecords;
 				$scope.crashReportsResultList=response.data.crashReportsResult;
 				console.log($scope.crashReportsResultList);
@@ -98,6 +100,7 @@ commonApp.controller('SearchReportsController',['$rootScope','$scope','$http','r
 		$('#crashDateSearch').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 		// Check Restriction Status
 		//$scope.getReportRestrictionStatus();
+		$scope.isSearched=false;
 	};
 	
 	$scope.init();

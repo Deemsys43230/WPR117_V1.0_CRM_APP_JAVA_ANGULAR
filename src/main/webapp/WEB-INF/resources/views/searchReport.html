@@ -75,7 +75,7 @@
 			<!-- <span class="pull-right"><a href="/CRM/" class="btn btn-default"><i class="fa fa-reply"></i> Back to Home</a></span> -->
 			<h4>Search Results</h4>
 			<hr/>
-				<table class="table table-bordered" ng-cloak>
+				<table class="table table-bordered" ng-cloak ng-show="isSearched">
 					<thead>
 						<tr class="report-table-header">
 							<th>Report #</th>
@@ -107,31 +107,36 @@
 				</table>
 				<dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true">
     					</dir-pagination-controls>
-				<div class="col-md-12">
+			<!-- 	<div class="col-md-12" ng-show="isSearched">
 					<div class="col-md-3 pull-right no-padding">
 						<label>Number of Records</label> <select
 							class="form-control input-sm option-bold"
 							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
 							id="noOfRows" ng-change="onRecordsPerPageChange()">
+							<option value="5">Show 5 Per Page</option>
 							<option value="10">Show 10 Per Page</option>
-							<option value="25">Show 25 Per Page</option>
-							<option value="50">Show 50 Per Page</option>
-							<option value="100">Show 100 Per Page</option>
-							<option value="250">Show 250 Per Page</option>
 						</select>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-md-12 access-alert" ng-show="isAccessable==0" ng-cloak>
 					<span><i class="fa fa-exclamation-triangle"></i> You have already downloaded a crash report today. Kindly wait for another 24 hours before attempting again (or) contact our support team for further assistance at <a href="mailto:support@crashreportsonline.com">support@crashreportsonline.com</a></span>
 				</div>
+				<div ng-show="!isSearched" class="div-center fa-2x"><i class="fa fa-search fa-5x"></i></div>
+				<div ng-show="!isSearched" class="div-center fa-2x">Enter the Details to get reports.</div>
 			</div>
-			
+		<!-- <div class="col-md-12" ng-show="crashReportSearchForm.policeDepartmentId==null||crashReportSearchForm.policeDepartmentId==''">
+		<div class="col-md-3"></div>
+		<div class="col-md-9">
+				<span><small>Please note that currently we provide service only for the Boardman & Fairborn Police Departments in Ohio. We are in the process of integrating with more Departments.</small></span><br/>
+		</div>
+		</div> -->
 		<div class="col-md-12">
 		<div class="col-md-3"></div>
 		<div class="col-md-9">
-				Did not find what you are looking for? Please <a href="#/contactUs">Contact Us.</a></div>
+				<span ng-show="crashReportSearchForm.policeDepartmentId==null||crashReportSearchForm.policeDepartmentId==''" class="small-text">Please note that currently we provide service only for the Boardman & Fairborn Police Departments in Ohio. We are in the process of integrating with more Departments.<br/></span>
+				Could not find what you were looking for? Please <a href="#/contactUs">Contact Us.</a></div>
 		</div>
-		</div>
+		
 	
 	<!-- 	<div class="col-md-12 login-form" style="min-height: 500px;"
 			ng-show="showResult">

@@ -84,11 +84,12 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name:'commonApp',
-                            files:[]
+                            files:['resources/scripts/controllers/contactUsController.js']
                         });
                     }]
 
                 },
+                controller:'ContactUsController'
             }).
             otherwise({
                 redirectTo: '/search-reports'

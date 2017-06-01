@@ -118,22 +118,29 @@ public class CommonController {
      	model.addAttribute("failed",true);
      	String departmentId=(String) request.getSession().getAttribute("LAST_DEPARTMENT");
  		//model.addAttribute("departmentId",departmentId);
- 		try{
-	 		if(departmentId.equals("2")){
-	 			response.sendRedirect("boardman?error=1");
-			}else if(departmentId.equals("3")){
-	 			response.sendRedirect("fairborn?error=1");
-			}
- 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+     	if(departmentId!=null&&!departmentId.equals("")){
+     		try{
+    	 		PoliceDepartmentForm policeDepartmentForm=policeDepartmentService.getPoliceDepartment(Integer.parseInt(departmentId));
+    	 		model.addAttribute("Success",true);
+    	 		response.sendRedirect(policeDepartmentForm.getLoginLink()+"?error=1");
+     		} catch (Exception e) {
+    			// TODO Auto-generated catch block
+     			model.addAttribute("Success",false);
+    			e.printStackTrace();
+    		}
+     	}else{
+     		model.addAttribute("Success",false);
+     		model.addAttribute("error","Department Id is Null");
+     		System.out.println("<<------ Department Id is Null ------->>");
+     	}
+     	
  	}
  	
  	// Logout
  	@RequestMapping(value="/logout",method=RequestMethod.GET)
    	public String logout(HttpServletRequest request,ModelMap model)
    	{
+ 		model.addAttribute("policeDepartmentForms",policeDepartmentService.getPoliceDepartmentList());
        	model.addAttribute("Success",true);
         return "/ohio-main";
    	}
@@ -141,6 +148,7 @@ public class CommonController {
  	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)
  	public String getIndexMain(ModelMap model)
  	{
+ 		model.addAttribute("policeDepartmentForms",policeDepartmentService.getPoliceDepartmentList());
      	model.addAttribute("Success",true);
  		return "/ohio-main";
  	}

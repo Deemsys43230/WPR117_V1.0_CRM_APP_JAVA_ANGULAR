@@ -39,10 +39,12 @@
 		<div class="col-md-12">
 			<div class="col-md-4"><label>Select Your Police Department:</label></div>
 			<div class="col-md-5">
+			
 			<select id="policeDepartment" name="policeDepartment" class="form-control">
 			<option value="">-- Select --</option>
-			<option value="boardman">Boardman</option>
-			<option value="fairborn">Fairborn</option>
+			<c:forEach var="policeDepartmentForm" items="${policeDepartmentForms}" >
+				<option value="${policeDepartmentForm.loginLink}">${policeDepartmentForm.name}</option>
+			</c:forEach>
 			</select>
 			<span id="ploiceDepartment_error" style="color:red;"></span>
 			</div>
