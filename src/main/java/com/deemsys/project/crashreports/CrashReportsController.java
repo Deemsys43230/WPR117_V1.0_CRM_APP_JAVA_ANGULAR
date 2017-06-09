@@ -87,7 +87,7 @@ public class CrashReportsController {
    	}
     
     @RequestMapping(value="/User/searchCrashReports",method=RequestMethod.POST)
-   	public String getAllCrashReportss(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model)
+   	public String getAllCrashReportss(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model) throws Exception
    	{
     	model.addAttribute("crashReportsResult",crashReportsService.searchCrashReportsList(crashReportSearchForm));
     	model.addAttribute("requestSuccess",true);
@@ -95,7 +95,7 @@ public class CrashReportsController {
    	}
 	
     @RequestMapping(value="/searchCrashReportsAllUser",method=RequestMethod.POST)
-   	public String searchCrashReportsAllUser(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model)
+   	public String searchCrashReportsAllUser(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model) throws Exception
    	{
     	model.addAttribute("crashReportsResult",crashReportsService.searchCrashReportsList(crashReportSearchForm));
     	model.addAttribute("requestSuccess",true);

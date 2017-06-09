@@ -10,14 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deemsys.project.common.CRMConstants;
+import com.deemsys.project.crashreports.CrashReportsDAO;
 import com.deemsys.project.entity.Accounts;
+import com.deemsys.project.entity.CrashReports;
 import com.deemsys.project.entity.PoliceDepartment;
+import com.deemsys.project.entity.Roles;
 import com.deemsys.project.entity.Users;
 import com.deemsys.project.login.PasswordEncryptor;
 import com.deemsys.project.users.UsersDAO;
 import com.deemsys.project.users.UsersForm;
 import com.deemsys.project.users.UsersService;
 import com.deemsys.project.policeDepartment.PoliceDepartmentDAO;
+import com.deemsys.project.roles.RolesDAO;
+import com.deemsys.project.roles.RolesForm;
+import java.util.UUID;
+
 /**
  * 
  * @author Deemsys
@@ -49,6 +56,12 @@ public class AccountsService {
 	@Autowired
 	PoliceDepartmentDAO policeDepartmentDAO;
 	
+	@Autowired
+	RolesDAO rolesDAO;
+	
+	@Autowired
+	CrashReportsDAO crashReportsDAO;
+	
 	//Get All Entries
 	public List<AccountsForm> getAccountsList()
 	{
@@ -61,7 +74,7 @@ public class AccountsService {
 		for (Accounts accounts : accountss) {
 			//TODO: Fill the List
 			Users users = usersDAO.getByAccountId(accounts.getAccountId());
-			AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus());
+			AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus(),users.getIsEnable());
 			accountsForms.add(accountsForm);
 		}
 		
@@ -70,14 +83,14 @@ public class AccountsService {
 	
 	//Get Particular Entry
 	public AccountsForm getAccounts(String accountId)
-	{
-		
+	{      
+		   
 		Accounts accounts=accountsDAO.getAccountsById(accountId);
-		
+		   
 		//TODO: Convert Entity to Form
 		//Start
 		Users users = usersDAO.getByAccountId(accountId);
-		AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus());
+		   AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus(),users.getIsEnable());
 		
 		//End
 		
@@ -103,13 +116,13 @@ public class AccountsService {
 	//Save an Entry
 	public int saveAccounts(AccountsForm accountsForm)
 	{
-		//TODO: Convert Form to Entity Here	
 		
-		//Logic Starts
 
 		try {
 			PoliceDepartment policeDepartment = policeDepartmentDAO.get(accountsForm.getPoliceDepartmentId());
-			Accounts accounts=new Accounts(accountsForm.getAccountId(), policeDepartment, accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), new Date(), accountsForm.getStatus(), null, null);
+			
+			String accountId=UUID.randomUUID().toString();
+			Accounts accounts=new Accounts(accountId, policeDepartment, accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), new Date(), accountsForm.getStatus(),0, null, null);
 			accountsDAO.saveAccount(accounts);
 			
 			UsersForm usersForm = new UsersForm(null, CRMConstants.CRM_USER_ROLE_ID, accounts.getAccountId(), accountsForm.getUsername(), accountsForm.getUsername(), 1, 1);
@@ -132,9 +145,16 @@ public class AccountsService {
 		
 		//Logic Starts
 		PoliceDepartment policeDepartment = policeDepartmentDAO.get(accountsForm.getPoliceDepartmentId());
-		Accounts accounts=new Accounts(accountsForm.getAccountId(), policeDepartment, accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), CRMConstants.convertYearFormatWithTime(accountsForm.getAddedDateTime()), accountsForm.getStatus(), null, null);
+		Accounts accounts=new Accounts(accountsForm.getAccountId(), policeDepartment, accountsForm.getFirstName(), accountsForm.getLastName(), accountsForm.getMiddleName(), accountsForm.getEmailId(), accountsForm.getPhoneNumber(), CRMConstants.convertYearFormatWithTime24Hr(accountsForm.getAddedDateTime()), accountsForm.getStatus(),0, null, null);
 
 		accountsDAO.update(accounts);
+		Users users=usersDAO.getByAccountId(accountsForm.getAccountId());
+	    Roles roles=rolesDAO.get(accountsForm.getRoleId());
+		users.setRoles(roles);
+		users.setUsername(accountsForm.getUsername());
+		usersDAO.update(users);
+		//UsersForm usersForm = new UsersForm(users.getUserId(), CRMConstants.CRM_USER_ROLE_ID, accounts.getAccountId(), accountsForm.getUsername(), accountsForm.getUsername(), 1, 1);
+		//usersService.updateUsers(usersForm);
 		
 		//Logic Ends
 		return 1;
@@ -143,7 +163,18 @@ public class AccountsService {
 	//Delete an Entry
 	public int deleteAccounts(String accountId)
 	{
-		accountsDAO.deleteAccounts(accountId);
+		
+		Accounts accounts=accountsDAO.getAccountsById(accountId);
+		Users users=usersDAO.getByAccountId(accountId);
+
+		//updating table instead deletion
+		accounts.setIsdeleted(1);
+		accountsDAO.update(accounts);
+		users.setIsEnable(0);
+		usersDAO.update(users);
+	/*	accountsDAO.delete(accountId);
+		Users user=usersDAO.getByAccountId(accountId);
+		usersDAO.delete(user.getUserId());*/
 		return 1;
 	}
 	
@@ -170,7 +201,7 @@ public class AccountsService {
 	public int resetPassword(String accountId)
 	{
 		Users users = usersDAO.getByAccountId(accountId);
-		users.setPassword(passwordEncryptor.encodePassword(users.getPassword()));
+		users.setPassword(passwordEncryptor.encodePassword(users.getUsername()));
 		usersDAO.update(users);
 		return 1;
 	}
@@ -187,5 +218,30 @@ public class AccountsService {
 		// TODO Auto-generated method stub
 		return usersDAO.checkPassword(accountId,passwordEncryptor.encodePassword(currentPassword));
 	}
+	
+	//get RolesList
+	public List<RolesForm> getRolesList()
+	{
+		List<Roles> roless=new ArrayList<Roles>();
+		roless=rolesDAO.getAll();
+		List<RolesForm> rolesForm=new ArrayList<RolesForm>();
+		for(Roles roles:roless)
+		{
+		RolesForm	rolesForm1=new RolesForm(roles.getRoleId(),roles.getRole(),roles.getName());
+		rolesForm.add(rolesForm1);
+		}
+		return rolesForm;
+	}
+	
+	
+	//getting total Records
+	public RecordsForm getTotalRecords()
+	{
+		Long totalAccounts=accountsDAO.totalNumberOfAccounts();
+		Long totalReports=crashReportsDAO.totalNumberOfCrash();
+		Long totalDepartment=policeDepartmentDAO.totalNumberOfDepartment();
 		
+		RecordsForm recordsForm=new RecordsForm(totalAccounts, totalDepartment, totalReports);
+		return recordsForm;
+	}
 }

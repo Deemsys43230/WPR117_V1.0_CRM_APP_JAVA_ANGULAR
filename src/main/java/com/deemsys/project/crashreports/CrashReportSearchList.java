@@ -24,6 +24,7 @@ public class CrashReportSearchList {
 	private String fileName;
 	private Integer noOfOccupants;
 	private Integer departmentId;
+	private String departmentName;
 	public String getReportId() {
 		return reportId;
 	}
@@ -126,9 +127,17 @@ public class CrashReportSearchList {
 	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
 	}
+	
+	
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
 	public CrashReportSearchList(String reportId, String reportNumber,
 			String crashDate, String location, String addedDate, String addedDateTime,
-			String firstName, String lastName, Integer status, String fileName,Integer noOfOccupants,Integer departmentId) {
+			String firstName, String lastName, Integer status, String fileName,Integer noOfOccupants,Integer departmentId,String departmentName) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -142,7 +151,8 @@ public class CrashReportSearchList {
 		this.fileName = fileName;
 		this.noOfOccupants = noOfOccupants;
 		this.departmentId = departmentId;
-	}
+		this.departmentName=departmentName;
+		}
 	public CrashReportSearchList() {
 		super();
 		// TODO Auto-generated constructor stub

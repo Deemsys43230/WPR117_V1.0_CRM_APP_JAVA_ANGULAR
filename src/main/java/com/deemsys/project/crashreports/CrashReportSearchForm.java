@@ -15,6 +15,8 @@ public class CrashReportSearchForm {
 	private Integer pageNumber;
 	private Integer itemsPerPage;
 	private Integer reportType;
+	private Integer countyId;
+	
 	
 	public String getAccountId() {
 		return accountId;
@@ -94,8 +96,15 @@ public class CrashReportSearchForm {
 	public void setReportType(Integer reportType) {
 		this.reportType = reportType;
 	}
+	
+	public Integer getCountyId() {
+		return countyId;
+	}
+	public void setCountyId(Integer countyId) {
+		this.countyId = countyId;
+	}
 	public CrashReportSearchForm(String accountId, Integer policeDepartmentId, String reportNumber, String crashDate, String location,
-		 String firstName, String lastName, String addedOnFromDate, String addedOnToDate, Integer searchType,Integer pageNumber,Integer itemsPerPage, Integer reportType) {
+		 String firstName, String lastName, String addedOnFromDate, String addedOnToDate, Integer searchType,Integer pageNumber,Integer itemsPerPage, Integer reportType,Integer countyId) {
 		super();
 		this.accountId = accountId;
 		this.policeDepartmentId = policeDepartmentId;
@@ -110,6 +119,7 @@ public class CrashReportSearchForm {
 		this.pageNumber = pageNumber;
 		this.itemsPerPage = itemsPerPage;
 		this.reportType = reportType;
+		this.countyId=countyId;
 	}
 	public CrashReportSearchForm() {
 		super();

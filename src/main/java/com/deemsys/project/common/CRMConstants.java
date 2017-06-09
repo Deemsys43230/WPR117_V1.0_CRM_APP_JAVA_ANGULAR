@@ -17,9 +17,11 @@ public class CRMConstants {
 	
 	public static Integer CRM_ADMIN_ROLE_ID=1;
 	public static Integer CRM_USER_ROLE_ID=2;
+	public static Integer CRM_SUPER_ADMIN_ID=3;
 	
 	public static String CRM_ADMIN_ROLE="ROLE_ADMIN";
 	public static String CRM_USER_ROLE="ROLE_USER";
+	public static String CRM_SUPER_ADMIN="ROLE_SUPER_ADMIN";
 	
 	// Login Additional Parameter Name
 	public static String DEPARTMENT_PARAMETER="department";

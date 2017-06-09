@@ -28,6 +28,10 @@ public class LoginService {
 			}else if(role[0].toString().equals(CRMConstants.CRM_USER_ROLE)){
 				currentRole=CRMConstants.CRM_USER_ROLE;
 			}
+			else if(role[0].toString().equals(CRMConstants.CRM_SUPER_ADMIN))
+			{
+				currentRole=CRMConstants.CRM_SUPER_ADMIN;
+			}
 		}catch(Exception ex){
 			ex.printStackTrace();
 			System.out.println(ex.toString());

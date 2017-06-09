@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -60,7 +61,7 @@ public class AccountsDAOImpl implements AccountsDAO{
 	@Override
 	public List<Accounts> getAll() {
 		// TODO Auto-generated method stub
-		return this.sessionFactory.getCurrentSession().createCriteria(Accounts.class).list();
+		return this.sessionFactory.getCurrentSession().createCriteria(Accounts.class).add(Restrictions.ne("isdeleted", 1)).list();
 	}
 
 	@Override
@@ -162,6 +163,13 @@ public class AccountsDAOImpl implements AccountsDAO{
 			this.sessionFactory.getCurrentSession().delete(accounts);
 		}
 		
+	}
+
+	@Override
+	public Long totalNumberOfAccounts() {
+		
+		Long total= (Long)this.sessionFactory.getCurrentSession().createCriteria(Accounts.class).setProjection(Projections.count("accountId")).uniqueResult();
+	return total;
 	}
 
 }

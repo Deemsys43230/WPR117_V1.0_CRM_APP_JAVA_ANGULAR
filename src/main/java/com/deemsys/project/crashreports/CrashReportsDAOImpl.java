@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import com.deemsys.project.common.BasicQuery;
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.entity.CrashReports;
+import com.deemsys.project.entity.PoliceDepartment;
 import com.deemsys.project.entity.Users;
 
 /**
@@ -206,6 +207,13 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 			}
 		}
 		
+		
+		if(crashReportSearchForm.getCountyId()!=null &&!crashReportSearchForm.getCountyId().equals("")){
+			
+				Criterion countyIdCriterion = Restrictions.eq("co1.countyId", crashReportSearchForm.getCountyId());
+				criteria.add(countyIdCriterion);
+			}
+		
 		if(crashReportSearchForm.getReportType()==1&&crashReportSearchForm.getSearchType()==1)
 		{
 			criteria.add(Restrictions.or(Restrictions.eq("p1.policeDepartmentId", crashReportSearchForm.getPoliceDepartmentId()),Restrictions.eq("accounts.accountId", crashReportSearchForm.getAccountId())));
@@ -239,6 +247,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		
 		// Police Department Id
 		projectionList.add(Projections.property("p1.policeDepartmentId"),"departmentId");
+		projectionList.add(Projections.property("p1.name"),"departmentName");
 		
 		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
 		
@@ -305,6 +314,14 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 		}else{
 			return 0;
 		}
+	}
+	
+
+	@Override
+	public Long totalNumberOfCrash() {
+		
+		Long total= (Long)this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).setProjection(Projections.count("reportId")).uniqueResult();
+	return total;
 	}
 
 	

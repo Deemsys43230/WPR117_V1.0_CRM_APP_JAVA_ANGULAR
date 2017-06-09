@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.deemsys.project.common.BasicQuery;
+import com.deemsys.project.entity.CrashReports;
 import com.deemsys.project.entity.PoliceDepartment;
 
 /**
@@ -59,7 +61,7 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 	@Override
 	public List<PoliceDepartment> getAll() {
 		// TODO Auto-generated method stub
-		return this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).list();
+		return this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).add(Restrictions.ne("policeDepartmentId", 1)).list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -134,6 +136,22 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 	public List<PoliceDepartment> getActiveList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public PoliceDepartment getPoliceDepartmentById(Integer policeDepartmentId)
+	{
+		return (PoliceDepartment) this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).add(Restrictions.eq("policeDepartmentId", policeDepartmentId)).uniqueResult();
+		
+		
+	}
+
+	@Override
+	public long totalNumberOfDepartment() {
+		Long total= (Long)this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).setProjection(Projections.count("policeDepartmentId")).add(Restrictions.ne("policeDepartmentId",1)).uniqueResult();
+		return total;
+		
+		
 	}
 
 	@Override

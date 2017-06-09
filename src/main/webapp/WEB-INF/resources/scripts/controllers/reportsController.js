@@ -169,7 +169,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 
 //View Report Controller
 adminApp.controller('ViewReportController',['$rootScope','$scope','$http','requestHandler','Flash','$q',function($rootScope,$scope,$http,requestHandler,Flash,$q){
-
+    
 	$scope.getCrashReportsList=function(){
 		
 		if($scope.crashReportSearchForm.addedOnFromDate!=''){
@@ -187,6 +187,7 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 			$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
 			if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
 				$scope.searchReportsList($scope.crashReportSearchForm);
+				
 			}
 			// To Avoid Main Search Parameter Override
 			angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
@@ -267,6 +268,8 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 				"searchType":1,
 				"reportType":1
 		};
+		
+		console.log($scope.crashReportSearchForm);
 		// Set Max Date
 		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 		$('#addedOnFromDate').data("DateTimePicker").setMaxDate($rootScope.currentDate);

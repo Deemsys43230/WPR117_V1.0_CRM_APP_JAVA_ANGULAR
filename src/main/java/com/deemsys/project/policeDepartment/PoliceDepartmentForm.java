@@ -14,12 +14,14 @@ public class PoliceDepartmentForm {
 
 	private Integer policeDepartmentId;
 	private Integer countyId;
+	private String countyName;
 	private String name;
 	private String code;
 	private String loginLink;
 	private String searchLink;
 	private String createdDateTime;
 	private Integer status;
+	private Integer isEnabled;
 	
 	public Integer getPoliceDepartmentId() {
 		return policeDepartmentId;
@@ -43,6 +45,16 @@ public class PoliceDepartmentForm {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	
+
+	public String getCountyName() {
+		return countyName;
+	}
+
+	public void setCountyName(String countyName) {
+		this.countyName = countyName;
 	}
 
 	public String getCode() {
@@ -85,8 +97,16 @@ public class PoliceDepartmentForm {
 		this.status = status;
 	}
 
-	public PoliceDepartmentForm(Integer policeDepartmentId, Integer countyId, String name,
-			String code, String loginLink, String searchLink, String createdDateTime, Integer status) {
+	public Integer getIsEnabled() {
+		return isEnabled;
+	}
+
+	public void setIsEnabled(Integer isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public PoliceDepartmentForm(Integer policeDepartmentId, Integer countyId,String countyName, String name,
+			String code, String loginLink, String searchLink, String createdDateTime, Integer status,Integer isEnabled) {
 		super();
 		this.policeDepartmentId = policeDepartmentId;
 		this.countyId = countyId;
@@ -96,6 +116,8 @@ public class PoliceDepartmentForm {
 		this.searchLink = searchLink;
 		this.createdDateTime = createdDateTime;
 		this.status = status;
+		this.isEnabled=isEnabled;
+		this.countyName=countyName;
 	}
 
 	public PoliceDepartmentForm() {

@@ -3,6 +3,7 @@ package com.deemsys.project.users;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class UsersDAOImpl implements UsersDAO{
 
 	@Override
 	public Users update(Users entity) {
-		// TODO Auto-generated method stub
-		this.sessionFactory.getCurrentSession().merge(entity);
+	
+		this.sessionFactory.getCurrentSession().update(entity);
 		return null;
 	}
 
@@ -157,6 +158,29 @@ public class UsersDAOImpl implements UsersDAO{
 			return 0;
 		}
 	}
+
+	//check username exists
+	@Override
+	public Integer checkUserNameExists(String username, String accountId) {
+		
+Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(Users.class);
+		
+		//Check User name
+		criteria.add(Restrictions.eq("username", username));
+		
+		//Skip for Add Edit
+		if(accountId!=null)
+			criteria.add(Restrictions.ne("accounts.accountId",accountId));
+		
+		Users users=(Users) criteria.uniqueResult();
+		
+		if(users!=null){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+
 
 	
 

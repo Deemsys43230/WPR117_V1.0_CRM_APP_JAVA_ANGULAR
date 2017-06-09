@@ -30,7 +30,7 @@
 		access-decision-manager-ref="accessDecisionManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<anonymous enabled="false" />
-		<intercept-url pattern="/SAdmin/**" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/SAdmin/**" access="hasAnyRole('ROLE_SUPER_ADMIN')" />
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 		<session-management invalid-session-url="/logout" />
@@ -42,7 +42,7 @@
 		access-decision-manager-ref="accessDecisionManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<anonymous enabled="false" />
-		<intercept-url pattern="/User/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+		<intercept-url pattern="/User/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_SUPER_ADMIN')" />
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 		<session-management invalid-session-url="/logout" />

@@ -14,6 +14,8 @@
 	<link rel="stylesheet" href="resources/styles/font-awesome.css" />
 	<link rel="stylesheet" href="resources/styles/style.css" />
 	<link rel="stylesheet" href="resources/styles/responsive.css" />
+	    <link rel="stylesheet" href="resources/angular/angular-flash/angular-flash.css"/>
+	
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="resources/images/icon/favicon.png">
@@ -171,7 +173,6 @@
 	<!-- Directive -->
 	<script type="text/javascript" src="resources/scripts/directives/fileUpload.js"></script>
     <script src="resources/angular/angular-flash/angular-flash.min.js"></script>
-    <link rel="stylesheet" href="resources/angular/angular-flash/angular-flash.css"/>
      <!-- dirPagination -->
     <script src="resources/angular/angular-utils-pagination/dirPagination.js"></script> 
 </body>

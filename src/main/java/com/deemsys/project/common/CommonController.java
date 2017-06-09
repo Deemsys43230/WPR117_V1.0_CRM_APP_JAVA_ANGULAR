@@ -86,13 +86,22 @@ public class CommonController {
     }
     
     @RequestMapping(value="/home",method=RequestMethod.GET)
-	public String getHomePage(ModelMap model)
+	public String getHomePage(ModelMap model) throws Exception
 	{
+    	String role=loginService.getCurrentRole();
+    	
+    	if(role=="ROLE_SUPER_ADMIN")
+    	{
+    		return "/superAdmin";
+    	}
+    	else
+    	{
     	model.addAttribute("Success",true);
     	Integer departmentId=loginService.getCurrentAccountPoliceDepartmentId();
     	model.addAttribute("departmentBannerImage",crmProperties.getProperty("bucketURL")+departmentId.toString()+"/banner/banner.jpg");
     	model.addAttribute("departmentId",departmentId);
 		return "/home";
+    	}
 	}
    	
     @RequestMapping(value={"/index","/"},method=RequestMethod.GET)
@@ -194,4 +203,14 @@ public class CommonController {
      	model.addAttribute("Success",true);
  		return "/404";
  	}
-}
+    
+    @RequestMapping(value={"/superAdmin"},method=RequestMethod.GET)
+    public String getsuperAdmin(ModelMap model)
+    {
+    	model.addAttribute("departmentId",1);
+    	model.addAttribute("departmentBannerImage","resources/images/slider/main.jpg");
+     	model.addAttribute("Success",true);
+ 		return "/index";
+    }
+    
+    }

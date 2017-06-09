@@ -17,10 +17,13 @@ public class CrashReportsResultByGroup {
 	private String countyName;
 	private String addedDate;
 	private String addedDateTime;
+	private Integer departmentId;
+	private String departmentName;
 	private Integer status;
 	private String fileName;
 	private Integer noOfOccupants;
 	private List<OccupantsForm> occupantsForms;
+	
 	
 	public String getReportId() {
 		return reportId;
@@ -125,10 +128,28 @@ public class CrashReportsResultByGroup {
 	public void setNoOfOccupants(Integer noOfOccupants) {
 		this.noOfOccupants = noOfOccupants;
 	}
+	
+
+
+	public Integer getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
 
 	public CrashReportsResultByGroup(String reportId, String reportNumber,
 			String crashDate, Integer countyId, String countyName, String location, Integer crashSeverity, String addedDate, String addedDateTime,
-			Integer status, String fileName, Integer noOfOccupants, List<OccupantsForm> occupantsForms) {
+			Integer departmentId,String departmentName,Integer status, String fileName, Integer noOfOccupants, List<OccupantsForm> occupantsForms) {
 		super();
 		this.reportId = reportId;
 		this.reportNumber = reportNumber;
@@ -139,6 +160,8 @@ public class CrashReportsResultByGroup {
 		this.crashSeverity = crashSeverity;
 		this.addedDate = addedDate;
 		this.addedDateTime = addedDateTime;
+		this.departmentId=departmentId;
+		this.departmentName=departmentName;
 		this.status = status;
 		this.fileName = fileName;
 		this.noOfOccupants = noOfOccupants;

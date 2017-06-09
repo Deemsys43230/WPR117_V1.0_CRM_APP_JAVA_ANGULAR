@@ -33,6 +33,7 @@ public class PoliceDepartment implements java.io.Serializable {
 	private String searchLink;
 	private Date createdDateTime;
 	private Integer status;
+	private Integer isEnabled;
 	private Set<Accounts> accountses = new HashSet<Accounts>(0);
 	private Set<CrashReports> crashReportses = new HashSet<CrashReports>(0);
 
@@ -41,7 +42,7 @@ public class PoliceDepartment implements java.io.Serializable {
 
 	public PoliceDepartment(County county, String name, String code,
 			String loginLink, String searchLink, Date createdDateTime,
-			Integer status, Set<Accounts> accountses,
+			Integer status,Integer isEnabled, Set<Accounts> accountses,
 			Set<CrashReports> crashReportses) {
 		this.county = county;
 		this.name = name;
@@ -50,8 +51,10 @@ public class PoliceDepartment implements java.io.Serializable {
 		this.searchLink = searchLink;
 		this.createdDateTime = createdDateTime;
 		this.status = status;
+		this.isEnabled=isEnabled;
 		this.accountses = accountses;
 		this.crashReportses = crashReportses;
+	
 	}
 
 	@Id
@@ -93,6 +96,15 @@ public class PoliceDepartment implements java.io.Serializable {
 		this.code = code;
 	}
 
+	
+	@Column(name = "is_enabled")
+	public Integer getIsEnabled() {
+		return this.isEnabled;
+	}
+
+	public void setIsEnabled(Integer isEnabled) {
+		this.isEnabled=isEnabled;
+	}
 	@Column(name = "login_link", length = 45)
 	public String getLoginLink() {
 		return this.loginLink;

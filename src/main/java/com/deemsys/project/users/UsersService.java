@@ -103,7 +103,7 @@ public class UsersService {
 		Roles roles = rolesDAO.get(usersForm.getRoleId());
 		Accounts accounts = accountsDAO.getAccountsById(usersForm.getAccountId());
 		
-		Users users=new Users(accounts, roles, usersForm.getUsername(), passwordEncryptor.encodePassword(usersForm.getPassword()), usersForm.getIsEnable(), usersForm.getStatus());
+		Users users=new Users(accounts, roles, usersForm.getUsername(), passwordEncryptor.encodePassword(usersForm.getUsername()), usersForm.getIsEnable(), usersForm.getStatus());
 		
 		//Logic Ends
 		
@@ -120,7 +120,9 @@ public class UsersService {
 		Roles roles = rolesDAO.get(usersForm.getRoleId());
 		Accounts accounts = accountsDAO.getAccountsById(usersForm.getAccountId());
 		
-		Users users=new Users(accounts, roles, usersForm.getUsername(), passwordEncryptor.encodePassword(usersForm.getPassword()), usersForm.getIsEnable(), usersForm.getStatus());
+		Users user=new Users();
+		user=usersDAO.getByAccountId(usersForm.getAccountId());
+		Users users=new Users(usersForm.getUserId(),accounts, roles, usersForm.getUsername(),user.getPassword(), usersForm.getIsEnable(), usersForm.getStatus());
 		
 		//Logic Ends
 		
@@ -135,6 +137,11 @@ public class UsersService {
 		return 1;
 	}
 	
+	//check username exists
+	public int checkUserNameExists(String username,String accountId)
+	{
+		return usersDAO.checkUserNameExists(username, accountId);
+	}
 	
 	
 }

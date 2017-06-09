@@ -61,7 +61,7 @@ commonApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                     }]
 
                 },
-                controller:'CommonController'
+                controller:'CommonController',
             }).
             when('/', {
                 templateUrl: 'views/searchReport.html',

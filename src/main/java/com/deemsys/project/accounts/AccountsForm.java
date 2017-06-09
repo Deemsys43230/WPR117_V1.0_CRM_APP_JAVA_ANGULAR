@@ -23,7 +23,17 @@ public class AccountsForm {
 	private String phoneNumber;
 	private String addedDateTime;
 	private Integer status;
+	private Integer isEnable;
 	
+	
+	public Integer getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(Integer isEnable) {
+		this.isEnable = isEnable;
+	}
+
 	public String getAccountId() {
 		return accountId;
 	}
@@ -113,7 +123,7 @@ public class AccountsForm {
 	}
 
 	public AccountsForm(String accountId, Integer policeDepartmentId, String username, Integer roleId, String firstName, String lastName,
-			String middleName, String emailId, String phoneNumber, String addedDateTime, Integer status) {
+			String middleName, String emailId, String phoneNumber, String addedDateTime, Integer status,Integer isEnable) {
 		super();
 		this.accountId = accountId;
 		this.policeDepartmentId = policeDepartmentId;
@@ -126,6 +136,8 @@ public class AccountsForm {
 		this.phoneNumber = phoneNumber;
 		this.addedDateTime = addedDateTime;
 		this.status = status;
+		this.isEnable=isEnable;
+		
 	}
 
 	public AccountsForm() {

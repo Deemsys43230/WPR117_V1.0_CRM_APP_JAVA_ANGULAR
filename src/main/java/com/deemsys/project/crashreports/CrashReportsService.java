@@ -74,14 +74,33 @@ public class CrashReportsService {
 	APIRequestService apiRequestService;
 	
 	//Get All Entries
-	public CrashReportsSearchResult searchCrashReportsList(CrashReportSearchForm crashReportSearchForm)
+	public CrashReportsSearchResult searchCrashReportsList(CrashReportSearchForm crashReportSearchForm) throws Exception
 	{
 		CrashReportsSearchResult crashReportsSearchResult = new CrashReportsSearchResult();
 		
 		if(crashReportSearchForm.getSearchType()==1&&crashReportSearchForm.getReportType()==1){
 			String currentAccountId=loginService.getCurrentAccountId();
 			crashReportSearchForm.setAccountId(currentAccountId);
-			crashReportSearchForm.setPoliceDepartmentId(loginService.getCurrentAccountPoliceDepartmentId());
+			/*if(loginService.getCurrentRole()==CRMConstants.CRM_SUPER_ADMIN&&crashReportSearchForm.getPoliceDepartmentId()!=null)
+			{
+				
+				
+				crashReportSearchForm.setPoliceDepartmentId(crashReportSearchForm.getPoliceDepartmentId());
+				
+				
+			}
+			else
+			{
+				crashReportSearchForm.setPoliceDepartmentId(loginService.getCurrentAccountPoliceDepartmentId());
+				
+			}*/
+			
+			Integer departmentId=loginService.getCurrentAccountPoliceDepartmentId();
+			if(departmentId==1)
+				crashReportSearchForm.setPoliceDepartmentId(crashReportSearchForm.getPoliceDepartmentId());
+			else
+				crashReportSearchForm.setPoliceDepartmentId(departmentId);
+			
 		}
 		
 		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReports(crashReportSearchForm);
@@ -97,7 +116,7 @@ public class CrashReportsService {
 				if(rowCount!=0){
 					crashReportsResultByGroupList.add(crashReportsResultByGroup);
 				}
-				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyId(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getDepartmentId()+crmProperties.getProperty("innerFolderName")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
+				crashReportsResultByGroup=new CrashReportsResultByGroup(crashReportSearchList.getReportId(), crashReportSearchList.getReportNumber(), crashReportSearchList.getCrashDate(), crashReportSearchList.getCountyId(), crashReportSearchList.getCountyName(), crashReportSearchList.getLocation(), crashReportSearchList.getCrashSeverity(), crashReportSearchList.getAddedDate(), crashReportSearchList.getAddedDateTime(),crashReportSearchList.getDepartmentId(),crashReportSearchList.getDepartmentName(), crashReportSearchList.getStatus(), crmProperties.getProperty("bucketURL")+crashReportSearchList.getDepartmentId()+crmProperties.getProperty("innerFolderName")+crashReportSearchList.getFileName(), crashReportSearchList.getNoOfOccupants(), new ArrayList<OccupantsForm>());
 			}
 			// Set Occupants
 			crashReportsResultByGroup.getOccupantsForms().add(new OccupantsForm(crashReportSearchList.getFirstName(), crashReportSearchList.getLastName(), crashReportSearchList.getInjuries(), CRMConstants.getInjuriesText(crashReportSearchList.getInjuries()), crashReportSearchList.getSeatingPosition(), CRMConstants.getSeatingPositionText(crashReportSearchList.getSeatingPosition()), 1));
@@ -158,7 +177,7 @@ public class CrashReportsService {
 			
 			// Police Department
 			PoliceDepartment policeDepartment = accounts.getPoliceDepartment();
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, policeDepartment, county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), fileName, addedDate, addedDateTime, 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, policeDepartment, county,crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), fileName, addedDate, addedDateTime, 1, null);
 
 			crashReportsDAO.merge(crashReports);
 
@@ -211,7 +230,7 @@ public class CrashReportsService {
 			County county = countyDAO.get(crashReportsForm.getCountyId());
 			
 			// Police Department
-			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, accounts.getPoliceDepartment(), county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
+			CrashReports crashReports=new CrashReports(crashReportsForm.getReportId(), accounts, accounts.getPoliceDepartment(),county, crashReportsForm.getReportNumber(),  CRMConstants.convertYearFormat(crashReportsForm.getCrashDate()), crashReportsForm.getLocation(), crashReportsForm.getCrashSeverity(), crashReportsForm.getOccupantsForms().size(), null,  new Date(), new Date(), 1, null);
 
 			crashReportsDAO.saveCrashReports(crashReports);
 			

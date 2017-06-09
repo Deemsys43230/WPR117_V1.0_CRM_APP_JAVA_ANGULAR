@@ -200,6 +200,7 @@ public class LoginDAOImpl implements LoginDAO,UserDetailsService{
 			}else{
 				isEnable=false;
 			}
+			
 		}
 		
 		return new User(username, password, isEnable, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
