@@ -90,7 +90,7 @@
                            
                             
                         </li>
-                        
+                        <div class="footer" style="margin-top:390px; width:100%; background-color:#383838; color:white;"><span>&nbsp;</span>&copy; 2017 Deemsys Inc</div>
                        <!--  <li>
                             <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
                         </li>
@@ -170,8 +170,7 @@
 <div id="page-wrapper" class="ng-view">
 </div>
  
-<div class="container-fluid" style="background-color:#383838; color:white; height:40px; padding-top:10px;" >
- <div class="footer col-md-12">&copy; 2017 Deemsys Inc - All Rights Reserved</div>
+
 </div>
 </body>
 </html>
