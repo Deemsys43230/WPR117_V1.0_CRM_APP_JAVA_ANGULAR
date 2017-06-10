@@ -1,0 +1,217 @@
+<link rel="stylesheet" href="resources/angular/components/datetime/datetimepicker.css"></link>
+<script src="resources/angular/components/datetime/datetimepicker.js"></script>
+<script src="resources/angular/components/datetime/moment.js"></script>
+
+	<div class="container-fluid" style="margin-top:60px; margin-left:-30px; margin-right:-30px;">
+		<div class="col-md-12 white-form">
+		<div class="col-md-12">
+		<h3>Reports	<a class="btn btn-primary pull-right" href="#/dashboard"><i class="fa fa-reply"></i> Back to Home</a></h3>
+		<hr/>
+		</div>
+		<div class="col-md-12 search-block">
+		<form>
+			  <div class="form-group">
+			    <label for="carshDate">Crash Date:</label>
+			    <div class="input-group">
+					<input type="text" name="crashDate" id="crashDateReportList" class="form-control calender-control"
+						ng-model="crashReportSearchForm.crashDate"
+						placeholder="Crash Date"> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="crashDateCalenderReportList"> <span class="fa fa-calendar"></span></span>
+					</div>
+			  </div>
+			  <div class="form-group">
+			    <label for="reportNumber">Report Number:</label>
+			    <input type="text" class="form-control" id="reportNumber" ng-model="crashReportSearchForm.reportNumber" placeholder="Report Number" maxlength="100">
+			  </div>
+			  <div class="form-group">
+			    <label for="FirstName">First Name:</label>
+			    <input type="text" class="form-control" id="firstName" ng-model="crashReportSearchForm.firstName" placeholder="First Name" maxlength="50">
+			  </div>
+			  <div class="form-group">
+			    <label for="LastName">Last Name:</label>
+			    <input type="text" class="form-control" id="lastName" ng-model="crashReportSearchForm.lastName" placeholder="Last Name" maxlength="50">
+			  </div>
+			  <div class="form-group">
+			    <label for="Location">Location:</label>
+			    <input type="text" class="form-control" id="location" ng-model="crashReportSearchForm.location" placeholder="Location" maxlength="100">
+			  </div>
+			  <div class="form-group">
+			    <label for="Department">Department:</label>
+			    <select class="form-control" ng-model="crashReportSearchForm.policeDepartmentId" ng-options="x.policeDepartmentId as x.name for x in policeDepartmentList" fix>
+			    <option value="">-select-</option>
+	</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="Department">County:</label>
+			    <select class="form-control" ng-model="crashReportSearchForm.countyId" ng-options="x.countyId as x.name for x in countyList" fix>
+			    <option value="">-select-</option>
+	</select>
+			  </div>
+			   <div class="form-group">
+			    <label for="addedOnFromDate">Added On From Date:</label>
+			    <div class="input-group">
+					<input type="text" name="addedOnFromDate" id="addedOnFromDate" class="form-control calender-control"
+						ng-model="crashReportSearchForm.addedOnFromDate"
+						placeholder="From Date" ng-change="resetToDate()"> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="addedOnFromDateCalender"> <span class="fa fa-calendar"></span></span>
+					</div>
+			   </div>
+			   <div class="form-group">
+			    <label for="addedOnFromDate">Added On To Date:</label>
+			    <div class="input-group">
+					<input type="text" name="addedOnToDate" id="addedOnToDate" class="form-control calender-control"
+						ng-model="crashReportSearchForm.addedOnToDate"
+						placeholder="To Date"> 
+					<span class="input-group-addon white-color-bg calender-control-span" id="addedOnToDateCalender"> <span class="fa fa-calendar"></span></span>
+					</div>
+					<div class="error-container"><span ng-show="addedToDateError">Please select to date</span></div>
+			   </div>
+			  <div class="form-group">
+			    <button type="button" class="btn btn-send" style="margin-top:25px;"  ng-click="getCrashReportsList()">Search</button>
+			    <button type="button" class="btn btn-default" style="margin-top:25px;"  ng-click="resetSearch()">Reset</button>
+			  </div>
+		</form>
+		</div><br>
+		<table class="table table-bordered" style="margin-top:15px;" ng-cloak>
+		        <thead>
+		            <tr class="report-table-header">
+		                <th colspan="2">First Name</th>
+		                <th colspan="2">Last Name</th>
+		                <th>Department</th>
+		             <th>Action</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
+		            	<td width="14%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
+		            	<td width="15%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
+		            	<td width="17%" class="wrap-break-word"><label>Location:</label><br/>{{resultData.location}}</td>
+		            	<td width="15%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
+		            <td width="17%">{{resultData.departmentName}}</td>
+		            	<td width="20%"><a style="color:#fff;" class="btn btn-primary btn-xs hint--top" data-hint="View Report Details" ng-click="getReport(resultData.reportId)"><i class="fa fa-eye fa-fw"></i></a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
+		            </tr>
+		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
+		            	<td colspan="2">{{occupants.firstName}}</td>
+		                <td colspan="4">{{occupants.lastName}}</td>
+		            </tr>
+		            <tr ng-repeat-end=""></tr>
+		           	<tr ng-show="totalRecords==0">
+							<td colspan="6"><center>
+							<strong>No Records Found!!!</strong>
+						</center></td>
+						</tr>
+		        </tbody>
+		    </table>
+		    <dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
+    					</dir-pagination-controls>
+    		<div class="col-md-12 no-padding">
+		    <div class="col-md-3 pull-right no-padding">
+						<label>Number of Records</label> <select
+							class="form-control input-sm option-bold"
+							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
+							id="noOfRows" ng-change="itemsPerPageFilterChange()">
+							<option value="10">Show 10 Per Page</option>
+							<option value="25">Show 25 Per Page</option>
+							<option value="50">Show 50 Per Page</option>
+							<option value="100">Show 100 Per Page</option>
+							<option value="250">Show 250 Per Page</option>
+						</select>
+				</div>
+			</div>
+				
+		</div>
+	</div><br>
+<!-- Delete Rport Confirmation Modal -->
+<div class="modal fade" id="deleteReportModal" role="dialog" data-backdrop="static" data-keyboard=false>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				Do you want to delete the report?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" ng-click="deleteReport()" ng-disabled="isDeleting">{{deleteText}}</button>
+				<button type="close" class="btn btn-danger" data-dismiss="modal" ng-disabled="isDeleting">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<!-- View Report Details -->
+<div class="modal fade" id="viewReportDetailsModal" role="dialog" data-backdrop="static" data-keyboard=false>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Report Details</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered table-striped">
+				<tbody>
+				<tr>
+				<td width="20%"><b>County</b></td>
+				<td width="30%">{{reportDetails.countyName}}</td>
+				<td width="20%"><b>Crash Date</b></td>
+				<td width="30%">{{reportDetails.crashDate}}</td>
+				</tr>
+				<tr>
+				<td><b>Report Number</b></td>
+				<td>{{reportDetails.reportNumber}}</td>
+				<td><b>Location</b></td>
+				<td class="wrap-break-word">{{reportDetails.location}}</td>
+				</tr>
+				<tr>
+				<td><b>Crash Severity</b></td>
+				<td colspan="3">{{reportDetails.crashSeverityText}}</td>
+				</tr>
+				</tbody>
+				</table>
+				<u><b>Occupants</b></u>
+				<table class="table table-bordered table-striped">
+					<tr class="report-table-header"><td width="20%">First Name</td><td width="20%">Last Name</td><td width="25%">Injuries</td><td width="35%">Seating Position</td>
+					</tr>
+					<tr ng-repeat="occupant in reportDetails.occupantsForms">
+					<td>{{occupant.firstName}}</td>
+					<td>{{occupant.lastName}}</td>
+					<td><span ng-show="occupant.injuriesText==''">-</span><span ng-show="occupant.injuriesText!=''">{{occupant.injuriesText}}</span></td>
+					<td><span ng-show="occupant.seatingPositionText==''">-</span><span ng-show="occupant.seatingPositionText!=''">{{occupant.seatingPositionText}}</span></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="close" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#crashDateReportList').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+});
+$("#crashDateCalenderReportList").click(function(){
+	$('#crashDateReportList').focus();
+});
+
+$('#addedOnFromDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+}).on('dp.change', function (selected) {
+    var minimumDate = new Date(selected.date.valueOf());
+    $('#addedOnToDate').data("DateTimePicker").setMinDate(minimumDate);	
+});;
+$("#addedOnFromDateCalender").click(function(){
+	$('#addedOnFromDate').focus();
+});
+
+$('#addedOnToDate').datetimepicker({
+	pickTime : false,
+	format:'MM/DD/YYYY',
+});
+$("#addedOnToDateCalender").click(function(){
+	$('#addedOnToDate').focus();
+});
+</script>

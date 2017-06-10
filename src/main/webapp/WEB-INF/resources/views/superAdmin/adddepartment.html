@@ -1,0 +1,89 @@
+<h3 style="margin-top:70px;">{{heading}}<a href="#/department" class="btn btn-primary pull-right">
+<i class="fa fa-reply"></i> Back to Department</a></h3>
+<hr>
+<div class="departmentAddForm">
+
+<div class="col-md-6">
+</div><div class="col-md-6" style="color:red; text-align:right;">Required fields are marked with asterisk (*)
+</div>
+<br>
+<form id="form" name="form">
+
+<div class="row">
+<div class="col-md-6 col-xs-12">
+<label>County <span class="asterisk">*</span></label>
+<div class="input-group">
+ <span class="input-group-addon" id="basic-addon1"><i class="fa fa-map"></i></span>
+<select class="form-control" name="countyId" ng-model="department.countyId" ng-options="x.countyId as x.name for x in countyList" ng-selected="x.countyId==department.countyId" required>
+<option value="">-- Select County --</option>
+</select>
+</div>
+</div>
+
+
+
+<div class="col-md-6 col-xs-12">
+<label>Name <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+  <input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name"  required>
+</div>
+<div id="error-container">
+<span  ng-show="form.name.$dirty && form.name.$invalid">
+<span ng-show="form.name.$error.required">Name is required.</span>
+</span>
+</div>
+</div>
+
+</div>
+
+
+<div class="row">
+<div class="col-md-6 col-xs-12">
+<label>Code <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ticket"></i></span>
+  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code"  required>
+</div>
+
+ <div id="error-container">
+ <span  ng-show="form.code.$dirty && form.code.$invalid">
+<span ng-show="form.code.$error.required">Code is required.</span>
+</span>
+ </div> 
+</div>
+
+<div class="col-md-6 col-xs-12">
+<label>Login Link:</label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="	fa fa-pencil"></i></span>
+  <input type="text" class="form-control" placeholder="Login Link" ng-model="department.loginLink" name="login"  required>
+</div>
+
+ 
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-md-6 col-xs-12">
+<label>Search Link:</label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+  <input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search"  required>
+</div>
+
+ 
+</div>
+</div>
+
+<br> 
+<div   style="text-align:center;">
+<button class="btn btn-default" ng-click="addDepartment(department)" ng-disabled="form.$invalid">{{buttonText}}</button>
+</div>
+
+<br>
+
+</form>
+
+</div>

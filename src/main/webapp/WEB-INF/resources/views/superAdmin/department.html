@@ -1,0 +1,203 @@
+<div class="row" style="margin-top: 50px; height:50px;">
+<div class="col-md-3">
+<h3>Police Department</h3>
+</div>
+	
+<div class="col-md-6 " style="padding-top:20px;">
+<div flash-message="4000" show-close="true"></div>
+</div>
+
+<div class="pull-right col-md-3">
+<a class="btn btn-primary" href="#/department-add" style="margin-top: 20px;">
+<i class="fa fa-plus"></i> Add Police Department</a>
+</div>
+</div>
+<hr>
+
+
+</div>					
+<br>
+<div class="tablediv">
+<table class="table-bordered table-striped table-condensed table-responsive ng-cloak">
+<thead>
+
+<tr>
+<th>Police Department ID</th>
+<th>Name</th>
+<th>County</th>
+<th>Code</th>
+<th>Actions</th>
+</tr>
+		
+<tr>
+<th>
+<div class = "input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type = "text" ng-model="search.policeDepartmentId" ng-change="filter(search)" placeholder="Police Department ID" class = "form-control">
+</div>
+</th>
+
+<th><div class = "input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type = "text" ng-model="search.name" ng-change="filter(search)" placeholder="Name" class = "form-control">
+ </div>
+ </th>
+
+
+<th>
+<div class = "input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type = "text" ng-model="search.countyName" ng-change="filter(search)" placeholder="County" class = "form-control">
+</div>
+</th>
+			
+			
+
+         
+         
+<th>
+<div class = "input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type = "text" ng-model="search.code" ng-change="filter(search)" placeholder="Code" class = "form-control">
+</div>
+</th>
+	
+<th>
+	
+</th>
+</tr>
+</thead>
+<tbody>
+		
+<tr dir-paginate="x in policeDepartmentListfilter=(policeDepartmentList|filter:search)|itemsPerPage:4">
+<td>{{x.policeDepartmentId}}</td>
+<td>{{x.name}}</td>
+<td>{{x.countyName}}</td>
+<td>{{x.code}}</td>
+<td>
+
+<span ng-switch="x.isEnabled"><span ng-switch-when="1">
+<a class="fa fa-unlock-alt fa-fw" ng-click="enableOrDisable(x.policeDepartmentId)" data-toggle="tooltip"
+						title="Click to Disable" onmouseenter="$(this).tooltip('show')"></a></span>
+        
+        <span ng-switch-when="0"><a class="fa fa-lock fa-fw"
+						ng-click="enableOrDisable(x.policeDepartmentId)" data-toggle="tooltip"
+						title="Click to Enable" onmouseenter="$(this).tooltip('show')"></a></span>
+			</span>
+
+<a class="fa fa-edit fa-fw" href="#/department-edit/{{x.policeDepartmentId}}"
+data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
+
+
+
+<a class="fa fa-eye fa-fw" data-toggle="tooltip" title="View"
+				onmouseenter="$(this).tooltip('show')"
+				ng-click="viewDepartment(x.policeDepartmentId)"></a>
+				
+				
+				
+<a class="fa fa-trash" data-toggle="tooltip" title="Delete"
+				onmouseenter="$(this).tooltip('show')"
+				ng-click="deleteDepartment(x.policeDepartmentId)"></a>
+				
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div>
+<dir-pagination-controls 
+          max-size="5"
+          direction-links="true"
+          boundary-links="true" >
+        </dir-pagination-controls></div>
+
+<div>
+
+<div id="deleteModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h2>Confirmation!</h2>
+</div>
+<div class="modal-body">
+<h3>Do you want to delete this Department?</h3>
+</div>
+<div class="modal-footer">
+<button class="btn btn-danger" ng-click="confirm()">Delete</button>
+<button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+
+<div id="viewModal" class="modal fade" role="dialog">
+<div class="modal-dialog" ng-cloak="">
+<div class="modal-content">
+
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h4 align="center">View Department Details </h4>
+</div>
+
+<div class="modal-body">
+<table border="3" width="400" align="center" class="table table-bordered" >
+<tr>
+<td><label>Police Department ID</label></td>
+<td>{{result.policeDepartmentId}}</td>
+</tr>
+
+<tr>
+<td><label>County</label></td>
+<td>{{result.countyId}}</td>
+</tr>
+
+
+<tr>
+<td><label>Name</label></td>
+<td>{{result.name}}</td>
+</tr>
+
+<tr>
+<td><label>Code</label></td>
+<td>{{result.code}}</td>
+</tr>
+
+<tr>
+<td><label>Login Link</label>
+<td>{{result.loginLink}}</td>
+</tr>
+
+
+<tr>
+<td><label>Search Link</label>
+<td>{{result.searchLink}}</td>
+</tr>
+
+<tr>
+<td><label>CreatedDateTime</label></td>
+<td>{{result.createdDateTime}}</td>
+</tr>
+
+
+</table>
+
+</div>
+<div class="modal-footer">
+
+<button class="btn btn-primary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+
+</div>
+
+
+ 

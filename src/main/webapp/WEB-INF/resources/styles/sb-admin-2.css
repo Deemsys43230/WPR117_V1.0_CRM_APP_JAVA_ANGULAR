@@ -52,7 +52,6 @@ font-size:15px;
 .navbar-default
 {
 	background-color:#383838;
-	margin-bottom:-20px;
 
 }
 
@@ -130,6 +129,7 @@ font-size:15px;
 .sidebar
 {
 	background-color:white;
+	position:fixed;
 
 }
 
@@ -203,7 +203,8 @@ font-size:15px;
   padding-left: 52px;
 }
 @media (min-width: 768px) {
-  .sidebar {
+  .sidebar  {
+  position:fixed;
     z-index: 1;
     position: absolute;
     width: 200px;

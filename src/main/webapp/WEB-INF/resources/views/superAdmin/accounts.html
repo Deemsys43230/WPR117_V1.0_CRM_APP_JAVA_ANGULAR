@@ -1,0 +1,149 @@
+
+
+<div class="row accountsdiv" style="margin-top: 50px; height:50px;">
+	<div class="col-md-3">
+		<h3>Accounts</h3>
+	</div>
+	<div class="col-md-6 " style="padding-top:20px;">
+<div flash-message="4000" show-close="true"></div>
+</div>
+	<div class="pull-right col-md-2">
+		<a class="btn btn-primary" href="#/accounts-add"
+			style="margin-top: 20px;"><i class="fa fa-plus"></i> Add new
+			Account</a>
+	</div>
+</div>
+<hr>
+
+<div class="row  searchdiv">
+<div class="well well-sm">Search</div>
+<div class="col-md-2">
+<label>Department:</label></div>
+<div class="col-md-3"><select class="form-control" ng-change="filter(search)" ng-model="search.policeDepartmentId" ng-options="x.policeDepartmentId as x.name for x in policeDepartmentList" fix>
+			        <option value="">All</option></select>
+</div>
+
+<div class="col-md-2 col-md-offset-1">
+<label>Role:</label></div>
+<div class="col-md-3"><select class="form-control" ng-change="filter(search)" ng-model="search.roleId" ng-options="x.roleId as x.name for x in roles" fix>
+<option value="" selected>All</option>
+</select>
+					</div>
+					<br>
+</div>					<br>
+<div class="tablediv">
+<table class="table-bordered table-striped table-condensed table-responsive ng-cloak">
+	<thead>
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>User Name</th>
+			<th>Email ID</th>
+			 <th class="hidden">Role</th>
+			<th>Actions</th>
+		</tr>
+		<tr>
+			<th> <div class = "input-group">
+            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+					 <input type = "text" ng-model="search.firstName" ng-change="filter(search)" placeholder="First Name" class = "form-control">
+               
+            </div></th>
+			<th><div class = "input-group">
+            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+					 <input type = "text" ng-model="search.lastName" ng-change="filter(search)" placeholder="Last Name" class = "form-control">
+               
+            </div></th>
+			<th><div class = "input-group">
+            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+					 <input type = "text" ng-model="search.username" ng-change="filter(search)" placeholder="User Name" class = "form-control">
+               
+            </div></th>
+			<th><div class = "input-group">
+            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+					 <input type = "text" ng-model="search.emailId" ng-change="filter(search)" placeholder="Email ID" class = "form-control">
+               
+            </div></th>
+			<!-- <th><select class="form-control" ng-model="search.roleId"><option
+						value="" selected>All</option>
+					<option value="1">Admin</option>
+					<option value="2">User</option>
+					<option value="3">Super Admin</option></select></th>
+			 -->
+			 <th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr
+			dir-paginate="x in accountsListfilter=(accountsList|filter:search)|itemsPerPage:4">
+			<td>{{x.firstName}}</td>
+			<td>{{x.lastName}}
+
+				<td>{{x.username}}</td>
+			<td>{{x.emailId}}</td>
+ <td class="hidden"><div ng-switch="x.roleId"><p ng-switch-when="1" style="color:red">Admin</p>
+				<p ng-switch-when="2" style="color: green">User</p>
+				<p ng-switch-when="3" style="color:blue">Super Admin</p>
+				</div>
+			</td>
+			<td class="hidden">{{x.policeDepartmentId}}</td>
+        
+			<td><span ng-switch="x.isEnable">
+        <span ng-switch-when="1"><a
+						class="fa fa-unlock-alt fa-fw"
+						ng-click="enableDisable(x.accountId)" data-toggle="tooltip"
+						title="Click to Disable" onmouseenter="$(this).tooltip('show')"></a></span>
+        <span ng-switch-when="0"><a class="fa fa-lock fa-fw"
+						ng-click="enableDisable(x.accountId)" data-toggle="tooltip"
+						title="Click to Enable" onmouseenter="$(this).tooltip('show')"></a></span>
+			</span> <a class="fa fa-edit fa-fw" href="#/accounts-edit/{{x.accountId}}"
+				data-toggle="tooltip" title="Edit"
+				onmouseenter="$(this).tooltip('show')"></a><!--  <a class="fa fa-trash"
+				data-toggle="tooltip" title="Delete"
+				onmouseenter="$(this).tooltip('show')"
+				ng-click="delete(x.accountId)"></a> --> <a class="fa fa-key"
+				data-toggle="tooltip" title="Reset Password"
+				onmouseenter="$(this).tooltip('show')"
+				ng-click="resetPassword(x.accountId)"></a></td>
+</tr>
+</tbody>
+</table></div>
+<div>
+<dir-pagination-controls 
+          max-size="5"
+          direction-links="true"
+          boundary-links="true" >
+        </dir-pagination-controls></div>
+<div id="deleteModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h2>Confirmation!</h2>
+</div>
+<div class="modal-body">
+<h3>Do you want to delete this record?</h3>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="confirm()">Delete</button>
+<button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+<div id="resetModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h2>Confirmation!</h2>
+</div>
+<div class="modal-body">
+<h3>Do you want to reset password for this Account?</h3>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="confirm()">Reset</button>
+<button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,123 @@
+<div class="accountsdiv" style="margin-top:70px;"><h3>{{heading}}<span ng-show="addFirstNameWithHeading"> - {{account.firstName}}</span><a href="#/accounts" class="btn btn-primary pull-right"><i class="fa fa-reply"></i> Back to Accounts</a></h3></div>
+
+<hr>
+<div class="container-fluid addformdiv">
+<div class="row">
+<div class="col-md-6">
+</div><div class="col-md-6" style="color:red; text-align:right;">Required fields are marked with asterisk (*)</div>
+</div><br>
+<form id="form" name="form">
+<div class="row">
+<div class="col-md-6 col-xs-12">
+<label>First Name <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+  <input type="text" class="form-control" name="firstName" placeholder="First Name" ng-model="account.firstName" required>
+</div>
+<div id="error-container">
+<span ng-show="form.firstName.$dirty && form.firstName.$invalid">
+<span ng-show="form.firstName.$error.required">First Name is required.</span>
+</span>
+
+</div></div>
+<div class="col-md-6 col-xs-12">
+<label>Middle Name:</label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+  <input type="text" class="form-control" placeholder="Middle Name" ng-model="account.middleName" >
+</div>
+<div id="error-container"></div>
+</div>
+
+</div>
+<div class="row">
+<div class="col-md-6 col-xs-12">
+<label>Last Name <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+  <input type="text" class="form-control" placeholder="Last Name" name="lastName"  ng-model="account.lastName"  required>
+</div>
+<div id="error-container">
+<span  ng-show="form.lastName.$dirty && form.lastName.$invalid">
+<span ng-show="form.lastName.$error.required">Last Name is required.</span>
+</span>
+
+</div>
+</div>
+<div class="col-md-6">
+<label>User Name <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+  <input type="text" class="form-control" placeholder="User Name" ng-model="account.username" name="userName" ng-disabled="disableUsername"  check-username required>
+</div>
+ <div id="error-container">
+						<span ng-show="form.userName.$dirty">
+							<span ng-cloak ng-show="form.userName.$error.required">Please
+								Enter User Name</span>
+							<span ng-cloak ng-show="!form.userName.$error.required&&form.userName.$error.checkUsername">User Name is already taken</span>
+							
+						</span>
+					</div> 
+					<!-- <span style="color:red" ng-show="form.userName.$dirty && form.userName.$invalid">
+<span ng-show="form.userName.$error.required">userName is required.</span>
+<span ng-show="!form.userName.$error.required&&!form.userName.$error.checkUsername">username already exists</span>
+</span> -->
+
+</div>
+
+</div>
+
+<div class="row">
+<div class="col-md-6">
+<label>Email ID <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-envelope"></i></span>
+  <input type="text" class="form-control" name="emailId" placeholder="Email-Id" ng-model="account.emailId"  ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required>
+</div>
+<div id="error-container">
+<span ng-show="form.emailId.$dirty && form.emailId.$invalid">
+<span ng-show="form.emailId.$error.required">Email ID is required.</span>
+<span ng-show="form.emailId.$error.pattern">Please enter valid Email ID</span>
+</span>
+</div>
+</div>
+<div class="col-md-6">
+<label>Phone Number <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-phone"></i></span>
+  <input type="text" class="form-control" name="phoneNumber" placeholder="Phone Number" ng-model="account.phoneNumber"  ng-pattern="/^[0-9]{10}$/" required>
+</div>
+<div id="error-container">
+<span ng-show="form.phoneNumber.$dirty && form.phoneNumber.$invalid">
+<span ng-show="form.phoneNumber.$error.required">Phone Number is Required.</span>
+<span ng-show="form.phoneNumber.$error.pattern">Enter Valid Phone Number</span>
+
+</span>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<label>Role <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user-secret"></i></span>
+
+<select class="form-control" name="role" ng-model="account.roleId" ng-options="x.roleId as x.name for x in roles" ng-selected="x.roleId==account.roleId" required>
+			        <option value="">--Select Role--</option>
+			         </select>
+			         </div>
+			        </div>
+			       
+			      <div class="col-md-6">
+			        <label>Department <span class="asterisk">*</span></label>
+			        <div class="input-group">
+			          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-id-badge"></i></span>
+<select class="form-control" name="checker" ng-model="account.policeDepartmentId" ng-options="x.policeDepartmentId as x.name for x in policeDepartmentList" ng-selected="x.policeDepartmentId==account.policeDepartmentId" required>
+			        <option value="">--Select Department--</option>
+			       
+			         </select></div></div></div>
+			        <br>
+<div style="text-align:center;"><button class="btn btn-default" ng-click="addAccounts(account)" ng-disabled="form.$invalid">{{buttonText}}</button>
+</div><br>
+</form>
+</div>
