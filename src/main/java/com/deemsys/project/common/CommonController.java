@@ -154,6 +154,12 @@ public class CommonController {
         return "/ohio-main";
    	}
  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
  	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)
  	public String getIndexMain(ModelMap model)
  	{

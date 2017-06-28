@@ -50,6 +50,22 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
         }]);
 
         $routeProvider.
+        
+        when('/viewdepartment', {
+            templateUrl: 'admin/view-department.html',
+            resolve: {
+                loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name:'adminApp',
+                        files:[
+                            'resources/scripts/controllers/viewDepartmentController.js'
+                  ]
+                    });
+                }]
+
+            },
+            controller:'ViewDepartmentController'
+        }).
             when('/add-report', {
                 templateUrl: 'admin/add-report.html',
                 resolve: {
@@ -112,11 +128,31 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
             otherwise({
                 redirectTo: '/reports'
             });
-    }]).controller('authenticationController', function($rootScope, $scope, $http, $location, requestHandler) {
+    }])
+  .controller('authenticationController', function($rootScope, $scope, $http, $location, requestHandler) {
     	requestHandler.getRequest("getCurrentDate.json","").then(function(response){
 			 $rootScope.currentDate=response.data.currentDate;
+			
     	});
-    });
+    })
+
+.controller('viewDepartmentController', function($rootScope,requestHandler) {
+
+	requestHandler.getRequest("getCurrentUserPoliceDepartment.json","").then(function(response)
+			{
+		 $rootScope.policeDepartmentId=response.data.policeDepartmentForm.policeDepartmentId;
+		 console.log($rootScope.policeDepartmentId);
+	});
+	
+	
+
+
+});
+
+
+
+
+
 
 adminApp.directive('validateName', function() {
 	var NAME_EXPR = /^ *([a-zA-Z]+ ?)+ *$/;

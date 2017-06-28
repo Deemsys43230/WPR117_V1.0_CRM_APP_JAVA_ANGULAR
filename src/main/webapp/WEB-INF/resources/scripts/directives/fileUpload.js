@@ -40,8 +40,10 @@ angular.module('adminApp').directive('validateFileType',function(){
 	      el.bind('change',function(){
 	    	if(el[0].files.length!=0){
 	    		 var fileSize=el[0].files[0].size;
+	    		
 		    	  var value = el.val(),
-	              ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();   
+	              ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase(); 
+		    	  
 		          ngModel.$validators.validateFileType = function() {
 		        	  return validFormats.indexOf(ext) !== -1;
 		          };

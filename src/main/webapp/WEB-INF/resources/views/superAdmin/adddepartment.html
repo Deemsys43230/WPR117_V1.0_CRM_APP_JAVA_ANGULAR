@@ -25,61 +25,116 @@
 <div class="col-md-6 col-xs-12">
 <label>Name <span class="asterisk">*</span></label>
 <div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-  <input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name"  required>
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+<input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()" check-departmentname required>
 </div>
 <div id="error-container">
-<span  ng-show="form.name.$dirty && form.name.$invalid">
-<span ng-show="form.name.$error.required">Name is required.</span>
+
+<span  ng-show="form.name.$dirty">
+
+<span ng-cloak ng-show="form.name.$error.required">Name is required.</span>
+
+<span ng-cloak ng-show="!form.name.$error.required&&form.name.$error.checkDepartmentname">Name is already taken</span>
+
 </span>
 </div>
 </div>
-
 </div>
 
+
+<br>
 
 <div class="row">
 <div class="col-md-6 col-xs-12">
 <label>Code <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ticket"></i></span>
-  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code"  required>
+  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" uppercase check-departmentcode required>
+</div>
+
+<div id="error-container">
+<span  ng-show="form.code.$dirty">
+<span ng-cloak ng-show="form.code.$error.required">Code is required.</span>
+<span ng-cloak ng-show="!form.code.$error.required&&form.code.$error.checkDepartmentcode">Code is already taken</span>
+</span>
+</div>
+</div>
+
+<div class="col-md-6 col-xs-12">
+<label>Login Link <span class="asterisk">*</span></label>
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1"><i class="	fa fa-pencil"></i></span>
+<input type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" lowercase check-departmentlogin  required></input>
 </div>
 
  <div id="error-container">
- <span  ng-show="form.code.$dirty && form.code.$invalid">
-<span ng-show="form.code.$error.required">Code is required.</span>
-</span>
- </div> 
-</div>
-
-<div class="col-md-6 col-xs-12">
-<label>Login Link:</label>
-<div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"><i class="	fa fa-pencil"></i></span>
-  <input type="text" class="form-control" placeholder="Login Link" ng-model="department.loginLink" name="login"  required>
-</div>
-
+ <span  ng-show="form.login.$dirty">
  
-</div>
-</div>
+<span ng-cloak ng-show="form.login.$error.required">Login Link is required.</span>
 
+<span ng-cloak ng-show="!form.login.$error.required&&form.login.$error.checkDepartmentlogin">Login Link is already taken</span>
+ </span>
+ </div>
+</div>
+</div>
+<br>
 
 <div class="row">
 <div class="col-md-6 col-xs-12">
-<label>Search Link:</label>
+<label>Search Link <span class="asterisk">*</span></label>
 <div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-  <input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search"  required>
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" lowercase check_departmentsearch  required>
 </div>
 
- 
+<div id="error-container">
+ <span  ng-show="form.search.$dirty"> 
+
+<span ng-cloak ng-show="form.search.$error.required">Search Link is required.</span>
+
+<span ng-cloak ng-show="!form.search.$error.required&&form.search.$error.checkDepartmentsearch">Search Link is already taken</span>
+
+ </span>
 </div>
 </div>
+
+<label style="margin-left:12px">Upload File</label>
+<div class="col-md-6 col-xs-12">
+<div class="col-md-13" ng-cloak ng-show="!isEdit">
+
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-upload"></i></span>
+
+<input type="file" class="form-control" file-model="policeDepartmentFile" validate-file-type name="policeDepartmentFile"  ng-model="policeDepartmentFile" onchange="angular.element(this).scope().uploadImage(this)">
+</div>
+
+<div class="error-container">
+<span style="color:red" ng-cloak ng-show="form.policeDepartmentFile.$error.validateFileType">Please Choose Valid File only JPEG, JPG or PNG </span>
+<span style="color:red" ng-cloak ng-show="!form.policeDepartmentFile.$error.validateFileType&&form.policeDepartmentFile.$error.validateFileSize">please select image with 1400*450 dimension </span> 
+</div>
+</div>
+
+<div class="col-md-12" ng-cloak ng-show="!showCancel">
+<a href="" ng-click="isEdit=true;showCancel=true;clearFile();imageUpload=false;"><i class="fa fa-close fa-fw"></i>&nbsp;Cancel</a>
+</div>
+<div class="col-md-10" ng-cloak ng-show="isEdit" style="padding-bottom: 3px;">
+
+</div>
+
+<div class="col-md-12" ng-cloak ng-show="isEdit">
+
+<img  ng-src="{{department.url}}"  width="300" height="150" alt="no image uploaded" >
+
+<a href="" ng-click="imageUpload=true;changeFile();"><i class="fa fa-pencil fa-fw"></i>&nbsp;Change</a>
+</div>
+</div>
+</div>
+
+
 
 <br> 
 <div   style="text-align:center;">
-<button class="btn btn-default" ng-click="addDepartment(department)" ng-disabled="form.$invalid">{{buttonText}}</button>
+<button class="btn btn-default" ng-click="addDepartment(department)" ng-disabled="form.$invalid||imageUpload">{{buttonText}}</button>
 </div>
 
 <br>

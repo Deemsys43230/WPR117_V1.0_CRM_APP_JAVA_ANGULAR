@@ -72,13 +72,26 @@
 		                <th>Action</th>
 		            </tr>
 		        </thead>
+		        
 		        <tbody>
 		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
 		            	<td width="16%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
 		            	<td width="20%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
 		            	<td width="24%" class="wrap-break-word"><label>Location:</label><br/>{{resultData.location}}</td>
 		            	<td width="16%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
-		            	<td width="24%"><span ng-show="crashReportSearchForm.reportType==1"><a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit"><i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp;<a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs hint--top" data-hint="Delete"><i class="fa fa-trash fa-fw"></i></a>&nbsp;|&nbsp;</span><a style="color:#fff;" class="btn btn-primary btn-xs hint--top" data-hint="View Report Details" ng-click="getReport(resultData.reportId)"><i class="fa fa-eye fa-fw"></i></a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
+		            	<td width="24%"><span ng-show="crashReportSearchForm.reportType==1">
+		            	
+		            	<a href="#/edit-report/{{resultData.reportId}}" class="btn btn-warning btn-xs hint--top" data-hint="Edit">
+		            	<i class="fa fa-pencil fa-fw"></i></a>&nbsp;|&nbsp;
+		            	
+		            	<a href="" ng-click="deleteReportModal(resultData.reportId)" class="btn btn-danger btn-xs hint--top" data-hint="Delete">
+		            	<i class="fa fa-trash fa-fw"></i>
+</a>&nbsp;|&nbsp;</span>
+<a style="color:#fff;" class="btn btn-primary btn-xs hint--top" data-hint="View Report Details" ng-click="getReport(resultData.reportId)">
+<i class="fa fa-eye fa-fw"></i></a>&nbsp;|&nbsp;
+
+<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File">
+<i class="fa fa-file fa-fw"></i></a></td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
 		            	<td colspan="2">{{occupants.firstName}}</td>
@@ -130,6 +143,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- View Report Details -->
 <div class="modal fade" id="viewReportDetailsModal" role="dialog" data-backdrop="static" data-keyboard=false>
 	<div class="modal-dialog modal-lg">
@@ -177,6 +191,8 @@
 		</div>
 	</div>
 </div>
+
+
 <script>
 $('#crashDateReportList').datetimepicker({
 	pickTime : false,

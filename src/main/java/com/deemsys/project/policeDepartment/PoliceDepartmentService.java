@@ -1,15 +1,23 @@
 package com.deemsys.project.policeDepartment;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.deemsys.project.AWS.AWSFileUpload;
 import com.deemsys.project.common.CRMConstants;
+import com.deemsys.project.common.CRMProperties;
 import com.deemsys.project.county.CountyDAO;
 import com.deemsys.project.entity.Accounts;
 import com.deemsys.project.entity.County;
@@ -35,6 +43,15 @@ public class PoliceDepartmentService {
 	@Autowired
 	CountyDAO countyDAO;
 
+	@Autowired
+	AWSFileUpload awsFileUpload;
+	
+	
+	@Autowired
+	CRMProperties crmProperties;
+	
+	
+	
 	// Get All Entries
 	public List<PoliceDepartmentForm> getPoliceDepartmentList() {
 		List<PoliceDepartmentForm> policeDepartmentForms = new ArrayList<PoliceDepartmentForm>();
@@ -50,7 +67,7 @@ public class PoliceDepartmentService {
 					policeDepartment.getCounty().getName(), policeDepartment.getName(), policeDepartment.getCode(),
 					policeDepartment.getLoginLink(), policeDepartment.getSearchLink(),
 					CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
-					policeDepartment.getStatus(), policeDepartment.getIsEnabled());
+					policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null);
 			policeDepartmentForms.add(policeDepartmentForm);
 		}
 
@@ -63,13 +80,16 @@ public class PoliceDepartmentService {
 
 		// TODO: Convert Entity to Form
 		// Start
+		
+		String innerFolderName="/reports";
+		String url=crmProperties.getProperty("bucketURL")+policeDepartmentId.toString()+innerFolderName+"/banner.jpeg";
 
 		PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 				policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
 				policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(),
 				policeDepartment.getSearchLink(),
 				CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
-				policeDepartment.getStatus(), policeDepartment.getIsEnabled());
+				policeDepartment.getStatus(), policeDepartment.getIsEnabled(),url);
 
 		// End
 
@@ -90,7 +110,7 @@ public class PoliceDepartmentService {
 						policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(),
 						policeDepartment.getSearchLink(),
 						CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
-						policeDepartment.getStatus(), policeDepartment.getIsEnabled());
+						policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null);
 			}
 
 			return policeDepartmentForm;
@@ -125,7 +145,8 @@ public class PoliceDepartmentService {
 		// Logic Ends
 
 		policeDepartmentDAO.merge(policeDepartment);
-		return 1;
+		
+		return policeDepartment.getPoliceDepartmentId();
 	}
 
 	// Save an Entry
@@ -141,13 +162,12 @@ public class PoliceDepartmentService {
 
 		PoliceDepartment policeDepartment = new PoliceDepartment(county, policeDepartmentForm.getName(),
 				policeDepartmentForm.getCode(), policeDepartmentForm.getLoginLink(),
-				policeDepartmentForm.getSearchLink(),
-				CRMConstants.convertYearFormatWithTime(CRMConstants.convertUSAFormatWithTime(new Date())),
+				policeDepartmentForm.getSearchLink(),new Date(),
 				policeDepartmentForm.getStatus(), 1, null, null);
 
 		policeDepartmentDAO.save(policeDepartment);
-
-		return 1;
+        
+		return policeDepartment.getPoliceDepartmentId();
 	}
 
 	// Update an Entry
@@ -172,7 +192,8 @@ public class PoliceDepartmentService {
 	}
 
 	// Delete an Entry
-	public int deletePoliceDepartment(Integer id) {
+	public int deletePoliceDepartment(Integer id)
+	{
 		policeDepartmentDAO.delete(id);
 		return 1;
 	}
@@ -191,5 +212,111 @@ public class PoliceDepartmentService {
 		return 1;
 
 	}
+
+	public String uploadPoliceDepartment(MultipartFile policeDepartmentFile, Integer policeDepartmentId) 
+	{
+		String fileName="banner.jpeg";
+   
+		String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString();
+
+	    try {
+		
+	    	File f=new File(path);
+	    	
+	    	if(!f.exists())
+	    	{
+	    		f.mkdir();
+	    	}
+	    	
+ 	
+ String filePath=path+"//banner.jpeg";
+	   
+ if(crmProperties.getProperty("awsUpload").equals("1"))
+ {
+ 
+			
+    File file=CRMConstants.saveTemporaryFile(policeDepartmentFile, filePath);
+    
+   
+   
+   awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId);
+   
+  file.delete();
+    }
+		}
+		catch (IllegalStateException e)
+		{
+			
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			
+			e.printStackTrace();
+		}
+		return null;
+		}
+
+	
+public String uploadPoliceDepartmentWithoutFile(Integer policeDepartmentId) throws IOException 
+{
+String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString();
+
+File srcFolder=new File("C://wamp64//www//CRM_Images//default//banner.jpeg");
+
+File destinationFolder=new File(path);
+
+if(!destinationFolder.exists())
+{
+	destinationFolder.mkdir();
+}
+
+path=path+"//banner.jpeg";
+
+destinationFolder=new File(path);
+
+if(crmProperties.getProperty("awsUpload").equals("1"))
+{
+FileUtils.copyFile(srcFolder,destinationFolder);
+
+String fileName="banner.jpeg";
+
+String filePath=path;
+awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId);
+destinationFolder.delete();
+}
+return null;
+}
+	
+
+	public int checkDepartmentName(String name,Integer policeDepartmentId)
+	{
+		
+		return policeDepartmentDAO.checkDepartmentName(name,policeDepartmentId);
+	}
+
+	
+	public int checkDepartmentCode(String code,Integer policeDepartmentId)
+	{
+		
+		return policeDepartmentDAO.checkDepartmentCode(code,policeDepartmentId);
+	}
+
+
+	public int checkDepartmentLogin(String login,Integer policeDepartmentId)
+	{
+		
+		return policeDepartmentDAO.checkDepartmentLogin(login,policeDepartmentId);
+	}
+	
+	public int checkDepartmentSearch(String search,Integer policeDepartmentId)
+	{
+		
+		return policeDepartmentDAO.checkDepartmentSearch(search,policeDepartmentId);
+	}
+
+	
+	
+	
 
 }

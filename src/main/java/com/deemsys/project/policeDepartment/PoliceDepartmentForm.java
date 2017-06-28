@@ -22,7 +22,17 @@ public class PoliceDepartmentForm {
 	private String createdDateTime;
 	private Integer status;
 	private Integer isEnabled;
+	private String  url;
 	
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	public Integer getPoliceDepartmentId() {
 		return policeDepartmentId;
 	}
@@ -106,7 +116,7 @@ public class PoliceDepartmentForm {
 	}
 
 	public PoliceDepartmentForm(Integer policeDepartmentId, Integer countyId,String countyName, String name,
-			String code, String loginLink, String searchLink, String createdDateTime, Integer status,Integer isEnabled) {
+			String code, String loginLink, String searchLink, String createdDateTime, Integer status,Integer isEnabled,String url) {
 		super();
 		this.policeDepartmentId = policeDepartmentId;
 		this.countyId = countyId;
@@ -118,6 +128,7 @@ public class PoliceDepartmentForm {
 		this.status = status;
 		this.isEnabled=isEnabled;
 		this.countyName=countyName;
+		this.url=url;
 	}
 
 	public PoliceDepartmentForm() {

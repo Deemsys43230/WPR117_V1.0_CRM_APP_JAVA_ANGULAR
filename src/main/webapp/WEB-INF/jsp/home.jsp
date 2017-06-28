@@ -32,14 +32,25 @@
 	<div class="container" style="width:92%;">
 		<img src="${departmentBannerImage}" style="width:100%;"/>
 	</div>
-	<body ng-app="adminApp" ng-cloak>
+	<body ng-app="adminApp" ng-cloak ng-controller="viewDepartmentController">
 	<div class="col-md-12">
 	<a href="j_spring_security_logout" class="pull-right logout-tag"><i class="fa fa-sign-out fa-fw"></i>&nbsp;Logout</a>&nbsp;&nbsp;
 	<a href="#/changepassword" class="pull-right logout-tag"><i class="fa fa-key fa-fw"></i>&nbsp;Change Password</a>
+	
+	
+<a href="#/viewdepartment" class="pull-right logout-tag" data-toggle="tooltip" title="View"
+onmouseenter="$(this).tooltip('show')" ng-click="viewDepartment(x.policeDepartmentId)"><i class="fa fa-eye fa-fw"></i>View Department</a>
+ 	
 	</div>
+	
+
+	
+	
+	
 	<div style="min-height: 500px;">
 	<div ng-view ng-cloak></div>
 	<div ng-controller="authenticationController"></div>
+	
 	</div>
 	<!-- FOOTER -->
 	<footer id="footer">

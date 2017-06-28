@@ -5,7 +5,7 @@
 	<div class="container-fluid" style="margin-top:50px; margin-left:-30px; margin-right:-30px;">
 		<div class="col-md-12 white-form">
 		<div class="col-md-12">
-		<h3>Reports	<a class="btn btn-primary pull-right" href="#/dashboard"><i class="fa fa-reply"></i> Back to Home</a></h3>
+		<h3>Reports	<a class="pull-right" href="#/dashboard"></a></h3>
 		<hr/>
 		</div>
 		<div class="col-md-12 search-block">
@@ -102,25 +102,32 @@
 						</tr>
 		        </tbody>
 		    </table>
-		    <dir-pagination-controls ng-show="totalRecords>0" max-size="5" direction-links="true" boundary-links="true" >
-    					</dir-pagination-controls>
-    		<div class="col-md-12 no-padding">
-		    <div class="col-md-3 pull-right no-padding">
-						<label>Number of Records</label> <select
-							class="form-control input-sm option-bold"
-							ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
-							id="noOfRows" ng-change="itemsPerPageFilterChange()">
-							<option value="10">Show 10 Per Page</option>
-							<option value="25">Show 25 Per Page</option>
-							<option value="50">Show 50 Per Page</option>
-							<option value="100">Show 100 Per Page</option>
-							<option value="250">Show 250 Per Page</option>
-						</select>
+		    
+<dir-pagination-controls  max-size="5" direction-links="true" boundary-links="true" ng-show="totalRecords>0" >
+		    
+</dir-pagination-controls>	
+	
+	
+	<div class="col-md-3 pull-right no padding">
+	
+<label>Number of Records</label> <select
+	class="form-control input-sm option-bold"
+	ng-model="crashReportSearchForm.itemsPerPage" name="noOfRows"
+	id="noOfRows" ng-change="itemsPerPageFilterChange()">
+	<option value="10">Show 10 Per Page</option>
+	<option value="25">Show 25 Per Page</option>
+	<option value="50">Show 50 Per Page</option>
+	<option value="100">Show 100 Per Page</option>
+	<option value="250">Show 250 Per Page</option>
+</select>
 				</div>
-			</div>
+    					 
+    		
+		   
+			
 				
 		</div>
-	</div><br>
+	</div>
 <!-- Delete Rport Confirmation Modal -->
 <div class="modal fade" id="deleteReportModal" role="dialog" data-backdrop="static" data-keyboard=false>
 	<div class="modal-dialog">
@@ -142,11 +149,11 @@
 <br>
 <!-- View Report Details -->
 <div class="modal fade" id="viewReportDetailsModal" role="dialog" data-backdrop="static" data-keyboard=false>
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">Report Details</h4>
+			<h4 align="center">Report Details</h4>
 			</div>
 			<div class="modal-body">
 				<table class="table table-bordered table-striped">

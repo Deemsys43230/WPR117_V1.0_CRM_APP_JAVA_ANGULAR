@@ -268,6 +268,7 @@ public class CrashReportsService {
 			if(crmProperties.getProperty("awsUpload").equals("1")){
 				// Write File Temp Folder
 				File file=CRMConstants.saveTemporaryFile(crashReport, filePath);
+				
 				// Upload File To AWS S3
 				awsFileUpload.uploadFileToAWSS3(filePath, fileName,loginService.getCurrentAccountPoliceDepartmentId());
 				

@@ -63,7 +63,8 @@ adminApp.controller('AddReportsController',['$rootScope','$scope','$http','reque
 	};
 	
 	// Save Crash Reports
-	$scope.saveCrashReport=function(){
+	$scope.saveCrashReport=function()
+	{
 		$scope.report.isEdit=false;
 		$scope.reportSave=true;
 		$scope.buttonText="Submiting....";
@@ -92,7 +93,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 	$scope.getCountyList=function(){
 		requestHandler.getRequest("User/getAllCountys.json","").then(function(response){
 				$scope.countyList=response.data.countyForms;
-		});
+	l	});
 	};
 	
 	// Call get County List
@@ -133,6 +134,7 @@ adminApp.controller('EditReportsController',['$rootScope','$scope','$http','requ
 		$scope.report.isEdit=true;
 		$scope.reportSave=true;
 		$scope.buttonText="Submiting....";
+		
 		if($scope.isEdit){
 			requestHandler.postRequest("User/mergeCrashReports.json",$scope.report).then(function(response){
 				$scope.reportSave=false;
@@ -324,4 +326,10 @@ adminApp.controller('ViewReportController',['$rootScope','$scope','$http','reque
 	$scope.resetSearch=function(){
 		$scope.init();
 	};
+	
+	
 }]);
+
+
+
+

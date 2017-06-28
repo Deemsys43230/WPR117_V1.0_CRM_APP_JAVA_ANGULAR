@@ -3,6 +3,7 @@ package com.deemsys.project.policeDepartment;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.deemsys.project.common.BasicQuery;
 import com.deemsys.project.entity.CrashReports;
 import com.deemsys.project.entity.PoliceDepartment;
+import com.deemsys.project.entity.Users;
 
 /**
  * 
@@ -160,6 +162,116 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 		return (PoliceDepartment) this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).add(Restrictions.eq("link", departmentLink)).uniqueResult();
 	}
 
+	@Override
+	public Integer checkDepartmentName(String name,Integer policeDepartmentId)
+	{
+		Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class);
+		
+		criteria.add(Restrictions.eq("name", name));
+		
+		
+		if(policeDepartmentId!=null)
+		
+			criteria.add(Restrictions.ne("policeDepartmentId",policeDepartmentId));
+		
+		
+		
+	PoliceDepartment policeDepartment=(PoliceDepartment) criteria.uniqueResult();
+	
+	if(policeDepartment!=null)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+		
+		
+	}
+
+	@Override
+	public Integer checkDepartmentLogin(String login,Integer policeDepartmentId)
+	{
+Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class);
+		
+		criteria.add(Restrictions.eq("loginLink",login));
+		
+		
+		if(policeDepartmentId!=null)
+			
+			criteria.add(Restrictions.ne("policeDepartmentId",policeDepartmentId));
+		
+		
+		
+		
+	PoliceDepartment policeDepartment=(PoliceDepartment) criteria.uniqueResult();
+	
+	if(policeDepartment!=null)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+		
+		
+	}
+
+	@Override
+	public Integer checkDepartmentCode(String code,Integer policeDepartmentId)
+	{
+		Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class);
+		
+		criteria.add(Restrictions.eq("code", code));
+		
+		
+		if(policeDepartmentId!=null)
+			
+			criteria.add(Restrictions.ne("policeDepartmentId",policeDepartmentId));
+		
+		
+		
+		PoliceDepartment policeDepartment=(PoliceDepartment) criteria.uniqueResult();
+		
+		if(policeDepartment!=null)
+		{
+			return 1;   
+		}
+		else
+		{	
+		return 0;
+		}
+	}
+
+	@Override
+	public Integer checkDepartmentSearch(String search,Integer policeDepartmentId)
+	{
+		
+Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class);
+		
+criteria.add(Restrictions.eq("searchLink", search));
+
+
+if(policeDepartmentId!=null)
+	
+	criteria.add(Restrictions.ne("policeDepartmentId",policeDepartmentId));
+
+PoliceDepartment policeDepartment=(PoliceDepartment) criteria.uniqueResult();
+
+if(policeDepartment!=null)
+{
+	return 1;   
+}
+else
+{	
+return 0;
+}
+		
+	}
+
+	
 	
 
 }

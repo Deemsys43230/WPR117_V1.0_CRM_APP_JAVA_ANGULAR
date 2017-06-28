@@ -93,3 +93,361 @@ superAdminApp.directive("checkPassword", function ($q, $timeout,requestHandler) 
 
 });
 
+
+superAdminApp.directive("checkDepartmentname", function ($q, $timeout,requestHandler)
+  {
+    var CheckDepartmentNameExists = function (isNew) {
+        if(isNew==1)
+            return true;
+        else
+            return false;
+    };
+    return {
+        restrict: "A",
+        require: "ngModel",
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$asyncValidators.checkDepartmentname = function (modelValue) {
+                var defer = $q.defer();
+                $timeout(function () {
+                    var isNew;
+                    
+                    if(scope.policeDepartmentId==undefined)
+                    	{
+                    	scope.policeDepartmentId="";
+                    	}
+                    
+                 
+                    var sendRequest=requestHandler.postRequest("/checkDepartmentName.json?name="+modelValue+"&id="+scope.policeDepartmentId,0).then(function(results)
+                    		{
+                    	
+                    	
+                        isNew=results.data.isCorrect;
+                      
+                    });
+
+                    sendRequest.then(function(){
+
+                        if (CheckDepartmentNameExists(!isNew)){
+                            defer.resolve();
+                        }
+                        else{
+                            defer.reject();
+                        } 
+                    });
+                    isNew = false;
+                }, 500);
+
+                return defer.promise;
+            }
+        }
+    };
+
+});
+
+
+superAdminApp.directive("checkDepartmentcode", function ($q, $timeout,requestHandler)
+		  {
+var CheckDepartmentCodeExists = function (isNew) {
+if(isNew==1)
+    return true;
+else
+    return false;
+};
+return {
+restrict: "A",
+require: "ngModel",
+link: function (scope, element, attributes, ngModel) {
+ngModel.$asyncValidators.checkDepartmentcode = function (modelValue)
+{
+    var defer = $q.defer();
+    $timeout(function () {
+        var isNew;
+        
+        if(scope.policeDepartmentId==undefined)
+    	{
+    	scope.policeDepartmentId="";
+    	}
+        
+        var sendRequest=requestHandler.postRequest("/checkDepartmentCode.json?code="+modelValue+"&id="+scope.policeDepartmentId,0).then(function(results)
+                		{
+                    isNew=results.data.isCorrect;
+                    
+                });
+
+                sendRequest.then(function(){
+
+                    if (CheckDepartmentCodeExists(!isNew)){
+                        defer.resolve();
+                    }
+                    else{
+                        defer.reject();
+                    } 
+                });
+                isNew = false;
+            }, 500);
+
+            return defer.promise;
+        }
+    }
+};
+
+});
+
+
+
+superAdminApp.directive("checkDepartmentlogin", function ($q, $timeout,requestHandler)
+		  {
+var CheckDepartmentLoginExists = function (isNew) {
+    if(isNew==1)
+        return true;
+    else
+        return false;
+};
+return {
+    restrict: "A",
+require: "ngModel",
+link: function (scope, element, attributes, ngModel) {
+    ngModel.$asyncValidators.checkDepartmentlogin = function (modelValue) {
+        var defer = $q.defer();
+        $timeout(function () {
+            var isNew;
+            
+            if(scope.policeDepartmentId==undefined)
+        	{
+        	scope.policeDepartmentId="";
+        	}
+            
+            var sendRequest=requestHandler.postRequest("/checkDepartmentLogin.json?login="+modelValue+"&id="+scope.policeDepartmentId,0).then(function(results)
+                    		{
+                        isNew=results.data.isCorrect;
+                      
+                    });
+
+                    sendRequest.then(function(){
+
+                        if (CheckDepartmentLoginExists(!isNew)){
+                            defer.resolve();
+                        }
+                        else{
+                            defer.reject();
+                        } 
+                    });
+                    isNew = false;
+                }, 500);
+
+                return defer.promise;
+            }
+        }
+    };
+
+});
+
+
+superAdminApp.directive("checkDepartmentsearch", function ($q, $timeout,requestHandler)
+		  {
+var CheckDepartmentSearchExists = function (isNew) 
+{
+  if(isNew==1)
+      return true;
+  else
+      return false;
+};
+return {
+  restrict: "A",
+require: "ngModel",
+link: function (scope, element, attributes, ngModel) {
+  ngModel.$asyncValidators.checkDepartmentsearch = function (modelValue) {
+      var defer = $q.defer();
+      $timeout(function () {
+          var isNew;
+          
+          if(scope.policeDepartmentId==undefined)
+      	{
+      	scope.policeDepartmentId="";
+      	}
+          
+          var sendRequest=requestHandler.postRequest("/checkDepartmentSearch.json?search="+modelValue+"&id="+scope.policeDepartmentId,0).then(function(results)
+                  		{
+                      isNew=results.data.isCorrect;
+                    
+                  });
+
+                  sendRequest.then(function(){
+
+                      if (CheckDepartmentSearchExists(!isNew)){
+                          defer.resolve();
+                      }
+                      else{
+                          defer.reject();
+                      } 
+                  });
+                  isNew = false;
+              }, 500);
+
+              return defer.promise;
+          }
+      }
+  };
+
+});
+
+
+superAdminApp.directive('uppercase', function() {
+	return {
+	    restrict: "A",
+	    require: "ngModel",
+	    link: function(scope, element, attrs, ngModel) {
+
+	       
+	        ngModel.$parsers.push(function(input) {
+	            return input ? input.toUpperCase() : "";
+	        });
+
+	       
+	        element.css("text-transform","uppercase");
+	    }
+	};
+	});
+
+
+superAdminApp.directive('lowercase', function() {
+	return {
+	    restrict: "A",
+	    require: "ngModel",
+	    link: function(scope, element, attrs, ngModel) {
+
+	       
+	        ngModel.$parsers.push(function(input) {
+	            return input ? input.toLowerCase() : "";
+	        });
+
+	       
+	        element.css("text-transform","lowercase");
+	    }
+	};
+	});
+
+
+
+
+superAdminApp.directive('fileModel', ['$parse', function ($parse)
+	{
+return {
+   restrict: 'A',
+   link: function(scope, element, attrs) 
+   {
+     var model = $parse(attrs.fileModel);
+      var modelSetter = model.assign;
+      element.bind('change', function(){
+      scope.$apply(function(){
+    	
+    	  	modelSetter(scope, element[0].files[0]);
+    	    
+             });
+          });
+       }
+    };
+ }]);
+
+
+
+
+//File Required Validation Directive
+superAdminApp.directive('validFile',function(){
+	  return {
+	    require:'ngModel',
+	    link:function(scope,el,attrs,ngModel){
+	      el.bind('change',function(){
+	        scope.$apply(function(){
+	        	 ngModel.$setViewValue(el.val());
+		          ngModel.$render(); 
+	         });
+	       
+	      });
+	    }
+	  };
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+//File Type Validation Directive
+superAdminApp.directive('validateFileType',function(){
+	var validFormats=['jpeg','jpg','png'];
+	  return {
+	    require:'ngModel',
+	    link:function(scope,el,attrs,ngModel){
+	      el.bind('change',function(){
+	    	if(el[0].files.length!=0){
+	    		 var fileSize=el[0].files[0].size;
+	    		
+	    		 
+	    		
+		    	  var value = el.val(),
+	              ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();   
+		    	  
+		          ngModel.$validators.validateFileType = function() 
+		          {
+		        	  return validFormats.indexOf(ext) !== -1;
+		          };
+		          
+		          
+		        ngModel.$validators.validateFileSize=function()
+		          {
+		        	
+		        	var _URL = window.URL || window.webkitURL;
+		        	
+		        	var file=el[0].files[0];
+		        	
+		        	 var image=new Image();
+		        	 
+		        	 image.onload=function()
+		        	 {
+		        		 if(image.width!=1400 && image.height!=450)
+		        			 {
+		        			return false;
+		        			 }
+		        	 }
+		        	
+		        	image.src= _URL.createObjectURL(file);
+		         
+		        	return fileSize>100000;
+		          };
+	          };
+   });
+	    }
+	  };
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

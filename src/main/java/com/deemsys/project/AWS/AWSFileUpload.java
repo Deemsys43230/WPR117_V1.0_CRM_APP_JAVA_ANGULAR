@@ -17,7 +17,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.deemsys.project.common.CRMProperties;
 
 @Service
-public class AWSFileUpload {
+public class AWSFileUpload 
+{
 	
 	@Autowired
 	CRMProperties crmProperties;
@@ -35,10 +36,13 @@ public class AWSFileUpload {
 		// Create Connection Based on Credentials
 		AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
 		System.out.println("Creating Connection.........................");
+		
 		// Upload File to S3 Bucket Folder
 		s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+innerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
 		System.out.println("File Uploaded...............................");
-		}catch(AmazonServiceException ase){
+		}
+		catch(AmazonServiceException ase)
+		{
 			 System.out.println("Caught an AmazonServiceException, which " +
 		        		"means your request made it " +
 		                "to Amazon S3, but was rejected with an error response" +
@@ -77,7 +81,8 @@ public class AWSFileUpload {
 			// Upload file to folder and set it to public
 			s3client.deleteObject(bucketName, folderName+departmentId.toString()+innerFolderName+fileName);
 			System.out.println("File Deleted..........................");
-		} catch (AmazonServiceException ase) {
+		} 
+		catch (AmazonServiceException ase) {
 			System.out.println("Caught an AmazonServiceException, which "
 					+ "means your request made it "
 					+ "to Amazon S3, but was rejected with an error response"

@@ -33,6 +33,21 @@ myApp.factory("requestHandler",['$http',function($http){
          });
     };
     
+    requestObj.postFileUploadWithOneParam=function(requestURL,data,params,data1,param1){      
+        
+    	alert(data);
+        var fd = new FormData();
+        fd.append(params, data);
+        fd.append(param1,data1);
+        
+         return $http.post(requestURL,fd,{
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined}
+         }).then(function (results) {
+                return results;
+         });
+    };
+    
 	requestObj.postFileUpdate=function(requestURL,data,params,data1,params1,data2,params2){      
 	        
 	        var fd = new FormData();
