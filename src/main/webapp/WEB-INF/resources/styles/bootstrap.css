@@ -185,7 +185,7 @@ transform:translate(0,0)}
 {
 	position:relative;
 	width:auto;
-	margin:5px
+	margin:20px
 	}
 	
 	.modal-content
@@ -230,24 +230,24 @@ transform:translate(0,0)}
 	
 .modal-header
 {
-	height:5px;
-	padding:2px;
+	min-height:17px;
+	padding:15px;
 	border-bottom:1px solid #e5e5e5
 }
 
 .modal-header .close
 {
-	margin-top:10px
+	margin-top:-3px
 }
 
 .modal-title
 {
-	margin:0;line-height:1.42857143
+	margin:auto;line-height:1.42857143
 }
 
 .modal-body
 {
-	position:relative;padding:10px
+	position:relative;padding:15px
 	}
 	
 .modal-footer
@@ -285,7 +285,7 @@ transform:translate(0,0)}
 	.modal-dialog
 	{
 	width:600px;
-	margin:30px auto
+	margin:40px auto
 	}
 	.modal-content
 	{
@@ -305,6 +305,7 @@ transform:translate(0,0)}
 	width:900px
 	}}
 	
+	
 .tooltip
 {
 	position:absolute;
@@ -322,6 +323,9 @@ transform:translate(0,0)}
 	
 	
  @media print{.hidden-print{display:none!important}}
+ 
+ 
+ 
  
  
  

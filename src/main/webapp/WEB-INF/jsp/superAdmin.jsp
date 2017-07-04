@@ -72,105 +72,71 @@
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
+
+                <nav class="main-menu">
+        <ul>
                       
-                        <li>
-                            <a  href="#/dashboard" class="{{activeClass.dashboard}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="#/department" class="{{activeClass.department}}"><i class="fa fa-id-badge fa-fw"></i>Department</a>
-                        </li>
-                        <li>
-                            <a href="#/accounts" class="{{activeClass.accounts}}"><i class="fa fa-users fa-fw"></i> Accounts</a>
-                        </li>
-                        <li>
-                            <a href="#/reports" class="{{activeClass.reports}}"><i class="fa fa-file fa-fw" ></i> Reports</a>
-                           
-                            
-                        </li>
-                        <div class="footer" style="position:fixed; width:200px;bottom:0; background-color:#383838; color:white;"><span>&nbsp;</span>&copy; 2017 Deemsys Inc</div>
-                       <!--  <li>
-                            <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements</a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="panels-wells.html">Panels and Wells</a>
-                                </li>
-                                <li>
-                                    <a href="buttons.html">Buttons</a>
-                                </li>
-                                <li>
-                                    <a href="notifications.html">Notifications</a>
-                                </li>
-                                <li>
-                                    <a href="typography.html">Typography</a>
-                                </li>
-                                <li>
-                                    <a href="icons.html"> Icons</a>
-                                </li>
-                                <li>
-                                    <a href="grid.html">Grid</a>
-                                </li>
-                            </ul>
-                            /.nav-second-level
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown</a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Third Level <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                    </ul>
-                                    /.nav-third-level
-                                </li>
-                            </ul>
-                            /.nav-second-level
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages</a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="blank.html">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="login.html">Login Page</a>
-                                </li>
-                            </ul>
-                            /.nav-second-level
-                        </li>
- -->                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav></div>
+<li>
+    <a  href="#/dashboard" class="{{activeClass.dashboard}}">
+   <i class="fa fa-dashboard fa-fw fa-2x"></i>
+    <span class="nav-text"> Dashboard</span></a>
+</li>
+
+
+<li>
+    <a href="#/department" class="{{activeClass.department}}">
+    <i class="fa fa-id-badge fa-fw fa-2x"></i>
+    <span class="nav-text">Department</span></a>
+</li>
+
+
+<li>
+    <a href="#/accounts" class="{{activeClass.accounts}}">
+    <i class="fa fa-users fa-fw fa-2x"></i>
+    <span class="nav-text">Accounts</span></a>
+</li>
+
+
+
+
+<li>
+    <a href="#/reports" class="{{activeClass.reports}}">
+    <i class="fa fa-file fa-fw fa-2x" ></i>
+    <span class="nav-text">Reports</span></a></li>
+    
+
+
+</ul>
+            
+       
+            
+            
+        </nav>
+                
+ </div>
+<!-- /.sidebar-collapse -->
+
+<!-- /.sidebar-collapse -->
+
+<!--/.navbar-static-side -->
+
+</nav>
+
+
+
+ </div>
+
 
 <div id="page-wrapper" class="ng-view">
 </div>
+<div  class="footer">
+<span>&nbsp;</span>&copy;2017  Deemsys Inc</div>   
+
+</nav>
+
+
  
 
-</div>
+
 </body>
 </html>
