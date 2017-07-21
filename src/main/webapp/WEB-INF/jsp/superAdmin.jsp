@@ -76,22 +76,22 @@
                 <nav class="main-menu">
         <ul>
                       
-<li>
-    <a  href="#/dashboard" class="{{activeClass.dashboard}}">
+<li class="{{activeClass.dashboard}}">
+    <a  href="#/dashboard">
    <i class="fa fa-dashboard fa-fw fa-2x"></i>
     <span class="nav-text"> Dashboard</span></a>
 </li>
 
 
-<li>
-    <a href="#/department" class="{{activeClass.department}}">
+<li class="{{activeClass.department}}">
+    <a href="#/department">
     <i class="fa fa-id-badge fa-fw fa-2x"></i>
     <span class="nav-text">Department</span></a>
 </li>
 
 
-<li>
-    <a href="#/accounts" class="{{activeClass.accounts}}">
+<li class="{{activeClass.accounts}}">
+    <a href="#/accounts">
     <i class="fa fa-users fa-fw fa-2x"></i>
     <span class="nav-text">Accounts</span></a>
 </li>
@@ -99,8 +99,8 @@
 
 
 
-<li>
-    <a href="#/reports" class="{{activeClass.reports}}">
+<li class="{{activeClass.reports}}">
+    <a href="#/reports" >
     <i class="fa fa-file fa-fw fa-2x" ></i>
     <span class="nav-text">Reports</span></a></li>
     

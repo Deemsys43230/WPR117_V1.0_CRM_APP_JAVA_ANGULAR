@@ -320,7 +320,8 @@ text-align:right;
 }
 .searchdiv
 {
-	padding-bottom:10px;
+	min-height:120px;
+	margin-bottom:20px;
     border:1px solid #eee;
     border-radius:2px;
 }
@@ -514,10 +515,10 @@ overflow:visible;
 }
 
 .main-menu {
-background:#f2f2f2;
+background: lightgrey;
 border-right:1px solid #e5e5e5;
 position:absolute;
-top:5px;
+top:3px;
 bottom:0px;
 height:600px;
 border-collapse:collapse;
@@ -550,9 +551,9 @@ position:relative;
 display:table;
 border-collapse:collapse;
 border-spacing:0;
-color:#999;
+color: #000;
  font-family: arial;
-font-size: 14px;
+font-size: 16px;
 text-decoration:none;
 -webkit-transform:translateZ(0) scale(1,1);
 -webkit-transition:all .1s linear;
@@ -630,8 +631,18 @@ color:#fff;
 background-color:#999;
 
 }
+
+.main-menu li.active
+{
+background-color:#999;
+}
+
+.main-menu li.active>a
+{
+background-color:#999;
+}
+
 .main-menu li:hover>a,
-nav.main-menu li.active>a,
 .dropdown-menu>li>a:hover,
 .dropdown-menu>li>a:focus,
 .dropdown-menu>.active>a,
@@ -657,7 +668,9 @@ height: 100%;
   src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
 }
 
-
+.margin-top-70{
+	margin-top:70px;
+}
 
 
 

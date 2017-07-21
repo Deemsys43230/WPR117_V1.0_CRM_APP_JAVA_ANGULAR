@@ -26,15 +26,15 @@
 <label>Name <span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-<input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()" check-departmentname required>
+<input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()" check-departmentname validate-name required>
 </div>
 <div id="error-container">
 
 <span  ng-show="form.name.$dirty">
 
 <span ng-cloak ng-show="form.name.$error.required">Name is required.</span>
-
-<span ng-cloak ng-show="!form.name.$error.required&&form.name.$error.checkDepartmentname">Name is already taken</span>
+<span ng-cloak ng-show="!form.name.$error.required&&form.name.$error.validateName">Name is invalid</span>
+<span ng-cloak ng-show="!form.name.$error.required&&!form.name.$error.validateName&&form.name.$error.checkDepartmentname">Name is already taken</span>
 
 </span>
 </div>
@@ -49,13 +49,14 @@
 <label>Code <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ticket"></i></span>
-  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" uppercase check-departmentcode required>
+  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" ng-pattern='/[R]{2}[_]{1}[A-Za-z]+[_]{1}/g' uppercase check-departmentcode required>
 </div>
 
 <div id="error-container">
 <span  ng-show="form.code.$dirty">
 <span ng-cloak ng-show="form.code.$error.required">Code is required.</span>
-<span ng-cloak ng-show="!form.code.$error.required&&form.code.$error.checkDepartmentcode">Code is already taken</span>
+<span ng-cloak ng-show="!form.code.$error.required&&form.code.$error.pattern">Code is invalid (Start with RR_ and End With _ Ex. RR_AB_)</span>
+<span ng-cloak ng-show="!form.code.$error.required&&!form.code.$error.pattern&&form.code.$error.checkDepartmentcode">Code is already taken</span>
 </span>
 </div>
 </div>

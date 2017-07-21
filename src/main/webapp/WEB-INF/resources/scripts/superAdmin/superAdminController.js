@@ -383,14 +383,13 @@ superAdminApp.controller("addDepartmentController",['$rootScope','$scope','$http
 			name:'',
 			loginLink:'',
 			searchLink:'',
-			code:''
+			code:'RR_'
 	}
 	
 	
 	$scope.onNameChange=function()
 	
 	{
-		$scope.department.code="RR"+"_";
 		
 		if($scope.department.name=="" || $scope.department.name==undefined)
 			{
@@ -400,7 +399,7 @@ superAdminApp.controller("addDepartmentController",['$rootScope','$scope','$http
 		else
 			{
 			var ind=$scope.department.name.split(" ");
-			$scope.department.loginLink=ind[0]+"_login";
+			$scope.department.loginLink=ind[0];
 			$scope.department.searchLink=ind[0]+"_search";
 			
 			}

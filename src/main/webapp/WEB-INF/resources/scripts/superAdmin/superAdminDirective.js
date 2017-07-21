@@ -368,18 +368,6 @@ superAdminApp.directive('validFile',function(){
 	  };
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 //File Type Validation Directive
 superAdminApp.directive('validateFileType',function(){
 	var validFormats=['jpeg','jpg','png'];
@@ -428,7 +416,19 @@ superAdminApp.directive('validateFileType',function(){
 	  };
 });
 
-
+superAdminApp.directive('validateName', function() {
+	var NAME_EXPR = /^ *([a-zA-Z]+ ?)+ *$/;
+	// var USA_MOB_EXPR_WITH_BR=/^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/;
+	return {
+	require : 'ngModel',
+	restrict : '',
+	link : function(scope, elm, attrs, ngModel) {
+		ngModel.$validators.validateName = function(modelValue) {
+			return NAME_EXPR.test(modelValue);// ||USA_MOB_EXPR_WITH_BR.test(modelValue);
+		};
+	}
+	};
+});
 
 
 

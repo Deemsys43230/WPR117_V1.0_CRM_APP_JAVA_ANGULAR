@@ -149,11 +149,6 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
 });
 
-
-
-
-
-
 adminApp.directive('validateName', function() {
 	var NAME_EXPR = /^ *([a-zA-Z]+ ?)+ *$/;
 	// var USA_MOB_EXPR_WITH_BR=/^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/;

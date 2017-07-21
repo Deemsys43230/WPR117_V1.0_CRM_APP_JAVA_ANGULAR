@@ -13,7 +13,7 @@
 </div>
 <hr>
 
-<div class="row  searchdiv">
+<div class="col-md-12 searchdiv" style="padding:0px;">
 <div class="well well-sm">Search</div>
 <div class="col-md-2">
 <label>Department:</label></div>
@@ -21,7 +21,7 @@
 			        <option value="">All</option></select>
 </div>
 
-<div class="col-md-2 col-md-offset-1">
+<div class="col-md-2">
 <label>Role:</label></div>
 <div class="col-md-3"><select class="form-control" ng-change="filter(search)" ng-model="search.roleId" ng-options="x.roleId as x.name for x in roles" fix>
 <option value="" selected>All</option>

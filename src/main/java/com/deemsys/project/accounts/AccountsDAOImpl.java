@@ -61,7 +61,7 @@ public class AccountsDAOImpl implements AccountsDAO{
 	@Override
 	public List<Accounts> getAll() {
 		// TODO Auto-generated method stub
-		return this.sessionFactory.getCurrentSession().createCriteria(Accounts.class).add(Restrictions.ne("isdeleted", 1)).list();
+		return this.sessionFactory.getCurrentSession().createCriteria(Accounts.class).add(Restrictions.ne("isDeleted", 1)).list();
 	}
 
 	@Override

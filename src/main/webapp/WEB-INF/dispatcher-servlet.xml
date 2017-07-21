@@ -30,6 +30,7 @@
 	<mvc:resources mapping="/js/**" location="/WEB-INF/resources/js/" />
 	<mvc:resources mapping="/views/**" location="/WEB-INF/resources/views/" />
 	<mvc:resources mapping="/admin/**" location="/WEB-INF/resources/views/admin/" />
+	<mvc:resources mapping="/search/**" location="../WEB-INF/resources/" />
 		<mvc:resources mapping="/superAdmin/**" location="/WEB-INF/resources/views/superAdmin/" />
 	
 	<!-- End Angular Configuration -->

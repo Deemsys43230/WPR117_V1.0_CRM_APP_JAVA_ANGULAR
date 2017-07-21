@@ -168,7 +168,7 @@ public class AccountsService {
 		Users users=usersDAO.getByAccountId(accountId);
 
 		//updating table instead deletion
-		accounts.setIsdeleted(1);
+		accounts.setIsDeleted(1);
 		accountsDAO.update(accounts);
 		users.setIsEnable(0);
 		usersDAO.update(users);
