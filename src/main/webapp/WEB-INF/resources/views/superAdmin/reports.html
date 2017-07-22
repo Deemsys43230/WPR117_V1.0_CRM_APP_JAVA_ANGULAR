@@ -86,7 +86,9 @@
 		            	<td width="17%" class="wrap-break-word"><label>Location:</label><br/>{{resultData.location}}</td>
 		            	<td width="15%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
 		            <td width="17%">{{resultData.departmentName}}</td>
-		            	<td width="20%"><a style="color:#fff;" class="btn btn-primary btn-xs hint--top" data-hint="View Report Details" ng-click="getReport(resultData.reportId)"><i class="fa fa-eye fa-fw"></i></a>&nbsp;|&nbsp;<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
+		            	<td width="20%"><a  class="fa fa-eye fa-fw" style="background-color:#000080;
+	color:white;" data-hint="View Report Details" ng-click="getReport(resultData.reportId)"></a>&nbsp;|&nbsp;
+<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
 		            	<td colspan="2">{{occupants.firstName}}</td>
@@ -176,7 +178,7 @@
 				</table>
 				<u><b>Occupants</b></u>
 				<table class="table table-bordered table-striped">
-					<tr class="report-table-header"><td width="20%">First Name</td><td width="20%">Last Name</td><td width="25%">Injuries</td><td width="35%">Seating Position</td>
+					<tr class="report-table-header"><td width="20%">First Name</td><td width="25%">Last Name</td><td width="20%">Injuries</td><td width="40%">Seating Position</td>
 					</tr>
 					<tr ng-repeat="occupant in reportDetails.occupantsForms">
 					<td>{{occupant.firstName}}</td>

@@ -36,7 +36,8 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	
 	//get AccountsList through superAdminService 
 	var details = superAdminService.getAccountsList();
-	details.then(function(data) {
+	details.then(function(data) 
+			{
 		$scope.accountsList = data;
 		console.log($scope.accountsList);
 	});
@@ -47,7 +48,7 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
 				{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
-			console.log($scope.policeDepartmentList);
+			
 				});
 		
 	}
@@ -58,14 +59,24 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	
 	//get Roles
 	var details = superAdminService.getRolesList();
-	details.then(function(data) {
+	details.then(function(data) 
+			{
 		$scope.roles = data;
 	});
+	
+	
+	
+	
+	
 	
 	//enable disable function
 	$scope.enableDisable=function(accountId)
 	{
+		
 		$scope.accountId=accountId;
+		
+		
+		
 		requestHandler.postRequest("SAdmin/enableOrDisableAccount.json?id="+$scope.accountId).then(function(success)
 				{
   Flash.create('success',"Changes Made Successfully!");	
@@ -152,6 +163,18 @@ superAdminApp.controller("addAccountsController",['$scope','$http','requestHandl
 	details.then(function(data) {
 		$scope.roles = data;
 	});
+	
+	var details = superAdminService.getRolesForAccount();
+	details.then(function(data) 
+			{
+		
+		
+		
+		$scope.rolesforaccount= data;
+	});
+	
+	
+	
 	
 	//get PoliceDepartmentList     (Police Department.class)
 	$scope.getPoliceDepartmentList=function()

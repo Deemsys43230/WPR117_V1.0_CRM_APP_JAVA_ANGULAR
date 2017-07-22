@@ -23,11 +23,27 @@ public class AWSFileUpload
 	@Autowired
 	CRMProperties crmProperties;
 	
-	public void uploadFileToAWSS3(String filePath,String fileName,Integer departmentId){
+	public void uploadFileToAWSS3(String filePath,String fileName,Integer departmentId,Integer uploadStatus)
+	{
 		
 		String bucketName=crmProperties.getProperty("bucketName");
 		String folderName=crmProperties.getProperty("folderName");
 		String innerFolderName=crmProperties.getProperty("innerFolderName");
+		String bannerFolderName=crmProperties.getProperty("correctFolderName");
+		
+		if(uploadStatus==1)
+		{
+			 innerFolderName=crmProperties.getProperty("innerFolderName");
+		}
+		else
+		{
+			bannerFolderName=crmProperties.getProperty("bannerFolderName");
+		}
+		
+		
+		
+		
+		
 		try{
 		// credentials object identifying user for authentication
 		// user must have AWSConnector and AmazonS3FullAccess
@@ -37,8 +53,22 @@ public class AWSFileUpload
 		AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
 		System.out.println("Creating Connection.........................");
 		
+		if(uploadStatus==1)
+		{
+			 innerFolderName=crmProperties.getProperty("innerFolderName");
+			 s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+innerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
+		}
+		else
+		{
+			bannerFolderName=crmProperties.getProperty("bannerFolderName");
+			s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+bannerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
+		}
+		
+		
+		
+		
 		// Upload File to S3 Bucket Folder
-		s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+innerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
+		
 		System.out.println("File Uploaded...............................");
 		}
 		catch(AmazonServiceException ase)

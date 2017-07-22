@@ -270,7 +270,7 @@ public class CrashReportsService {
 				File file=CRMConstants.saveTemporaryFile(crashReport, filePath);
 				
 				// Upload File To AWS S3
-				awsFileUpload.uploadFileToAWSS3(filePath, fileName,loginService.getCurrentAccountPoliceDepartmentId());
+				awsFileUpload.uploadFileToAWSS3(filePath, fileName,loginService.getCurrentAccountPoliceDepartmentId(),1);
 				
 				// File Delete in Temp Folder
 				file.delete();

@@ -74,7 +74,7 @@ public class AccountsService {
 		for (Accounts accounts : accountss) {
 			//TODO: Fill the List
 			Users users = usersDAO.getByAccountId(accounts.getAccountId());
-			AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus(),users.getIsEnable());
+			AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus(),users.getIsEnable(), accounts.getPoliceDepartment().getName());
 			accountsForms.add(accountsForm);
 		}
 		
@@ -90,7 +90,7 @@ public class AccountsService {
 		//TODO: Convert Entity to Form
 		//Start
 		Users users = usersDAO.getByAccountId(accountId);
-		   AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus(),users.getIsEnable());
+		   AccountsForm accountsForm=new AccountsForm(accounts.getAccountId(), accounts.getPoliceDepartment().getPoliceDepartmentId(), users.getUsername(), users.getRoles().getRoleId(), accounts.getFirstName(), accounts.getLastName(), accounts.getMiddleName(), accounts.getEmailId(), accounts.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(accounts.getAddedDateTime()), accounts.getStatus(),users.getIsEnable(), null);
 		
 		//End
 		
@@ -224,6 +224,21 @@ public class AccountsService {
 	{
 		List<Roles> roless=new ArrayList<Roles>();
 		roless=rolesDAO.getAll();
+		List<RolesForm> rolesForm=new ArrayList<RolesForm>();
+		for(Roles roles:roless)
+		{
+		RolesForm	rolesForm1=new RolesForm(roles.getRoleId(),roles.getRole(),roles.getName());
+		rolesForm.add(rolesForm1);
+		}
+		return rolesForm;
+	}
+	
+	
+	
+	public List<RolesForm> getRolesForAccount()
+	{
+		List<Roles> roless=new ArrayList<Roles>();
+		roless=rolesDAO.getRoleForAccount();
 		List<RolesForm> rolesForm=new ArrayList<RolesForm>();
 		for(Roles roles:roless)
 		{

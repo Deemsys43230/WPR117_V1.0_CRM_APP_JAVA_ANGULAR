@@ -24,8 +24,19 @@ public class AccountsForm {
 	private String addedDateTime;
 	private Integer status;
 	private Integer isEnable;
+	private String policeDepartmentName;
 	
 	
+	public String getPoliceDepartmentName() 
+	{
+		return policeDepartmentName;
+	}
+
+	public void setPoliceDepartmentName(String policeDepartmentName)
+	{
+		this.policeDepartmentName = policeDepartmentName;
+	}
+
 	public Integer getIsEnable() {
 		return isEnable;
 	}
@@ -123,7 +134,7 @@ public class AccountsForm {
 	}
 
 	public AccountsForm(String accountId, Integer policeDepartmentId, String username, Integer roleId, String firstName, String lastName,
-			String middleName, String emailId, String phoneNumber, String addedDateTime, Integer status,Integer isEnable) {
+			String middleName, String emailId, String phoneNumber, String addedDateTime, Integer status,Integer isEnable,String policeDepartmentName) {
 		super();
 		this.accountId = accountId;
 		this.policeDepartmentId = policeDepartmentId;
@@ -137,7 +148,7 @@ public class AccountsForm {
 		this.addedDateTime = addedDateTime;
 		this.status = status;
 		this.isEnable=isEnable;
-		
+		this.policeDepartmentName = policeDepartmentName;
 	}
 
 	public AccountsForm() {

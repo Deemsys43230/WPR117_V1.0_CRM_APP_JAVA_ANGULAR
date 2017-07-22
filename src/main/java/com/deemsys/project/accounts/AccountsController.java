@@ -115,6 +115,24 @@ public class AccountsController {
 		model.addAttribute("requestSuccess", true);
 		return "/returnPage";
 	}
+	
+	
+	@RequestMapping(value = "/SAdmin/getRolesForAccount", method = RequestMethod.GET)
+	public String getRolesForAccountList(ModelMap model) {
+		model.addAttribute("rolesForm", accountsService.getRolesForAccount());
+		model.addAttribute("requestSuccess", true);
+		return "/returnPage";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/SAdmin/getTotalRecords", method = RequestMethod.GET)
 	public String getTotalRecords(ModelMap model) {
 		model.addAttribute("recordsForm", accountsService.getTotalRecords());

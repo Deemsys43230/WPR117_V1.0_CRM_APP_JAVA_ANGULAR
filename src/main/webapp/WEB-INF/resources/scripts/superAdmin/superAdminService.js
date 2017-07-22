@@ -14,6 +14,23 @@ superAdminApp.service('superAdminService',['requestHandler',function(requestHand
 		}
 
 	
+	
+	object.getRolesForAccount=function()
+	 {
+		
+	return requestHandler.getRequest("SAdmin/getRolesForAccount.json").then(function(response)
+			{
+	      return response.data.rolesForm;    
+
+			});
+
+		}
+
+	
+	
+	
+	
+	
 	//(AccountsController)
 	
 		object.getRolesList=function()

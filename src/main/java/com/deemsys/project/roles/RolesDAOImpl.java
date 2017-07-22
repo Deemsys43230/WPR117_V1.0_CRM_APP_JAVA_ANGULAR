@@ -61,6 +61,17 @@ public class RolesDAOImpl implements RolesDAO{
 		// TODO Auto-generated method stub
 		return this.sessionFactory.getCurrentSession().createCriteria(Roles.class).list();
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Roles> getRoleForAccount() 
+	{
+		// TODO Auto-generated method stub
+		return this.sessionFactory.getCurrentSession().createCriteria(Roles.class).add(Restrictions.lt("roleId",3)).list();
+	}
+	
+	
+	
 
 	@Override
 	public List<Roles> find(String paramName, String paramValue) {

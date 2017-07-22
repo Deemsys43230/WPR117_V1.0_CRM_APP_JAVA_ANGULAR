@@ -26,7 +26,7 @@
 <label>Name <span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-<input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()" check-departmentname validate-name required>
+<input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()" check-departmentname validate-name required maxlength="60">
 </div>
 <div id="error-container">
 
@@ -65,13 +65,13 @@
 <label>Login Link <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="	fa fa-pencil"></i></span>
-<input type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" lowercase check-departmentlogin  required></input>
+<input type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" ng-disabled="true" lowercase check-departmentlogin  required></input>
 </div>
 
  <div id="error-container">
  <span  ng-show="form.login.$dirty">
  
-<span ng-cloak ng-show="form.login.$error.required">Login Link is required.</span>
+<span ng-cloak ng-show="form.login.$error.required" >Login Link is required.</span>
 
 <span ng-cloak ng-show="!form.login.$error.required&&form.login.$error.checkDepartmentlogin">Login Link is already taken</span>
  </span>
@@ -85,7 +85,7 @@
 <label>Search Link <span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-<input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" lowercase check_departmentsearch  required>
+<input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" ng-disabled="true" lowercase check_departmentsearch  required>
 </div>
 
 <div id="error-container">

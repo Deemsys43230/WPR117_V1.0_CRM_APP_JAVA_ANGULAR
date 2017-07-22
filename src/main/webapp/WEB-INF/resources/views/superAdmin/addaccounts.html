@@ -12,10 +12,11 @@
 <label>First Name <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-  <input type="text" class="form-control" name="firstName" placeholder="First Name" ng-model="account.firstName" required>
+  <input type="text" class="form-control" name="firstName" placeholder="First Name" ng-model="account.firstName" validate-name maxlength="45"  required>
 </div>
 <div id="error-container">
 <span ng-show="form.firstName.$dirty && form.firstName.$invalid">
+<span ng-cloak ng-show="!form.firstName.$error.required&&form.firstName.$error.validateName">First Name is invalid</span>
 <span ng-show="form.firstName.$error.required">First Name is required.</span>
 </span>
 
@@ -24,9 +25,12 @@
 <label>Middle Name:</label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-  <input type="text" class="form-control" placeholder="Middle Name" ng-model="account.middleName" >
+  <input type="text" class="form-control" placeholder="Middle Name" ng-model="account.middleName" name="middleName" maxlength="45" validate-name  >
 </div>
-<div id="error-container"></div>
+<div id="error-container">
+<span ng-show="form.middleName.$dirty && form.middleName.$invalid">
+<span ng-cloak ng-show="form.middleName.$error.validateName">Middle Name is invalid</span></span>
+</div>
 </div>
 
 </div>
@@ -35,10 +39,11 @@
 <label>Last Name <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-  <input type="text" class="form-control" placeholder="Last Name" name="lastName"  ng-model="account.lastName"  required>
+  <input type="text" class="form-control" placeholder="Last Name" name="lastName"  ng-model="account.lastName" maxlength="45" validate-name  required>
 </div>
 <div id="error-container">
 <span  ng-show="form.lastName.$dirty && form.lastName.$invalid">
+<span ng-cloak ng-show="!form.lastName.$error.required&&form.lastName.$error.validateName">Last Name is invalid</span>
 <span ng-show="form.lastName.$error.required">Last Name is required.</span>
 </span>
 
@@ -48,7 +53,7 @@
 <label>User Name <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-  <input type="text" class="form-control" placeholder="User Name" ng-model="account.username" name="userName" ng-disabled="disableUsername"  check-username required>
+  <input type="text" class="form-control" placeholder="User Name" ng-model="account.username" name="userName" ng-disabled="disableUsername" maxlength="45"  validate-name check-username required>
 </div>
  <div id="error-container">
 						<span ng-show="form.userName.$dirty">
@@ -102,7 +107,7 @@
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user-secret"></i></span>
 
-<select class="form-control" name="role" ng-model="account.roleId" ng-options="x.roleId as x.name for x in roles" ng-selected="x.roleId==account.roleId" required>
+<select class="form-control" name="role" ng-model="account.roleId" ng-options="x.roleId as x.name for x in rolesforaccount"   ng-selected="x.roleId==account.roleId" required>
 			        <option value="">--Select Role--</option>
 			         </select>
 			         </div>

@@ -82,7 +82,8 @@ public class PoliceDepartmentService {
 		// Start
 		
 		String innerFolderName="/reports";
-		String url=crmProperties.getProperty("bucketURL")+policeDepartmentId.toString()+innerFolderName+"/banner.jpeg";
+		String bannerFolderName="/banner";
+		String url=crmProperties.getProperty("bucketURL")+policeDepartmentId.toString()+bannerFolderName+"/banner.jpg";
 
 		PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 				policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
@@ -215,9 +216,14 @@ public class PoliceDepartmentService {
 
 	public String uploadPoliceDepartment(MultipartFile policeDepartmentFile, Integer policeDepartmentId) 
 	{
-		String fileName="banner.jpeg";
+		
+		
+		
+		String fileName=crmProperties.getProperty("fileName");
+		
+		String bannerFolderName=crmProperties.getProperty("bannerFolderName");
    
-		String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString();
+		String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString()+bannerFolderName;
 
 	    try {
 		
@@ -229,7 +235,7 @@ public class PoliceDepartmentService {
 	    	}
 	    	
  	
- String filePath=path+"//banner.jpeg";
+ String filePath=path+"//banner.jpg";
 	   
  if(crmProperties.getProperty("awsUpload").equals("1"))
  {
@@ -239,7 +245,7 @@ public class PoliceDepartmentService {
     
    
    
-   awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId);
+   awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId,2);
    
   file.delete();
     }
@@ -262,7 +268,14 @@ public String uploadPoliceDepartmentWithoutFile(Integer policeDepartmentId) thro
 {
 String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString();
 
-File srcFolder=new File("C://wamp64//www//CRM_Images//default//banner.jpeg");
+
+
+
+String bannerFolderName=crmProperties.getProperty("bannerFolderName");
+
+String locallink=crmProperties.getProperty("locallink");
+
+File srcFolder=new File(locallink);
 
 File destinationFolder=new File(path);
 
@@ -271,7 +284,7 @@ if(!destinationFolder.exists())
 	destinationFolder.mkdir();
 }
 
-path=path+"//banner.jpeg";
+path=path+bannerFolderName+"//banner.jpg";
 
 destinationFolder=new File(path);
 
@@ -279,10 +292,11 @@ if(crmProperties.getProperty("awsUpload").equals("1"))
 {
 FileUtils.copyFile(srcFolder,destinationFolder);
 
-String fileName="banner.jpeg";
+String fileName=crmProperties.getProperty("fileName");
+
 
 String filePath=path;
-awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId);
+awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId,2);
 destinationFolder.delete();
 }
 return null;
