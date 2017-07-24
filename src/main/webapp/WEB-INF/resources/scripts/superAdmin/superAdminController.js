@@ -226,6 +226,17 @@ superAdminApp.controller("editAccountsController",['$scope','$http','requestHand
 		$scope.roles = data;
 	});
 	
+	
+	var details = superAdminService.getRolesForAccount();
+	details.then(function(data) 
+			{
+		$scope.rolesforaccount= data;
+	});
+	
+	
+	
+	
+	
 	//get PoliceDepartmentList  (Police Department.class)
 	$scope.getPoliceDepartmentList=function()
 	{
