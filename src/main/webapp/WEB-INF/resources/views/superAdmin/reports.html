@@ -48,7 +48,7 @@
 			   <div class="form-group">
 			    <label for="addedOnFromDate">Added On From Date:</label>
 			    <div class="input-group">
-					<input type="text" name="addedOnFromDate" id="addedOnFromDate" class="form-control calender-control"
+                <input type="text" name="addedOnFromDate" id="addedOnFromDate" class="form-control calender-control"
 						ng-model="crashReportSearchForm.addedOnFromDate"
 						placeholder="From Date" ng-change="resetToDate()"> 
 					<span class="input-group-addon white-color-bg calender-control-span" id="addedOnFromDateCalender"> <span class="fa fa-calendar"></span></span>
@@ -194,25 +194,39 @@
 		</div>
 	</div>
 </div>
+
 <script>
 $('#crashDateReportList').datetimepicker({
 	pickTime : false,
-	format:'MM/DD/YYYY',
+	format:'MM/DD/YYYY'
+	
 });
+
 $("#crashDateCalenderReportList").click(function(){
 	$('#crashDateReportList').focus();
 });
 
 $('#addedOnFromDate').datetimepicker({
 	pickTime : false,
-	format:'MM/DD/YYYY',
-}).on('dp.change', function (selected) {
+     format:'MM/DD/YYYY',
+     maxDate:new Date(),
+     autoclose: true
+	}) .on('dp.change', function (selected) 
+		{
     var minimumDate = new Date(selected.date.valueOf());
-    $('#addedOnToDate').data("DateTimePicker").setMinDate(minimumDate);	
-});;
-$("#addedOnFromDateCalender").click(function(){
+     $('#addedOnToDate').data("DateTimePicker").setMinDate(minimumDate);
+
+     	
+}); 
+
+$("#addedOnFromDateCalender").click(function()
+		{
+	
+	
 	$('#addedOnFromDate').focus();
-});
+	
+	
+	});
 
 $('#addedOnToDate').datetimepicker({
 	pickTime : false,

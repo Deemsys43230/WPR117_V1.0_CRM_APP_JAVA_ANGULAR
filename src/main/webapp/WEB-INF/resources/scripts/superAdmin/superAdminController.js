@@ -66,6 +66,14 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	
 	
 	
+	var details = superAdminService.getRolesForAccount();
+	details.then(function(data) 
+			{
+		
+		
+		
+		$scope.rolesforaccount= data;
+	});
 	
 	
 	

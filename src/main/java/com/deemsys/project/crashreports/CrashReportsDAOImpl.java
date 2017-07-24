@@ -320,7 +320,7 @@ public class CrashReportsDAOImpl implements CrashReportsDAO{
 	@Override
 	public Long totalNumberOfCrash() {
 		
-		Long total= (Long)this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).setProjection(Projections.count("reportId")).uniqueResult();
+Long total= (Long)this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class).setProjection(Projections.count("reportId")).uniqueResult();
 	return total;
 	}
 
