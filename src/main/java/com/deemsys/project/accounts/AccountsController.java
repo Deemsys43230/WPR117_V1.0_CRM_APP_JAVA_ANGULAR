@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deemsys.project.login.LoginService;
 import com.deemsys.project.users.UsersService;
+import com.mangofactory.swagger.annotations.ApiError;
+import com.wordnik.swagger.annotations.Api;
 
 /**
  * 
@@ -19,6 +21,7 @@ import com.deemsys.project.users.UsersService;
  *
  */
 @Controller
+@Api(value="Accounts",description="Accounts CRUD Opearions")
 public class AccountsController {
 
 	@Autowired

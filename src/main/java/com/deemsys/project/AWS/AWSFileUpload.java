@@ -29,20 +29,7 @@ public class AWSFileUpload
 		String bucketName=crmProperties.getProperty("bucketName");
 		String folderName=crmProperties.getProperty("folderName");
 		String innerFolderName=crmProperties.getProperty("innerFolderName");
-		String bannerFolderName=crmProperties.getProperty("correctFolderName");
-		
-		if(uploadStatus==1)
-		{
-			 innerFolderName=crmProperties.getProperty("innerFolderName");
-		}
-		else
-		{
-			bannerFolderName=crmProperties.getProperty("bannerFolderName");
-		}
-		
-		
-		
-		
+		String bannerFolderName=crmProperties.getProperty("bannerFolderName");
 		
 		try{
 		// credentials object identifying user for authentication
@@ -55,12 +42,10 @@ public class AWSFileUpload
 		
 		if(uploadStatus==1)
 		{
-			 innerFolderName=crmProperties.getProperty("innerFolderName");
 			 s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+innerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
 		}
 		else
 		{
-			bannerFolderName=crmProperties.getProperty("bannerFolderName");
 			s3Client.putObject(new PutObjectRequest(bucketName, folderName+departmentId.toString()+bannerFolderName+fileName, new File(filePath)).withCannedAcl(CannedAccessControlList.PublicRead));
 		}
 		

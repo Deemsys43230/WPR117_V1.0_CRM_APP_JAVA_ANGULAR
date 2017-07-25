@@ -81,9 +81,7 @@ public class PoliceDepartmentService {
 		// TODO: Convert Entity to Form
 		// Start
 		
-		String innerFolderName="/reports";
-		String bannerFolderName="/banner";
-		String url=crmProperties.getProperty("bucketURL")+policeDepartmentId.toString()+bannerFolderName+"/banner.jpg";
+		String url=crmProperties.getProperty("bucketURL")+policeDepartmentId.toString()+crmProperties.getProperty("bannerFolderName")+crmProperties.getProperty("fileName");
 
 		PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 				policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
@@ -216,39 +214,19 @@ public class PoliceDepartmentService {
 
 	public String uploadPoliceDepartment(MultipartFile policeDepartmentFile, Integer policeDepartmentId) 
 	{
-		
-		
-		
 		String fileName=crmProperties.getProperty("fileName");
 		
-		String bannerFolderName=crmProperties.getProperty("bannerFolderName");
-   
-		String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString()+bannerFolderName;
+		String path=crmProperties.getProperty("tempFolder")+policeDepartmentId.toString()+fileName;
 
 	    try {
-		
-	    	File f=new File(path);
-	    	
-	    	if(!f.exists())
-	    	{
-	    		f.mkdir();
-	    	}
-	    	
- 	
- String filePath=path+"//banner.jpg";
+		  if(crmProperties.getProperty("awsUpload").equals("1"))
+		   {
+			   File file=CRMConstants.saveTemporaryFile(policeDepartmentFile, path);
+	    
+			   awsFileUpload.uploadFileToAWSS3(path, fileName,policeDepartmentId,2);
 	   
- if(crmProperties.getProperty("awsUpload").equals("1"))
- {
- 
-			
-    File file=CRMConstants.saveTemporaryFile(policeDepartmentFile, filePath);
-    
-   
-   
-   awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId,2);
-   
-  file.delete();
-    }
+			   file.delete();
+		   }
 		}
 		catch (IllegalStateException e)
 		{
@@ -264,55 +242,27 @@ public class PoliceDepartmentService {
 		}
 
 	
-public String uploadPoliceDepartmentWithoutFile(Integer policeDepartmentId) throws IOException 
-{
-String path=crmProperties.getProperty("logoTempFolder")+policeDepartmentId.toString();
-
-
-
-
-String bannerFolderName=crmProperties.getProperty("bannerFolderName");
-
-String locallink=crmProperties.getProperty("locallink");
-
-File srcFolder=new File(locallink);
-
-File destinationFolder=new File(path);
-
-if(!destinationFolder.exists())
-{
-	destinationFolder.mkdir();
-}
-
-path=path+bannerFolderName+"//banner.jpg";
-
-destinationFolder=new File(path);
-
-if(crmProperties.getProperty("awsUpload").equals("1"))
-{
-FileUtils.copyFile(srcFolder,destinationFolder);
-
-String fileName=crmProperties.getProperty("fileName");
-
-
-String filePath=path;
-awsFileUpload.uploadFileToAWSS3(filePath, fileName,policeDepartmentId,2);
-destinationFolder.delete();
-}
-return null;
-}
+	public String uploadPoliceDepartmentWithoutFile(Integer policeDepartmentId) throws IOException 
+	{
+		String path=crmProperties.getProperty("tempFolder")+crmProperties.getProperty("defaultBannerName");
+		
+		if(crmProperties.getProperty("awsUpload").equals("1"))
+		{
+			String fileName=crmProperties.getProperty("fileName");
+			awsFileUpload.uploadFileToAWSS3(path, fileName,policeDepartmentId,2);
+		}
+		return null;
+	}
 	
 
 	public int checkDepartmentName(String name,Integer policeDepartmentId)
 	{
-		
 		return policeDepartmentDAO.checkDepartmentName(name,policeDepartmentId);
 	}
 
 	
 	public int checkDepartmentCode(String code,Integer policeDepartmentId)
 	{
-		
 		return policeDepartmentDAO.checkDepartmentCode(code,policeDepartmentId);
 	}
 
