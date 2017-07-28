@@ -48,14 +48,15 @@
                     <span class="icon-bar"></span>
                 </button>
                 <p class="navbar-brand">Crash Reports Upload - <mark>Admin Interface</mark></p>
+                
             </div>
             <!-- /.navbar-header -->
-
+ 
             <ul class="nav navbar-top-links navbar-right">
-
-                <!-- /.dropdown -->
+  <!-- /.dropdown --><span style="color:white;align:right;">sadmin</span>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown">
+                    
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
@@ -85,7 +86,8 @@
 
 <li class="{{activeClass.department}}">
     <a href="#/department">
-    <i class="fa fa-id-badge fa-fw fa-2x"></i>
+    <i class="fa fa-university fa-fw  fa-2x" ></i>
+    <!-- <i class="fa fa-id-badge fa-fw fa-2x"></i> -->
     <span class="nav-text">Department</span></a>
 </li>
 
@@ -104,6 +106,11 @@
     <i class="fa fa-file fa-fw fa-2x" ></i>
     <span class="nav-text">Reports</span></a></li>
     
+<li class="{{activeClass.settings}}">
+    <a href="#/settings" >
+    <i class="fa fa-gear fa-fw fa-2x" ></i>
+    <span class="nav-text">Settings</span></a></li>
+
 
 
 </ul>

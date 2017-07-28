@@ -2,7 +2,7 @@ var adminApp = angular.module('adminApp',['flash','requestModule']);
 
 
 //Add Reports Controller
-adminApp.controller('ChangePasswordController',['$rootScope','$scope','$http','requestHandler','$route','Flash',function($rootScope,$scope,$http,requestHandler,$route,Flash){
+adminApp.controller('ChangePasswordController',['$rootScope','$scope','$http','requestHandler','$route','Flash','$location',function($rootScope,$scope,$http,requestHandler,$route,$location,Flash){
 	
 	$scope.changePassword=function()
 	{
@@ -10,8 +10,9 @@ adminApp.controller('ChangePasswordController',['$rootScope','$scope','$http','r
 			 $scope.value=response.data.requestSuccess;
 			  if($scope.value==true)
 				  {
-				  successMessage(Flash,"Successfully Changed");
-				  $route.reload();
+				  
+				  $location.path("#/dashboard");	
+				  successMessage(Flash,"Password Successfully Changed");
 				 }
 		});
 	};

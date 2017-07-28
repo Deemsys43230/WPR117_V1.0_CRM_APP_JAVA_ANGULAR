@@ -36,13 +36,13 @@
 			  <div class="form-group">
 			    <label for="Department">Department:</label>
 			    <select class="form-control" ng-model="crashReportSearchForm.policeDepartmentId" ng-options="x.policeDepartmentId as x.name for x in policeDepartmentList" fix>
-			    <option value="">-select-</option>
+			    <option value="">-- Select --</option>
 	</select>
 			  </div>
 			  <div class="form-group">
 			    <label for="Department">County:</label>
 			    <select class="form-control" ng-model="crashReportSearchForm.countyId" ng-options="x.countyId as x.name for x in countyList" fix>
-			    <option value="">-select-</option>
+			    <option value="">-- Select --</option>
 	</select>
 			  </div>
 			   <div class="form-group">
@@ -76,7 +76,7 @@
 		                <th colspan="2">First Name</th>
 		                <th colspan="2">Last Name</th>
 		                <th>Department</th>
-		             <th>Action</th>
+		             <th>Actions</th>
 		            </tr>
 		        </thead>
 		        <tbody>
@@ -88,7 +88,7 @@
 		            <td width="17%">{{resultData.departmentName}}</td>
 		            	<td width="20%"><a  class="fa fa-eye fa-fw" style="background-color:#000080;
 	color:white;" data-hint="View Report Details" ng-click="getReport(resultData.reportId)"></a>&nbsp;|&nbsp;
-<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
+<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-sm btn-info hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
 		            </tr>
 		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
 		            	<td colspan="2">{{occupants.firstName}}</td>

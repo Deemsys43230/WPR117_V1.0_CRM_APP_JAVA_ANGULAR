@@ -142,7 +142,61 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'superAdminReportsController'
+                	
+            }).when('/settings', {
+                templateUrl: 'superAdmin/settings.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'superAdminApp',
+                            files:[
+                                'resources/scripts/superAdmin/superAdminSettingsController.js',
+                                
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'viewSettingsController'
+            })
+            .when('/settings-add', {
+                templateUrl: 'superAdmin/addsettings.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'superAdminApp',
+                            files:[
+                                'resources/scripts/superAdmin/superAdminSettingsController.js',
+                                
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'addSettingsController'
             }).
+            
+            
+            when('/settings-edit/:id', {
+                templateUrl: 'superAdmin/addsettings.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'superAdminApp',
+                            files:[
+                                'resources/scripts/superAdmin/superAdminSettingsController.js',
+                                
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'editSettingsController'
+            }).
+            
+            
+            
+            
             
             when('/department-add', {
                 templateUrl: 'superAdmin/adddepartment.html',

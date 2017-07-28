@@ -26,13 +26,13 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	
 	//getting search keys while loading viewAccountsController
 	
-	$scope.init=function()
+	/*$scope.init=function()
 	{
 		$scope.search=searchAccountService.getSearch();
 		console.log($scope.search);
 	}
 	
-	$scope.init();
+	$scope.init();*/
 	
 	//get AccountsList through superAdminService 
 	var details = superAdminService.getAccountsList();
@@ -48,6 +48,7 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
 				{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
+			
 			
 				});
 		
@@ -129,6 +130,7 @@ $('#resetModal').modal({animation:true});
 	{
 		console.log(search);
 		searchAccountService.setSearch(search);
+		
 	}
 	
 	
@@ -441,6 +443,9 @@ superAdminApp.controller("addDepartmentController",['$rootScope','$scope','$http
 		else
 			{
 			var ind=$scope.department.name.split(" ");
+			
+			
+			
 			$scope.department.loginLink=ind[0];
 			$scope.department.searchLink=ind[0]+"_search";
 			
@@ -508,7 +513,7 @@ $scope.addDepartment=function(department)
 	$scope.policeDepartmentForms=department;
 	$scope.policeDepartmentForms.status=1;
 	
-//scope.policeDepartmentFile="";
+
 	
 	console.log($scope.policeDepartmentForms);
 	
@@ -592,7 +597,7 @@ requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
 				{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
-			console.log($scope.policeDepartmentList);
+			/*console.log($scope.policeDepartmentList);*/
 				});
 		
 	}
@@ -604,6 +609,7 @@ requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 requestHandler.getRequest("/getPoliceDepartment.json?id="+$scope.policeDepartmentId).then(function(response)
 {
 $scope.department=response.data.policeDepartmentForm;
+console.log($scope.department);
 });
 	
 

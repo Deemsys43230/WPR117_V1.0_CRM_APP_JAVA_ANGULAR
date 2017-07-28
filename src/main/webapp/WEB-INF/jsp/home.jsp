@@ -39,7 +39,7 @@
 	
 	
 <a href="#/viewdepartment" class="pull-right logout-tag" data-toggle="tooltip" title="View"
-onmouseenter="$(this).tooltip('show')" ng-click="viewDepartment(x.policeDepartmentId)"><i class="fa fa-eye fa-fw"></i>View Department</a>
+onmouseenter="$(this).tooltip('show')" ng-click="viewDepartment(x.policeDepartmentId)"><i class="fa fa-eye fa-fw"></i>My Department</a>
  	
 	</div>
 	

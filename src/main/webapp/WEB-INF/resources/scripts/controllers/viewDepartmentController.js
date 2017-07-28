@@ -6,7 +6,9 @@ adminApp.controller('ViewDepartmentController',['$rootScope','$scope','$http','r
 	{
   requestHandler.getRequest("/getPoliceDepartment.json?id="+$rootScope.policeDepartmentId).then(function(response)
 	{
-	$scope.result=response.data.policeDepartmentForm;		
+	$scope.result=response.data.policeDepartmentForm;	
+	
+	
 	});
 	};
 	

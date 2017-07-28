@@ -1,0 +1,215 @@
+<div class="row" style="margin-top: 50px; height:50px;">
+<div class="col-md-3">
+<h3>Application Properties</h3>
+</div>
+	
+<div class="col-md-4" style="padding-top:20px;">
+<div flash-message="4000" show-close="true" class="pull-right col-xs-6"></div>
+</div>
+
+<div class="pull-right col-md-3">
+
+<button class="btn btn-primary pull-right active"    ng-click="addSetting()" style="margin-top: 20px;" >
+<i class="fa fa-plus"></i> Add Application Properties</button>
+</div>
+
+
+</div>
+<hr>
+
+
+
+
+<table class="table-bordered table-striped table-condensed table-responsive ng-cloak">
+<thead>
+
+<tr>
+<!-- <th>Id</th> -->
+<th>Key</th>
+<th>Value</th>
+<th>Actions</th>
+</tr>
+		
+<tr>
+ <!-- <th>
+<div class = "input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type = "text" ng-model="search.settingId" ng-change="filter(search)" placeholder="Id" class = "form-control">
+</div>
+</th> -->
+ 
+
+ <th>
+<div class = "input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+<input type = "text" ng-model="search.settingKey" ng-change="filter(search)" placeholder="key" class = "form-control">
+</div>
+</th>
+ 
+	
+<th>
+	
+</th>
+</tr>
+</thead>
+<tbody>
+		
+<tr  dir-paginate="x in settingsListfilter=(settingsList|filter:search)|itemsPerPage:8">
+<!-- <td>{{x.settingId}}</td> -->
+<td>{{x.settingKey}}</td>
+<td>{{x.settingValue}}</td>
+
+<td>
+<a class="fa fa-edit fa-fw"  ng-click="editSetting(x.settingId)"  
+data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
+
+		
+<a class="fa fa-trash" data-toggle="tooltip" title="Delete"
+				onmouseenter="$(this).tooltip('show')"
+				ng-click="delete(x.settingId)"></a> 
+
+</td> 
+</tr>
+
+<tr ng-repeat-end=""></tr>
+		           	<tr ng-show="(settingsList|filter:search).length==0">
+							<td colspan="8"><center>
+							<strong>No Result Found!!!</strong>
+						</center></td>
+						</tr>
+
+</tbody>
+</table>
+
+<div>
+<dir-pagination-controls  max-size="5" direction-links="true" boundary-links="true"  ng-show="(settingsList|filter:search).length>0">
+</dir-pagination-controls>
+</div>
+
+
+
+
+<!-- delete Modal -->
+<div id="deleteModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h6>Confirmation!</h6>
+</div>
+<div class="modal-body">
+<h3>Do you want to delete this key?</h3>
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary" ng-click="confirm()">Delete</button>
+<button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Add Modal -->
+<div id="addModal" class="modal fade" role="dialog" >
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h4>{{heading}}</h4>
+</div>
+<div class="modal-body">
+
+<form id="form" name="form">
+<div class="row">
+
+<div class="col-md-6 col-xs-12">
+<label>key<span class="asterisk">*</span></label>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+<input type="text" class="form-control" placeholder="Key" name="settingkey"  ng-model="settings.settingKey" required>
+</div>
+<div id="error-container">
+<span ng-show="form.settingkey.$dirty && form.settingkey.$invalid">
+<span ng-show="form.settingkey.$error.required">Key is required</span>
+</span>
+</div>
+</div>
+
+<div class="col-md-6 col-xs-12">
+<label>Value<span class="asterisk">*</span></label>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+<input type="text" class="form-control" placeholder="Value" name="settingvalue"  ng-model="settings.settingValue" required>
+</div>
+<div id="error-container">
+<span ng-show="form.settingvalue.$dirty  && form.settingvalue.$invalid">
+<span ng-show="form.settingvalue.$error.required">Value is required.</span>
+</span>
+</div>
+</div>
+</div>
+
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary active" ng-click="addKey()" ng-disabled="form.$invalid"  data-dismiss="modal">{{buttonText}}</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<!-- Edit Modal -->
+<div id="editModal" class="modal fade" role="dialog" data-backdrop="false">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<a class="close" type="button" data-dismiss="modal">&times;</a>
+<h4>{{heading}}</h4>
+</div>
+<div class="modal-body">
+
+<form id="form" name="form">
+<div class="row">
+
+<div class="col-md-6 col-xs-12">
+<label>key<span class="asterisk">*</span></label>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+<input type="text" class="form-control" placeholder="Key" name="settingkey"  ng-model="settings.settingKey" required>
+</div>
+<div id="error-container">
+<span ng-show="form.settingkey.$dirty && form.settingkey.$invalid">
+<span ng-show="form.settingkey.$error.required">Key is required</span>
+</span>
+</div>
+</div>
+
+<div class="col-md-6 col-xs-12">
+<label>Value<span class="asterisk">*</span></label>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+<input type="text" class="form-control" placeholder="Value" name="settingvalue"  ng-model="settings.settingValue" required>
+</div>
+<div id="error-container">
+<span ng-show="form.settingvalue.$dirty  && form.settingvalue.$invalid">
+<span ng-show="form.settingvalue.$error.required">Value is required.</span>
+</span>
+</div>
+</div>
+</div>
+
+</div>
+<div class="modal-footer">
+<button class="btn btn-primary active" ng-click="addKey()" ng-disabled="form.$invalid" >{{buttonText}}</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+

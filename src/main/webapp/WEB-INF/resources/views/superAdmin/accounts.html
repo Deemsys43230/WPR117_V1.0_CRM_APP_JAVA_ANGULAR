@@ -2,11 +2,11 @@
 	<div class="col-md-3">
 		<h3>Accounts</h3>
 	</div>
-	<div class="col-md-6 " style="padding-top:20px;">
-<div flash-message="4000" show-close="true"></div>
+	<div class="col-md-6" style="padding-top:20px;">
+<div flash-message="4000" show-close="true" class="pull-right col-xs-6"></div>
 </div>
 	<div class="pull-right col-md-2">
-		<a class="btn btn-primary" href="#/accounts-add"
+		<a class="btn btn-primary active" href="#/accounts-add"
 			style="margin-top: 20px;"><i class="fa fa-plus"></i> Add new
 			Account</a>
 	</div>
@@ -85,7 +85,7 @@
 	</thead>
 	<tbody>
 		<tr
-			dir-paginate="x in accountsListfilter=(accountsList|filter:search)|itemsPerPage:10">
+			dir-paginate="x in accountsListfilter=(accountsList|filter:search)|itemsPerPage:6">
 			<td>{{x.firstName}}</td>
 			<td>{{x.lastName}}
             <td>{{x.username}}</td>
@@ -118,17 +118,21 @@
 				onmouseenter="$(this).tooltip('show')"
 				ng-click="resetPassword(x.accountId)"></a></td>
 </tr>
+<tr ng-repeat-end=""></tr>
+		           	<tr ng-show="(accountsList|filter:search).length==0">
+							<td colspan="8"><center>
+							<strong>No Result Found!!!</strong>
+						</center></td>
+						</tr>
+
+
 </tbody>
 </table>
-<br>
-<h3><p  style="color:red;text-align:center;"ng-show="(accountsList|filter:search).length==0">No Result Found</p></h3>
 </div>
-<div>
-<dir-pagination-controls 
-          max-size="10"
-          direction-links="true"
-          boundary-links="true" >
-        </dir-pagination-controls></div>
+
+<dir-pagination-controls  max-size="5" direction-links="true" boundary-links="true" ng-show="(accountsList|filter:search).length>0" >
+</dir-pagination-controls>
+        
 <div id="deleteModal" class="modal fade" role="dialog">
 <div class="modal-dialog">
 <div class="modal-content">
@@ -146,6 +150,7 @@
 </div>
 </div>
 </div>
+
 <div id="resetModal" class="modal fade" role="dialog">
 <div class="modal-dialog">
 <div class="modal-content">

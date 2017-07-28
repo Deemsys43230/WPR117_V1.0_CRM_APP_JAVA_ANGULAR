@@ -10,4 +10,6 @@
   <table-filter match-catalog="crm_boardman" match-name="police_department"/>
   <table-filter match-catalog="crm_boardman" match-name="roles"/>
   <table-filter match-catalog="crm_boardman" match-name="users"/>
+  <table-filter match-catalog="crm-boardman" match-name="settings"/>
+ 
 </hibernate-reverse-engineering>
