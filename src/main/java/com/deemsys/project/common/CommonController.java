@@ -154,12 +154,6 @@ public class CommonController {
         return "/ohio-main";
    	}
  	
- 	
- 	
- 	
- 	
- 	
- 	
  	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)
  	public String getIndexMain(ModelMap model)
  	{
@@ -210,6 +204,7 @@ public class CommonController {
  		return "/404";
  	}
     
+    /*
     @RequestMapping(value={"/superAdmin"},method=RequestMethod.GET)
     public String getsuperAdmin(ModelMap model)
     {
@@ -217,6 +212,6 @@ public class CommonController {
     	model.addAttribute("departmentBannerImage","resources/images/slider/main.jpg");
      	model.addAttribute("Success",true);
  		return "/index";
-    }
+    }*/
     
     }

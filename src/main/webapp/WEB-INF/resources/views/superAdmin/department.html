@@ -152,7 +152,7 @@ data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
 
 
 <div id="viewModal" class="modal fade" role="dialog">
-<div class="modal-dialog" ng-cloak="">
+<div class="modal-dialog modal-lg" ng-cloak="">
 <div class="modal-content">
 <div class="modal-header">
  <a class="close" type="button" data-dismiss="modal">&times;</a>
@@ -160,31 +160,31 @@ data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
 </div>
 
 <div class="modal-body">
-<img ng-src="{{result.url}}" width="575" height="180" alt="no image uploaded" >
+<img ng-src="{{result.url}}" width="100%" height="180" alt="no image uploaded" >
 
 <br><br>
-<table  width="500" align="center" class="table table-bordered" >
+<table class="table table-bordered" >
 
 <tr>
-<td><label>Police Department ID</label></td>
-<td>{{result.policeDepartmentId}}</td>
-<td><label>County</label></td>
-<td>{{result.countyName}}</td>
+<td class="col-md-3"><label>Police Department ID</label></td>
+<td class="col-md-3 wrap-breakall">{{result.policeDepartmentId}}</td>
+<td class="col-md-3"><label>County</label></td>
+<td class="col-md-3 wrap-breakall">{{result.countyName}}</td>
 </tr>
 
 
 <tr>
-<td><label>Name</label></td>
-<td>{{result.name}}</td>
-<td><label>Code</label></td>
-<td>{{result.code}}</td>
+<td class="col-md-3"><label>Name</label></td>
+<td class="col-md-3 wrap-breakall">{{result.name}}</td>
+<td class="col-md-3"><label>Code</label></td>
+<td class="col-md-3 wrap-breakall">{{result.code}}</td>
 </tr>
 
 <tr>
-<td><label>Login Link</label>
-<td>{{result.loginLink}}</td>
-<td><label>Search Link</label>
-<td>{{result.searchLink}}</td>
+<td class="col-md-3"><label>Login Link</label>
+<td class="col-md-3 wrap-breakall">{{result.loginLink}}</td>
+<td class="col-md-3"><label>Search Link</label>
+<td class="col-md-3 wrap-breakall">{{result.searchLink}}</td>
 </tr>
 
 

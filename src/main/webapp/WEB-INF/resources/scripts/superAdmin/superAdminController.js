@@ -15,22 +15,22 @@ superAdminApp.controller("dashboardController",['$rootScope','$scope','$http','r
     		  $scope.totalRecords=response.data.recordsForm;
     		  console.log($scope.totalRecords);
     			  });
-      }
+      };
       
       $scope.getTotalRecords();
 
 }]);
 
-superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http','requestHandler','superAdminService','Flash','searchAccountService',function($rootScope,$scope, $http, requestHandler, superAdminService,Flash,searchAccountService)
+superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http','requestHandler','superAdminService','Flash','searchAccountService', function($rootScope,$scope, $http, requestHandler, superAdminService,Flash,searchAccountService)
 		{
 	
 	//getting search keys while loading viewAccountsController
-	
-	/*$scope.init=function()
+	/*
+	$scope.init=function()
 	{
 		$scope.search=searchAccountService.getSearch();
 		console.log($scope.search);
-	}
+	};
 	
 	$scope.init();*/
 	
@@ -39,20 +39,18 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	details.then(function(data) 
 			{
 		$scope.accountsList = data;
-		console.log($scope.accountsList);
 	});
 	
 	//get PoliceDepartmentList
 	$scope.getPoliceDepartmentList=function()
 	{
 		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
-				{
+		{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
 			
-			
-				});
+		});
 		
-	}
+	};
 	
 	//calling getPoliceDepartmentList function
 	$scope.getPoliceDepartmentList();
@@ -61,7 +59,7 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	//get Roles
 	var details = superAdminService.getRolesList();
 	details.then(function(data) 
-			{
+	{
 		$scope.roles = data;
 	});
 	
@@ -69,10 +67,7 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	
 	var details = superAdminService.getRolesForAccount();
 	details.then(function(data) 
-			{
-		
-		
-		
+	{
 		$scope.rolesforaccount= data;
 	});
 	
@@ -83,28 +78,23 @@ superAdminApp.controller("viewAccountsController",['$rootScope','$scope','$http'
 	{
 		
 		$scope.accountId=accountId;
-		
-		
-		
 		requestHandler.postRequest("SAdmin/enableOrDisableAccount.json?id="+$scope.accountId).then(function(success)
-				{
-  Flash.create('success',"Changes Made Successfully!");	
-  $(window).scrollTop(0);	
+		{
+			Flash.create('success',"Changes Made Successfully!");	
+			$(window).scrollTop(0);	
 			
 			var details = superAdminService.getAccountsList();
 			details.then(function(data) {
 				$scope.accountsList = data;
-				console.log($scope.accountsList);
-				
 			});
 			
-				});
-	}
+		});
+	};
 	
 	//reset password function
 	$scope.resetPassword=function(accountId)
 	{
-$('#resetModal').modal({animation:true});
+		$('#resetModal').modal({animation:true});
 		
 		$scope.confirm=function()
 		{
@@ -122,16 +112,14 @@ $('#resetModal').modal({animation:true});
 					$scope.accountsList = data;
 				});
 					});
-		}
-	}
+		};
+	};
 		
 	//setting search keys to searchAccountService
 	$scope.filter=function(search)
 	{
-		console.log(search);
-		searchAccountService.setSearch(search);
-		
-	}
+			searchAccountService.setSearch(search);
+	};
 	
 	
 	//delete function
@@ -154,7 +142,7 @@ $('#resetModal').modal({animation:true});
 					$scope.accountsList = data;
 				});
 					});
-		}
+		};
 	}
 	}]);
 
@@ -176,10 +164,7 @@ superAdminApp.controller("addAccountsController",['$scope','$http','requestHandl
 	
 	var details = superAdminService.getRolesForAccount();
 	details.then(function(data) 
-			{
-		
-		
-		
+	{
 		$scope.rolesforaccount= data;
 	});
 	
@@ -209,14 +194,12 @@ superAdminApp.controller("addAccountsController",['$scope','$http','requestHandl
 			$scope.accountsForms.status=1;
 			console.log($scope.accountsForms);
 			
-			requestHandler.postRequest("SAdmin/saveUpdateAccounts.json",$scope.accountsForms);
-			
-			window.location.href="#/accounts";
-			Flash.create('success',"New Account is Been Added!");
-
-			$(window).scrollTop(0);
-		
-		}
+			requestHandler.postRequest("SAdmin/saveUpdateAccounts.json",$scope.accountsForms).then(function(response){
+				Flash.create('success',"New Account is Been Added!");
+				window.location.href="#/accounts";
+				$(window).scrollTop(0);
+			});
+		};
 	}]);
 
 superAdminApp.controller("editAccountsController",['$scope','$http','requestHandler','$routeParams','superAdminService','Flash',function($scope, $http,requestHandler,$routeParams,superAdminService,Flash)
@@ -274,13 +257,13 @@ superAdminApp.controller("editAccountsController",['$scope','$http','requestHand
 		$scope.accountsForms=account;
 		console.log($scope.accountsForms);
 		
-		requestHandler.postRequest("SAdmin/saveUpdateAccounts.json",$scope.accountsForms);
-		Flash.create('success',"Account Updated Successfully!");
-		$(window).scrollTop(0);
-		window.location.href="#/accounts";
-		
+		requestHandler.postRequest("SAdmin/saveUpdateAccounts.json",$scope.accountsForms).then(function(response){
+			Flash.create('success',"Account Updated Successfully!");
+			$(window).scrollTop(0);
+			window.location.href="#/accounts";
+		});
+	};
 	
-	}
 	}]);
 
 
@@ -291,26 +274,24 @@ superAdminApp.controller("changePasswordController",['$scope','$http','requestHa
 		console.log(password);
 		
 		requestHandler.postRequest("User/changePassword.json?password="+password).then(function(success)
-				{
+		{
 			window.location.href="#/accounts";
 			Flash.create('success',"Password Updated Successfully!");
 			$(window).scrollTop(0);
-				})
+		});
 	}
 	
 }]);
 
 superAdminApp.controller("viewDepartmentController",['$rootScope','$scope','$http','requestHandler','superAdminService','Flash','searchAccountService',function($rootScope,$scope, $http, requestHandler, superAdminService,Flash,searchAccountService)
-	{
+{
 	
 //get PoliceDepartmentList
 $scope.getPoliceDepartmentList=function()
 {
-requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
+	requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
 	{
-$scope.policeDepartmentList=response.data.policeDepartmentForms;
-//console.log($scope.policeDepartmentList);
-
+		$scope.policeDepartmentList=response.data.policeDepartmentForms;
 	});
 	
 }
@@ -318,23 +299,17 @@ $scope.policeDepartmentList=response.data.policeDepartmentForms;
 //calling getPoliceDepartmentList function
 $scope.getPoliceDepartmentList();
 
-
-
 //enable disable function
 $scope.enableOrDisable=function(policeDepartmentId)
 {
 	$scope.policeDepartmentId=policeDepartmentId;
-	
-	console.log($scope.policeDepartmentId);
-	
 	requestHandler.postRequest("/enableOrDisableDepartment.json?id="+$scope.policeDepartmentId).then(function(success)
-			{
+	{
 		Flash.create('success',"Changes Made Successfully!");	
 		 $(window).scrollTop(0);
-		
 		$scope.getPoliceDepartmentList();
 		
-			});
+	});
 }
 
 
@@ -394,20 +369,17 @@ $scope.deleteDepartment=function(id)
 //view single department details 
 $scope.viewDepartment=function(id)
 {
-	$('#viewModal').modal({animation:true});
 	
-   
-$scope.policeDepartmentId=id;
+	$scope.policeDepartmentId=id;
+	console.log($scope.policeDepartmentId);  
 
-console.log($scope.policeDepartmentId);  
+	requestHandler.getRequest("/getPoliceDepartment.json?id="+$scope.policeDepartmentId).then(function(response)
+	{
+		$scope.result=response.data.policeDepartmentForm;		
+		$('#viewModal').modal({animation:true});
+	});
+};
 
-requestHandler.getRequest("/getPoliceDepartment.json?id="+$scope.policeDepartmentId).then(function(response)
-{
-/*$('#viewModal').modal('hide');*/
-
-$scope.result=response.data.policeDepartmentForm;		
-});
-		}
 }]);
 
 
@@ -443,9 +415,6 @@ superAdminApp.controller("addDepartmentController",['$rootScope','$scope','$http
 		else
 			{
 			var ind=$scope.department.name.split(" ");
-			
-			
-			
 			$scope.department.loginLink=ind[0];
 			$scope.department.searchLink=ind[0]+"_search";
 			
@@ -459,12 +428,11 @@ superAdminApp.controller("addDepartmentController",['$rootScope','$scope','$http
 //get PoliceDepartmentList
 $scope.getPoliceDepartmentList=function()
 {
-requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
+	requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
 	{
-$scope.policeDepartmentList=response.data.policeDepartmentForms;
-console.log($scope.policeDepartmentList);
+		$scope.policeDepartmentList=response.data.policeDepartmentForms;
+		console.log($scope.policeDepartmentList);
 	});
-	
 }
 
 //calling getPoliceDepartmentList function
@@ -474,14 +442,10 @@ $scope.getPoliceDepartmentList();
 //get CountyList
 $scope.getCountyList=function()
 {
-requestHandler.getRequest("User/getAllCountys.json").then(function(response)
+	requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 	{
-
-	$scope.countyList=response.data.countyForms;
-
-	
-});
-	
+		$scope.countyList=response.data.countyForms;
+	});
 }
 
 //calling getcountyList function
@@ -500,10 +464,7 @@ $scope.uploadFile = function()
 
 $scope.uploadImage = function()
 {
-
-	
-    console.log("Changed");
-   
+	console.log("Changed");
 }
 
 
@@ -512,11 +473,6 @@ $scope.addDepartment=function(department)
 {
 	$scope.policeDepartmentForms=department;
 	$scope.policeDepartmentForms.status=1;
-	
-
-	
-	console.log($scope.policeDepartmentForms);
-	
 	
 	//upload and save image in department
 	requestHandler.postRequest("saveUpdatePoliceDepartment.json",$scope.policeDepartmentForms).then(function(response)
@@ -528,21 +484,21 @@ $scope.addDepartment=function(department)
 		
 	if($scope.policeDepartmentFile!="" && $scope.policeDepartmentFile!=undefined)
 		{
-		requestHandler.postFileUpdate("uploadPoliceDepartment.json",$scope.policeDepartmentId,"policeDepartmentId",$scope.policeDepartmentFile,"policeDepartmentFile").then(function(response)
-	{
-		window.location.href="#/department";
-	    Flash.create('success',"Department Added Successfully!");
-	    $(window).scrollTop(0);
-	});
+			requestHandler.postFileUpdate("uploadPoliceDepartment.json",$scope.policeDepartmentId,"policeDepartmentId",$scope.policeDepartmentFile,"policeDepartmentFile").then(function(response)
+			{
+				window.location.href="#/department";
+			    Flash.create('success',"Department Added Successfully!");
+			    $(window).scrollTop(0);
+			});
 		}
 	else
 		{
-		requestHandler.postFileUpdate("uploadPoliceDepartmentWithoutFile.json",$scope.policeDepartmentId,"policeDepartmentId").then(function(response)
-		{
-		window.location.href="#/department";
-	    Flash.create('success',"Department Added Successfully!");
-	    $(window).scrollTop(0);
-		});
+			requestHandler.postFileUpdate("uploadPoliceDepartmentWithoutFile.json",$scope.policeDepartmentId,"policeDepartmentId").then(function(response)
+			{
+				window.location.href="#/department";
+			    Flash.create('success',"Department Added Successfully!");
+			    $(window).scrollTop(0);
+			});
 		}
 	
 	});
@@ -550,17 +506,15 @@ $scope.addDepartment=function(department)
 	
 	$scope.getPoliceDepartmentList=function()
 	{
-	requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
-		{
-	$scope.policeDepartmentList=response.data.policeDepartmentForms;
-	});
-	
-	
-	}
+		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
+			{
+		$scope.policeDepartmentList=response.data.policeDepartmentForms;
+		});
+	};
 
 //calling getPoliceDepartmentList function
 	$scope.getPoliceDepartmentList();
-	}
+	};
 }]);
 
 
@@ -597,7 +551,7 @@ requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
 				{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
-			/*console.log($scope.policeDepartmentList);*/
+			console.log($scope.policeDepartmentList);
 				});
 		
 	}
@@ -609,7 +563,6 @@ requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 requestHandler.getRequest("/getPoliceDepartment.json?id="+$scope.policeDepartmentId).then(function(response)
 {
 $scope.department=response.data.policeDepartmentForm;
-console.log($scope.department);
 });
 	
 

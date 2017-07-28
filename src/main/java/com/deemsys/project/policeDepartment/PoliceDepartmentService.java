@@ -57,7 +57,7 @@ public class PoliceDepartmentService {
 		List<PoliceDepartmentForm> policeDepartmentForms = new ArrayList<PoliceDepartmentForm>();
 
 		List<PoliceDepartment> policeDepartments = new ArrayList<PoliceDepartment>();
-
+		
 		policeDepartments = policeDepartmentDAO.getAll();
 
 		for (PoliceDepartment policeDepartment : policeDepartments) {
@@ -82,11 +82,12 @@ public class PoliceDepartmentService {
 		// Start
 		
 		String url=crmProperties.getProperty("bucketURL")+policeDepartmentId.toString()+crmProperties.getProperty("bannerFolderName")+crmProperties.getProperty("fileName");
-
+		// CRM Domain Link
+		String crmDomainLink=crmProperties.getProperty("CRMAppDomain");
 		PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 				policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
-				policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(),
-				policeDepartment.getSearchLink(),
+				policeDepartment.getName(), policeDepartment.getCode(), crmDomainLink+policeDepartment.getLoginLink(),
+				crmDomainLink+policeDepartment.getSearchLink(),
 				CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
 				policeDepartment.getStatus(), policeDepartment.getIsEnabled(),url);
 
@@ -100,14 +101,15 @@ public class PoliceDepartmentService {
 		PoliceDepartmentForm policeDepartmentForm = null;
 		try {
 			List<PoliceDepartment> policeDepartments = policeDepartmentDAO.find(departmentLinkParam, departmentValue);
-
+			// CRM Domain Link
+			String crmDomainLink=crmProperties.getProperty("CRMAppDomain");
 			// TODO: Convert Entity to Form
 			// Start
 			for (PoliceDepartment policeDepartment : policeDepartments) {
 				policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 						policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
-						policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(),
-						policeDepartment.getSearchLink(),
+						policeDepartment.getName(), policeDepartment.getCode(), crmDomainLink+policeDepartment.getLoginLink(),
+						crmDomainLink+policeDepartment.getSearchLink(),
 						CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
 						policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null);
 			}

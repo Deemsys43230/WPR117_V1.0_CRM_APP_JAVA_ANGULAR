@@ -143,6 +143,21 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                 },
                 controller:'superAdminReportsController'
                 	
+            }).when('/occupants', {
+                templateUrl: 'superAdmin/occupants.html',
+                resolve: {
+                    loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name:'superAdminApp',
+                            files:[
+                                'resources/scripts/superAdmin/superAdminOccupantsController.js',
+                                
+                            ]
+                        });
+                    }]
+
+                },
+                controller:'superAdminOccupantsController'
             }).when('/settings', {
                 templateUrl: 'superAdmin/settings.html',
                 resolve: {
@@ -174,10 +189,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'addSettingsController'
-            }).
-            
-            
-            when('/settings-edit/:id', {
+            }). when('/settings-edit/:id', {
                 templateUrl: 'superAdmin/addsettings.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
@@ -192,13 +204,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
 
                 },
                 controller:'editSettingsController'
-            }).
-            
-            
-            
-            
-            
-            when('/department-add', {
+            }).when('/department-add', {
                 templateUrl: 'superAdmin/adddepartment.html',
                 resolve: {
                     loadMyFiles:['$ocLazyLoad',function($ocLazyLoad) {
@@ -278,5 +284,8 @@ superAdminApp.controller('InitialController', [
               $rootScope.previousState=previous.$$route.originalPath;
           }
       });
+      requestHandler.getRequest("getCurrentDate.json","").then(function(response){
+  		 $rootScope.currentDate=response.data.currentDate;
+       });
   }
 ]);

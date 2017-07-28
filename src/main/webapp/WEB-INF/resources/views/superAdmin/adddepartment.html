@@ -49,7 +49,7 @@
 <label>Code <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ticket"></i></span>
-  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" ng-pattern='/[R]{2}[_]{1}[A-Za-z]+[_]{1}/g' uppercase check-departmentcode required>
+  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" ng-pattern='/[R]{2}[_]{1}[A-Za-z]{2}[_]{1} *$/g' uppercase check-departmentcode required>
 </div>
 
 <div id="error-container">
@@ -65,16 +65,14 @@
 <label>Login Link <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="	fa fa-pencil"></i></span>
-<input type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" ng-disabled="true" lowercase check-departmentlogin  required></input>
+<input type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" lowercase check-departmentlogin  required></input>
 </div>
 
  <div id="error-container">
+ <span ng-cloak ng-show="!form.login.$error.required&&form.login.$error.checkDepartmentlogin">Login Link is already taken</span>
  <span  ng-show="form.login.$dirty">
- 
-<span ng-cloak ng-show="form.login.$error.required" >Login Link is required.</span>
-
-<span ng-cloak ng-show="!form.login.$error.required&&form.login.$error.checkDepartmentlogin">Login Link is already taken</span>
- </span>
+ 	<span ng-cloak ng-show="form.login.$error.required" >Login Link is required.</span>
+</span>
  </div>
 </div>
 </div>
@@ -82,20 +80,18 @@
 
 <div class="row">
 <div class="col-md-6 col-xs-12">
-<label>Search Link <span class="asterisk">*</span></label>
+<label>Search Link {{form.search.$error.pattern}}<span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-<input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" ng-disabled="true" lowercase check_departmentsearch  required>
+<input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" lowercase check-departmentsearch required>
 </div>
 
 <div id="error-container">
- <span  ng-show="form.search.$dirty"> 
-
-<span ng-cloak ng-show="form.search.$error.required">Search Link is required.</span>
-
 <span ng-cloak ng-show="!form.search.$error.required&&form.search.$error.checkDepartmentsearch">Search Link is already taken</span>
 
- </span>
+ <span  ng-show="form.search.$dirty"> 
+	<span ng-cloak ng-show="form.search.$error.required">Search Link is required.</span>
+</span>
 </div>
 </div>
 

@@ -4,7 +4,7 @@
 
 	<div class="container-fluid" style="margin-top:50px; margin-left:-30px; margin-right:-30px;">
 		<div class="col-md-12 white-form">
-		<h3>Reports<a class="pull-right" href="#/dashboard"></a></h3>
+		<h3>Occupants<a class="pull-right" href="#/dashboard"></a></h3>
 		<hr/>
 		<div class="col-md-12 search-block">
 		<form>
@@ -21,14 +21,14 @@
 			    <label for="reportNumber">Report Number:</label>
 			    <input type="text" class="form-control" id="reportNumber" ng-model="crashReportSearchForm.reportNumber" placeholder="Report Number" maxlength="100">
 			  </div>
-			 <!--  <div class="form-group">
+			  <div class="form-group">
 			    <label for="FirstName">First Name:</label>
 			    <input type="text" class="form-control" id="firstName" ng-model="crashReportSearchForm.firstName" placeholder="First Name" maxlength="50">
 			  </div>
 			  <div class="form-group">
 			    <label for="LastName">Last Name:</label>
 			    <input type="text" class="form-control" id="lastName" ng-model="crashReportSearchForm.lastName" placeholder="Last Name" maxlength="50">
-			  </div> -->
+			  </div>
 			  <div class="form-group">
 			    <label for="Location">Location:</label>
 			    <input type="text" class="form-control" id="location" ng-model="crashReportSearchForm.location" placeholder="Location" maxlength="100">
@@ -73,27 +73,27 @@
 		<table class="table table-bordered" style="margin-top:15px;" ng-cloak>
 		        <thead>
 		            <tr class="report-table-header">
-		                <th>Crash Date</th>
-		                <th>Report Number</th>
-		                <th>Location</th>
-		                <th>No. of Occupants</th>
+		                <th colspan="2">First Name</th>
+		                <th colspan="2">Last Name</th>
 		                <th>Department</th>
 		             <th>Action</th>
 		            </tr>
 		        </thead>
 		        <tbody>
-		            <tr dir-paginate="resultData in crashReportsResultList |itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
-		            	<td width="14%">{{resultData.crashDate}}</td>
-		            	<td width="15%">{{resultData.reportNumber}}</td>
-		            	<td width="17%" class="wrap-break-word">{{resultData.location}}</td>
-		            	<td width="15%">{{resultData.noOfOccupants}}</td>
+		            <tr ng-repeat-start="resultData in crashReportsResultList.crashReportsResult" class="report-header">
+		            	<td width="14%"><label>Crash Date:</label><br/>{{resultData.crashDate}}</td>
+		            	<td width="15%"><label>Report Number:</label><br/>{{resultData.reportNumber}}</td>
+		            	<td width="17%" class="wrap-break-word"><label>Location:</label><br/>{{resultData.location}}</td>
+		            	<td width="15%"><label>No. of Occupants:</label><br/>{{resultData.noOfOccupants}}</td>
 		            <td width="17%">{{resultData.departmentName}}</td>
-		            	<td width="20%"><a href="{{resultData.fileName}}" target="_blank" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
+		            	<td width="20%"><a  class="btn btn-primary btn-xs" data-hint="View Report Details" ng-click="getReport(resultData.reportId)"><i class="fa fa-eye fa-fw"></i></a>&nbsp;|&nbsp;
+<a href="{{resultData.fileName}}" target="_blank" style="color:#fff;" class="btn btn-info btn-xs hint--top" data-hint="View Report File"><i class="fa fa-file fa-fw"></i></a></td>
 		            </tr>
-		            <!-- <tr dir-paginate="occupants in resultData.occupantsForms" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
+		            <tr dir-paginate="occupants in resultData.occupantsForms|itemsPerPage:crashReportSearchForm.itemsPerPage" current-page="crashReportSearchForm.pageNumber" total-items="totalRecords">
 		            	<td colspan="2">{{occupants.firstName}}</td>
 		                <td colspan="4">{{occupants.lastName}}</td>
-		            </tr> -->
+		            </tr>
+		            <tr ng-repeat-end=""></tr>
 		           	<tr ng-show="totalRecords==0">
 							<td colspan="6"><center>
 							<strong>No Records Found!!!</strong>

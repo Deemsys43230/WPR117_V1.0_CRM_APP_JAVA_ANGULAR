@@ -1,4 +1,4 @@
-superAdminApp.controller("superAdminReportsController",['$rootScope','$scope','$http','requestHandler','superAdminService','Flash','searchAccountService','$q',function($rootScope,$scope, $http, requestHandler, superAdminService,Flash,searchAccountService,$q)
+superAdminApp.controller("superAdminOccupantsController",['$rootScope','$scope','$http','requestHandler','superAdminService','Flash','searchAccountService','$q',function($rootScope,$scope, $http, requestHandler, superAdminService,Flash,searchAccountService,$q)
 	{
 	
 	//get PoliceDepartmentList
@@ -28,10 +28,9 @@ superAdminApp.controller("superAdminReportsController",['$rootScope','$scope','$
 	$scope.getAllCounty();
 	$scope.searchReportsList=function(searchObj){
 		var defer=$q.defer();
-		requestHandler.postRequest("User/searchCrashReportsOnly.json",searchObj).then(function(response){
-			$scope.totalRecords=response.data.crashReportsList.totalRecords;
-			$scope.crashReportsResultList=response.data.crashReportsList.crashReportSearchLists;
-            console.log($scope.crashReportsResultList);
+		requestHandler.postRequest("User/searchCrashReports.json",searchObj).then(function(response){
+			$scope.totalRecords=response.data.crashReportsResult.totalRecords;
+			$scope.crashReportsResultList=response.data.crashReportsResult;
 			$scope.crashReportsResultListOriginal=angular.copy($scope.crashReportsResultList);
 			defer.resolve(response);
 		});
@@ -153,10 +152,10 @@ $scope.secondarySearch=function(){
 				"pageNumber":1,
 				"itemsPerPage":"10",
 				"searchType":1,
+				"reportType":2,
 				"countyId":""
 		};
 		
-		console.log($scope.crashReportSearchForm);
 		// Set Max Date
 		$('#crashDateReportList').data("DateTimePicker").setMaxDate($rootScope.currentDate);
 		$('#addedOnFromDate').data("DateTimePicker").setMaxDate($rootScope.currentDate);

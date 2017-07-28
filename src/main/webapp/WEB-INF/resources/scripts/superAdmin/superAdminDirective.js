@@ -369,7 +369,7 @@ superAdminApp.directive('validFile',function(){
 });
 
 //File Type Validation Directive
-superAdminApp.directive('validateFileType',function(){
+superAdminApp.directive('validateFileType',function($q){
 	var validFormats=['jpeg','jpg','png'];
 	  return {
 	    require:'ngModel',
@@ -388,28 +388,31 @@ superAdminApp.directive('validateFileType',function(){
 		        	  return validFormats.indexOf(ext) !== -1;
 		          };
 		          
-		          
-		        ngModel.$validators.validateFileSize=function()
+		          ngModel.$asyncValidators.validateFileSize=function()
 		          {
+		        	  var defer=$q.defer();
+		        	 var _URL = window.URL || window.webkitURL;
+			        	
+			        	var file=el[0].files[0];
+			        	
+			        	 var image=new Image();
+			        	 
+			        	 image.src= _URL.createObjectURL(file);
+			        	 
+			        	 image.onload=function()
+			        	 {
+			        		 if(image.width==1400 && image.height==450)
+			        			 {
+			        			 	defer.resolve();
+			        			 }else{
+			        				defer.reject();
+			        			 }
+			        	 };
+		        	 return defer.promise;
 		        	
-		        	var _URL = window.URL || window.webkitURL;
-		        	
-		        	var file=el[0].files[0];
-		        	
-		        	 var image=new Image();
-		        	 
-		        	 image.onload=function()
-		        	 {
-		        		 if(image.width!=1400 && image.height!=450)
-		        			 {
-		        			return false;
-		        			 }
-		        	 }
-		        	
-		        	image.src= _URL.createObjectURL(file);
-		         
-		        	return fileSize>100000;
 		          };
+		          
+		         
 	          };
    });
 	    }
@@ -424,13 +427,33 @@ superAdminApp.directive('validateName', function() {
 	restrict : '',
 	link : function(scope, elm, attrs, ngModel) {
 		ngModel.$validators.validateName = function(modelValue) {
-			return NAME_EXPR.test(modelValue);// ||USA_MOB_EXPR_WITH_BR.test(modelValue);
+			if(modelValue!='' && modelValue!=undefined){
+				return NAME_EXPR.test(modelValue);
+			}else{
+				return true;
+			}
 		};
 	}
 	};
 });
 
-
+superAdminApp.directive('validateSearchLink', function() {
+	var SEARCH_LINK_EXPR = /^ *([A-Za-z]+[_]{1}search)+ *$/g;
+	// var USA_MOB_EXPR_WITH_BR=/^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/;
+	return {
+	require : 'ngModel',
+	restrict : '',
+	link : function(scope, elm, attrs, ngModel) {
+		ngModel.$validators.validateSearchLink = function(modelValue) {
+			if(modelValue!='' && modelValue!=undefined){
+				return SEARCH_LINK_EXPR.test(modelValue);
+			}else{
+				return true;
+			}
+		};
+	}
+	};
+});
 
 
 

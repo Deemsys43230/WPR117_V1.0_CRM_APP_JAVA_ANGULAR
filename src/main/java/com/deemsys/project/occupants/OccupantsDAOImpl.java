@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -149,6 +150,12 @@ public class OccupantsDAOImpl implements OccupantsDAO{
 		for (Occupants occupant : occupants) {
 			this.sessionFactory.getCurrentSession().delete(occupant);
 		}
+	}
+
+	@Override
+	public Long getCountOfOccupants() {
+		// TODO Auto-generated method stub
+		return (Long) this.sessionFactory.getCurrentSession().createCriteria(Occupants.class).setProjection(Projections.count("id.reportId")).uniqueResult();
 	}
 
 	

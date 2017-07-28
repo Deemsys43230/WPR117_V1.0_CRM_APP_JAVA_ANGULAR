@@ -324,6 +324,89 @@ Long total= (Long)this.sessionFactory.getCurrentSession().createCriteria(CrashRe
 	return total;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public CrashReportsSearchResultSet searchCrashReportsOnly(
+			CrashReportSearchForm crashReportSearchForm) {
+		// TODO Auto-generated method stub
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(CrashReports.class,"c1");
+		criteria.createAlias("c1.county", "co1");
+		criteria.createAlias("c1.policeDepartment", "p1");
+		
+		if(crashReportSearchForm.getReportNumber()!=null && !crashReportSearchForm.getReportNumber().equals("")){
+			if(crashReportSearchForm.getSearchType()==0){
+				Criterion reportNumberCriterion = Restrictions.eq("reportNumber", crashReportSearchForm.getReportNumber());
+				criteria.add(reportNumberCriterion);
+			}else{
+				Criterion reportNumberCriterion = Restrictions.like("reportNumber", crashReportSearchForm.getReportNumber(),MatchMode.ANYWHERE);
+				criteria.add(reportNumberCriterion);
+			}
+		}
+		
+		if(crashReportSearchForm.getCrashDate()!=null && !crashReportSearchForm.getCrashDate().equals("")){
+			Criterion crashDateCriterion = Restrictions.eq("crashDate", CRMConstants.convertYearFormat(crashReportSearchForm.getCrashDate()));
+			criteria.add(crashDateCriterion);
+		}
+		
+		if(crashReportSearchForm.getLocation()!=null && !crashReportSearchForm.getLocation().equals("")){
+			if(crashReportSearchForm.getSearchType()==0){
+				Criterion locationCriterion = Restrictions.eq("location", crashReportSearchForm.getLocation());
+				criteria.add(locationCriterion);
+			}else{
+				Criterion locationCriterion = Restrictions.like("location", crashReportSearchForm.getLocation(),MatchMode.ANYWHERE);
+				criteria.add(locationCriterion);
+			}
+		}
+		
+		if(crashReportSearchForm.getAddedOnFromDate()!=null && !crashReportSearchForm.getAddedOnFromDate().equals("")){
+			Criterion addedDateCriterion = Restrictions.between("addedDate", CRMConstants.convertYearFormat(crashReportSearchForm.getAddedOnFromDate()), CRMConstants.convertYearFormat(crashReportSearchForm.getAddedOnToDate()));
+			criteria.add(addedDateCriterion);
+		}
+		
+		if(crashReportSearchForm.getCountyId()!=null &&!crashReportSearchForm.getCountyId().equals("")){
+			
+				Criterion countyIdCriterion = Restrictions.eq("co1.countyId", crashReportSearchForm.getCountyId());
+				criteria.add(countyIdCriterion);
+			}
+	
+		if(crashReportSearchForm.getPoliceDepartmentId()!=null&&!crashReportSearchForm.getPoliceDepartmentId().equals(""))
+			criteria.add(Restrictions.eq("p1.policeDepartmentId", crashReportSearchForm.getPoliceDepartmentId()));
+		 
+		
+		ProjectionList projectionList = Projections.projectionList();
+		
+		projectionList.add(Projections.property("c1.reportId"),"reportId");
+		projectionList.add(Projections.property("c1.reportNumber"),"reportNumber");
+		projectionList.add(Projections.property("c1.crashDate"),"crashDate");
+		projectionList.add(Projections.property("c1.location"),"location");
+		projectionList.add(Projections.property("c1.crashSeverity"),"crashSeverity");
+		projectionList.add(Projections.property("c1.noOfOccupants"),"noOfOccupants");
+		projectionList.add(Projections.property("c1.addedDate"),"addedDate");
+		projectionList.add(Projections.property("c1.addedDateTime"),"addedDateTime");
+		projectionList.add(Projections.property("c1.fileName"),"fileName");
+		projectionList.add(Projections.property("c1.status"),"status");
+		
+		// County Details
+		projectionList.add(Projections.property("co1.countyId"),"countyId");
+		projectionList.add(Projections.property("co1.name"),"countyName");
+		
+		// Police Department Id
+		projectionList.add(Projections.property("p1.policeDepartmentId"),"departmentId");
+		projectionList.add(Projections.property("p1.name"),"departmentName");
+		
+		Long totalNoOfRecords = (Long) criteria.setProjection(Projections.count("c1.reportId")).uniqueResult();
+		
+		criteria.setProjection(projectionList);
+		
+		// Set Order
+		criteria.addOrder(Order.desc("c1.addedDateTime"));
+				
+		List<CrashReportSearchList> crashReportSearchLists = criteria.setResultTransformer(new AliasToBeanResultTransformer(CrashReportSearchList.class)).setFirstResult((crashReportSearchForm.getPageNumber()-1)*crashReportSearchForm.getItemsPerPage()).setMaxResults(crashReportSearchForm.getItemsPerPage()).list();
+		
+		CrashReportsSearchResultSet crashReportsSearchResultSet = new CrashReportsSearchResultSet(totalNoOfRecords, crashReportSearchLists);
+		return crashReportsSearchResultSet;
+	}
+
 	
 
 }

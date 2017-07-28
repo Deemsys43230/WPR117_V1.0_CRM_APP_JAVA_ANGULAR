@@ -3,24 +3,23 @@
 <div class="col-md-3">
 <h3>Dashboard</h3>
 </div>
-<div class="col-md-6 " style="padding-top:20px;">
-<div flash-message="4000" show-close="true"></div>
-</div>
 </div>
 <hr>
+<div class="dashboarddiv" ><span class="fa fa-university"></span><br>
+<a class="btn btn-default" href="#/department">Police Department <span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+<h4>Total Departments: {{totalRecords.totalDepartments}}</h4>
+</div>
 <div class="dashboarddiv" >
 <span class="fa fa-users"></span><br>
 <a class="btn btn-default" href="#/accounts">Accounts <span class="glyphicon glyphicon-circle-arrow-right"></span></a>
 <h4>Total Accounts: {{totalRecords.totalAccounts}}</h4>
 </div>
-
-<div class="dashboarddiv" ><span class="fa fa-university "></span><br>
-<a class="btn btn-default" href="#/department">Police Department <span class="glyphicon glyphicon-circle-arrow-right"></span></a>
-<h4>Total Departments: {{totalRecords.totalDepartments}}</h4>
-</div>
-
 <div class="dashboarddiv"><span class="fa fa-file"></span><br>
 <a class="btn btn-default" href="#/reports">Crash Reports <span class="glyphicon glyphicon-circle-arrow-right"></span></a>
 <h4>Total Crash Reports: {{totalRecords.totalCrashReports}}</h4>
+</div>
+<div class="dashboarddiv"><span class="fa fa-user"></span><br>
+<a class="btn btn-default" href="#/occupants">Occupants <span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+<h4>Total Occupants: {{totalRecords.totalOccupants}}</h4>
 </div>
 </div>

@@ -11,7 +11,7 @@ superAdminApp.service('superAdminService',['requestHandler',function(requestHand
 
 			});
 
-		}
+		};
 	
 	
 	

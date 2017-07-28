@@ -125,4 +125,12 @@ public class CrashReportsController {
     	model.addAttribute("requestSuccess",true);
 		return "/returnPage";
 	}
+    
+    @RequestMapping(value="/User/searchCrashReportsOnly",method=RequestMethod.POST)
+   	public String getAllCrashReportsOnly(@RequestBody CrashReportSearchForm crashReportSearchForm,ModelMap model) throws Exception
+   	{
+    	model.addAttribute("crashReportsList",crashReportsService.searchCrashReportsListOnly(crashReportSearchForm));
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
 }

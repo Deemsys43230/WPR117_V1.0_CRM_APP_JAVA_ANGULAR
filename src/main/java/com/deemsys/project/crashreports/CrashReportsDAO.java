@@ -16,4 +16,5 @@ public interface CrashReportsDAO extends IGenericDAO<CrashReports>{
 	public Integer checkReportNumberExist(String reportNumber);
 	public Integer checkReportNumberExist(String reportId,String reportNumber);
 	public Long totalNumberOfCrash();
+	public CrashReportsSearchResultSet searchCrashReportsOnly(CrashReportSearchForm crashReportSearchForm);
 }

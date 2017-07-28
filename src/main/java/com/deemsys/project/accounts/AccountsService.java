@@ -20,6 +20,7 @@ import com.deemsys.project.login.PasswordEncryptor;
 import com.deemsys.project.users.UsersDAO;
 import com.deemsys.project.users.UsersForm;
 import com.deemsys.project.users.UsersService;
+import com.deemsys.project.occupants.OccupantsDAO;
 import com.deemsys.project.policeDepartment.PoliceDepartmentDAO;
 import com.deemsys.project.roles.RolesDAO;
 import com.deemsys.project.roles.RolesForm;
@@ -61,6 +62,9 @@ public class AccountsService {
 	
 	@Autowired
 	CrashReportsDAO crashReportsDAO;
+	
+	@Autowired
+	OccupantsDAO occupantsDAO;
 	
 	//Get All Entries
 	public List<AccountsForm> getAccountsList()
@@ -256,7 +260,7 @@ public class AccountsService {
 		Long totalReports=crashReportsDAO.totalNumberOfCrash();
 		Long totalDepartment=policeDepartmentDAO.totalNumberOfDepartment();
 		
-		RecordsForm recordsForm=new RecordsForm(totalAccounts, totalDepartment, totalReports);
+		RecordsForm recordsForm=new RecordsForm(totalAccounts, totalDepartment, totalReports,occupantsDAO.getCountOfOccupants());
 		return recordsForm;
 	}
 }

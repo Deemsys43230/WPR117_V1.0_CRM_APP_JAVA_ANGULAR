@@ -5,6 +5,7 @@ public class RecordsForm {
 	private Long totalAccounts;
 	private Long totalDepartments;
 	private Long totalCrashReports;
+	private Long totalOccupants;
 	public Long getTotalAccounts() {
 		return totalAccounts;
 	}
@@ -23,11 +24,18 @@ public class RecordsForm {
 	public void setTotalCrashReports(Long totalCrashReports) {
 		this.totalCrashReports = totalCrashReports;
 	}
-	public RecordsForm(Long totalAccounts, Long totalDepartments, Long totalCrashReports) {
+	public Long getTotalOccupants() {
+		return totalOccupants;
+	}
+	public void setTotalOccupants(Long totalOccupants) {
+		this.totalOccupants = totalOccupants;
+	}
+	public RecordsForm(Long totalAccounts, Long totalDepartments, Long totalCrashReports,Long totalOCccupants) {
 		super();
 		this.totalAccounts = totalAccounts;
 		this.totalDepartments = totalDepartments;
 		this.totalCrashReports = totalCrashReports;
+		this.totalOccupants = totalOCccupants;
 	}
 	public RecordsForm() {
 		super();

@@ -130,6 +130,17 @@ public class CrashReportsService {
 		return crashReportsSearchResult;
 	}
 	
+	public CrashReportsSearchResultSet searchCrashReportsListOnly(CrashReportSearchForm crashReportSearchForm) throws Exception
+	{
+		
+		CrashReportsSearchResultSet crashReportsSearchResultSet=crashReportsDAO.searchCrashReportsOnly(crashReportSearchForm);
+		for (CrashReportSearchList crashReportSearchList : crashReportsSearchResultSet.getCrashReportSearchLists()) {
+			crashReportSearchList.setFileName(crmProperties.getProperty("bucketURL")+crashReportSearchList.getDepartmentId()+crmProperties.getProperty("innerFolderName")+crashReportSearchList.getFileName());
+		}
+		
+		return crashReportsSearchResultSet;
+	}
+	
 	//Get Particular Entry
 	public CrashReportsForm getCrashReports(String reportId)
 	{

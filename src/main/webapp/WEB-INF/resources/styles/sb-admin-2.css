@@ -330,9 +330,9 @@ text-align:right;
 	 background:linear-gradient(white 50%, #B0B0B0 50%);
 	 float:left;
 	     -webkit-filter:drop-shadow(1px 1px 1px black);
-	 margin-left:30px;
+	 margin-left:20px;
 	 margin-top:20px;
-	 width: 300px;
+	 width: 250px;
 	 height:220px;
 	 text-align:center;
 	 }
@@ -673,7 +673,13 @@ height: 100%;
 	margin-top:70px;
 }
 
+.wrap{
+	word-wrap: break-word !important;
+}
 
+.wrap-breakall{
+	word-break: break-all!important;
+}
 
 
 

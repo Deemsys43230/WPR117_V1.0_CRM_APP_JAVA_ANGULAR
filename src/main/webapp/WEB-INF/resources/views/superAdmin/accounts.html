@@ -98,7 +98,7 @@
 			
 			<td>{{x.policeDepartmentName}}</td>
         
-			<td><span ng-hide="x.roleId==3" ng-switch="x.isEnable">
+			<td><span ng-switch="x.isEnable">
         <span ng-switch-when="1"><a
 						class="fa fa-unlock-alt fa-fw"
 						ng-click="enableDisable(x.accountId)" data-toggle="tooltip"
@@ -114,7 +114,7 @@
 				data-toggle="tooltip" title="Delete"
 				onmouseenter="$(this).tooltip('show')"
 				ng-click="delete(x.accountId)"></a> --> <a class="fa fa-key"
-				data-toggle="tooltip" title="Reset Password" ng-hide="x.roleId==3"
+				data-toggle="tooltip" title="Reset Password"
 				onmouseenter="$(this).tooltip('show')"
 				ng-click="resetPassword(x.accountId)"></a></td>
 </tr>
