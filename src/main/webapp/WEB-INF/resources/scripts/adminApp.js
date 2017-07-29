@@ -132,22 +132,9 @@ adminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
   .controller('authenticationController', function($rootScope, $scope, $http, $location, requestHandler) {
     	requestHandler.getRequest("getCurrentDate.json","").then(function(response){
 			 $rootScope.currentDate=response.data.currentDate;
-			
-    	});
-    })
+		});	
+ });
 
-.controller('viewDepartmentController', function($rootScope,requestHandler) {
-
-	requestHandler.getRequest("getCurrentUserPoliceDepartment.json","").then(function(response)
-			{
-		 $rootScope.policeDepartmentId=response.data.policeDepartmentForm.policeDepartmentId;
-		 console.log($rootScope.policeDepartmentId);
-	});
-	
-	
-
-
-});
 
 adminApp.directive('validateName', function() {
 	var NAME_EXPR = /^ *([a-zA-Z]+ ?)+ *$/;

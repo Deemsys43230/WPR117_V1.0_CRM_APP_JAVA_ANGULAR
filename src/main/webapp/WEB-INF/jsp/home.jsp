@@ -32,7 +32,7 @@
 	<div class="container" style="width:92%;">
 		<img src="${departmentBannerImage}" style="width:100%;"/>
 	</div>
-	<body ng-app="adminApp" ng-cloak ng-controller="viewDepartmentController">
+	<body ng-app="adminApp" ng-cloak>
 	<div class="col-md-12">
 	<a href="j_spring_security_logout" class="pull-right logout-tag"><i class="fa fa-sign-out fa-fw"></i>&nbsp;Logout</a>&nbsp;&nbsp;
 	<a href="#/changepassword" class="pull-right logout-tag"><i class="fa fa-key fa-fw"></i>&nbsp;Change Password</a>

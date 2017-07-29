@@ -24,6 +24,9 @@ public class PoliceDepartmentForm {
 	private Integer isEnabled;
 	private String  url;
 	
+	// View Links
+	private String viewLoginLink;
+	private String viewSearchLink;
 	
 	public String getUrl() {
 		return url;
@@ -115,8 +118,24 @@ public class PoliceDepartmentForm {
 		this.isEnabled = isEnabled;
 	}
 
+	public String getViewLoginLink() {
+		return viewLoginLink;
+	}
+
+	public void setViewLoginLink(String viewLoginLink) {
+		this.viewLoginLink = viewLoginLink;
+	}
+
+	public String getViewSearchLink() {
+		return viewSearchLink;
+	}
+
+	public void setViewSearchLink(String viewSearchLink) {
+		this.viewSearchLink = viewSearchLink;
+	}
+
 	public PoliceDepartmentForm(Integer policeDepartmentId, Integer countyId,String countyName, String name,
-			String code, String loginLink, String searchLink, String createdDateTime, Integer status,Integer isEnabled,String url) {
+			String code, String loginLink, String searchLink, String createdDateTime, Integer status,Integer isEnabled,String url, String viewLoginLink, String viewSearchLink) {
 		super();
 		this.policeDepartmentId = policeDepartmentId;
 		this.countyId = countyId;
@@ -129,6 +148,8 @@ public class PoliceDepartmentForm {
 		this.isEnabled=isEnabled;
 		this.countyName=countyName;
 		this.url=url;
+		this.viewLoginLink=viewLoginLink;
+		this.viewSearchLink=viewSearchLink;
 	}
 
 	public PoliceDepartmentForm() {

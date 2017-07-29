@@ -578,7 +578,6 @@ $scope.department={
 $scope.onNameChange=function()
 
 {
-	$scope.department.code="RR"+"_";
 	
 	if($scope.department.name=="" || $scope.department.name==undefined)
 		{
@@ -587,8 +586,9 @@ $scope.onNameChange=function()
 		}
 	else
 		{
-		$scope.department.loginLink=$scope.department.name+"_login";
-		$scope.department.searchLink=$scope.department.name+"_search";
+		var ind=$scope.department.name.split(" ");
+		$scope.department.loginLink=ind[0];
+		$scope.department.searchLink=ind[0]+"_search";
 		
 		}
 }

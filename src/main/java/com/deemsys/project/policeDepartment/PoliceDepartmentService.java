@@ -62,12 +62,14 @@ public class PoliceDepartmentService {
 
 		for (PoliceDepartment policeDepartment : policeDepartments) {
 			// TODO: Fill the List
+			String crmDomainLink=crmProperties.getProperty("CRMAppDomain");
 			PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(
 					policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(),
 					policeDepartment.getCounty().getName(), policeDepartment.getName(), policeDepartment.getCode(),
 					policeDepartment.getLoginLink(), policeDepartment.getSearchLink(),
 					CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
-					policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null);
+					policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null,crmDomainLink+policeDepartment.getLoginLink(),
+					crmDomainLink+policeDepartment.getSearchLink());
 			policeDepartmentForms.add(policeDepartmentForm);
 		}
 
@@ -86,10 +88,10 @@ public class PoliceDepartmentService {
 		String crmDomainLink=crmProperties.getProperty("CRMAppDomain");
 		PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 				policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
-				policeDepartment.getName(), policeDepartment.getCode(), crmDomainLink+policeDepartment.getLoginLink(),
-				crmDomainLink+policeDepartment.getSearchLink(),
-				CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
-				policeDepartment.getStatus(), policeDepartment.getIsEnabled(),url);
+				policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(),
+				policeDepartment.getSearchLink(),CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
+				policeDepartment.getStatus(), policeDepartment.getIsEnabled(),url,crmDomainLink+policeDepartment.getLoginLink(),
+				crmDomainLink+policeDepartment.getSearchLink());
 
 		// End
 
@@ -108,10 +110,11 @@ public class PoliceDepartmentService {
 			for (PoliceDepartment policeDepartment : policeDepartments) {
 				policeDepartmentForm = new PoliceDepartmentForm(policeDepartment.getPoliceDepartmentId(),
 						policeDepartment.getCounty().getCountyId(), policeDepartment.getCounty().getName(),
-						policeDepartment.getName(), policeDepartment.getCode(), crmDomainLink+policeDepartment.getLoginLink(),
-						crmDomainLink+policeDepartment.getSearchLink(),
+						policeDepartment.getName(), policeDepartment.getCode(), policeDepartment.getLoginLink(),
+						policeDepartment.getSearchLink(),
 						CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
-						policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null);
+						policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null,crmDomainLink+policeDepartment.getLoginLink(),
+						crmDomainLink+policeDepartment.getSearchLink());
 			}
 
 			return policeDepartmentForm;

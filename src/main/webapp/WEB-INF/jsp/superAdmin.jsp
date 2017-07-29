@@ -108,11 +108,11 @@
     <a href="#/occupants" >
     <i class="fa fa-user fa-fw fa-2x" ></i>
     <span class="nav-text">Occupants</span></a></li>
-    
+<!--     
 <li class="{{activeClass.settings}}">
     <a href="#/settings" >
     <i class="fa fa-gear fa-fw fa-2x" ></i>
-    <span class="nav-text">Settings</span></a></li>
+    <span class="nav-text">Settings</span></a></li> -->
 
 
 </ul>
