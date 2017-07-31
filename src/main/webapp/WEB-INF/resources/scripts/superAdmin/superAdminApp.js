@@ -279,13 +279,63 @@ superAdminApp.controller('InitialController', [
       $rootScope.$route=$route;
       $rootScope.$routeParams=$routeParams;
       $rootScope.$on('$routeChangeSuccess',function(event,current,previous){
-    	 // alert("route change success");
+    	  /*alert("route change success");*/
           if(previous!=undefined){
               $rootScope.previousState=previous.$$route.originalPath;
           }
       });
       requestHandler.getRequest("getCurrentDate.json","").then(function(response){
   		 $rootScope.currentDate=response.data.currentDate;
+  		 console.log($rootScope.currentDate);
        });
+     
+     /*requestHandler.getRequest("getCurrentRole.json","").then(function(response)
+    		  {
+   		 $rootScope.currentUser=response.data.currentRole;
+   		 
+          console.log($rootScope.currentUser);
+   		
+        });*/
+      
+      
+      var authenticate = function() {
+			requestHandler
+					.getRequest("getCurrentRole.json", "")
+					.then(
+							function(response)
+							{
+								if (response.data.role == "ROLE_ADMIN") {
+									$rootScope.authenticated = true;
+									$rootScope.isAdmin = 1;
+									$rootScope.username = response.data.username;
+								} else if (response.data.role == "ROLE_USER") {
+									$rootScope.authenticated = true;
+									$rootScope.isAdmin = 2;
+									$rootScope.username = response.data.username;
+								} 
+								else if (response.data.role == "ROLE_SUPER_ADMIN")
+								{
+									$rootScope.authenticated = true;
+									$rootScope.isAdmin = 3;
+									$rootScope.username = response.data.username;
+									
+								} 
+								console.log($rootScope.username);
+								
+							});
+							
+		};
+		authenticate();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+      
+      
   }
 ]);

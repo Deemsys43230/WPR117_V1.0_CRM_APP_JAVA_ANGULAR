@@ -113,6 +113,11 @@ return 1;
 		
 		return 1;
 	}
+
+	public int checkKeyValue(String settingKey, Integer settingId) 
+	{
+ return settingsDAO.checkKeyValue(settingKey,settingId);
+	}
 	
 	
 	

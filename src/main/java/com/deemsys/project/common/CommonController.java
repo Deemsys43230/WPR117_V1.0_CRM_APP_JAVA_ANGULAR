@@ -60,7 +60,10 @@ public class CommonController {
     @RequestMapping(value="getCurrentRole",method=RequestMethod.GET)
     public String getCurrentRole(ModelMap model){
     	
+    	
+    	
     	try {
+    		
 			model.addAttribute("role",loginService.getCurrentRole());
 			model.addAttribute("requestSuccess", true);
 		} catch (Exception e) {
@@ -70,6 +73,17 @@ public class CommonController {
 		}
     	return "";
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @RequestMapping(value="getCurrentDate",method=RequestMethod.GET)
     public String getCurrentDate(ModelMap model){

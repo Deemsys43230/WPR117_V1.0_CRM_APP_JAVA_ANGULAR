@@ -275,7 +275,7 @@ superAdminApp.controller("changePasswordController",['$scope','$http','requestHa
 		
 		requestHandler.postRequest("User/changePassword.json?password="+password).then(function(success)
 		{
-			window.location.href="#/accounts";
+			window.location.href="#/dashboard";
 			Flash.create('success',"Password Updated Successfully!");
 			$(window).scrollTop(0);
 		});

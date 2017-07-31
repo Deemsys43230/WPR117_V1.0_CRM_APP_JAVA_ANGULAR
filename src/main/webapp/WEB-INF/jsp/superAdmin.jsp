@@ -47,13 +47,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <p class="navbar-brand">Crash Reports Upload - <mark>Admin Interface</mark></p>
+                <p class="navbar-brand" >Crash Reports Upload - <mark>Admin Interface</mark></p>
                 
             </div>
             <!-- /.navbar-header -->
  
             <ul class="nav navbar-top-links navbar-right">
-  <!-- /.dropdown --><span style="color:white;align:right;">sadmin</span>
+           
+  <!-- /.dropdown -->
+  <span style="color:red;align:right;">{{$root.username}}</span>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown">
                     
@@ -63,6 +65,7 @@
                        
                         <li><a href="#/changePassword"><i class="fa fa-gear fa-fw"></i>Change Password</a>
                         </li>
+                         
                         <li class="divider"></li>
                         <li><a href="j_spring_security_logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
@@ -108,11 +111,11 @@
     <a href="#/occupants" >
     <i class="fa fa-user fa-fw fa-2x" ></i>
     <span class="nav-text">Occupants</span></a></li>
-<!--     
+   
 <li class="{{activeClass.settings}}">
     <a href="#/settings" >
     <i class="fa fa-gear fa-fw fa-2x" ></i>
-    <span class="nav-text">Settings</span></a></li> -->
+    <span class="nav-text">Settings</span></a></li> 
 
 
 </ul>

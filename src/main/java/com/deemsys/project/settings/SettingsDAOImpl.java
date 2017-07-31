@@ -3,13 +3,16 @@ package com.deemsys.project.settings;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.deemsys.project.common.BasicQuery;
+import com.deemsys.project.entity.PoliceDepartment;
 import com.deemsys.project.entity.Settings;
+import com.deemsys.project.entity.Users;
 
 /**
  * 
@@ -147,6 +150,31 @@ public class SettingsDAOImpl implements SettingsDAO{
 		return (Settings) this.sessionFactory.getCurrentSession().createCriteria(Settings.class).add(Restrictions.eq("settingId", settingId)).uniqueResult();
 	}
 
+	@Override
+	public Integer checkKeyValue(String settingKey, Integer settingId)
+	{
+		
+		
+	Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(Settings.class);
 	
+	criteria.add(Restrictions.eq("settingKey", settingKey)).uniqueResult();
+	
+	if(settingId!=null)
+	{
+		criteria.add(Restrictions.ne("settingId", settingId));
+	}
+	
+Settings settings=(Settings) criteria.uniqueResult();
+	
+	if(settings!=null)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+		
+	}
 
 }

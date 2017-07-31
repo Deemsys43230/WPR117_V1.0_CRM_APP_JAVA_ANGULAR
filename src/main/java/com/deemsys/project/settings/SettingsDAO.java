@@ -11,4 +11,7 @@ import com.deemsys.project.entity.Settings;
 public interface SettingsDAO extends IGenericDAO<Settings>
 {
 public Settings getSettingsById(Integer settingId);
+
+public Integer checkKeyValue(String settingKey, Integer settingId);
+
 }

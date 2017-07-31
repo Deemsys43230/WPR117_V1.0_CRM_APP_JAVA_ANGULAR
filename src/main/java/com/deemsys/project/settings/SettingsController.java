@@ -67,5 +67,19 @@ public class SettingsController {
     	model.addAttribute("requestSuccess",true);
    		return "/returnPage";
    	}
+    
+    
+    @RequestMapping(value="/checkKeyValue",method=RequestMethod.POST)
+   	public String checkKeyValue(@RequestParam("settingKey") String settingKey,@RequestParam("id") Integer settingId,ModelMap model)
+   	{
+    	
+    	
+    	model.addAttribute("isCorrect",settingsService.checkKeyValue(settingKey,settingId));
+   		return "/returnPage";
+   	}
+    
+    
+    
+    
 	
 }

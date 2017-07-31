@@ -38,6 +38,8 @@ superAdminApp.directive("checkUsername", function ($q, $timeout,requestHandler) 
 
 });
 
+
+
 //directive for converting null to empty string from select box
 
 superAdminApp.directive('fix', function() {
@@ -92,6 +94,65 @@ superAdminApp.directive("checkPassword", function ($q, $timeout,requestHandler) 
     };
 
 });
+
+
+superAdminApp.directive("checkKeyvalue", function ($q, $timeout,requestHandler) {
+    var CheckKeyValueExists = function (isNew)
+    {
+        if(isNew==1)
+            return true;
+        else
+            return false;
+    };
+    return {
+        restrict: "A",
+        require: "ngModel",
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$asyncValidators.checkKeyvalue = function (modelValue) {
+                var defer = $q.defer();
+                $timeout(function () {
+                    var isNew;
+                    
+                    if(scope.settingId==undefined)
+                	{
+                	scope.settingId="";
+                	}
+                    
+                    var sendRequest=requestHandler.postRequest("checkKeyValue.json?settingKey="+modelValue+"&id="+scope.settingId,0).then(function(results)
+                    		{
+                        isNew=results.data.isCorrect;
+                    });
+
+                    sendRequest.then(function(){
+
+                        if (CheckKeyValueExists(!isNew))
+                        {
+                        		defer.resolve();
+                        }
+                        else
+                        {
+                            
+                        	defer.reject();
+                            
+                        } 
+                    });
+                    isNew = false;
+                }, 500);
+
+                return defer.promise;
+            }
+        }
+    };
+
+});
+
+
+
+
+
+
+
+
 
 
 superAdminApp.directive("checkDepartmentname", function ($q, $timeout,requestHandler)
