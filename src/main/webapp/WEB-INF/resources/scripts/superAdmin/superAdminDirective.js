@@ -12,9 +12,9 @@ superAdminApp.directive("checkUsername", function ($q, $timeout,requestHandler) 
         require: "ngModel",
         link: function (scope, element, attributes, ngModel) {
             ngModel.$asyncValidators.checkUsername = function (modelValue) {
-                var defer = $q.defer();
+            	 var defer = $q.defer();
                 $timeout(function () {
-                    var isNew;
+                    var isNew=0;
                     var sendRequest=requestHandler.postRequest("User/checkUserNameExists.json?username="+modelValue+"&id="+scope.accountId,0).then(function(results){
                         isNew=results.data.isCorrect;
                     });
@@ -29,7 +29,7 @@ superAdminApp.directive("checkUsername", function ($q, $timeout,requestHandler) 
                         } 
                     });
                     isNew = false;
-                }, 500);
+                }, 100);
 
                 return defer.promise;
             }
@@ -86,7 +86,7 @@ superAdminApp.directive("checkPassword", function ($q, $timeout,requestHandler) 
                         } 
                     });
                     isNew = false;
-                }, 500);
+                }, 100);
 
                 return defer.promise;
             }
@@ -277,7 +277,6 @@ link: function (scope, element, attributes, ngModel) {
         	{
         	scope.policeDepartmentId="";
         	}
-            
             var sendRequest=requestHandler.postRequest("/checkDepartmentLogin.json?login="+modelValue+"&id="+scope.policeDepartmentId,0).then(function(results)
                     		{
                         isNew=results.data.isCorrect;
@@ -490,6 +489,23 @@ superAdminApp.directive('validateName', function() {
 		ngModel.$validators.validateName = function(modelValue) {
 			if(modelValue!='' && modelValue!=undefined){
 				return NAME_EXPR.test(modelValue);
+			}else{
+				return true;
+			}
+		};
+	}
+	};
+});
+
+superAdminApp.directive('validateUsername', function() {
+	var USER_NAME_EXPR = /^ *([a-zA-Z0-9@_]+ ?)+ *$/;
+	return {
+	require : 'ngModel',
+	restrict : '',
+	link : function(scope, elm, attrs, ngModel) {
+		ngModel.$validators.validateUsername = function(modelValue) {
+			if(modelValue!='' && modelValue!=undefined){
+				return USER_NAME_EXPR.test(modelValue);
 			}else{
 				return true;
 			}

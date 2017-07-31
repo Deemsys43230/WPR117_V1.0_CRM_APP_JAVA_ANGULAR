@@ -263,4 +263,16 @@ public class AccountsService {
 		RecordsForm recordsForm=new RecordsForm(totalAccounts, totalDepartment, totalReports,occupantsDAO.getCountOfOccupants());
 		return recordsForm;
 	}
+	
+	public List<AccountsForm> getAccountsByPoliceDepartmentId(Integer policeDepartmentId){
+		List<AccountsForm> accountsForms = new ArrayList<AccountsForm>();
+		List<Accounts> accounts = accountsDAO.getAccountsByDepartmentId(policeDepartmentId);
+		for (Accounts account : accounts) {
+			Users users = usersDAO.getByAccountId(account.getAccountId());
+			AccountsForm accountsForm=new AccountsForm(account.getAccountId(), policeDepartmentId, users.getUsername(), users.getRoles().getRoleId(), account.getFirstName(), account.getLastName(), account.getMiddleName(), account.getEmailId(), account.getPhoneNumber(), CRMConstants.convertUSAFormatWithTime(account.getAddedDateTime()), account.getStatus(),users.getIsEnable(), account.getPoliceDepartment().getName());
+			accountsForms.add(accountsForm);
+		}
+		
+		return accountsForms;
+	}
 }

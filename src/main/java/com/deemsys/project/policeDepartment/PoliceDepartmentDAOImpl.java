@@ -134,10 +134,11 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PoliceDepartment> getActiveList() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class).add(Restrictions.and(Restrictions.eq("isEnabled", 1),Restrictions.ne("policeDepartmentId", 1))).list();
 	}
 
 	@Override

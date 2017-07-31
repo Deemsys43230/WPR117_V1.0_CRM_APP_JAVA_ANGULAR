@@ -112,6 +112,13 @@ public class PoliceDepartmentController
    		return "/returnPage";
    	}
 	
+    @RequestMapping(value="/getActivePoliceDepartments",method=RequestMethod.GET)
+   	public String getActivePoliceDepartments(ModelMap model)
+   	{
+    	model.addAttribute("policeDepartmentForms",policeDepartmentService.getActivePoliceDepartmentList());
+    	model.addAttribute("requestSuccess",true);
+   		return "/returnPage";
+   	}
     
     @RequestMapping(value="/getCurrentUserPoliceDepartment",method=RequestMethod.GET)
    	public String getCurrentUserPoliceDepartment(ModelMap model)

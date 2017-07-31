@@ -174,7 +174,7 @@ superAdminApp.controller("addAccountsController",['$scope','$http','requestHandl
 	//get PoliceDepartmentList     (Police Department.class)
 	$scope.getPoliceDepartmentList=function()
 	{
-		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
+		requestHandler.getRequest("getActivePoliceDepartments.json").then(function(response)
 				{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
 			console.log($scope.policeDepartmentList);
@@ -233,7 +233,7 @@ superAdminApp.controller("editAccountsController",['$scope','$http','requestHand
 	//get PoliceDepartmentList  (Police Department.class)
 	$scope.getPoliceDepartmentList=function()
 	{
-		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
+		requestHandler.getRequest("getActivePoliceDepartments.json").then(function(response)
 				{
 			$scope.policeDepartmentList=response.data.policeDepartmentForms;
 			console.log($scope.policeDepartmentList);
@@ -319,8 +319,6 @@ requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 	{
 
 	$scope.countyList=response.data.countyForms;
-
-	
 });
 	
 }
@@ -347,17 +345,6 @@ $scope.deleteDepartment=function(id)
 			Flash.create('success',"Department Deleted Successfully!");
 			
 			$(window).scrollTop(0);	
-			$scope.getPoliceDepartmentList=function()
-			{
-			requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
-				{
-			$scope.policeDepartmentList=response.data.policeDepartmentForms;
-			
-
-				});
-				
-			}
-
 			$scope.getPoliceDepartmentList();
 
 			    });
@@ -545,20 +532,6 @@ requestHandler.getRequest("User/getAllCountys.json").then(function(response)
 	//calling getcountyList function
 	$scope.getCountyList();
 
-	//get PoliceDepartmentList
-	$scope.getPoliceDepartmentList=function()
-	{
-		requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
-				{
-			$scope.policeDepartmentList=response.data.policeDepartmentForms;
-			console.log($scope.policeDepartmentList);
-				});
-		
-	}
-	
-	//calling getpoliceDepartmentList function
-	$scope.getPoliceDepartmentList();
-	
 	//get department by id
 requestHandler.getRequest("/getPoliceDepartment.json?id="+$scope.policeDepartmentId).then(function(response)
 {
@@ -635,14 +608,14 @@ $scope.addDepartment=function(department)
 if($scope.policeDepartmentFile!=undefined&&$scope.policeDepartmentFile!="")
 	{
 	
-requestHandler.postFileUpdate("uploadPoliceDepartment.json",$scope.policeDepartmentId,"policeDepartmentId",$scope.policeDepartmentFile,"policeDepartmentFile").then(function(response)
-{
-	console.log("File Updated");
-	window.location.href="#/department";
-	Flash.create('success',"Department Updated Successfully!");
-	$(window).scrollTop(0);
-	
-});
+	requestHandler.postFileUpdate("uploadPoliceDepartment.json",$scope.policeDepartmentId,"policeDepartmentId",$scope.policeDepartmentFile,"policeDepartmentFile").then(function(response)
+	{
+		console.log("File Updated");
+		window.location.href="#/department";
+		Flash.create('success',"Department Updated Successfully!");
+		$(window).scrollTop(0);
+		
+	});
 	}else{
 		window.location.href="#/department";
 		Flash.create('success',"Department Updated Successfully!");
@@ -652,19 +625,6 @@ requestHandler.postFileUpdate("uploadPoliceDepartment.json",$scope.policeDepartm
 
 });
 
-
-$scope.getPoliceDepartmentList=function()
-{
-requestHandler.getRequest("getAllPoliceDepartments.json").then(function(response)
-	{
-$scope.policeDepartmentList=response.data.policeDepartmentForms;
-});
-
-
-}
-
-//calling getPoliceDepartmentList function
-$scope.getPoliceDepartmentList();
 
 }
 

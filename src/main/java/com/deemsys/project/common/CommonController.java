@@ -163,7 +163,7 @@ public class CommonController {
  	@RequestMapping(value="/logout",method=RequestMethod.GET)
    	public String logout(HttpServletRequest request,ModelMap model)
    	{
- 		model.addAttribute("policeDepartmentForms",policeDepartmentService.getPoliceDepartmentList());
+ 		model.addAttribute("policeDepartmentForms",policeDepartmentService.getActivePoliceDepartmentList());
        	model.addAttribute("Success",true);
         return "/ohio-main";
    	}
@@ -171,7 +171,7 @@ public class CommonController {
  	 @RequestMapping(value={"/ohio"},method=RequestMethod.GET)
  	public String getIndexMain(ModelMap model)
  	{
- 		model.addAttribute("policeDepartmentForms",policeDepartmentService.getPoliceDepartmentList());
+ 		model.addAttribute("policeDepartmentForms",policeDepartmentService.getActivePoliceDepartmentList());
      	model.addAttribute("Success",true);
  		return "/ohio-main";
  	}

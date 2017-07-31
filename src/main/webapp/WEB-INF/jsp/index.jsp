@@ -44,8 +44,9 @@
 	<section id="services">
 		<div class="container">
 			<div class="col-md-6">
-			<p class="brown-text">This page is for the Police Department officials to upload
+			<p class="brown-text userDiv" style="display: none;">This page is for the Police Department officials to upload
 				crash reports. (Sign in required)</p>
+			<p class="brown-text adminDiv" style="display: none;">Super Admin Portal</p>
 				<%--  <sec:authorize access="isAuthenticated()">
     				<script>
     					window.location.href=window.location.origin+"/CRM/home";
@@ -55,7 +56,7 @@
 		</div>
 		
 				<div class="col-md-6 login-form">
-						<h4>Sign In <span class="pull-right"><a href="/CRM/ohio" class="btn btn-default"><i class="fa fa-reply"> Back</i></a></span></h4>
+						<h4 class="userDiv" style="display: none;">Sign In <span class="pull-right"><a href="/CRM/ohio" class="btn btn-default"><i class="fa fa-reply"> Back</i></a></span></h4>
 						<hr/>
 						<c:if test="${not empty param['error']}">
 		                            <div style="color:#FF0000;padding-left:20px;"><i class="fa fa-exclamation-triangle"></i>&nbsp;${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}<br/><br/></div>
@@ -77,7 +78,7 @@
                                 <input type="submit" name="submit" onclick="return checkValidation()" value="Sign In" class="btn-send">
                     	</form>
 			</div>
-			<div class="col-md-12" style="padding:20px;">
+			<div class="col-md-12 userDiv" style="padding:20px;display: none;">
 			<p class="brown-text">Not what you are looking for?
 			<a href="/CRM">Click Here</a> to search and download your crash reports.</p>
 			</div> 
@@ -113,40 +114,6 @@
 	</div>
 
 	
-	
-	<script>
-	if(location.search=='?sessionout'){
-		document.getElementById('sessionout').style.display = 'inline';
-	}else{
-		document.getElementById('sessionout').style.display = 'none';
-	}
-	
-	function checkValidation(){
-		var username=document.getElementById("username").value;
-		var password=document.getElementById("password").value;
-		
-		document.getElementById("username_error").innerText="";
-		document.getElementById("password_error").innerText="";
-		
-		var error=false;
-		if(username==""){
-			error=true;
-			document.getElementById("username_error").innerText="Please Enter Username";
-		}
-		if(password==""){
-			error=true;
-			document.getElementById("password_error").innerText="Please Enter Password";
-		}
-		
-		if(error){
-			return false;
-		}else{
-			return true;
-		}
-	}
-	</script>
-	
-	
 	<!-- JS -->
 	<script type="text/javascript" src="resources/js/jquery.min.js"></script><!-- jQuery -->
 	<script type="text/javascript" src="resources/js/bootstrap.min.js"></script><!-- Bootstrap -->
@@ -175,5 +142,47 @@
     <script src="resources/angular/angular-flash/angular-flash.min.js"></script>
      <!-- dirPagination -->
     <script src="resources/angular/angular-utils-pagination/dirPagination.js"></script> 
+    
+    	<script>
+	if(location.search=='?sessionout'){
+		document.getElementById('sessionout').style.display = 'inline';
+	}else{
+		document.getElementById('sessionout').style.display = 'none';
+	}
+	
+	var policeDepartmentId=document.getElementById('department').value;
+	if(policeDepartmentId==1){
+		$(".userDiv").css({"display":"none"});
+		$(".adminDiv").css({"display":"block"});
+	}else{
+		$(".userDiv").css({"display":"block"});
+		$(".adminDiv").css({"display":"none"});
+	}
+	
+	function checkValidation(){
+		var username=document.getElementById("username").value;
+		var password=document.getElementById("password").value;
+		
+		document.getElementById("username_error").innerText="";
+		document.getElementById("password_error").innerText="";
+		
+		var error=false;
+		if(username==""){
+			error=true;
+			document.getElementById("username_error").innerText="Please Enter Username";
+		}
+		if(password==""){
+			error=true;
+			document.getElementById("password_error").innerText="Please Enter Password";
+		}
+		
+		if(error){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	</script>
+	
 </body>
 </html>

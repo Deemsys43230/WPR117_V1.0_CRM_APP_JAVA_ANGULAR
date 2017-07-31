@@ -172,4 +172,11 @@ public class AccountsDAOImpl implements AccountsDAO{
 	return total;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Accounts> getAccountsByDepartmentId(Integer policeDepartmentId) {
+		// TODO Auto-generated method stub
+		return this.sessionFactory.getCurrentSession().createCriteria(Accounts.class).add(Restrictions.eq("policeDepartment.policeDepartmentId", policeDepartmentId)).list();
+	}
+
 }

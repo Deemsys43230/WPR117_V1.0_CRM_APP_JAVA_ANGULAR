@@ -108,7 +108,7 @@
 						
 			</span> <a class="fa fa-edit fa-fw" href="#/accounts-edit/{{x.accountId}}"
 				data-toggle="tooltip" title="Edit"
-				onmouseenter="$(this).tooltip('show')"></a><!--  <a class="fa fa-trash"
+				onmouseenter="$(this).tooltip('show')" ng-show="x.isEnable==1"></a><!--  <a class="fa fa-trash"
 				data-toggle="tooltip" title="Delete"
 				onmouseenter="$(this).tooltip('show')"
 				ng-click="delete(x.accountId)"></a> --> <a class="fa fa-key"

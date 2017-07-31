@@ -53,13 +53,15 @@
 <label>User Name <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-  <input type="text" class="form-control" placeholder="User Name" ng-model="account.username" name="userName" ng-disabled="disableUsername" maxlength="45"  validate-name check-username required>
+  <input type="text" class="form-control" placeholder="User Name" ng-model="account.username" name="userName" ng-disabled="disableUsername" maxlength="45"  validate-username check-username required>
 </div>
  <div id="error-container">
 						<span ng-show="form.userName.$dirty">
 							<span ng-cloak ng-show="form.userName.$error.required">Please
 								Enter User Name</span>
-							<span ng-cloak ng-show="!form.userName.$error.required&&form.userName.$error.checkUsername">User Name is already taken</span>
+							<span ng-cloak ng-show="!form.userName.$error.required&&form.userName.$error.validateUsername">
+								Enter Valid User Name (Accepts only Alphabet and Numbers @ # _)</span>
+							<span ng-cloak ng-show="!form.userName.$error.required&&!form.userName.$error.validateUsername&&form.userName.$error.checkUsername">User Name is already taken</span>
 							
 						</span>
 					</div> 

@@ -16,12 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.deemsys.project.AWS.AWSFileUpload;
+import com.deemsys.project.accounts.AccountsDAO;
+import com.deemsys.project.accounts.AccountsForm;
+import com.deemsys.project.accounts.AccountsService;
 import com.deemsys.project.common.CRMConstants;
 import com.deemsys.project.common.CRMProperties;
 import com.deemsys.project.county.CountyDAO;
 import com.deemsys.project.entity.Accounts;
 import com.deemsys.project.entity.County;
 import com.deemsys.project.entity.PoliceDepartment;
+import com.deemsys.project.entity.Users;
+import com.deemsys.project.users.UsersDAO;
 
 /**
  * 
@@ -50,7 +55,11 @@ public class PoliceDepartmentService {
 	@Autowired
 	CRMProperties crmProperties;
 	
+	@Autowired
+	AccountsDAO accountsDAO;
 	
+	@Autowired
+	UsersDAO usersDAO;
 	
 	// Get All Entries
 	public List<PoliceDepartmentForm> getPoliceDepartmentList() {
@@ -76,6 +85,29 @@ public class PoliceDepartmentService {
 		return policeDepartmentForms;
 	}
 
+	public List<PoliceDepartmentForm> getActivePoliceDepartmentList() {
+		List<PoliceDepartmentForm> policeDepartmentForms = new ArrayList<PoliceDepartmentForm>();
+
+		List<PoliceDepartment> policeDepartments = new ArrayList<PoliceDepartment>();
+		
+		policeDepartments = policeDepartmentDAO.getActiveList();
+
+		for (PoliceDepartment policeDepartment : policeDepartments) {
+			// TODO: Fill the List
+			String crmDomainLink=crmProperties.getProperty("CRMAppDomain");
+			PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(
+					policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(),
+					policeDepartment.getCounty().getName(), policeDepartment.getName(), policeDepartment.getCode(),
+					policeDepartment.getLoginLink(), policeDepartment.getSearchLink(),
+					CRMConstants.convertUSAFormatWithTime(policeDepartment.getCreatedDateTime()),
+					policeDepartment.getStatus(), policeDepartment.getIsEnabled(), null,crmDomainLink+policeDepartment.getLoginLink(),
+					crmDomainLink+policeDepartment.getSearchLink());
+			policeDepartmentForms.add(policeDepartmentForm);
+		}
+
+		return policeDepartmentForms;
+	}
+	
 	// Get Particular Entry
 	public PoliceDepartmentForm getPoliceDepartment(Integer policeDepartmentId) {
 		PoliceDepartment policeDepartment = policeDepartmentDAO.getPoliceDepartmentById(policeDepartmentId);
@@ -210,9 +242,23 @@ public class PoliceDepartmentService {
 		} else {
 			policeDepartment.setIsEnabled(1);
 		}
-
 		policeDepartmentDAO.update(policeDepartment);
 
+		List<Accounts> accounts = accountsDAO.getAccountsByDepartmentId(policeDepartmentId);
+		for (Accounts account : accounts) {
+			Users users = usersDAO.getByAccountId(account.getAccountId());
+			if(users.getIsEnable()==1){
+				account.setStatus(0);
+				users.setIsEnable(0);
+			}else{
+				account.setStatus(1);
+				users.setIsEnable(1);
+			}
+			accountsDAO.update(account);
+			
+			usersDAO.update(users);
+		}
+		
 		return 1;
 
 	}
