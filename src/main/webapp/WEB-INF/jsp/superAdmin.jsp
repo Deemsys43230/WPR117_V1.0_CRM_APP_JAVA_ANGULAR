@@ -55,7 +55,7 @@
             <ul class="nav navbar-top-links navbar-right">
            
   <!-- /.dropdown -->
-  <span style="color:red;align:right;">{{$root.username}}</span>
+  <span style="color:white;align:right;">{{$root.currentUser}}</span>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown">
                     

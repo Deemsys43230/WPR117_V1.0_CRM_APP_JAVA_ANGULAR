@@ -16,39 +16,62 @@ $scope.getSettingsList=function()
 		
 		$scope.settingsList=response.data.settingsForms;
 		
-		/*console.log($scope.settingsList);*/
+		
 });
 	
 }
-
-
 $scope.getSettingsList();
 
 //add property function
 $scope.addSetting=function()
 {
+	
 $('#addModal').modal({animation:true});
+
+$('#addModal').on('hidden.bs.modal', function ()
+		{
+    $(this).find('form').trigger('reset');
+})
 	
 $scope.buttonText="Add";
 
 $scope.heading="Add Property";
 
 
+
 	$scope.addKey=function()
 	{
-		requestHandler.postRequest("saveUpdateSettings.json",$scope.settings).then(function(response)
+		$scope.settingId=0;
+		$scope.existError=false;
+
+requestHandler.postRequest("checkKeyValue.json?settingKey="+$scope.settings.settingKey+"&id="+$scope.settingId).then(function(response)
 				{
+	if(response.data.isCorrect==1)
+				{
+$scope.existError=true;
+}
+else
+{
+requestHandler.postRequest("saveUpdateSettings.json",$scope.settings).then(function(response)
+						{
+	            
+	         $('#addModal').modal('hide');
+	
+		Flash.create('success',"New Key Has Been Added!");
+					
+					$(window).scrollTop(0);
+					
+					$scope.getSettingsList();
+					
+						});
+		}
 			
-			console.log($scope.settings);
+				});
 			
-			Flash.create('success',"New Key Has Been Added!");
-			
-			$(window).scrollTop(0);
-			
-			$scope.getSettingsList();
-			
-			});
+
 	}
+	
+	
 }
 
 //edit property function
@@ -74,24 +97,36 @@ requestHandler.getRequest("getSettings.json?id="+$scope.settingId).then(function
 
 
 
-	$scope.addKey=function()
+$scope.addKey=function()
 	{
+$scope.existError=false;
+
+requestHandler.postRequest("checkKeyValue.json?settingKey="+$scope.settings.settingKey+"&id="+$scope.settingId).then(function(response)
+						{
+if(response.data.isCorrect==1)
+        {
+		$scope.existError=true;
+		}
+		else
+		{	
 	
 		requestHandler.postRequest("saveUpdateSettings.json",$scope.settings).then(function(response)
 				{
 			
 			console.log($scope.settings);
 			
+			$('#addModal').modal('hide');
 			
 			Flash.create('success',"Property Has Been updated!");
 
 			$(window).scrollTop(0);
 			
 			$scope.getSettingsList();
-			
+				
 			
 				});
-}
+		}
+});
 }
 
 
@@ -109,13 +144,14 @@ $scope.delete=function(id)
 				{
 			$('#deleteModal').modal('hide');
 			
-			Flash.create('success',"Property Has Been Deleted Successfully!");
+			Flash.create('success',"Property Has Been Deleted!");
 			
 			$(window).scrollTop(0);
 			
 		$scope.getSettingsList();
 			});
 	}
+}
 }
 }]);
 

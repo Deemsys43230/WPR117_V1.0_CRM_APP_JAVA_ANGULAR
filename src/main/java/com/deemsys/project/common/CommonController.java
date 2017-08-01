@@ -75,7 +75,21 @@ public class CommonController {
     }
     
     
-    
+   //call to get current username in homepage 
+    @RequestMapping(value="getCurrentName",method=RequestMethod.GET)
+    public String getCurrentName(ModelMap model){
+  	try
+  	{
+    		
+			model.addAttribute("currentName",loginService.getCurrentName());
+			model.addAttribute("requestSuccess", true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			model.addAttribute("requestSuccess", false);
+		}
+    	return "";
+    }
     
     
     

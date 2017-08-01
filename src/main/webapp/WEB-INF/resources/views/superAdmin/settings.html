@@ -120,14 +120,18 @@ data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
 <label>Key<span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-<input type="text" class="form-control" placeholder="Key" name="settingkey"  ng-model="settings.settingKey" ng-cloak check-keyvalue required>
+<input type="text" class="form-control" placeholder="Key" name="settingkey"  ng-model="settings.settingKey" ng-cloak  required>
 </div>
 
 <div id="error-container">
-<span ng-show="form.settingkey.$dirty && form.settingkey.$invalid"">
-<span ng-cloak ng-show="!form.settingkey.$error.required && form.settingkey.$error.checkKeyvalue">Key is already taken</span>
-<span ng-cloak ng-show="form.settingkey.$error.required">Key is required.</span>
-</span>
+<span ng-show="existError">Key is already taken</span>
+
+
+<!-- <span ng-show="form.settingkey.$dirty && form.settingkey.$invalid"">
+<span ng-cloak ng-show="form.settingkey.$dirty.required">Key is required.</span>
+<span ng-cloak ng-show="form.settingkey.$error.existerror">Key is already taken</span>
+span ng-cloak ng-show="form.settingkey.$error.required">Key is required.</span>
+</span> -->
 
 </div>
 </div>
@@ -139,16 +143,18 @@ data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
 <input type="text" class="form-control" placeholder="Value" name="settingvalue"  ng-model="settings.settingValue" ng-cloak required>
 </div>
 <div id="error-container">
-<span ng-show="form.settingvalue.$dirty  && form.settingvalue.$invalid">
+
+
+<!-- <span ng-show="form.settingvalue.$dirty  && form.settingvalue.$invalid">
 <span ng-cloak ng-show="form.settingvalue.$error.required">Value is required.</span>
-</span>
+</span> -->
 </div>
 </div>
 </div>
 
 </div>
 <div class="modal-footer">
-<button class="btn btn-primary active" ng-click="addKey()" ng-disabled="form.$invalid"  data-dismiss="modal">{{buttonText}}</button>
+<button class="btn btn-primary active" ng-click="addKey()" >{{buttonText}}</button>
 </div>
 </div>
 </div>

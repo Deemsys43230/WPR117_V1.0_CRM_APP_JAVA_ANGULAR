@@ -96,7 +96,8 @@ superAdminApp.directive("checkPassword", function ($q, $timeout,requestHandler) 
 });
 
 
-superAdminApp.directive("checkKeyvalue", function ($q, $timeout,requestHandler) {
+superAdminApp.directive("checkKeyvalue", function ($q, $timeout,requestHandler) 
+		{
     var CheckKeyValueExists = function (isNew)
     {
         if(isNew==1)
@@ -117,10 +118,12 @@ superAdminApp.directive("checkKeyvalue", function ($q, $timeout,requestHandler) 
                 	{
                 	scope.settingId="";
                 	}
-                    
-                    var sendRequest=requestHandler.postRequest("checkKeyValue.json?settingKey="+modelValue+"&id="+scope.settingId,0).then(function(results)
+var sendRequest=requestHandler.postRequest("checkKeyValue.json?settingKey="+modelValue+"&id="+scope.settingId,0).then(function(results)
                     		{
+	
                         isNew=results.data.isCorrect;
+                        
+                        
                     });
 
                     sendRequest.then(function(){
@@ -128,6 +131,7 @@ superAdminApp.directive("checkKeyvalue", function ($q, $timeout,requestHandler) 
                         if (CheckKeyValueExists(!isNew))
                         {
                         		defer.resolve();
+                        		isNew=true;
                         }
                         else
                         {

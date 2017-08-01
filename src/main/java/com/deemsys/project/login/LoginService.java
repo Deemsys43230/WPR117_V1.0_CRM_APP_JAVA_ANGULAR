@@ -20,24 +20,30 @@ public class LoginService {
 	
 	public String getCurrentRole() throws Exception{
 		String currentRole="";
-		String currentUser[];
+		String currentUser="";
 		try{
 			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			     user.getUsername().split(CRMConstants.USERNAME_DELIMETER);
+			     
 			
 			Object[] role = user.getAuthorities().toArray();
+			
+			/*String[] username=user.getUsername().split(CRMConstants.USERNAME_DELIMETER);*/
+			
 			if(role[0].toString().equals(CRMConstants.CRM_ADMIN_ROLE))
 			{
 				currentRole=CRMConstants.CRM_ADMIN_ROLE;
+				
 				 
 			}
 			else if(role[0].toString().equals(CRMConstants.CRM_USER_ROLE)){
 				currentRole=CRMConstants.CRM_USER_ROLE;
+				
 			}
 			else if(role[0].toString().equals(CRMConstants.CRM_SUPER_ADMIN))
 			{
 				currentRole=CRMConstants.CRM_SUPER_ADMIN;
+				
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -47,6 +53,15 @@ public class LoginService {
 	}
 	
 
+	public String getCurrentName()
+	{
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return usersDAO.getByUsername(CRMConstants.splitUserName(user.getUsername())).getUsername();
+	}
+	
+	
+	
+	
 	
 	public Integer getCurrentUserId(){
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

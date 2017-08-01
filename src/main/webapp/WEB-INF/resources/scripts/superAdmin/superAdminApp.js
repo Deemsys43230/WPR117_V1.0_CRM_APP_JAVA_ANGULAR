@@ -289,53 +289,13 @@ superAdminApp.controller('InitialController', [
   		 console.log($rootScope.currentDate);
        });
      
-     /*requestHandler.getRequest("getCurrentRole.json","").then(function(response)
+     requestHandler.getRequest("getCurrentName.json","").then(function(response)
     		  {
-   		 $rootScope.currentUser=response.data.currentRole;
+   		 $rootScope.currentUser=response.data.currentName;
    		 
-          console.log($rootScope.currentUser);
-   		
-        });*/
+          
+        });
       
-      
-      var authenticate = function() {
-			requestHandler
-					.getRequest("getCurrentRole.json", "")
-					.then(
-							function(response)
-							{
-								if (response.data.role == "ROLE_ADMIN") {
-									$rootScope.authenticated = true;
-									$rootScope.isAdmin = 1;
-									$rootScope.username = response.data.username;
-								} else if (response.data.role == "ROLE_USER") {
-									$rootScope.authenticated = true;
-									$rootScope.isAdmin = 2;
-									$rootScope.username = response.data.username;
-								} 
-								else if (response.data.role == "ROLE_SUPER_ADMIN")
-								{
-									$rootScope.authenticated = true;
-									$rootScope.isAdmin = 3;
-									$rootScope.username = response.data.username;
-									
-								} 
-								console.log($rootScope.username);
-								
-							});
-							
-		};
-		authenticate();
-	
-	
-	
-	
-	
-	
-	
-	
-	
-      
-      
+ 
   }
 ]);
