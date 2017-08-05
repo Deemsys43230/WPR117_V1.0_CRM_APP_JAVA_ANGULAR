@@ -10,6 +10,7 @@
 <form id="form" name="form">
 
 <div class="row">
+
 <div class="col-md-6 col-xs-12">
 <label>County <span class="asterisk">*</span></label>
 <div class="input-group">
@@ -18,27 +19,38 @@
 <option value="">-- Select County --</option>
 </select>
 </div>
+
+<div id="error-container">
+<span  ng-show="form.countyId.$dirty">
+<span ng-show="form.countyId.$error.required"></span>
+</span>
 </div>
-
-
+</div>
 
 <div class="col-md-6 col-xs-12">
 <label>Name <span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-<input type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()" check-departmentname validate-name required maxlength="60">
+<input id="one" type="text" class="form-control" placeholder="Name" name="name"  ng-model="department.name" ng-change="onNameChange()"  validate-name required maxlength="60">
 </div>
 <div id="error-container">
+
+<span id="first" ng-show="existDepartmentError">Name is already taken</span>
+
 
 <span  ng-show="form.name.$dirty">
 
 <span ng-cloak ng-show="form.name.$error.required">Name is required.</span>
 <span ng-cloak ng-show="!form.name.$error.required&&form.name.$error.validateName">Name is invalid</span>
-<span ng-cloak ng-show="!form.name.$error.required&&!form.name.$error.validateName&&form.name.$error.checkDepartmentname">Name is already taken</span>
-
+<!-- <span ng-cloak ng-show="!form.name.$error.required&&!form.name.$error.validateName&&form.name.$error.checkDepartmentname">Name is already taken</span>
+ -->
 </span>
 </div>
 </div>
+
+
+
+
 </div>
 
 
@@ -49,14 +61,25 @@
 <label>Code <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ticket"></i></span>
-  <input type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" ng-pattern='/[R]{2}[_]{1}[A-Za-z]{2}[_]{1} *$/g' uppercase check-departmentcode required>
+  <input id="two" type="text" class="form-control" placeholder="Code" ng-model="department.code" name="code" ng-pattern='/[R]{2}[_]{1}[A-Za-z]{2}[_]{1} *$/g' uppercase  required>
 </div>
+<center >code:RR_AB_</center>
 
 <div id="error-container">
+
+
+<span id="second" ng-show="existCodeErrors">Code is already taken</span>
+
+<!-- <span ng-show="existCodeError">Code already exist</span> -->
+
+<span ng-show="form.code.$error.pattern">Code is invalid (Start with RR_ and End With _ Ex. RR_AB_)</span>
+
 <span  ng-show="form.code.$dirty">
-<span ng-cloak ng-show="form.code.$error.required">Code is required.</span>
-<span ng-cloak ng-show="!form.code.$error.required&&form.code.$error.pattern">Code is invalid (Start with RR_ and End With _ Ex. RR_AB_)</span>
-<span ng-cloak ng-show="!form.code.$error.required&&!form.code.$error.pattern&&form.code.$error.checkDepartmentcode">Code is already taken</span>
+
+<span ng-cloak ng-show="form.code.$error.$valid && form.code.$error.required">Code is required.</span>
+
+<!-- <span ng-cloak ng-show="form.code.$error.required&&form.code.$error.pattern">Code is invalid (Start with RR_ and End With _ Ex. RR_AB_)</span> -->
+ <span ng-cloak ng-show="!form.code.$error.required&&!form.code.$error.pattern&&form.code.$error.checkDepartmentcode">Code is already taken</span> 
 </span>
 </div>
 </div>
@@ -65,15 +88,17 @@
 <label>Login Link <span class="asterisk">*</span></label>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1"><i class="	fa fa-pencil"></i></span>
-<input type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" lowercase check-departmentlogin  required></input>
+<input id="three" type="text" class="form-control"  placeholder="Login Link" ng-model="department.loginLink" name="login" lowercase ng-disabled="disable"   required></input>
 </div>
 
  <div id="error-container">
- <span ng-cloak ng-show="!form.login.$error.required&&form.login.$error.checkDepartmentlogin">Login Link is already taken</span>
+ <span  id="third" ng-show="existLoginError">Login Link is already taken</span>
+ 
+ <!-- <span ng-cloak ng-show="!form.login.$error.required&&form.login.$error.checkDepartmentlogin">Login Link is already taken</span>
  <span  ng-show="form.login.$dirty">
  	<span ng-cloak ng-show="form.login.$error.required" >Login Link is required.</span>
-</span>
- </div>
+</span> -->
+ </div> 
 </div>
 </div>
 <br>
@@ -83,16 +108,18 @@
 <label>Search Link {{form.search.$error.pattern}}<span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-<input type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" lowercase check-departmentsearch required>
+<input  id="four" type="text" class="form-control" placeholder="Search Link" ng-model="department.searchLink" name="search" lowercase ng-disabled="disable"  required>
 </div>
 
 <div id="error-container">
-<span ng-cloak ng-show="!form.search.$error.required&&form.search.$error.checkDepartmentsearch">Search Link is already taken</span>
+<span id="fourth" ng-show="existSearchError">Search Link is already taken</span>
+
+<!-- <span ng-cloak ng-show="!form.search.$error.required&&form.search.$error.checkDepartmentsearch">Search Link is already taken</span>
 
  <span  ng-show="form.search.$dirty"> 
 	<span ng-cloak ng-show="form.search.$error.required">Search Link is required.</span>
-</span>
-</div>
+</span> -->
+</div> 
 </div>
 
 <label style="margin-left:12px">Upload File</label>

@@ -26,6 +26,7 @@ superAdminApp.controller("superAdminReportsController",['$rootScope','$scope','$
 	//call getAllCounty function
 	
 	$scope.getAllCounty();
+	
 	$scope.searchReportsList=function(searchObj){
 		var defer=$q.defer();
 		requestHandler.postRequest("User/searchCrashReportsOnly.json",searchObj).then(function(response){

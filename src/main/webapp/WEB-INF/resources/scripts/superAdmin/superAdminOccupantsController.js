@@ -55,6 +55,16 @@ superAdminApp.controller("superAdminOccupantsController",['$rootScope','$scope',
 		if(!$scope.addedToDateError){
 			$scope.oldPageNumber=$scope.crashReportSearchForm.pageNumber;
 			$scope.crashReportSearchForm.pageNumber=1;  // This Will Call Through pageNumber $watch
+			
+			if(!$scope.crashReportSearchForm.policeDepartmentId)
+			{
+				$scope.crashReportSearchForm.reportType=2;
+
+			}
+			else
+				{
+				$scope.crashReportSearchForm.reportType=1;
+				}
 			if($scope.oldPageNumber==$scope.crashReportSearchForm.pageNumber){
 				$scope.searchReportsList($scope.crashReportSearchForm);
 				
@@ -63,16 +73,9 @@ superAdminApp.controller("superAdminOccupantsController",['$rootScope','$scope',
 			angular.copy($scope.crashReportSearchForm,$scope.mainSearchParam);
 		}
 		
-		if(!$scope.crashReportSearchForm.policeDepartmentId)
-		{
-			$scope.crashReportSearchForm.reportType=2;
-
-		}
-		else
-			{
-			$scope.crashReportSearchForm.reportType=1;
-			}
+		
 		$scope.searchReportsList($scope.crashReportSearchForm);
+		console.log($scope.mainSearchParam);
 	}
 	
 	
@@ -92,6 +95,8 @@ $scope.secondarySearch=function(){
 			// Copy Mainsearchparam to Patient
 			angular.copy($scope.mainSearchParam,$scope.crashReportSearchForm);
 			return $scope.searchReportsList($scope.crashReportSearchForm);
+			
+			console.log($scope.mainSearchParam);
 		}
 		
 		return null;

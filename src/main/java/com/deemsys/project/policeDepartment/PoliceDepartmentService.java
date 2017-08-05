@@ -72,6 +72,7 @@ public class PoliceDepartmentService {
 		for (PoliceDepartment policeDepartment : policeDepartments) {
 			// TODO: Fill the List
 			String crmDomainLink=crmProperties.getProperty("CRMAppDomain");
+			
 			PoliceDepartmentForm policeDepartmentForm = new PoliceDepartmentForm(
 					policeDepartment.getPoliceDepartmentId(), policeDepartment.getCounty().getCountyId(),
 					policeDepartment.getCounty().getName(), policeDepartment.getName(), policeDepartment.getCode(),
@@ -329,9 +330,53 @@ public class PoliceDepartmentService {
 		
 		return policeDepartmentDAO.checkDepartmentSearch(search,policeDepartmentId);
 	}
+	
 
+	public int[] checkAllDepartment(String name,String code,String login,String search,Integer policeDepartmentId)
+	{
+			int a[]=new int[5];
+			
+	    
+		int nameresult=policeDepartmentDAO.checkDepartmentName(name, policeDepartmentId);
+		
+		if(nameresult==1)
+		{
+			a[0]=1;
+		}
+	
+		int coderesult=policeDepartmentDAO.checkDepartmentCode(code,policeDepartmentId);
+	    
+		if(coderesult==1)
+		{
+			a[1]=2;
+		}
+
+        int loginresult=policeDepartmentDAO.checkDepartmentLogin(login,policeDepartmentId);
+
+         if(loginresult==1)
+         {
+        	 a[2]=3;
+         }
+	
+		
+         int searchresult=policeDepartmentDAO.checkDepartmentSearch(search,policeDepartmentId);
+         
+         if(searchresult==1)
+         {
+        	 a[3]=4;
+         }
+		
+		return a;
+		
+		/*return policeDepartmentDAO.checkAllDepartment(name,code,login,search,policeDepartmentId);*/
+	}
 	
 	
+	
+	
+	
+	
+
 	
 
 }

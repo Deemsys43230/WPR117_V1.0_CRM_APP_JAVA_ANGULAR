@@ -55,7 +55,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                         name:'superAdminApp',
                         files:[
                             'resources/scripts/superAdmin/superAdminController.js',
-                            
+                            'resources/js/Tour.js'
                         ]
                     });
                 }]
@@ -71,7 +71,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                         name:'superAdminApp',
                         files:[
                             'resources/scripts/superAdmin/superAdminController.js',
-                            
+                            'resources/js/Tour.js'
                         ]
                     });
                 }]
@@ -88,7 +88,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                         name:'superAdminApp',
                         files:[
                             'resources/scripts/superAdmin/superAdminController.js',
-                            
+                            'resources/js/Tour.js'
                         ]
                     });
                 }]
@@ -104,7 +104,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -120,7 +120,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -135,7 +135,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminReportsController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -151,7 +151,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminOccupantsController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -166,7 +166,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminSettingsController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -182,7 +182,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminSettingsController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -197,7 +197,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminSettingsController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -212,7 +212,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -229,7 +229,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]
@@ -246,7 +246,7 @@ superAdminApp.config(['$routeProvider','$ocLazyLoadProvider','$httpProvider',
                             name:'superAdminApp',
                             files:[
                                 'resources/scripts/superAdmin/superAdminController.js',
-                                
+                                'resources/js/Tour.js'
                             ]
                         });
                     }]

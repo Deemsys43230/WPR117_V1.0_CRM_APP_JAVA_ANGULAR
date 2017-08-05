@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="resources/styles/sb-admin-2.css"/>
 			<link rel="stylesheet" href="resources/styles/font-awesome.css" />
 			<link rel="stylesheet" href="resources/angular/angular-flash/angular-flash.css"/>
-			
+			 
 	
 
 </head>
@@ -18,6 +18,12 @@
 
 <script type="text/javascript" src="resources/js/jquery.min.js"></script><!-- jQuery -->
 	<script type="text/javascript" src="resources/js/bootstrap.min.js"></script><!-- Bootstrap -->
+	
+	<link rel="stylesheet" href="resources/styles/tourstart.css" />
+	
+	
+     <script type="text/javascript" src="resources/js/tourstart.js"></script>
+
 	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 	    <script type="text/javascript" src="resources/angular/angular-route-1.4.5.js"></script>
 	 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.min.js"></script>
@@ -30,11 +36,16 @@
 	     <script src="scripts/superAdmin/superAdminService.js" type="text/javascript"></script>
 	     <script src="scripts/superAdmin/superAdminDirective.js" type="text/javascript"></script>
 	     <script type="text/javascript" src="resources/js/superAdmin/metisMenu.min.js"></script>
+	    
+	     
+	     
 	     	     <script type="text/javascript" src="resources/js/superAdmin/sb-admin-2.js"></script>
 	     	     	<script src="resources/angular/components/datetime/moment.js"></script>
+	     
+	     
 	     	     
 	     
-	
+	    
 
  <div id="wrapper"  ng-controller="InitialController">
 
@@ -47,7 +58,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <p class="navbar-brand" >Crash Reports Upload - <mark>Admin Interface</mark></p>
+                <p class="navbar-brand" >Crash Reports Upload - <mark>Admin Interface</mark>
+                </p>
+                
                 
             </div>
             <!-- /.navbar-header -->
@@ -145,10 +158,46 @@
 <span>&nbsp;</span>&copy;2017  Deemsys Inc</div>   
 
 </nav>
+</body>
+</html>
 
 
+
+<div class="modal fade" id="tourModal" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog">    
+   
+     
+      <div class="modal-content">
+      <form name="tourModalForm" novalidate>
+        <div class="modal-header">
+        
+          <button type="button" class="close" ng-click="showTourAlert();">&times;</button>
+          <h4 class="modal-title">Welcome To CRM </h4>
+        </div>
+        <div class="modal-body">
+ 	 <p>Click on the  button to start the tour</p>
+         <br/>
+        </div>
+        
+        <div class="modal-footer" >
+        <span class="error-container pull-left" style="color:red" ng-show="isShowTourError">{{isTourError}}</span>
+   <button class="btn btn-primary active btn-lg" id="start-tour" data-dismiss="modal"  >Start Tour</button>  
+       <button    class="btn btn-danger btn-lg" onclick="endTour()" data-dismiss="modal">Skip Tour</button>
+     </div>
+        </form>
+      </div>
+      
+    </div>
+ </div>   
  
 
 
-</body>
-</html>
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,7 @@ superAdminApp.controller("superAdminSettingsController",['$rootScope','$scope','
 	
 	
 	
+	
 	}]);
 	
 
@@ -31,24 +32,31 @@ $('#addModal').modal({animation:true});
 $('#addModal').on('hidden.bs.modal', function ()
 		{
     $(this).find('form').trigger('reset');
+    $scope.form.$invalid=true;
 })
+
+
 	
 $scope.buttonText="Add";
 
 $scope.heading="Add Property";
 
-
-
 	$scope.addKey=function()
 	{
 		$scope.settingId=0;
 		$scope.existError=false;
+		
+		
 
 requestHandler.postRequest("checkKeyValue.json?settingKey="+$scope.settings.settingKey+"&id="+$scope.settingId).then(function(response)
 				{
-	if(response.data.isCorrect==1)
+	
+	
+
+if(response.data.isCorrect==1)
 				{
 $scope.existError=true;
+$("#try").show();
 }
 else
 {
@@ -63,8 +71,22 @@ requestHandler.postRequest("saveUpdateSettings.json",$scope.settings).then(funct
 					
 					$scope.getSettingsList();
 					
+					$scope.form.$invalid=true;
+					
 						});
 		}
+
+
+$(function($scope) 
+		{
+    $("#check").keypress(function() 
+    	    {
+    	$("#try").hide();
+        
+    });
+});
+
+
 			
 				});
 			
@@ -79,11 +101,15 @@ $scope.editSetting=function(id)
 {
 $('#addModal').modal({animation:true});
 
-
-$('#addModal').on('hidden.bs.modal', function () {
+$('#addModal').on('hidden.bs.modal', function () 
+		{
     $(this).find('form').trigger('reset');
+    $scope.form.$invalid=true;
 })
 	
+
+
+
 $scope.buttonText="Update";
 $scope.heading="Edit Settings";
 $scope.settingId = id;
@@ -92,6 +118,11 @@ requestHandler.getRequest("getSettings.json?id="+$scope.settingId).then(function
 		{
 	$scope.settings=response.data.settingsForm;
 	console.log($scope.settings);
+	
+	
+	
+	
+	
 		});
 
 
@@ -100,6 +131,7 @@ requestHandler.getRequest("getSettings.json?id="+$scope.settingId).then(function
 $scope.addKey=function()
 	{
 $scope.existError=false;
+
 
 requestHandler.postRequest("checkKeyValue.json?settingKey="+$scope.settings.settingKey+"&id="+$scope.settingId).then(function(response)
 						{
@@ -123,13 +155,14 @@ if(response.data.isCorrect==1)
 			
 			$scope.getSettingsList();
 				
+			/*$scope.form.$invalid=true;*/
 			
 				});
 		}
 });
 }
 
-
+}
 
 //delete property function
 $scope.delete=function(id)
@@ -152,7 +185,7 @@ $scope.delete=function(id)
 			});
 	}
 }
-}
+
 }]);
 
 

@@ -120,11 +120,13 @@ data-toggle="tooltip" title="Edit" onmouseenter="$(this).tooltip('show')"></a>
 <label>Key<span class="asterisk">*</span></label>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
-<input type="text" class="form-control" placeholder="Key" name="settingkey"  ng-model="settings.settingKey" ng-cloak  required>
+<input id="check" type="text" class="form-control" placeholder="Key" name="settingkey"  ng-model="settings.settingKey"  ng-cloak  required>
 </div>
 
 <div id="error-container">
-<span ng-show="existError">Key is already taken</span>
+
+<span id="try" ng-show="existError" >Key is already taken</span>
+
 
 
 <!-- <span ng-show="form.settingkey.$dirty && form.settingkey.$invalid"">
@@ -144,6 +146,8 @@ span ng-cloak ng-show="form.settingkey.$error.required">Key is required.</span>
 </div>
 <div id="error-container">
 
+<span  ng-show="requireError">Value is required</span>
+
 
 <!-- <span ng-show="form.settingvalue.$dirty  && form.settingvalue.$invalid">
 <span ng-cloak ng-show="form.settingvalue.$error.required">Value is required.</span>
@@ -154,14 +158,16 @@ span ng-cloak ng-show="form.settingkey.$error.required">Key is required.</span>
 
 </div>
 <div class="modal-footer">
-<button class="btn btn-primary active" ng-click="addKey()" >{{buttonText}}</button>
+<button  class="btn btn-primary active" ng-disabled="form.$invalid" ng-click="addKey()" >{{buttonText}}</button>
 </div>
 </div>
 </div>
 </div>
 
 
+<script>
 
+</script>
 
 
 

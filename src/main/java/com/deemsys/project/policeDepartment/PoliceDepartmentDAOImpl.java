@@ -171,8 +171,7 @@ public class PoliceDepartmentDAOImpl implements PoliceDepartmentDAO{
 		criteria.add(Restrictions.eq("name", name));
 		
 		
-		if(policeDepartmentId!=null)
-		
+		if(policeDepartmentId!=null)		
 			criteria.add(Restrictions.ne("policeDepartmentId",policeDepartmentId));
 		
 		
@@ -272,7 +271,84 @@ return 0;
 		
 	}
 
+	@Override
+	public Integer checkAllDepartment(String name,String code, String login, String search,Integer policeDepartmentId) 
+	{
+		Criteria criteria=this.sessionFactory.getCurrentSession().createCriteria(PoliceDepartment.class);
+				
+				/*
+				.add(Restrictions.disjunction()
+		        .add(Restrictions.eq("name", name))
+		        .add(Restrictions.eq("code", code))
+		        .add(Restrictions.eq("loginLink",login))
+		        .add(Restrictions.eq("searchLink", search))
+		    );*/
+		
 	
+		criteria.add(Restrictions.eq("name", name));
+		  criteria.add(Restrictions.eq("code", code));
+		  criteria.add(Restrictions.eq("loginLink",login));
+		 criteria.add(Restrictions.eq("searchLink", search));
+		 
+		
+		 
+		
+		
+		
+		if(policeDepartmentId!=null)
+			
+			criteria.add(Restrictions.ne("policeDepartmentId",policeDepartmentId));
+
+		
+PoliceDepartment policeDepartment=(PoliceDepartment) criteria.uniqueResult();
+
 	
 
+if(policeDepartment!=null)
+{
+	return 1;   
 }
+else
+{	
+return 0;
+}
+
+
+
+
+
+	  /*if(policeDepartment.getName().equals(name))
+		{
+			return 1;   
+		}
+		else if(policeDepartment.getCode().equals(code))
+		{
+			return 2;
+		}
+		else if(policeDepartment.getLoginLink().equals(login))
+		{
+			return 3;
+		}
+		else if(policeDepartment.getSearchLink().equals(search))
+		{
+			return 4;
+		}
+    	else 
+		{	
+		return 0;
+		}*/
+	  
+	}
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+
+	

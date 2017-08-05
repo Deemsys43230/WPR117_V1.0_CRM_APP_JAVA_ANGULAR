@@ -53,12 +53,9 @@ public class PoliceDepartmentController
    	{
            model.addAttribute("policeDepartmentId",policeDepartmentService.savePoliceDepartment(policeDepartmentForm));
            model.addAttribute("requestSuccess",true);
-            return "/returnPage";
+           return "/returnPage";
    	}
-   
-    
-    
-    
+     
     @RequestMapping(value="/uploadPoliceDepartment",method=RequestMethod.POST)
    	public String uploadPoliceDepartment(@RequestParam("policeDepartmentFile") MultipartFile policeDepartmentFile,@RequestParam("policeDepartmentId") Integer policeDepartmentId,ModelMap model)
    	{
@@ -166,6 +163,13 @@ public class PoliceDepartmentController
 	}
     
     
+    @RequestMapping(value="/checkAllDepartment",method=RequestMethod.POST)
+   	public String checkAllDepartment(@RequestParam("name") String name,@RequestParam("code") String code,@RequestParam("login") String login,@RequestParam("search") String search,@RequestParam("id") Integer policeDepartmentId,ModelMap model)
+   	{
+           model.addAttribute("isCorrect",policeDepartmentService.checkAllDepartment(name,code,login,search,policeDepartmentId));
+           model.addAttribute("requestSuccess",true);
+           return "/returnPage";
+   	}
     
     
 }
