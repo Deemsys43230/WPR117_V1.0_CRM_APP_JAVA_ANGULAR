@@ -1,0 +1,22 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { DefaultLayoutComponent } from './container/default-layout/default-layout.component';
+import { LoginComponent } from './auth/login/login.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    DefaultLayoutComponent,
+    LoginComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

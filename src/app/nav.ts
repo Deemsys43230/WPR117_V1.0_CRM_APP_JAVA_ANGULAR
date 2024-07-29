@@ -1,0 +1,24 @@
+export class navItems {
+    public superAdminNavItems=[
+      {
+        name: 'Dashboard',
+        url: 'Dashboard',
+        icon: 'fa fa-home'
+      },
+      {
+        name: 'Police Department',
+        url: 'policeDepartment',
+        icon: 'fa fa-phone'
+      },
+      {
+        name: 'Settings',
+        url: 'settings',
+        icon: 'fa fa-male'
+      },
+      {
+        name: 'logout',
+        url: 'auth/login',
+        icon: 'fa fa-sign-out'
+      },
+    ];
+}
