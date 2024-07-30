@@ -5,18 +5,13 @@ import { LoginComponent } from './auth/login/login.component';
 
 const routes: Routes = [
   {
-    path:'',
-    redirectTo:'superAdmin',
-    pathMatch:'full'
-  },
-  {
     path:"auth/login",
     component:LoginComponent,
   },
   {
     path:'superAdmin',
     component:DefaultLayoutComponent,
-    // loadChildren: () => import('./components/super-admin/super-admin.module').then(m => m.SuperAdminModule)
+    loadChildren: () => import('./super-admin/super-admin.module').then(m => m.SuperAdminModule)
   },
 ];
 

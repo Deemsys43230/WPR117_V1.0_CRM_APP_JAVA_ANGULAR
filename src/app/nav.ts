@@ -2,7 +2,7 @@ export class navItems {
     public superAdminNavItems=[
       {
         name: 'Dashboard',
-        url: 'Dashboard',
+        url: 'dashboard',
         icon: 'fa fa-home'
       },
       {
