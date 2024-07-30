@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { DefaultLayoutComponent } from './container/default-layout/default-layout.component';
 import { LoginComponent } from './auth/login/login.component';
 import { CommonLayoutComponent } from './container/common-layout/common-layout.component';
+import { TableConfigComponent } from './shared/table-config/table-config.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { CommonLayoutComponent } from './container/common-layout/common-layout.c
     DefaultLayoutComponent,
     LoginComponent,
     CommonLayoutComponent,
+    TableConfigComponent,
   ],
   imports: [
     BrowserModule,
