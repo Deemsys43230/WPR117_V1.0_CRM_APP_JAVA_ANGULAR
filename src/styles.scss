@@ -5,3 +5,25 @@
     font-weight: 500;
   }
   /* heading ends */
+
+  /* Header styles starts */
+  .custom-row {
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    border-style: outset;
+  }
+  
+  .custom-row .custom-icon {
+    margin-right: 8px;
+    color: #316c71;
+    font-weight: 600;
+    font-size: xx-large;
+  }
+  
+  .custom-row .headerStyle {
+    font-weight: 600;
+    font-size: xx-large;
+    color: #316c71;
+  }
+  /* Header styles ends */
