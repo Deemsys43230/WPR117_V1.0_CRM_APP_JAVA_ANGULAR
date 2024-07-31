@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DepartmentComponent } from './department/department.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
 import { TableConfigComponent } from '../shared/table-config/table-config.component';
+import { AddNewAccountComponent } from './accounts/add-new-account/add-new-account.component';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { TableConfigComponent } from '../shared/table-config/table-config.compon
     DashboardComponent,
     DepartmentComponent,
     AddDepartmentComponent,
+    AddNewAccountComponent,
   ],
   imports: [
     CommonModule,

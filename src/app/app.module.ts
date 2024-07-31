@@ -6,6 +6,7 @@ import { DefaultLayoutComponent } from './container/default-layout/default-layou
 import { LoginComponent } from './auth/login/login.component';
 import { CommonLayoutComponent } from './container/common-layout/common-layout.component';
 import { TableConfigComponent } from './shared/table-config/table-config.component';
+import { AccountsComponent } from './super-admin/accounts/accounts.component';
 
 @NgModule({
   declarations: [
@@ -13,10 +14,12 @@ import { TableConfigComponent } from './shared/table-config/table-config.compone
     DefaultLayoutComponent,
     LoginComponent,
     CommonLayoutComponent,
+    AccountsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    TableConfigComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

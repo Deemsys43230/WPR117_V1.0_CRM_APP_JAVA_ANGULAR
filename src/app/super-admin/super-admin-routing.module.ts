@@ -2,12 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DepartmentComponent } from './department/department.component';
+import { AccountsComponent } from './accounts/accounts.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
+import { AddNewAccountComponent } from './accounts/add-new-account/add-new-account.component';
 
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
-  { path: "department", component: DepartmentComponent },
-  {path: "department/add-department" , component: AddDepartmentComponent}
+  { path: "policeDepartment", component: DepartmentComponent },
+  {path: "department/add-department" , component: AddDepartmentComponent},
+  { path: "accountsDepartment", component: AccountsComponent },
+  {path: "accounts/add-new-account" , component: AddNewAccountComponent},
 ];
 
 @NgModule({

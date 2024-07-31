@@ -6,9 +6,14 @@ export class navItems {
         icon: 'fa fa-home'
       },
       {
-        name: 'Police Department',
-        url: 'department',
+        name: 'Police',
+        url: 'policeDepartment',
         icon: 'fa fa-phone'
+      },
+      {
+        name: 'Accounts',
+        url: 'accountsDepartment',
+        icon: 'fa fa-users'
       },
       {
         name: 'Settings',

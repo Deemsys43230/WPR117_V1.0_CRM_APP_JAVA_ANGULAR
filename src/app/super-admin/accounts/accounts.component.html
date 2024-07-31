@@ -1,0 +1,28 @@
+<div class="custom-row">
+  <i class="fa fa-users custom-icon"></i>
+  <div class="headerStyle">Accounts</div>
+</div>
+<div class="add-new-account">
+  <button>
+    <a (click)="addDepartment()"><i class="fa fa-plus icon-spacing"></i>Add New Account</a>
+  </button>
+</div>
+<div class="accounts-department">
+  <div class="row-department">
+    <label>Department:</label>
+    <select>
+      <option>All</option>
+      <option>Boardman</option>
+      <option>Fairbom</option>
+    </select>
+  </div>
+  <div class="row-department">
+    <label>Role:</label>
+    <select>
+      <option>All</option>
+      <option>Admin</option>
+      <option>User</option>
+    </select>
+  </div>
+</div>
+<table-config [tableData] = "table_data" />
