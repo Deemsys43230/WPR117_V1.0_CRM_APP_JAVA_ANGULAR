@@ -1,7 +1,11 @@
+@import 'src/styles.scss';
 body {
     padding-bottom: 30px;
     position: relative;
     min-height: 100%;
+  }
+  .navbar-header h2{
+    color: white;
   }
   
   a {
@@ -27,7 +31,7 @@ body {
     margin-left: -250px;
     overflow-y: auto;
     overflow-x: hidden;
-    background: #316c71;
+    background: #243449;
     transition: all 0.5s ease;
   }
   
@@ -68,11 +72,15 @@ body {
     font-weight: 600;
     font-size: 16px;
   }
-  .sidebar-nav > li > a:hover,
+  .sidebar-nav > li > a:hover {
+    text-decoration: none;
+    color: $primary-color;
+    background: $third-color;
+  }
   .sidebar-nav > li.active > a {
     text-decoration: none;
     color: #fff;
-    background: #1d8d97;
+    background: $secondary-color;
   }
   .sidebar-nav > li > a i.fa {
     font-size: 24px;
@@ -90,7 +98,7 @@ body {
   }
   #navbar-wrapper .navbar {
     border-width: 0 0 0 0;
-    background-color: #1d8d97;
+    background-color: $secondary-color;
     font-size: 24px;
     margin-bottom: 0;
     border-radius: 0;

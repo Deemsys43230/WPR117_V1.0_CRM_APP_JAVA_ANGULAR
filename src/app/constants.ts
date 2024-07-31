@@ -40,3 +40,11 @@ export const ItemsPerPage = [
         'value': 20
     }
 ]
+
+export interface TableData{
+data : any[],
+totalCount : any,
+labelName: any[],
+tableHeading: any[],
+actionButton: any[]
+}

@@ -1,5 +1,7 @@
+@import '../../../styles.scss';
+
 .background-color {
-    background-color:#b9e0ff;
+    background-color: $primary-color;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -14,34 +16,14 @@
     font-weight: 700;
     margin-bottom: 30px;
     padding: 5px;
+    color: $secondary-color;
   }
   .link{
-    color: #0d6efd;
+    color: $secondary-color;
   }
-  .hover-underline {
-    text-decoration: none;
-    position: relative;
-  }
-  .hover-underline::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    transform: scaleX(0);
-    height: 3px;
-    bottom: 0;
-    left: 0;
-    background-color: #0d6efd ;
-    transform-origin: bottom right;
-    transition: transform 0.25s ease-out;
-    border-radius: 2px;
-  }
-  .hover-underline:hover::after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-  }
-  .form-hover:hover .hover-underline::after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
+
+  .btn{
+    background-color: $secondary-color;
   }
   img{
     height: 70vh;

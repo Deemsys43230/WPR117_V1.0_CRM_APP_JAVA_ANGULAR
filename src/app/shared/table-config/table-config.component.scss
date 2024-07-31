@@ -1,3 +1,4 @@
+@import 'src/styles.scss';
 // Table CSS Starts
 table {
     width: 100%;
@@ -14,8 +15,8 @@ table {
   }
   
   th {
-    background-color: #dce3ff;
-    color: #5466b1;
+    background-color: $third-color;
+    color: $primary-color;
   }
   
   tr:nth-child(even) {

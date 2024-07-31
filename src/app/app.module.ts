@@ -13,7 +13,6 @@ import { TableConfigComponent } from './shared/table-config/table-config.compone
     DefaultLayoutComponent,
     LoginComponent,
     CommonLayoutComponent,
-    TableConfigComponent,
   ],
   imports: [
     BrowserModule,

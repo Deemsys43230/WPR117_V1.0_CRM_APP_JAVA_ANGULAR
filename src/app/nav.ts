@@ -7,7 +7,7 @@ export class navItems {
       },
       {
         name: 'Police Department',
-        url: 'policeDepartment',
+        url: 'department',
         icon: 'fa fa-phone'
       },
       {

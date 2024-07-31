@@ -1,11 +1,14 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { icons } from '../../constants'
+import { icons} from '../../constants'
 import { ItemsPerPage } from '../../constants'
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'table-config',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './table-config.component.html',
-  styleUrls: ['./table-config.component.scss']
+  styleUrls: ['./table-config.component.scss'],
 })
 
 export class TableConfigComponent implements OnInit {
