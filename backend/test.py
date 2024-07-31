@@ -6,7 +6,6 @@ from functools import wraps
 from flask import make_response,jsonify
 from models import Users,Roles
 from flask_jwt_extended import jwt_required,get_jwt_identity  # type: ignore
-from config import mail_password,marketingApp
 import jwt
 
 # Authentication code
@@ -35,18 +34,18 @@ def role_required(*roles):
     return decorator
 
 # To send mail for reset password
-def sendMailToResetPassword(to,body):
-    email_sender = 'benhiveamsdev@gmail.com'
-    email_password = mail_password
-    email_receiver = to
-    subject = "Dear user"
-    body = body
-    em = EmailMessage()
-    em['FROM'] = email_sender
-    em['TO'] = email_receiver
-    em['subject'] = subject
-    em.set_content(body)
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-        smtp.login(email_sender, email_password)
-        smtp.sendmail(email_sender, email_receiver, em.as_string())
+# def sendMailToResetPassword(to,body):
+#     email_sender = 'benhiveamsdev@gmail.com'
+#     email_password = mail_password
+#     email_receiver = to
+#     subject = "Dear user"
+#     body = body
+#     em = EmailMessage()
+#     em['FROM'] = email_sender
+#     em['TO'] = email_receiver
+#     em['subject'] = subject
+#     em.set_content(body)
+#     context = ssl.create_default_context()
+#     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+#         smtp.login(email_sender, email_password)
+#         smtp.sendmail(email_sender, email_receiver, em.as_string())
