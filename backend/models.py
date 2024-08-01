@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey
 from app import db
 from sqlalchemy import ForeignKey
@@ -54,27 +55,7 @@ class Accounts(db.Model):
         db.session.add(self)
         db.session.commit()
 
-# models for user
-class Users(db.Model):
-    
-    __tablename__ = 'users'
-    
-    user_id = db.Column(db.Integer,primary_key=True)
-    # role id foreign key initialization
-    role_id = db.Column(db.Integer, ForeignKey('roles.role_id'))
-    role = db.relationship('Roles')
-    account_id=db.Column(db.String(32), ForeignKey('accounts.account_id'))
-    account = db.relationship('Accounts')
-    username = db.Column(db.String(45))
-    password = db.Column(db.String(600))
-    is_enable = db.Column(db.Integer,default=1)
-    status = db.Column(db.Integer,default=1)
-    
-    def save_to_users(self):
-        db.create_all()
-        db.session.add(self)
-        db.session.commit()     
-    
+# models for users
 class Users(db.Model):
     __tablename__="users"
     user_id = db.Column(db.Integer, primary_key=True)
@@ -89,6 +70,7 @@ class Users(db.Model):
         db.session.add(self)
         db.session()
 
+#models for county
 class County(db.Model):
     __tablename__="county"
     county_id=db.Column(db.Integer, primary_key=True)
@@ -98,3 +80,22 @@ class County(db.Model):
         db.create_all()
         db.session.add(self)
         db.session()
+
+# models for occupants
+class Occupants(db.Model):
+    
+    __tablename__ = 'occupants'
+    
+    report_id = db.Column(db.String(32), ForeignKey('crash_reports.report_id'))
+    crash_reports = db.relationship('Crash Reports')
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    injuries = db.Column(db.String(4))
+    seating_position = db.Column(db.String(4))
+    sequence_no = db.Column(db.Integer)
+    status = db.Column(db.Integer)
+    
+    def save_to_users(self):
+        db.create_all()
+        db.session.add(self)
+        db.session.commit()    
