@@ -1,28 +1,132 @@
-<div class="custom-row">
-  <i class="fa fa-users custom-icon"></i>
-  <div class="headerStyle">Accounts</div>
-</div>
-<div class="add-new-account">
-  <button>
-    <a (click)="addDepartment()"><i class="fa fa-plus icon-spacing"></i>Add New Account</a>
-  </button>
-</div>
-<div class="accounts-department">
-  <div class="row-department">
-    <label>Department:</label>
-    <select>
-      <option>All</option>
-      <option>Boardman</option>
-      <option>Fairbom</option>
-    </select>
-  </div>
-  <div class="row-department">
-    <label>Role:</label>
-    <select>
-      <option>All</option>
-      <option>Admin</option>
-      <option>User</option>
-    </select>
+<!-- Header Starts -->
+<div class="card-header h5">
+  <div class="custom-row">
+    <div class="headerStyle">
+      <i class="fa fa-users custom-icon"></i>
+      Accounts
+    </div>
+    <div>
+      <button
+        (click)="addAccountsDepartment()"
+        class="btn common-btn-color"
+        data-bs-toggle="modal"
+        data-bs-target="#memberModal"
+      >
+        <i class="fa fa-plus"></i>&nbsp;<b>Add New Account</b>
+      </button>
+    </div>
   </div>
 </div>
-<table-config [tableData] = "table_data" />
+<!-- Header Ends -->
+
+<!-- Search form Starts -->
+<div class="row">
+  <div class="input-col">
+    <label for="" class="form-label">First Name</label>
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa-solid fa-user"></i>
+      </span>
+      <input type="text" class="form-control w-70" placeholder="Name" />
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label">Middle Name</label>
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa-solid fa-user"></i>
+      </span>
+      <input type="text" class="form-control w-70" placeholder="Name" />
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label">Last Name</label>
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa-solid fa-user"></i>
+      </span>
+      <input type="text" class="form-control w-70" placeholder="Name" />
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label">User Name</label>
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa-solid fa-user"></i>
+      </span>
+      <input type="text" class="form-control w-70" placeholder="Name" />
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label">Email Id</label>
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa-solid fa-envelope"></i>
+      </span>
+      <input type="text" class="form-control w-70" placeholder="Name" />
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label">Phone Number</label>
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa-solid fa-phone"></i>
+      </span>
+      <input type="text" class="form-control w-70" placeholder="Name" />
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label"
+      >Role <span class="text-danger">*</span></label
+    >
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa fa-user-secret"></i>
+      </span>
+      <select class="form-control w-50">
+        <option value="">---select---</option>
+        <option value="India">Admin</option>
+        <option value="SA">User</option>
+      </select>
+    </div>
+  </div>
+  <div class="input-col">
+    <label for="" class="form-label"
+      >Department <span class="text-danger">*</span></label
+    >
+    <div class="input-box">
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa fa-id-badge"></i>
+      </span>
+      <select class="form-control w-50">
+        <option value="">---select---</option>
+        <option value="India">Boardman</option>
+        <option value="SA">Fairbom</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="input-col">
+    <div class="btn-box">
+      <button
+        class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
+        type="submit"
+        (click)="onSearch()"
+      >
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      </button>
+      <button
+        class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
+        type="submit"
+        (click)="resetSearch()"
+      >
+        <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Search form ends -->
+
+<!-- Table Starts -->
+<table-config [tableData]="table_data" />
+<!-- Table Ends -->

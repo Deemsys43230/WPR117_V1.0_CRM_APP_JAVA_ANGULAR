@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TableData } from 'src/app/constants';
 @Component({
@@ -6,7 +6,7 @@ import { TableData } from 'src/app/constants';
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss']
 })
-export class AccountsComponent {
+export class AccountsComponent implements OnInit {
   public table_data : TableData;
 
   constructor(private router: Router){}
@@ -14,7 +14,8 @@ export class AccountsComponent {
   ngOnInit(): void {
    this.getData();
   }
-  getData(){
+
+  getData(): void {
     const department_data = [{
       department_id: 1,
       image_url: "",
@@ -47,10 +48,16 @@ export class AccountsComponent {
       labelName : ['firstname', 'lastname', 'username', 'emailid', 'policedepartment'],
       tableHeading: ['First Name', 'Last Name', 'User Name', 'Email Id', 'Police Department', 'Actions'],
       actionButton: ['Enable', 'Disable','Edit']
-    }
+    };
   }
 
-  addDepartment(){
-    this.router.navigate(['superAdmin/department/add-department'])
+  addAccountsDepartment() {
+    this.router.navigate(['superAdmin/accounts/add-new-account'])
+  }
+
+  onSearch(){
+  }
+
+  resetSearch(){
   }
 }

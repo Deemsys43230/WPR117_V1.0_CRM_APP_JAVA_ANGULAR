@@ -6,8 +6,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let row of tableData.data; let i = index">
-            <td *ngFor="let label of tableData.labelName">{{ row[label] }}</td>
+        <tr *ngFor="let row of tableData?.data; let i = index">
+            <td *ngFor="let label of tableData?.labelName">{{ row[label] }}</td>
             <td>
                 <ng-container *ngFor="let icon of selectedIcons">
                     <i [ngClass]="[icon.icon,'icons']" [ngStyle]="{backgroundColor:icon.bgColor}" tooltip="delete"
