@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask_jwt_extended import create_refresh_token,create_access_token,get_jwt_identity
-from models import  Roles,Users
+from models import  Roles,Users,Accounts
 from db import db
 from flask import jsonify,request,Blueprint
 from flask_restful import Api,Resource
@@ -8,7 +8,7 @@ import hashlib
 
 from flask_cors import cross_origin
 
-from test import role_required
+from test import role_required, sendMailToResetPassword
 
         
 # Change password
@@ -29,7 +29,6 @@ class ChangePassword(Resource):
             if user:
                 if new_password == confirm_password:
                     user.password = self.hash_password(new_password)
-                    user.is_password_changed = 1
                     db.session.commit()
                     return jsonify({'msg':'Password Updated Successfully, Please Login Again','status':True})
                 return jsonify({'msg': 'Passwords Do Not Match','status':False})
@@ -76,21 +75,23 @@ class resetPassword(Resource):
         md5.update(password.encode('utf-8'))
         return md5.hexdigest()  
     # Return the hash as a hex string
-    # @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
+    @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
         try:
             data = request.get_json()
-            userId = data.get('user_id')
-            user = Users.query.filter_by(user_id=userId).first()
-            print('uer',user)
+            account_id = data.get('account_id')
+            accounts = Accounts.query.filter_by(account_id=account_id).first() 
 
-            if user is None:
+            user = Users.query.filter_by(account_id=account_id).first()
+
+            if accounts is None:
                 return jsonify({'msg': 'Failed No Such User','status':False})
             changed_password = self.hash_password(user.username)
             user.password = changed_password
             db.session.commit()
             body = f"Your password is updated.Your New password :{user.username}"
-
+            sendMailToResetPassword(accounts.email_id,body)
+            return jsonify({'mail send':'Password Updated','status':True})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})       
 
