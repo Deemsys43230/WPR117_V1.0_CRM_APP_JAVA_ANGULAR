@@ -1,5 +1,11 @@
 @import '../../../styles.scss';
 
+.row{
+  display: flex !important;
+  flex-direction: row;
+  gap: 0px;
+}
+
 .background-color {
     background-color: $primary-color;
     width: 100%;
