@@ -49,7 +49,11 @@ export class DepartmentComponent implements OnInit {
     this.router.navigate(['superAdmin/department/add-department'])
   }
 
+  onSearch(){
+  }
 
+  resetSearch(){
+  }
 
 
 

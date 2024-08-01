@@ -4,32 +4,92 @@ $secondary-color: #1d8d97;
 $third-color: #b0f1f1;
 
 
-/* heading starts */
-.heading {
-    margin: 0%;
-    font-size: 25px;
-    font-weight: 500;
-  }
-  /* heading ends */
+/* Header styles starts */
+.custom-row {
+  padding: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-style: outset;
+}
 
-  /* Header styles starts */
-  .custom-row {
-    padding-left: 10px;
-    display: flex;
-    align-items: center;
-    border-style: outset;
-  }
-  
-  .custom-row .custom-icon {
-    margin-right: 8px;
-    color: #316c71;
-    font-weight: 600;
-    font-size: xx-large;
-  }
-  
-  .custom-row .headerStyle {
-    font-weight: 600;
-    font-size: xx-large;
-    color: #316c71;
-  }
-  /* Header styles ends */
+.custom-row .custom-icon {
+  margin-right: 8px;
+  color: #316c71;
+  font-weight: 600;
+  font-size: xx-large;
+}
+
+.custom-row .headerStyle {
+  font-weight: 600;
+  font-size: xx-large;
+  color: #316c71;
+}
+
+/* Header styles ends */
+
+/*Card Body Styles starts */
+.card-body {
+  padding: 50px 0;
+}
+
+/*Card Body Styles ends */
+
+/*Common Button Styles Starts */
+.common-btn-color {
+  background-color: $secondary-color;
+  color: white;
+}
+
+.common-btn-color:active {
+  background-color: darken($secondary-color, 10%);
+  color: lighten(white, 10%);
+}
+
+.search-btn {
+  background-color: $secondary-color;
+  right: 135px;
+  margin-top: 7% !important;
+  width: 3%;
+  font-size: 12px;
+  border-radius: 4px;
+}
+.reset-btn {
+  background-color: $primary-color;
+  margin-top: 7% !important;
+  left: 90%;
+  width: 3%;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+/*Common Button Styles Ends */
+
+/* Form Styles starts*/
+.row{
+  display: flex !important;
+  align-items: center !important;
+  gap: 50px;
+}
+.input-col{
+  width: max-content;
+}
+.form-control{
+  width: 20vw !important;
+}
+.input-group-text{
+  background-color: $third-color;
+}
+.input-box{
+  display: flex;
+  width: max-content;
+}
+.form-label {
+  font-weight: 600;
+}
+.btn-box{
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+/* Form Styles ends*/

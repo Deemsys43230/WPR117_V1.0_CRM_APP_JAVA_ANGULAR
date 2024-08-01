@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-department',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-department.component.scss']
 })
 export class AddDepartmentComponent {
+
+
+constructor(private router: Router){}
+
+  back(){
+    this.router.navigate(['superAdmin/policeDepartment/'])
+  }
 
 }
