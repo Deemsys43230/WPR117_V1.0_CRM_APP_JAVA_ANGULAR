@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey
-from app import db
+from db import db
 from sqlalchemy import ForeignKey
 
 # Models for Roles

@@ -8,7 +8,15 @@ from models import Users,Roles
 from flask_jwt_extended import jwt_required,get_jwt_identity  # type: ignore
 import jwt
 from config import mail_password
+import boto3
+from config import AWSCredentials,folderName,innerFolderName,bannerFolderName,bucketName
 
+
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
+    aws_secret_access_key=AWSCredentials["AWS_SECRET_ACCESS_KEY"]
+)
 # Authentication code
 def role_required(*roles):
     def decorator(f):
@@ -50,3 +58,22 @@ def sendMailToResetPassword(to,body):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
         smtp.login(email_sender, email_password)
         smtp.sendmail(email_sender, email_receiver, em.as_string())
+
+def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
+    try:
+        if upload_status == 1:
+            object_key = f"{folderName}{department_id}{innerFolderName}{file_name}"
+        else:
+            object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"
+        print("filepath",filepath)
+        print("bucketName",bucketName)
+        s3.upload_file(
+            filepath, 
+            bucketName, 
+            object_key,
+            ExtraArgs={'ACL': 'public-read'}
+        )
+        print(f"File uploaded successfully to {bucketName}/{object_key}")
+        return f"File uploaded successfully to {bucketName}/{object_key}"
+    except FileNotFoundError:
+        print(f"The file {filepath} was not found.")
