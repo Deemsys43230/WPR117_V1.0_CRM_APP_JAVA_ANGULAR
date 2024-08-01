@@ -59,21 +59,19 @@ def sendMailToResetPassword(to,body):
         smtp.login(email_sender, email_password)
         smtp.sendmail(email_sender, email_receiver, em.as_string())
 
+# FUNCTION FOR UPLOAD IMAGE IN AWS
 def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
     try:
         if upload_status == 1:
             object_key = f"{folderName}{department_id}{innerFolderName}{file_name}"
         else:
             object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"
-        print("filepath",filepath)
-        print("bucketName",bucketName)
         s3.upload_file(
             filepath, 
             bucketName, 
             object_key,
             ExtraArgs={'ACL': 'public-read'}
         )
-        print(f"File uploaded successfully to {bucketName}/{object_key}")
         return f"File uploaded successfully to {bucketName}/{object_key}"
     except FileNotFoundError:
-        print(f"The file {filepath} was not found.")
+        return f"The file {filepath} was not found."

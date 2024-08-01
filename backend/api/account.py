@@ -12,6 +12,7 @@ def generate_short_uuid():
     short_uuid = uuid_str[:8] + uuid_str[8:12] + uuid_str[12:16] + uuid_str[16:20] + uuid_str[20:]
     return short_uuid
 
+# TO CREATE ACCOUNT AND SAVE DETAILS IN USER
 class createAccount(Resource):
     @staticmethod
     def hash_password(password):
@@ -37,7 +38,8 @@ class createAccount(Resource):
             return jsonify({'status':True,'data':{**data}})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
-        
+
+# TO GET ALL ACCOUNTS WITH SEARCH AND PAGINATION 
 class GetAllAccounts(Resource):
     def post(self):
         data = request.get_json()
@@ -95,6 +97,7 @@ class GetAllAccounts(Resource):
         except Exception as e:
             return {'message': 'An error occurred', 'error': str(e)}, 500
 
+# GET ACCOUNTS BY ID 
 class getAccountsById(Resource):
     def get(self,uuid):
         try:
@@ -115,6 +118,7 @@ class getAccountsById(Resource):
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
     
+# UPDATE ACCOUNT DETAILS 
 class updateAccount(Resource):
     def put(self,uuid):
         try:
@@ -126,7 +130,7 @@ class updateAccount(Resource):
                 accounts.last_name = data['last_name']
                 accounts.middle_name = data['middle_name']
                 accounts.email_id = data['email_id']
-                accounts.phone_numnber = data['phone_number']
+                accounts.phone_number = data['phone_number']
                 accounts.police_department_id = data['police_department_id']
                 db.session.commit()
             if user:
@@ -137,6 +141,7 @@ class updateAccount(Resource):
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
     
+# ENABLE DISABLE ACCOUNTS BY ID
 class enableDisableAccountById(Resource):
     def post(self,uuid):
         try:
@@ -163,4 +168,3 @@ api.add_resource(GetAllAccounts,'/GetAllAccounts')
 api.add_resource(getAccountsById,'/getAccountsById/<string:uuid>')
 api.add_resource(updateAccount,'/updateAccount/<string:uuid>')
 api.add_resource(enableDisableAccountById,'/enableDisableAccountById/<string:uuid>')
-# api.add_resource(resetPasswordForAccounts,'/resetPasswordForAccounts/<string:uuid>')

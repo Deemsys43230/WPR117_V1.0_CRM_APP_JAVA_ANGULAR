@@ -6,6 +6,7 @@ from models import policeDepartmentModel
 from db import db
 from test import uploadFileToAWSS3
 
+# TO CREATE POLICE DEPARTMENT 
 class createPoliceDepartment(Resource):
     def post(self):
         try:
@@ -23,6 +24,7 @@ class createPoliceDepartment(Resource):
         except Exception as e:
             return jsonify({'msg':'Error While Adding Police Department','error':str(e)})
 
+# GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
     def post(self):
         data = request.get_json()
@@ -60,6 +62,7 @@ class getAllPoliceDepartment(Resource):
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
     
+# GET POLICE DEPARTMENT BY ID
 class getByIdPoliceDepartment(Resource):
     def get(self,id):
         try:
@@ -82,6 +85,7 @@ class getByIdPoliceDepartment(Resource):
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
 
+# UPDATE POLICE DEPARTMENT BY ID
 class updatePoliceDepartment(Resource):
     def put(self,id):
         try:
@@ -96,6 +100,7 @@ class updatePoliceDepartment(Resource):
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
 
+# ENABLE DISABLE POLICE DEPARTMENT BY ID
 class enableDisablePoliceDepartment(Resource):
     def post(self,id):
         try:
@@ -112,9 +117,8 @@ class enableDisablePoliceDepartment(Resource):
                     return jsonify({'status':True,'msg':'Police Department Enabled Successfully','is_enabled':police.is_enabled})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
-        
-        
-        
+
+# TO UPLOAD IMAGE WHEN IMAGE IS NOT PROVIDED        
 class uploadPoliceDepartmentWithoutFile(Resource):
     def post(self,dep_id): 
         
@@ -122,7 +126,9 @@ class uploadPoliceDepartmentWithoutFile(Resource):
         if awsUpload == 1:
             uploadFileToAWSS3(path,fileName,dep_id,2)
         return None
-
+    
+ # TO SAVE IMAGE IN TEMPORARY STORAGE
+ 
 def save_temporary_file(file, path):
     try:
         with open(path, 'wb') as f:
@@ -131,6 +137,7 @@ def save_temporary_file(file, path):
     except Exception as e:
         return str(e)
 
+# TO UPLOAD IMAGE IN AWS
 class UploadImageForPoliceDepartment(Resource):
     def post(self):
         data = request.form
@@ -151,9 +158,6 @@ class UploadImageForPoliceDepartment(Resource):
             else:
                 return jsonify({'msg': 'Failed to save file'}), 500
         return jsonify({'msg': 'AWS upload not enabled'}), 400
-
-	
-
 
 police_blueprint = Blueprint('police',__name__)
 api = Api(police_blueprint)
