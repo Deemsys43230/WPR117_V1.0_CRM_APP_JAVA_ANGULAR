@@ -49,12 +49,12 @@ class GetAllAccounts(Resource):
             items_per_page = query_count
         try:
             page = data['page']
-            username = data.get('username')
-            first_name = data.get('first_name')
-            last_name = data.get('last_name')
-            police_department_id = data.get('police_department_id')
-            role_id = data.get('role_id')
-            email_id = data.get('email_id')
+            username = data.get('username',None)
+            first_name = data.get('first_name',None)
+            last_name = data.get('last_name',None)
+            police_department_id = data.get('police_department_id',None)
+            role_id = data.get('role_id',None)
+            email_id = data.get('email_id',None)
             offset = (page - 1) * items_per_page
             # Query accounts
             query = Accounts.query.filter_by(status=1)
@@ -67,7 +67,6 @@ class GetAllAccounts(Resource):
             if police_department_id:
                 query = query.filter(Accounts.police_department_id.ilike(f"%{police_department_id}%"))
             accounts = query.limit(items_per_page).offset(offset).all()
-            print("accountd",accounts)
             result = []
             for account in accounts:
                 users = Users.query.filter_by(account_id=account.account_id)

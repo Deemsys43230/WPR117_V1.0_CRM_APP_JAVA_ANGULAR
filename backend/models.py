@@ -15,10 +15,18 @@ class Roles(db.Model):
         db.session.add(self)
         db.session.commit()
 
+#models for county
+class County(db.Model):
+    __tablename__ = 'county'
+    county_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=False)
+    status = db.Column(db.Integer, unique=False)
+    
 class PoliceDepartmentModel(db.Model):
     __tablename__ = 'police_department'
     police_department_id = db.Column(db.Integer, primary_key=True)
-    county_id = db.Column(db.Integer)
+    county_id = db.Column(db.Integer,ForeignKey('county.county_id'))
+    county = db.relationship('County', backref='police_department')
     name = db.Column(db.String(60))
     code = db.Column(db.String(50))
     login_link = db.Column(db.String(50), unique=True)
@@ -69,12 +77,7 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
-#models for county
-class County(db.Model):
-    __tablename__ = 'county'
-    county_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=False)
-    status = db.Column(db.Integer, unique=False)
+
 
     def save_to_county(self):
         db.create_all()
@@ -88,7 +91,6 @@ class Occupants(db.Model):
     
     occupants_id = db.Column(db.Integer,primary_key = True)
     report_id = db.Column(db.String(32), ForeignKey('crash_reports.report_id'))
-    crash_reports = db.relationship('Crash Reports')
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     injuries = db.Column(db.String(4))

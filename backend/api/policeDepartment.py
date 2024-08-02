@@ -35,8 +35,8 @@ class getAllPoliceDepartment(Resource):
         try:
             data = request.get_json()
             page = data.get('page')
-            name = data.get('name')
-            county = data.get('county')
+            name = data.get('name',None)
+            county = data.get('county',None)
             offset = (page - 1) * items_per_page
             query = PoliceDepartmentModel.query
             if name:
@@ -48,8 +48,11 @@ class getAllPoliceDepartment(Resource):
             result=[]
             for data in police:
                 police_data = {
+                    'department_id':data.police_department_id,
                     'county_id':data.county_id,
+                    'county_name':data.county.name,
                     'name':data.name,
+                    'status':data.county.status,
                     'code':data.code,
                     'login_link':data.login_link,
                     'search_link':data.search_link,
@@ -70,6 +73,8 @@ class getByIdPoliceDepartment(Resource):
             if data:
                 police_data = {
                     'county_id':data.county_id,
+                    'count_name':data.county.name,
+                    'status':data.county.status,
                     'name':data.name,
                     'code':data.code,
                     'login_link':data.login_link,
