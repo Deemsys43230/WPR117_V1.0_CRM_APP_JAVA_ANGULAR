@@ -20,17 +20,20 @@
 <!-- Header Ends -->
 
 <!-- Search form Starts -->
+
 <div class="row">
+  <form class="row" [formGroup]="searchPoliceDepartmentForm"> 
   <div class="col-lg-4 col-md-4 col-sm-12">
     <label for="" class="form-label">Name</label>
-    <input type="text" class="form-control" placeholder="Search Name" />
+    <input type="text" class="form-control" placeholder="Search Name" formControlName="name" />
   </div>
   <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
-    <label for="" class="form-label">Country</label>
-    <select class="form-control">
-      <option>All</option>
-      <option>India</option>
-      <option>US</option>
+    <label for="" class="form-label">County</label>
+    <select class="form-control" formControlName="county">
+      <option value="">All Counties</option>
+      <option *ngFor="let county of countyList" value="{{county?.county_id}}" >
+        {{county?.county_name}}
+    </option>
     </select>
   </div>
   <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
@@ -45,9 +48,10 @@
               aria-hidden="true"></i></button>
     </div>
   </div>
+  </form>
   </div>
     <!-- Search form ends -->
 
 <!-- Table Starts -->
-<table-config [tableData]="table_data" />
+<table-config *ngIf="callChildComponent" [tableData]="table_data" (page)="page($event)" (actionOutput)="actionOutput($event)" />
 <!-- Table Ends -->

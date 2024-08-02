@@ -10,7 +10,7 @@
             <td *ngFor="let label of tableData?.labelName">{{ row[label] }}</td>
             <td>
                 <ng-container *ngFor="let icon of selectedIcons">
-                    <i [ngClass]="[icon.icon,'icons']" [ngStyle]="{backgroundColor:icon.bgColor}" tooltip="delete"
+                    <i title="{{icon.title}}" [ngClass]="[icon.icon,'icons']" [ngStyle]="{backgroundColor:icon.bgColor}" tooltip="delete"
                         aria-hidden="true" (click)="action(row, icon.title)"
                         *ngIf="row[icon.checkVariable] == icon.checkValue"></i>
                 </ng-container>
@@ -24,7 +24,7 @@
 <!-- Pagination Starts -->
 <section *ngIf="tableData.totalCount != 0 && count.length > 1">
     <div class="row mt-4">
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-xl-4">
             <div class="d-flex">
                 <input type="number" placeholder="Search Page" class="searchPage" #searchPageNumber [min]="1" />
                 <button class="button goBtn" (click)="pageSearch(searchPageNumber.value)">GO</button>
@@ -32,10 +32,10 @@
             <p class="text-danger ms-1" *ngIf="isValid">Please Enter Valid Page Number</p>
             <p class="text-danger ms-1" *ngIf="isSearchValidation">Please Enter Page Number</p>
         </div>
-        <div class="col-lg-4 pageStatus">
+        <div class="col-lg-4 col-xl-4 pageStatus">
             <p class="mb-0 text-center">Showing {{startItem}}-{{endItem}} of {{tableData.totalCount}} records</p>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-xl-4 ">
             <select name="pages" id="pages" class="searchPage" (change)="onChangeItem($event)">
                 <option *ngFor="let item of items" value="{{item.value}}">{{item.data}}</option>
             </select>

@@ -47,6 +47,16 @@ table {
     color: white;
     border: 1px solid #6375c0;
   }
+
+  //Icon Styles
+  .icons {
+    font-size: 10px;
+    color: white;
+    padding: 7px;
+    border-radius: 5px;
+    margin: 0px 5px;
+    cursor: pointer;
+}
   
   .active {
     background-color: #1d8d97 !important;

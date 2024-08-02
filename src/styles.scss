@@ -79,7 +79,7 @@ $third-color: #b0f1f1;
 }
 .input-box{
   display: flex;
-  width: max-content;
+  width: 100%;
 }
 .form-label {
   font-weight: 600;
@@ -88,6 +88,7 @@ $third-color: #b0f1f1;
   display: flex;
   gap: 10px;
 }
+
 /* Form Styles ends*/
 
 /* Media query for header starts */

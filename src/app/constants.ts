@@ -3,7 +3,7 @@ export const icons = [
     {
         'title': 'Edit',
         'icon': 'fa fa-pencil',
-        'bgColor': '#4a578fc9'
+        'bgColor': '#243449'
     },
     {
         'title': 'Enable',
@@ -18,6 +18,13 @@ export const icons = [
         'bgColor': '#ed3e2fcc',
         'checkVariable': 'status',
         'checkValue': 0
+    },
+    {
+        'title': 'View',
+        'icon': 'fa fa-eye',
+        'bgColor': '#1d8d97',
+        'checkVariable': 'status',
+        'checkValue': 1
     }
 ]
  

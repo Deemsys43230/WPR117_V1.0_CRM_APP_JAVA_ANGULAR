@@ -6,6 +6,7 @@ import { DepartmentComponent } from './department/department.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
 import { TableConfigComponent } from '../shared/table-config/table-config.component';
 import { AddNewAccountComponent } from './accounts/add-new-account/add-new-account.component';
+import {  ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { AddNewAccountComponent } from './accounts/add-new-account/add-new-accou
   imports: [
     CommonModule,
     SuperAdminRoutingModule,
-    TableConfigComponent
+    TableConfigComponent,
+    ReactiveFormsModule
   ],
   exports : [
     DashboardComponent,

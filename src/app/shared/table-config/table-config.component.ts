@@ -24,7 +24,7 @@ export class TableConfigComponent implements OnInit {
   public currentPage: any = 1;
   public pagination: any[] = [];
   public paginationDesign: boolean | undefined;
-  public pageItem: any = 5;
+  public pageItem: number = 5;
   public endItem: Number | undefined;
   public startItem: Number | undefined;
   public totalItem: Number | undefined;
@@ -46,8 +46,8 @@ export class TableConfigComponent implements OnInit {
   }
 
   // Initial Function to call from another component
-  initialFunction() {
-    // this.count = count;
+  initialFunction(count : any) {
+    this.count = count;
     var length = Math.ceil(this.tableData.totalCount / this.pageItem);
     this.count = Array.from({ length }, (_, i) => i + 1);
     this.itemCalculation();
