@@ -66,14 +66,14 @@ $third-color: #b0f1f1;
 .row{
   display: flex !important;
   align-items: center !important;
-  gap: 50px;
+  padding: 0px 15px;
 }
 .input-col{
   width: max-content;
 }
-.form-control{
-  width: 400px !important;
-}
+// .form-control{
+//   width: 330px !important;
+// }
 .input-group-text{
   background-color: $third-color;
 }
@@ -87,6 +87,27 @@ $third-color: #b0f1f1;
 .btn-box{
   display: flex;
   gap: 10px;
-  margin-top: 18px;
 }
 /* Form Styles ends*/
+
+/* Media query for header starts */
+@media screen and (max-width: 425px) {
+  .custom-row .custom-icon,
+  .custom-row .headerStyle {
+    font-size: x-large;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 375px) {
+  .custom-row .custom-icon,
+  .custom-row .headerStyle {
+    font-size: 15px;
+  }
+  .btn {
+    font-size: 12px;
+  }
+  .add-new {
+    font-size: 15px;
+  }
+}
+/* Media query for header ends */

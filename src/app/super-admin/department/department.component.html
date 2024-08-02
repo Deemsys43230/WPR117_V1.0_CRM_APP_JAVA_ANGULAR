@@ -1,5 +1,5 @@
 <!-- Header Starts -->
-<div class="card-header h5">
+<div class="card-header h5 mb-3">
   <div class="custom-row">
     <div class="headerStyle">
       <i class="fa fa-phone custom-icon"></i>
@@ -12,7 +12,7 @@
         data-bs-toggle="modal"
         data-bs-target="#memberModal"
       >
-        <i class="fa fa-plus"></i>&nbsp;<b>Add Police Department</b>
+        <i class="fa fa-plus add-new"></i>&nbsp;<b>Add Police Department</b>
       </button>
     </div>
   </div>
@@ -21,29 +21,19 @@
 
 <!-- Search form Starts -->
 <div class="row">
-  <div class="input-col">
+  <div class="col-lg-4 col-md-4 col-sm-12">
     <label for="" class="form-label">Name</label>
-    <div class="input-box">
-      <span class="input-group-text" id="basic-addon1">
-        <i class="fa-solid fa-user"></i>
-        </span>
-    <input type="text" class="form-control w-70" placeholder="Name" />
-    </div>
+    <input type="text" class="form-control" placeholder="Search Name" />
   </div>
-  <div class="input-col">
+  <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
     <label for="" class="form-label">Country</label>
-    <div class="input-box">
-      <span class="input-group-text" id="basic-addon1">
-        <i class="fa-solid fa-globe"></i>
-      </span>
-    <select class="form-control w-70">
+    <select class="form-control">
       <option>All</option>
-      <option>Admin</option>
-      <option>User</option>
+      <option>India</option>
+      <option>US</option>
     </select>
   </div>
-  </div>
-  <div class="input-col">
+  <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
     <div class="btn-box">  
       <button
           class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"
