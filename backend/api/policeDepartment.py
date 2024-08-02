@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource,Api
 from config import CRMAppDomain,bucketURL,bannerLocation,awsUpload,fileName,tempFolder,defaultBannerName
-from models import policeDepartmentModel
+from models import PoliceDepartmentModel
 from db import db
 from test import uploadFileToAWSS3
 
@@ -11,7 +11,7 @@ class createPoliceDepartment(Resource):
     def post(self):
         try:
             data = request.get_json()
-            police = policeDepartmentModel(
+            police = PoliceDepartmentModel(
                 county_id=data['county_id'],
                 name = data['name'],
                 code = data['code'],
@@ -29,7 +29,7 @@ class getAllPoliceDepartment(Resource):
     def post(self):
         data = request.get_json()
         items_per_page = data.get('items_per_page')
-        query_count = policeDepartmentModel.query.filter_by(status=1).count()
+        query_count = PoliceDepartmentModel.query.filter_by(status=1).count()
         if items_per_page == "":
             items_per_page = query_count
         try:
@@ -38,11 +38,11 @@ class getAllPoliceDepartment(Resource):
             name = data.get('name')
             county = data.get('county')
             offset = (page - 1) * items_per_page
-            query = policeDepartmentModel.query
+            query = PoliceDepartmentModel.query
             if name:
-                query = query.filter(policeDepartmentModel.name.ilike(f"%{name}%"))
+                query = query.filter(PoliceDepartmentModel.name.ilike(f"%{name}%"))
             if county:
-                query = query.filter(policeDepartmentModel.county_id.ilike(f"%{county}%"))
+                query = query.filter(PoliceDepartmentModel.county_id.ilike(f"%{county}%"))
             count = query.count()
             police = query.limit(items_per_page).offset(offset).all()
             result=[]
@@ -66,7 +66,7 @@ class getAllPoliceDepartment(Resource):
 class getByIdPoliceDepartment(Resource):
     def get(self,id):
         try:
-            data = policeDepartmentModel.query.filter_by(police_department_id=id).first()
+            data = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if data:
                 police_data = {
                     'county_id':data.county_id,
@@ -89,7 +89,7 @@ class getByIdPoliceDepartment(Resource):
 class updatePoliceDepartment(Resource):
     def put(self,id):
         try:
-            police = policeDepartmentModel.query.filter_by(police_department_id=id).first()
+            police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if police:
                 data = request.get_json()
                 police.county_id = data['county_id']
@@ -104,7 +104,7 @@ class updatePoliceDepartment(Resource):
 class enableDisablePoliceDepartment(Resource):
     def post(self,id):
         try:
-            police = policeDepartmentModel.query.filter_by(police_department_id=id).first()
+            police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             data = request.get_json()
             if police:
                 if data['is_enabled'] == 0:
@@ -128,11 +128,12 @@ class uploadPoliceDepartmentWithoutFile(Resource):
         return None
     
  # TO SAVE IMAGE IN TEMPORARY STORAGE
- 
+
 def save_temporary_file(file, path):
     try:
         with open(path, 'wb') as f:
             f.write(file.read())
+        print("path",path)
         return path
     except Exception as e:
         return str(e)
@@ -142,14 +143,18 @@ class UploadImageForPoliceDepartment(Resource):
     def post(self):
         data = request.form
         file = request.files.get('file')    
+        print("file",file.filename)
         dep_id = data.get('dep_id')
-        file_name = file.filename
-        path = os.path.join(tempFolder, str(dep_id), file_name).replace('\\', '/')
+        
+        path = os.path.join(tempFolder, str(dep_id), file.filename).replace('\\', '/')
+        print('path',path)
         os.makedirs(os.path.dirname(path), exist_ok=True)
+        
         if awsUpload == 1:
             saved_file_path = save_temporary_file(file, path)
+            print('saved_file_path',saved_file_path)
             if saved_file_path:
-                uploadFileToAWSS3(saved_file_path, file_name, dep_id, 2)
+                uploadFileToAWSS3(saved_file_path, file, dep_id, 2)
                 try:
                     os.remove(saved_file_path)
                 except OSError as e:
