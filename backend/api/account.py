@@ -69,29 +69,39 @@ class GetAllAccounts(Resource):
             accounts = query.limit(items_per_page).offset(offset).all()
             result = []
             for account in accounts:
-                users = Users.query.filter_by(account_id=account.account_id)
+                users = Users.query.filter_by(account_id=account.account_id).all()  
                 users_info = []
                 for user in users:
-                    if  username not in user.username:
-                        continue  # Skip users not matching the username filter
-                    if role_id != user.role_id:
-                        continue  #
+                    if username and username not in user.username:
+                        continue
+                    if role_id and role_id != user.role_id:
+                        continue
                     users_info.append({
                         'username': user.username,
-                        'role_id': user.role_id
+                        'role_id': user.role_id,
+                        'is_enable':user.is_enable
                     })
                 if not users_info and (username or role_id):
-                    continue  # Skip this account if no users matched the filters
+                    continue 
                 payload = {
                     'first_name': account.first_name,
                     'last_name': account.last_name,
                     'middle_name': account.middle_name,
                     'email_id': account.email_id,
                     'phone_number': account.phone_number,
-                    'police_department_id':account.police_department_id,
-                    'users': users_info
-                }
+                    'police_department_id': account.police_department_id,
+                    'username': users_info[0]['username'] if users_info else None,
+                    'role_id': users_info[0]['role_id'] if users_info else None,
+                    'is_enable': users_info[0]['is_enable'] if users_info else None,
+                    'status':account.status
+                    }
+
+                # Append to the result list
                 result.append(payload)
+
+            # Print the final result for debugging
+            print('Result:', result)
+
             return {'data': result, 'status':True,'count': query_count}, 200
         except Exception as e:
             return {'message': 'An error occurred', 'error': str(e)}, 500
@@ -145,14 +155,17 @@ class enableDisableAccountById(Resource):
     def post(self,uuid):
         try:
             account = Accounts.query.filter_by(account_id=(uuid)).first()
+            user = Users.query.filter_by(account_id =(uuid)).first()
             data = request.get_json()
             if account:
                 if data['is_enabled'] == 0:
-                    account.is_enabled = data['is_enabled']
+                    account.status = data['is_enabled']
+                    user.is_enable = data ['is_enabled']
                     db.session.commit()
                     return jsonify({'status':True,'msg':'Account Disabled Successfully','is_enabled':account.is_enabled})
                 else:
-                    account.is_enabled = data['is_enabled']
+                    account.status = data['is_enabled']
+                    user.is_enable = data ['is_enabled']
                     db.session.commit()
                     return jsonify({'status':True,'msg':'Account Enabled Successfully','is_enabled':account.is_enabled})
         except Exception as e:

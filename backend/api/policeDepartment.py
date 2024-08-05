@@ -28,13 +28,13 @@ class createPoliceDepartment(Resource):
 class getAllPoliceDepartment(Resource):
     def post(self):
         data = request.get_json()
-        items_per_page = data.get('items_per_page')
+        items_per_page = data.get('items_per_page',None)
         query_count = PoliceDepartmentModel.query.filter_by(status=1).count()
         if items_per_page == "":
             items_per_page = query_count
         try:
             data = request.get_json()
-            page = data.get('page')
+            page = data.get('page',1)
             name = data.get('name',None)
             county = data.get('county',None)
             offset = (page - 1) * items_per_page
@@ -148,6 +148,7 @@ class UploadImageForPoliceDepartment(Resource):
     def post(self):
         data = request.form
         file = request.files.get('file')    
+        print("file",file)
         print("file",file.filename)
         dep_id = data.get('dep_id')
         

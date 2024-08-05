@@ -64,9 +64,9 @@ class Users(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     role_id = db.Column(db.Integer, ForeignKey('roles.role_id'))
-    role = db.relationship('Roles')
+    role = db.relationship('Roles', backref='users')
     account_id = db.Column(db.Integer, ForeignKey('accounts.account_id'))
-    account = db.relationship('Accounts')
+    account = db.relationship('Accounts',backref='users')
     username = db.Column(db.String(45))
     password = db.Column(db.String(600))
     is_enable = db.Column(db.Integer, default=1)
