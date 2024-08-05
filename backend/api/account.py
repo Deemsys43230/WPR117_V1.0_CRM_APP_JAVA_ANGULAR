@@ -162,12 +162,12 @@ class enableDisableAccountById(Resource):
                     account.status = data['is_enabled']
                     user.is_enable = data ['is_enabled']
                     db.session.commit()
-                    return jsonify({'status':True,'msg':'Account Disabled Successfully','is_enabled':account.is_enabled})
+                    return jsonify({'status':True,'msg':'Account Disabled Successfully','is_enabled':account.status})
                 else:
                     account.status = data['is_enabled']
                     user.is_enable = data ['is_enabled']
                     db.session.commit()
-                    return jsonify({'status':True,'msg':'Account Enabled Successfully','is_enabled':account.is_enabled})
+                    return jsonify({'status':True,'msg':'Account Enabled Successfully','is_enabled':account.status})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
                
