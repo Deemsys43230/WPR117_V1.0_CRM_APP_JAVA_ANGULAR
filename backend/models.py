@@ -88,7 +88,6 @@ class Users(db.Model):
 class Occupants(db.Model):
     
     __tablename__ = 'occupants'
-    
     occupants_id = db.Column(db.Integer,primary_key = True)
     report_id = db.Column(db.String(32), ForeignKey('crash_reports.report_id'))
     first_name = db.Column(db.String(50))
@@ -123,6 +122,7 @@ class CrashReports(db.Model):
     added_date_time= db.Column(DateTime,default=datetime.now) 
     status=db.Column(db.Integer)
 
+    occupants = db.relationship('Occupants', backref='crash_reports', lazy=True)
     def save_to_crash_reports(self):
         db.create_all()
         db.session.add(self)

@@ -23,6 +23,7 @@ class GetAllOccupants(Resource):
         else:
             page=requestDetails['page']
             itemsPerPage=requestDetails['itemsPerPage']
+           
             data = Occupants.query.paginate(page=page, per_page=itemsPerPage, error_out=False)
             countlist = [{
             'occupants_id':occupants.occupants_id,
