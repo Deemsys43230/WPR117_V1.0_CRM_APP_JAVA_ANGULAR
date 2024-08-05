@@ -1,12 +1,12 @@
 import uuid
 import boto3
 from flask import request, jsonify, Blueprint
-from models import CrashReports, Occupants
+from models import CrashReports, Occupants,PoliceDepartmentModel
 from flask_restful import Api, Resource
 from sqlalchemy.exc import SQLAlchemyError
 from db import db
 from config import AWSCredentials
-
+from datetime import datetime
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -89,15 +89,57 @@ class GetAllCrashReports(Resource):
         requestDetails = request.get_json()
         page = requestDetails.get('page', 1)
         itemsPerPage = requestDetails.get('itemsPerPage', 10)
-
+        accountId=requestDetails.get('accountId')
+        reportNumber= requestDetails.get('reportNumber')
+        crashDate= requestDetails.get('crashDate')
+        firstName=requestDetails.get('firstName')
+        lastName= requestDetails.get('lastName')
+        location= requestDetails.get('location')
+        addedOnFromDate= requestDetails.get('addedOnFromDate')
+        addedOnToDate= requestDetails.get('addedOnToDate')
+        searchType= requestDetails.get('searchType')
+        reportType=requestDetails.get('reportType')
+        countyId= requestDetails.get('countyId')
+        policeDepartmentId=requestDetails.get('policeDepartmentId')
+        print(accountId,reportNumber)
+        query = CrashReports.query
+        if (accountId!=""):
+            query = query.filter_by(account_id=accountId)
+        if (reportNumber!=""):
+            query = query.filter_by(report_number=reportNumber)
         # Paginate crash reports
-        data = CrashReports.query.paginate(page=page, per_page=itemsPerPage, error_out=False)
+        if(crashDate!=""):
+            query = query.filter_by(crash_date=crashDate)
+        if(firstName!=""):
+            query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
+        if(lastName!=""):
+            query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))  
+        if(location!=""):
+            query = query.filter(location.ilike(f'%{location}%'))
+        if(countyId!=""):
+            query = query.filter_by(county_id=countyId)
+        if(policeDepartmentId!="" and (policeDepartmentId) is not None):
+            query = query.join(CrashReports.police).filter(PoliceDepartmentModel.police_department_id == policeDepartmentId)
+        if (addedOnFromDate!=""):
+            try:
+                from_date = datetime.strptime(addedOnFromDate, '%Y-%m-%d')
+                query = query.filter(CrashReports.added_date >= from_date)
+            except ValueError:
+                return jsonify({'message': 'Invalid date format for addedOnFromDate. Use YYYY-MM-DD.'}), 400
+        if (addedOnToDate!=""):
+            try:
+                to_date = datetime.strptime(addedOnToDate, '%Y-%m-%d')
+                query = query.filter(CrashReports.added_date <= to_date)
+            except ValueError:
+                return jsonify({'message': 'Invalid date format for addedOnToDate. Use YYYY-MM-DD.'}), 400
+        
+        print(query)
+        data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
        
         report_list = []
         
         # Iterate through crash reports and add occupants
         for crash in data.items:
-           
             # Use the relationship to get occupants for the current crash report
             occupants_forms = [{
                 "occupants_id": occupant.occupants_id,
@@ -113,7 +155,7 @@ class GetAllCrashReports(Resource):
             report_data = {
                 "report_id": crash.report_id,
                 "account_id": crash.account_id,
-                "police_department_id": crash.police_department_id,
+                "police_department": crash.police.name,
                 "report_number": crash.report_number,
                 "crash_date": crash.crash_date,
                 "location": crash.location,

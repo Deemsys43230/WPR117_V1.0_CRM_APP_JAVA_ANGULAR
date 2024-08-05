@@ -109,7 +109,6 @@ class CrashReports(db.Model):
     account_id=db.Column(db.String(32),ForeignKey('accounts.account_id'))
     account_Details = db.relationship('Accounts')
     police_department_id=db.Column(db.String(32),ForeignKey('police_department.police_department_id'))
-    police=db.relationship('PoliceDepartmentModel',backref='policeDetails')
     report_number=db.Column(db.String(100))
     crash_date=db.Column(DateTime)
     location=db.Column(db.String(100))
@@ -123,6 +122,8 @@ class CrashReports(db.Model):
     status=db.Column(db.Integer)
 
     occupants = db.relationship('Occupants', backref='crash_reports', lazy=True)
+    police=db.relationship('PoliceDepartmentModel',backref='crash_reports',lazy=True)
+
     def save_to_crash_reports(self):
         db.create_all()
         db.session.add(self)
