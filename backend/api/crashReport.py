@@ -1,12 +1,14 @@
 import uuid
 import boto3
 from flask import request, jsonify, Blueprint
-from models import CrashReports, Occupants,PoliceDepartmentModel
+from models import CrashReports, Occupants,PoliceDepartmentModel,Users
 from flask_restful import Api, Resource
 from sqlalchemy.exc import SQLAlchemyError
+from flask_jwt_extended import create_refresh_token,create_access_token,get_jwt_identity
 from db import db
 from config import AWSCredentials
 from datetime import datetime
+from test import role_required
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -85,6 +87,7 @@ class CreateCrashReport(Resource):
 
 # Get All Crash Reports
 class GetAllCrashReports(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
         requestDetails = request.get_json()
         page = requestDetails.get('page', 1)
@@ -101,9 +104,12 @@ class GetAllCrashReports(Resource):
         reportType=requestDetails.get('reportType')
         countyId= requestDetails.get('countyId')
         policeDepartmentId=requestDetails.get('policeDepartmentId')
-        print(accountId,reportNumber)
         query = CrashReports.query
-        if (accountId!=""):
+        if(reportType==1):
+           user = Users.query.filter_by(username=get_jwt_identity()).first()
+           if user:
+                accountId = user.account_id
+        if (accountId!="0"):
             query = query.filter_by(account_id=accountId)
         if (reportNumber!=""):
             query = query.filter_by(report_number=reportNumber)
@@ -133,7 +139,6 @@ class GetAllCrashReports(Resource):
             except ValueError:
                 return jsonify({'message': 'Invalid date format for addedOnToDate. Use YYYY-MM-DD.'}), 400
         
-        print(query)
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
        
         report_list = []

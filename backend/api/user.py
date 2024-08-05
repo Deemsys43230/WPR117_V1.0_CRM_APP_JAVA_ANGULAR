@@ -75,7 +75,7 @@ class resetPassword(Resource):
         md5.update(password.encode('utf-8'))
         return md5.hexdigest()  
     # Return the hash as a hex string
-    @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
+    # @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
         try:
             data = request.get_json()
