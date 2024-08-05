@@ -95,13 +95,7 @@ class GetAllAccounts(Resource):
                     'is_enable': users_info[0]['is_enable'] if users_info else None,
                     'status':account.status
                     }
-
-                # Append to the result list
                 result.append(payload)
-
-            # Print the final result for debugging
-            print('Result:', result)
-
             return {'data': result, 'status':True,'count': query_count}, 200
         except Exception as e:
             return {'message': 'An error occurred', 'error': str(e)}, 500

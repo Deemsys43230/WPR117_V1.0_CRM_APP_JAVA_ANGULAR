@@ -138,8 +138,8 @@ def save_temporary_file(file, path):
     try:
         with open(path, 'wb') as f:
             f.write(file.read())
-        print("path",path)
         return path
+    
     except Exception as e:
         return str(e)
 
@@ -148,24 +148,19 @@ class UploadImageForPoliceDepartment(Resource):
     def post(self):
         data = request.form
         file = request.files.get('file')    
-        print("file",file)
-        print("file",file.filename)
         dep_id = data.get('dep_id')
         
         path = os.path.join(tempFolder, str(dep_id), file.filename).replace('\\', '/')
-        print('path',path)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         
         if awsUpload == 1:
             saved_file_path = save_temporary_file(file, path)
-            print('saved_file_path',saved_file_path)
             if saved_file_path:
-                uploadFileToAWSS3(saved_file_path, file, dep_id, 2)
+                uploadFileToAWSS3(saved_file_path, file.filename, dep_id, 2)
                 try:
                     os.remove(saved_file_path)
                 except OSError as e:
-                    print(f"Error removing file: {e}")
-                return jsonify({'msg': 'File Uploaded Successfully'})
+                    return jsonify({'msg': 'File Uploaded Successfully'})
             else:
                 return jsonify({'msg': 'Failed to save file'}), 500
         return jsonify({'msg': 'AWS upload not enabled'}), 400
