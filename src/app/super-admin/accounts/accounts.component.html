@@ -39,17 +39,19 @@
     <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">Role <span class="text-danger">*</span></label>
       <select class="form-control" formControlName="role_id">
-        <option value="">---select---</option>
-        <option value="India">Admin</option>
-        <option value="SA">User</option>
+        <option value="">Role</option>
+        <option *ngFor="let role of roleList" value="{{role?.role_id}}">
+          {{role?.role}}
+        </option>
       </select>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">Department <span class="text-danger">*</span></label>
       <select class="form-control" formControlName="police_department_id">
-        <option value="">---select---</option>
-        <option value="India">Boardman</option>
-        <option value="SA">Fairbom</option>
+        <option value="">Department</option>
+        <option *ngFor="let department of departmentList" value="{{department?.department_id}}">
+          {{department?.name}}
+        </option>
       </select>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">

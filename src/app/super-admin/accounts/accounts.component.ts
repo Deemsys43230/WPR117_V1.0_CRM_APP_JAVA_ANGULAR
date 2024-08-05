@@ -5,6 +5,7 @@ import { TableData } from 'src/app/constants';
 import { AccountsDepartmentService } from 'src/app/shared/services/accounts-department-service';
 import { TableConfigComponent } from 'src/app/shared/table-config/table-config.component';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
+import { RoleService } from 'src/app/shared/services/role.service';
 
 @Component({
   selector: 'app-accounts-component',
@@ -23,12 +24,15 @@ export class AccountsComponent implements OnInit {
   public itemsPerPage = 5;
   public callChildComponent: boolean | undefined;
   public count: any[] = [];
+  public roleList: any[] = [];
+  public departmentList: any[] = [];
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private accountsDepartmentService: AccountsDepartmentService,
-    private policeDepartmentService: PoliceDepartmentService
+    private policeDepartmentService: PoliceDepartmentService,
+    private roleService: RoleService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +61,7 @@ export class AccountsComponent implements OnInit {
         : '',
     };
     this.getAccountsDepartmentByPagination();
+    this.getAllRoles();
   }
 
   //initialization of searchAccessManagementForm
@@ -74,29 +79,40 @@ export class AccountsComponent implements OnInit {
   //To Get all Account department details
   getAccountsDepartmentByPagination() {
     var policeData: any[] = [];
-    var policeDepData = { page: 1, items_per_page: "", name: "", county: "" }
+    var policeDepData = { page: 1, items_per_page: "", name: "", county: "" };
     const departmentMap = new Map<number, string>();
+
     this.policeDepartmentService
       .getPoliceDepartmentDetailsByPagination(policeDepData)
       .subscribe((res) => {
         if (res.status) {
+          this.departmentList = [];
           this.callChildComponent = true;
+          res.data.forEach(item => {
+            departmentMap.set(item.department_id, item.name);
+          });
           policeData = res.data
-            .filter(item => res.data.map(item => item.police_department_id).includes(item.department_id))
+            .filter(item => departmentMap.has(item.department_id))
             .map(item => ({
               police_department_id: item.department_id,
               name: item.name
             }));
-          res.data.forEach(item => {
-            departmentMap.set(item.department_id, item.name);
+          res.data.forEach(element => {
+            let data = {
+              department_id: element.department_id,
+              name: element.name,
+            };
+            this.departmentList.push(data);
           });
         }
       });
+
     this.accountsDepartmentService
       .getAccountsDepartmentDetailsByPagination(this.searchData)
       .subscribe((res) => {
         if (res.status) {
           this.callChildComponent = true;
+
           res.data.forEach((ele: any) => {
             policeData.push({
               email_id: ele.email_id,
@@ -107,6 +123,7 @@ export class AccountsComponent implements OnInit {
               police_department_id: departmentMap.get(ele.police_department_id) || 'Unknown'
             });
           });
+
           this.table_data = {
             data: policeData,
             totalCount: res.count,
@@ -127,15 +144,37 @@ export class AccountsComponent implements OnInit {
             ],
             actionButton: ['View', 'Enable', 'Disable', 'Edit'],
           };
+
           var length = Math.ceil(res.count / this.itemsPerPage);
           this.count = Array.from({ length }, (_, i) => i + 1);
           this.TableConfigComponent?.initialFunction(this.count);
-          // this.flashMessage.successMessage("Get ALl Laywer Admin Details Successfully!!!")
         }
-        // else {
-        //   // this.spinner.hide();
-        // }
       });
+  }
+
+
+  //get the role of the admin
+  getAllRoles() {
+    this.roleService.getAllRoles().subscribe((res) => {
+      if (res.status) {
+        this.roleList = [];
+        let roles = res.data;
+        roles.forEach((element) => {
+          let data = {
+            role_id: element.role_id,
+            role: element.role,
+          };
+          this.roleList.push(data);
+          // this.selectedMemberRole = this.roleList[0].role_id
+        },
+          error => {
+            console.error('Error fetching roles:', error);
+          });
+        // this.searchAccessmanagementForm.patchValue({
+        //   role_id: this.selectedRole
+        // })
+      }
+    });
   }
 
   //Page change events
