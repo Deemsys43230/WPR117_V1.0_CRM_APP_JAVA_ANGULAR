@@ -92,7 +92,7 @@ class GetAllAccounts(Resource):
                     'users': users_info
                 }
                 result.append(payload)
-            return {'data': result, 'count': query_count}, 200
+            return {'data': result, 'status':True,'count': query_count}, 200
         except Exception as e:
             return {'message': 'An error occurred', 'error': str(e)}, 500
 
