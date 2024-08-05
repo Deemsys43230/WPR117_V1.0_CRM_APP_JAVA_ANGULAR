@@ -1,0 +1,21 @@
+import { Injectable } from '@angular/core';
+import { catchError, tap } from 'rxjs/operators';
+import { throwError, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AccountsDepartmentDataService {
+  constructor(private httpClient: HttpClient) {}
+
+  //get all accounts department details by pagination
+  public getAccountsDepartmentDetailsByPagination(data): Observable<any> {
+    return this.httpClient.post('GetAllAccounts', data).pipe(
+      tap((res) => {
+        return res;
+      }),
+      catchError((error) => throwError(() => error))
+    );
+  }
+}

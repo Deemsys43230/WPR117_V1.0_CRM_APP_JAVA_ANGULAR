@@ -1,6 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { icons} from '../../constants'
-import { ItemsPerPage } from '../../constants'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { icons } from '../../constants';
+import { ItemsPerPage } from '../../constants';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,9 +18,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './table-config.component.html',
   styleUrls: ['./table-config.component.scss'],
 })
-
 export class TableConfigComponent implements OnInit {
-  @ViewChild('searchPageNumber') searchPageNumberInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('searchPageNumber')
+  searchPageNumberInput!: ElementRef<HTMLInputElement>;
 
   @Input() tableData: any;
   @Output() actionOutput = new EventEmitter<any>();
@@ -32,29 +40,29 @@ export class TableConfigComponent implements OnInit {
   public isValid: boolean = false;
 
   ngOnInit(): void {
-    icons.forEach(val => {
-      this.tableData.actionButton.forEach((ele: any) => {
+    icons.forEach((val) => {
+      this.tableData?.actionButton.forEach((ele: any) => {
         if (val.title == ele) {
           this.selectedIcons.push(val);
         }
-      })
-    })
-    var length = Math.ceil(this.tableData.totalCount / this.pageItem);
+      });
+    });
+    var length = Math.ceil(this.tableData?.totalCount / this.pageItem);
     this.count = Array.from({ length }, (_, i) => i + 1);
     this.paginationFunction(this.count);
     this.itemCalculation();
   }
 
   // Initial Function to call from another component
-  initialFunction(count : any) {
+  initialFunction(count: any) {
     this.count = count;
-    var length = Math.ceil(this.tableData.totalCount / this.pageItem);
+    var length = Math.ceil(this.tableData?.totalCount / this.pageItem);
     this.count = Array.from({ length }, (_, i) => i + 1);
     this.itemCalculation();
     this.paginationFunction(this.count);
   }
 
-  // Function Calls when change Items per page 
+  // Function Calls when change Items per page
   onChangeItem(event: any) {
     this.pageItem = event.target.value;
     var setCurrentPage = Math.ceil(this.tableData.totalCount / this.pageItem);
@@ -63,13 +71,13 @@ export class TableConfigComponent implements OnInit {
     } else {
       this.currentPage = this.currentPage;
     }
-    this.page.emit({ page: this.currentPage, item: this.pageItem })
+    this.page.emit({ page: this.currentPage, item: this.pageItem });
   }
 
   // To Calculate Items page calculation
   itemCalculation() {
-    this.endItem = Number(this.currentPage) * Number(this.pageItem)
-    this.startItem = (Number(this.endItem) - Number(this.pageItem)) + 1
+    this.endItem = Number(this.currentPage) * Number(this.pageItem);
+    this.startItem = Number(this.endItem) - Number(this.pageItem) + 1;
   }
 
   // Searching Page
@@ -77,12 +85,12 @@ export class TableConfigComponent implements OnInit {
     var pageNumber = Number(value);
     if (pageNumber > 0 && pageNumber <= this.count.length) {
       this.currentPage = pageNumber;
-      this.page.emit({ page: pageNumber, item: this.pageItem })
+      this.page.emit({ page: pageNumber, item: this.pageItem });
       this.isSearchValidation = false;
       this.isValid = false;
-      this.searchPageNumberInput.nativeElement.value = ''
+      this.searchPageNumberInput.nativeElement.value = '';
     } else if (pageNumber < 1 || this.count.length <= pageNumber) {
-      this.isValid = true
+      this.isValid = true;
     } else {
       this.isSearchValidation = true;
     }
@@ -96,40 +104,43 @@ export class TableConfigComponent implements OnInit {
   // Next Page
   nextPage() {
     this.currentPage = this.currentPage + 1;
-    this.page.emit({ page: this.currentPage, item: this.pageItem })
+    this.page.emit({ page: this.currentPage, item: this.pageItem });
   }
 
   // Previous Page
   previousPage() {
     this.currentPage = this.currentPage - 1;
-    this.page.emit({ page: this.currentPage, item: this.pageItem })
+    this.page.emit({ page: this.currentPage, item: this.pageItem });
   }
 
   // Selected Page
   selectedPage(pageNum: any) {
     if (pageNum) {
-      this.currentPage = pageNum
+      this.currentPage = pageNum;
     }
-    this.page.emit({ page: this.currentPage, item: this.pageItem })
+    this.page.emit({ page: this.currentPage, item: this.pageItem });
   }
 
   // Pagination Calculation
   paginationFunction(count: any[]) {
-    this.pagination = []
-    var dots = '...'
+    this.pagination = [];
+    var dots = '...';
     if (count.length <= 5) {
-      this.pagination = count
+      this.pagination = count;
     } else if (this.currentPage == 1 || this.currentPage == count.length) {
-      this.pagination.push(1, 2, dots, count.length - 1, count.length)
-    }
-    else if (this.currentPage == 2) {
-      this.pagination.push(1, 2, dots, count.length)
-    }
-    else if (count.length - 1 == this.currentPage) {
-      this.pagination.push(1, dots, count.length - 2, count.length - 1, count.length)
-    }
-    else {
-      this.pagination.push(1, dots, this.currentPage, dots, count.length)
+      this.pagination.push(1, 2, dots, count.length - 1, count.length);
+    } else if (this.currentPage == 2) {
+      this.pagination.push(1, 2, dots, count.length);
+    } else if (count.length - 1 == this.currentPage) {
+      this.pagination.push(
+        1,
+        dots,
+        count.length - 2,
+        count.length - 1,
+        count.length
+      );
+    } else {
+      this.pagination.push(1, dots, this.currentPage, dots, count.length);
     }
   }
 }
