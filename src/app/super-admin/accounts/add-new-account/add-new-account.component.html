@@ -21,25 +21,27 @@
 
 <!-- Form starts -->
 <div class="card-body">
-  <form class="d-flex flex-column gap-3">
+  <form [formGroup]="accountForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="firstName" class="form-label"
           >First Name <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-user"></i>
           </span>
           <input
-            type="text"
-            class="form-control"
-            placeholder="First Name"
+          id="firstName"
+          type="text"
+          class="form-control"
+          placeholder="First Name"
+          formControlName="first_name"
           />
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="middleName" class="form-label"
           >Middle Name</label
         >
         <div class="input-box">
@@ -47,15 +49,17 @@
             <i class="fa fa-user"></i>
           </span>
           <input
-            type="text"
-            class="form-control"
-            placeholder="Middle Name"
+          id="middleName"
+          type="text"
+          class="form-control"
+          placeholder="Middle Name"
+          formControlName="middle_name"
           />
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="lastName" class="form-label"
           >Last Name <span class="text-danger">*</span></label
         >
         <div class="input-box">
@@ -63,9 +67,11 @@
             <i class="fa fa-user"></i>
           </span>
           <input
-            type="text"
-            class="form-control"
-            placeholder="Last Name"
+          id="lastName"
+          type="text"
+          class="form-control"
+          placeholder="Last Name"
+          formControlName="last_name"
           />
         </div>
       </div>
@@ -73,7 +79,7 @@
 
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="userName" class="form-label"
           >User Name <span class="text-danger">*</span></label
         >
         <div class="input-box">
@@ -81,27 +87,34 @@
             <i class="fa fa-user"></i>
           </span>
           <input
+          id="userName"
             type="text"
             class="form-control"
             placeholder="User Name"
+            formControlName="username"
           />
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="emailId" class="form-label"
           >Email Id <span class="text-danger">*</span></label
         >
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-envelope"></i>
           </span>
-          <input type="text" class="form-control" placeholder="Email Id" />
+          <input  
+          id="emailId"
+          type="text"
+          class="form-control"
+          placeholder="Email Id"
+          formControlName="email_id" />
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="phoneNumber" class="form-label"
           >Phone Number <span class="text-danger">*</span></label
         >
         <div class="input-box">
@@ -109,9 +122,11 @@
             <i class="fa fa-phone"></i>
           </span>
           <input
-            type="text"
-            class="form-control"
-            placeholder="Phone Number"
+          id="phoneNumber"
+          type="text"
+          class="form-control"
+          placeholder="Phone Number"
+          formControlName="phone_number"
           />
         </div>
       </div>
@@ -119,32 +134,34 @@
 
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="role" class="form-label"
           >Role <span class="text-danger">*</span></label
         >
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-user-secret"></i>
           </span>
-          <select class="form-control">
-            <option value="">---select---</option>
-            <option value="India">Admin</option>
-            <option value="SA">User</option>
+          <select class="form-control" formControlName="role_id">
+            <option value="">Role</option>
+            <option *ngFor="let role of roleList" value="{{role?.role_id}}">
+              {{role?.role}}
+            </option>
           </select>
         </div>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
+        <label for="department" class="form-label"
           >Department <span class="text-danger">*</span></label
         >
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-id-badge"></i>
           </span>
-          <select class="form-control">
-            <option value="">---select---</option>
-            <option value="India">Boardman</option>
-            <option value="SA">Fairbom</option>
+          <select class="form-control" formControlName="police_department_id">
+            <option value="">Department</option>
+            <option *ngFor="let department of departmentList" value="{{department?.department_id}}">
+              {{department?.name}}
+            </option>
           </select>
         </div>
       </div>
@@ -153,7 +170,7 @@
     <div class="row">
       <div class="text-end">
         <button class="btn common-btn-css common-btn-color" type="submit">
-          Submit
+          {{ account_id ? "Update" : "Submit" }}
         </button>
       </div>
     </div>

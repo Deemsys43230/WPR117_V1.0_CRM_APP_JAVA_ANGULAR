@@ -87,6 +87,7 @@ export class AccountsComponent implements OnInit {
         res.data.forEach((ele: any) => {
           this.policeDepartmentService.getByIdPoliceDepartmentDetails(ele.police_department_id).subscribe((val) => {
             policeData.push({
+              account_id: ele.account_id,
               email_id: ele.email_id,
               first_name: ele.first_name,
               last_name: ele.last_name,
@@ -189,14 +190,44 @@ export class AccountsComponent implements OnInit {
   // Call Function based on action click's in table
   actionOutput(event: any) {
     console.log(event);
-    // if (event.action == 'Edit') {
-    //   this.editLawyerAdmin(event.data);
-    // } else if (event.action == 'Enable' || event.action == 'Disable') {
-    //   this.enabledisableLawyerAdmin(event.data);
-    // } else if (event.action == 'Reset') {
-    //   this.resetPasswordModalOpen(event.data)
-    // }
+    if (event.action == 'Edit') {
+      this.handleEdit(event.data);
+    } else if (event.action == 'Enable') {
+      // this.handleEnable(event.data);
+    } else if (event.action == 'Disable') {
+      // this.handleDisable(event.data);
+    } else if (event.action == 'View') {
+      // this.handleView(event.data);
+    }
   }
+
+  private handleEdit(data: any) {
+    console.log('Edit:', data);
+    this.router.navigate(['/superAdmin/accounts/add-new-account/'+data.account_id]);
+  }
+
+  // private handleEnable(data: any) {
+  //   console.log('Enable:', data);
+  //   this.someService.enableItem(data.id).subscribe(
+  //     (response) => {
+  //       this.toastr.success('Item enabled successfully');
+  //     },
+  //   );
+  // }
+  
+  // private handleDisable(data: any) {
+  //   console.log('Disable:', data);
+  //   this.someService.disableItem(data.id).subscribe(
+  //     (response) => {
+  //       this.toastr.success('Item disabled successfully');
+  //     },
+  //   );
+  // }
+  
+  // private handleView(data: any) {
+  //   console.log('View:', data);
+  //   this.router.navigate(['view', data.id]);
+  // }
 
   addAccountsDepartment() {
     this.router.navigate(['superAdmin/accounts/add-new-account']);

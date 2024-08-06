@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: "department/add-department", component: AddDepartmentComponent },
   { path: "accountsDepartment", component: AccountsComponent },
   { path: "accounts/add-new-account", component: AddNewAccountComponent },
+  { path: "accounts/add-new-account/:id", component: AddNewAccountComponent },
   { path: "occupants", component: OccupantsComponent },
 ];
 

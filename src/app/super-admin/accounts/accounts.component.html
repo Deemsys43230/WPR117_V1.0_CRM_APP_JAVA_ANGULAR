@@ -19,25 +19,25 @@
  <div>
 <form class="row" [formGroup]="searchAccountsDepartmentForm">
   <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">First Name</label>
       <input type="text" class="form-control" placeholder="Search First Name" formControlName="first_name" />
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">Last Name</label>
       <input type="text" class="form-control" placeholder="Search Last Name" formControlName="last_name" />
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">User Name</label>
       <input type="text" class="form-control" placeholder="Search User Name" formControlName="username" />
     </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">Email Id</label>
       <input type="text" class="form-control" placeholder="Search Email Id" formControlName="email_id" />
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+  </div>
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">Role <span class="text-danger">*</span></label>
       <select class="form-control" formControlName="role_id">
         <option value="">Role</option>
@@ -46,7 +46,7 @@
         </option>
       </select>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">Department <span class="text-danger">*</span></label>
       <select class="form-control" formControlName="police_department_id">
         <option value="">Department</option>
@@ -55,7 +55,7 @@
         </option>
       </select>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <div class="btn-box">
         <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
           type="button" (click)="onSearch()">
