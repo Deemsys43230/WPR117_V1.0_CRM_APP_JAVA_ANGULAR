@@ -17,7 +17,11 @@ export class PoliceDepartmentDataService {
     }), catchError(error => throwError(() => error)));
 }
 
-
-
+   //get by id police department details
+   public getByIdPoliceDepartmentDetails(id: number): Observable<any> {
+    return this.httpClient.get(`getByIdPoliceDepartment/${id}`).pipe(tap(res => {
+        return res;
+    }), catchError(error => throwError(() => error)));
+}
 
 }

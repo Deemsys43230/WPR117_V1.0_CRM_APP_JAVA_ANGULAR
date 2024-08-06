@@ -28,7 +28,6 @@ export class AccountsComponent implements OnInit {
   public departmentList: any[] = [];
   public searchValue: any;
 
-
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -64,6 +63,7 @@ export class AccountsComponent implements OnInit {
     };
     this.getAccountsDepartmentByPagination();
     this.getAllRoles();
+    this.getAllDepartments();
   }
 
   //initialization of searchAccessManagementForm
@@ -81,79 +81,46 @@ export class AccountsComponent implements OnInit {
   //To Get all Account department details
   getAccountsDepartmentByPagination() {
     var policeData: any[] = [];
-    var policeDepData = { page: 1, items_per_page: "", name: "", county: "" };
-    const departmentMap = new Map<number, string>();
-
-    this.policeDepartmentService
-      .getPoliceDepartmentDetailsByPagination(policeDepData)
-      .subscribe((res) => {
-        if (res.status) {
-          this.departmentList = [];
-          this.callChildComponent = true;
-          res.data.forEach(item => {
-            departmentMap.set(item.department_id, item.name);
-          });
-          policeData = res.data
-            .filter(item => departmentMap.has(item.department_id))
-            .map(item => ({
-              police_department_id: item.department_id,
-              name: item.name
-            }));
-          res.data.forEach(element => {
-            let data = {
-              department_id: element.department_id,
-              name: element.name,
-            };
-            this.departmentList.push(data);
-          });
-        }
-      });
-
-    this.accountsDepartmentService
-      .getAccountsDepartmentDetailsByPagination(this.searchData)
-      .subscribe((res) => {
-        if (res.status) {
-          this.callChildComponent = true;
-
-          res.data.forEach((ele: any) => {
+    this.accountsDepartmentService.getAccountsDepartmentDetailsByPagination(this.searchData).subscribe((res) => {
+      if (res.status) {
+        this.callChildComponent = true;
+        res.data.forEach((ele: any) => {
+          this.policeDepartmentService.getByIdPoliceDepartmentDetails(ele.police_department_id).subscribe((val) => {
             policeData.push({
               email_id: ele.email_id,
               first_name: ele.first_name,
               last_name: ele.last_name,
               username: ele.username,
               role_id: ele.role_id,
-              police_department_id: departmentMap.get(ele.police_department_id) || 'Unknown'
+              status: ele.status,
+              police_department_id: val.data.name
             });
           });
-
-          this.table_data = {
-            data: policeData,
-            totalCount: res.count,
-            labelName: [
-              'first_name',
-              'last_name',
-              'username',
-              'email_id',
-              'police_department_id',
-            ],
-            tableHeading: [
-              'First Name',
-              'Last Name',
-              'User Name',
-              'Email Id',
-              'Police Department',
-              'Actions',
-            ],
-            actionButton: ['View', 'Enable', 'Disable', 'Edit'],
-          };
-
-          var length = Math.ceil(res.count / this.itemsPerPage);
-          this.count = Array.from({ length }, (_, i) => i + 1);
-          this.TableConfigComponent?.initialFunction(this.count);
-        }
-      });
+        });
+        this.table_data = {
+          data: policeData,
+          totalCount: res.count,
+          labelName: [
+            'first_name',
+            'last_name',
+            'username',
+            'email_id',
+            'police_department_id',
+          ],
+          tableHeading: [
+            'First Name',
+            'Last Name',
+            'User Name',
+            'Email Id',
+            'Police Department',
+            'Actions',
+          ],
+          actionButton: ['View', 'Enable', 'Disable', 'Edit'],
+        };
+        this.TableConfigComponent?.initialFunction(res.count);
+      }
+    });
   }
-
 
   //get the role of the admin
   getAllRoles() {
@@ -161,22 +128,53 @@ export class AccountsComponent implements OnInit {
       if (res.status) {
         this.roleList = [];
         let roles = res.data;
-        roles.forEach((element) => {
-          let data = {
-            role_id: element.role_id,
-            role: element.role,
-          };
-          this.roleList.push(data);
-          // this.selectedMemberRole = this.roleList[0].role_id
-        },
-          error => {
+        roles.forEach(
+          (element) => {
+            let data = {
+              role_id: element.role_id,
+              role: element.role,
+            };
+            this.roleList.push(data);
+            // this.selectedMemberRole = this.roleList[0].role_id
+          },
+          (error) => {
             console.error('Error fetching roles:', error);
-          });
+          }
+        );
         // this.searchAccessmanagementForm.patchValue({
         //   role_id: this.selectedRole
         // })
       }
     });
+  }
+
+  //get all department
+  getAllDepartments() {
+    this.policeDepartmentService
+      .getPoliceDepartmentDetailsByPagination({
+        page: 1,
+        items_per_page: '',
+        name: '',
+        county: '',
+      })
+      .subscribe((res) => {
+        if (res.status) {
+          this.departmentList = [];
+          let departments = res.data;
+          departments.forEach(
+            (element) => {
+              let data = {
+                department_id: element.department_id,
+                name: element.name,
+              };
+              this.departmentList.push(data);
+            },
+            (error) => {
+              console.error('Error fetching roles:', error);
+            }
+          );
+        }
+      });
   }
 
   //Page change events

@@ -26,7 +26,7 @@ export class navItems {
       icon: 'fa fa-male'
     },
     {
-      name: 'logout',
+      name: 'Logout',
       url: 'auth/login',
       icon: 'fa fa-sign-out'
     },

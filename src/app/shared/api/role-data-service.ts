@@ -14,9 +14,9 @@ export class RoleDataService {
     //getAllRoles
     public getAllRoles(): Observable<any> {
         return this.httpClient.get('role/getAllRoles').pipe(
-            tap(res => console.log('Response:', res)), // Log response for debugging
+            tap(res => { return res}), 
             catchError(error => {
-                console.error('Error:', error); // Log error for debugging
+                console.error('Error:', error);
                 return throwError(() => error);
             })
         );

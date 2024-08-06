@@ -16,6 +16,7 @@
 <!-- Header Ends -->
 
 <!-- Search form Starts -->
+ <div>
 <form class="row" [formGroup]="searchAccountsDepartmentForm">
   <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
@@ -57,7 +58,7 @@
     <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
       <div class="btn-box">
         <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
-          type="submit" (click)="onSearch()">
+          type="button" (click)="onSearch()">
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         </button>
         <button class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
@@ -68,6 +69,7 @@
     </div>
   </div>
 </form>
+</div>
 <!-- Search form ends -->
 
 <!-- Table Starts -->
