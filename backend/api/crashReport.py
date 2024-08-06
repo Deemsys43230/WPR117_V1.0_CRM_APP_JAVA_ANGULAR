@@ -87,7 +87,7 @@ class CreateCrashReport(Resource):
 
 # Get All Crash Reports
 class GetAllCrashReports(Resource):
-    @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
+    # @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
         requestDetails = request.get_json()
         page = requestDetails.get('page', 1)
@@ -105,10 +105,10 @@ class GetAllCrashReports(Resource):
         countyId= requestDetails.get('countyId')
         policeDepartmentId=requestDetails.get('policeDepartmentId')
         query = CrashReports.query
-        if(reportType==1):
-           user = Users.query.filter_by(username=get_jwt_identity()).first()
-           if user:
-                accountId = user.account_id
+        # if(reportType==1):
+        #    user = Users.query.filter_by(username=get_jwt_identity()).first()
+        #    if user:
+        #         accountId = user.account_id
         if (accountId!="0"):
             query = query.filter_by(account_id=accountId)
         if (reportNumber!=""):
