@@ -19,11 +19,11 @@
 
 <div class="row">
   <form class="row" [formGroup]="searchPoliceDepartmentForm">
-    <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="col-lg-3 col-md-4 col-sm-12">
       <label for="" class="form-label">Name</label>
       <input type="text" class="form-control" placeholder="Search Name" formControlName="name" />
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <label for="" class="form-label">County</label>
       <select class="form-control" formControlName="county">
         <option value="">All Counties</option>
@@ -32,7 +32,7 @@
         </option>
       </select>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <div class="btn-box">
         <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"
           type="submit" (click)="onSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
@@ -47,5 +47,4 @@
 <!-- Table Starts -->
 <table-config *ngIf="callChildComponent" [tableData]="table_data" (page)="page($event)" [search]="searchValue"
   (actionOutput)="actionOutput($event)"></table-config>
-
 <!-- Table Ends -->
