@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppHttpInterceptor } from './shared/httpInterceptor/app-http-interceptor.interceptor';
@@ -28,7 +29,8 @@ import { AccountsComponent } from './super-admin/accounts/accounts.component';
     RouterModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     {

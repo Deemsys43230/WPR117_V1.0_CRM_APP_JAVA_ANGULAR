@@ -5,13 +5,15 @@ import { DepartmentComponent } from './department/department.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
 import { AddNewAccountComponent } from './accounts/add-new-account/add-new-account.component';
+import { OccupantsComponent } from './occupants/occupants.component';
 
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
   { path: "policeDepartment", component: DepartmentComponent },
-  {path: "department/add-department" , component: AddDepartmentComponent},
+  { path: "department/add-department", component: AddDepartmentComponent },
   { path: "accountsDepartment", component: AccountsComponent },
-  {path: "accounts/add-new-account" , component: AddNewAccountComponent},
+  { path: "accounts/add-new-account", component: AddNewAccountComponent },
+  { path: "occupants", component: OccupantsComponent },
 ];
 
 @NgModule({
