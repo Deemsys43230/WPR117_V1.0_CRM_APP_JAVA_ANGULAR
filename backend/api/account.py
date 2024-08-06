@@ -84,6 +84,7 @@ class GetAllAccounts(Resource):
                 if not users_info and (username or role_id):
                     continue 
                 payload = {
+                    'account_id':account.account_id,
                     'first_name': account.first_name,
                     'last_name': account.last_name,
                     'middle_name': account.middle_name,
@@ -108,6 +109,7 @@ class getAccountsById(Resource):
             user = Users.query.filter_by(account_id=uuid).first()
             if data:
                 payload = {
+                    'account_id':data.account_id,
                         'first_name':data.first_name,
                         'last_name':data.last_name,
                         'middle_name':data.middle_name,

@@ -19,10 +19,10 @@ class createPoliceDepartment(Resource):
                 search_link = data['search_link']
                 )
             police.savePoliceDepartment()
-            return jsonify({'msg':'Police Department Added Sucessfully','data':{**data}})
+            return jsonify({'msg':'Police Department Added Sucessfully','status':True,'data':{**data}})
         
         except Exception as e:
-            return jsonify({'msg':'Error While Adding Police Department','error':str(e)})
+            return jsonify({'msg':'Error While Adding Police Department','status':False,'error':str(e)})
 
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
@@ -72,6 +72,7 @@ class getByIdPoliceDepartment(Resource):
             data = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if data:
                 police_data = {
+                    'department_id':data.police_department_id,
                     'county_id':data.county_id,
                     'count_name':data.county.name,
                     'status':data.county.status,
@@ -126,20 +127,17 @@ class enableDisablePoliceDepartment(Resource):
 # TO UPLOAD IMAGE WHEN IMAGE IS NOT PROVIDED        
 class uploadPoliceDepartmentWithoutFile(Resource):
     def post(self,dep_id): 
-        
         path = tempFolder +""+ defaultBannerName
         if awsUpload == 1:
             uploadFileToAWSS3(path,fileName,dep_id,2)
         return None
     
  # TO SAVE IMAGE IN TEMPORARY STORAGE
-
 def save_temporary_file(file, path):
     try:
         with open(path, 'wb') as f:
             f.write(file.read())
         return path
-    
     except Exception as e:
         return str(e)
 
