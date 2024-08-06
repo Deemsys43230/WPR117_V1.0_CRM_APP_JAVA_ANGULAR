@@ -90,8 +90,8 @@ class GetAllCrashReports(Resource):
     # @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
         requestDetails = request.get_json()
-        page = requestDetails.get('page', 1)
-        itemsPerPage = requestDetails.get('itemsPerPage', 10)
+        page = requestDetails.get('page')
+        itemsPerPage = requestDetails.get('itemsPerPage')
         accountId=requestDetails.get('accountId')
         reportNumber= requestDetails.get('reportNumber')
         crashDate= requestDetails.get('crashDate')
