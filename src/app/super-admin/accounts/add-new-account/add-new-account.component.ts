@@ -48,11 +48,9 @@ export class AddNewAccountComponent implements OnInit {
    onSubmit(): void {
     if (this.accountForm.valid) {  
       if (this.account_id) {
-        console.log('before',this.accountForm.value)
         //Update existing account
         this.updateAccountData.updateAccountData(this.account_id, this.accountForm.value).subscribe({
           next: () => {
-            console.log('this',this.accountForm.value)
             alert('Account updated successfully');
             this.router.navigate(['superAdmin/accountsDepartment/']);
           },

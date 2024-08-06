@@ -14,4 +14,9 @@ export class AccountsDepartmentService {
       data
     );
   }
+
+  //enable/disable account
+  public enableDisableAccountsDepartment(id, data) {
+    return this.accountsDepartmentDataService.enableDisableAccountsDepartment(id, data)
+  }
 }

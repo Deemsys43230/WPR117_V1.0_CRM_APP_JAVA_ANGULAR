@@ -18,4 +18,14 @@ export class AccountsDepartmentDataService {
       catchError((error) => throwError(() => error))
     );
   }
+
+   //enable/disable account
+   public enableDisableAccountsDepartment(id, data): Observable<any> {
+    return this.httpClient.post(`enableDisableAccountById/${id}`, data).pipe(
+      tap((res) => {
+        return res;
+      }),
+      catchError((error) => throwError(() => error))
+    );
+  }
 }

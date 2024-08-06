@@ -20,11 +20,9 @@ export const icons = [
         'checkValue': 0
     },
     {
-        'title': 'View',
-        'icon': 'fa fa-eye',
+        'title': 'Reset Password',
+        'icon': 'fa fa-key',
         'bgColor': '#1d8d97',
-        'checkVariable': 'status',
-        'checkValue': 1
     }
 ]
  

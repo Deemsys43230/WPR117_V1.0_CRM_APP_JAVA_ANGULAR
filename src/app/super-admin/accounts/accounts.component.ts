@@ -33,7 +33,8 @@ export class AccountsComponent implements OnInit {
     private fb: FormBuilder,
     private accountsDepartmentService: AccountsDepartmentService,
     private policeDepartmentService: PoliceDepartmentService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private enableDisableAccountsDepartment: AccountsDepartmentService
   ) { }
 
   ngOnInit(): void {
@@ -94,7 +95,8 @@ export class AccountsComponent implements OnInit {
               username: ele.username,
               role_id: ele.role_id,
               status: ele.status,
-              police_department_id: val.data.name
+              police_department_id: val.data.name,
+              is_enable: ele.is_enable
             });
           });
         });
@@ -116,7 +118,7 @@ export class AccountsComponent implements OnInit {
             'Police Department',
             'Actions',
           ],
-          actionButton: ['View', 'Enable', 'Disable', 'Edit'],
+          actionButton: ['Edit', 'Enable', 'Disable', 'Reset Password'],
         };
         this.TableConfigComponent?.initialFunction(res.count);
       }
@@ -193,40 +195,41 @@ export class AccountsComponent implements OnInit {
     if (event.action == 'Edit') {
       this.handleEdit(event.data);
     } else if (event.action == 'Enable') {
-      // this.handleEnable(event.data);
+      console.log('enable',event.data);
+      this.handleEnable(event.data);
     } else if (event.action == 'Disable') {
-      // this.handleDisable(event.data);
-    } else if (event.action == 'View') {
+      this.handleDisable(event.data);
+    } else if (event.action == 'Reset Password') {
       // this.handleView(event.data);
     }
   }
 
   private handleEdit(data: any) {
-    console.log('Edit:', data);
     this.router.navigate(['/superAdmin/accounts/add-new-account/'+data.account_id]);
   }
 
-  // private handleEnable(data: any) {
-  //   console.log('Enable:', data);
-  //   this.someService.enableItem(data.id).subscribe(
-  //     (response) => {
-  //       this.toastr.success('Item enabled successfully');
-  //     },
-  //   );
-  // }
+  private handleEnable(data: any) {
+    const payload = {
+      is_enable: data.is_enable ? 1 : 0
+    };
+    this.enableDisableAccountsDepartment.enableDisableAccountsDepartment(data.account_id, payload).subscribe(
+      (response) => {
+        alert('Item enabled successfully');
+      },
+    );
+  }
   
-  // private handleDisable(data: any) {
-  //   console.log('Disable:', data);
-  //   this.someService.disableItem(data.id).subscribe(
-  //     (response) => {
-  //       this.toastr.success('Item disabled successfully');
-  //     },
-  //   );
-  // }
+  private handleDisable(data: any) {
+    this.enableDisableAccountsDepartment.enableDisableAccountsDepartment(data.account_id, data).subscribe(
+      (response) => {
+        alert('Item disabled successfully');
+      },
+    );
+  }
   
-  // private handleView(data: any) {
-  //   console.log('View:', data);
-  //   this.router.navigate(['view', data.id]);
+  // private handleResetPassword(data: any) {
+  //   console.log('ResetPassword:', data);
+  //   this.router.navigate(['ResetPassword', data.id]);
   // }
 
   addAccountsDepartment() {
