@@ -78,11 +78,11 @@
 <!-- table start -->
 <table class="table table-bordered mt-5">
     <thead>
-        <tr class="report-table-header">
-            <th colspan="2">First Name</th>
-            <th colspan="2">Last Name</th>
-            <th>Department</th>
-            <th>Action</th>
+        <tr>
+            <th class="report-table-header" colspan="2">First Name</th>
+            <th class="report-table-header" colspan="2">Last Name</th>
+            <th class="report-table-header">Department</th>
+            <th class="report-table-header">Action</th>
         </tr>
     </thead>
     <tbody *ngIf="!error">
@@ -97,9 +97,9 @@
                         Occupants:</label><br />{{data.no_of_occupants}}</td>
                 <td class="report-header">{{data.police_department}}</td>
                 <td class="report-header"><a class="view-btn" title="View"><i
-                            class="fa fa-eye fa-sm"></i></a>&nbsp;&nbsp;
+                            class="fa fa-eye fa-sm"></i></a>
                     <a href="{{data.file_name}}" target="_blank" class="info-btn" title="View Report File"><i
-                            class="fa fa-file fa-sm"></i></a>
+                            class="fas fa-file"></i></a>
                 </td>
             </tr>
             <tr *ngFor="let item of data.occupantsForms">
@@ -116,23 +116,22 @@
 </table>
 <!-- Pagination Starts -->
 <div class="row mt-4" *ngIf="!error">
-    <div class="col-lg-4 col-xl-4" *ngIf="pagebutton"></div>
-    <div class=" col-lg-4 col-xl-4 d-flex" *ngIf="!pagebutton">
-        <input class="form-control w-100" type="number" [(ngModel)]="searchPage" min="1"
-            placeholder="Search By page no" />
+    <div class="col-lg-4" *ngIf="pagebutton"></div>
+    <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
+        <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search By page no" />
         <button class="button goBtn" (change)="searchPageno()">
             GO
         </button>
         <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
     </div>
-    <div class="col-lg-4 col-xl-4 pageStatus">
+    <div class="col-lg-4 pageStatus">
         <div class="data-list">
             <p>
                 Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
             </p>
         </div>
     </div>
-    <div class="col-lg-4 col-xl-4">
+    <div class="col-lg-4">
         <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown" type="text"
             (change)="onChangePagination($event)">
             <option *ngFor="let data of ItemsPerPage" [value]="data.value">
@@ -153,8 +152,8 @@
                     (click)="goToPage(page)">
                     {{ page }}
                 </li>
-                <li [ngClass]="{ numberList: currentPage === totalPages }">
-                    <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage === totalPages"
+                <li [ngClass]="{ numberList: currentPage !== totalPages }">
+                    <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
                         (click)="nextPage()"></i>
                 </li>
             </ul>

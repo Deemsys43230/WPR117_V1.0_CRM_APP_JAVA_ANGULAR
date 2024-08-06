@@ -1,13 +1,13 @@
 @import 'src/styles.scss';
 
 .report-table-header {
-    background-color: #323130 !important;
-    color: #fff;
+    background-color: $third-color;
+    color: $primary-color;
 }
 
 .report-header {
-    background-color: #B0B0B0 !important;
-    color: #323130;
+    background-color: #9fc1c173;
+    color: $primary-color;
 }
 
 .label-color {
@@ -22,25 +22,27 @@
     border-radius: 5px;
     margin: 0px 5px;
     cursor: pointer;
-    background-color: #337ab7;
+    background-color: #1d8d97;
 }
 
 .info-btn {
-    font-size: 10px;
+    font-size: 12px;
     color: white;
     padding: 7px;
     border-radius: 5px;
     margin: 0px 5px;
     cursor: pointer;
-    background-color: #5bc0de;
+    background-color: #f0ad4e;
 }
+
 .warn {
     color: red;
     font-family: Roboto;
     font-weight: 500;
     text-align: center;
-  }
-  // Pagination CSS Starts
+}
+
+// Pagination CSS Starts
 .numberListContainer {
     list-style: none;
     display: flex;
@@ -49,7 +51,7 @@
 
 li.numberList {
     padding: 0px 10px;
-    border: 1px solid #7386d5;
+    border: 1px solid #9fc1c1;
     margin: 5px;
     color: #316c71;
     font-weight: 500;
@@ -58,25 +60,15 @@ li.numberList {
 }
 
 li.numberList:hover {
-    background: #7386d5;
+    background: #9fc1c1;
     color: white;
-    border: 1px solid #6375c0;
-}
-
-//Icon Styles
-.icons {
-    font-size: 10px;
-    color: white;
-    padding: 7px;
-    border-radius: 5px;
-    margin: 0px 5px;
-    cursor: pointer;
+    border: 1px solid #9fc1c1;
 }
 
 .active {
     background-color: #1d8d97 !important;
     color: white !important;
-    border: #7386d5 !important;
+    border: #1d8d97 !important;
 }
 
 .searchPage {
@@ -91,7 +83,7 @@ li.numberList:hover {
 }
 
 .searchPage:focus-visible {
-    border: 1px solid #7386d5;
+    border: 1px solid #9fc1c1;
     outline: none !important;
 }
 
@@ -102,15 +94,16 @@ li.numberList:hover {
 }
 
 //Pagination CSS Ends
- //Button CSS Starts
- .goBtn {
-    background-color: #7386d5;
+//Button CSS Starts
+.goBtn {
+    background-color: #1d8d97;
     color: white;
     border-radius: 0px 5px 5px 0px;
-  }
-  
-  .goBtn:hover {
+    border: #1d8d97;
+}
+
+.goBtn:hover {
     color: white;
-  }
-  
-  //Button CSS Ends
+}
+
+//Button CSS Ends

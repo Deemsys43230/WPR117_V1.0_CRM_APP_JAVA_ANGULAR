@@ -1,102 +1,104 @@
 @import 'src/styles.scss';
+
 // Table CSS Starts
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-inline: auto;
-    margin-top: 30px;
-  }
-  
-  th,
-  td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-  
-  th {
-    background-color: $third-color;
-    color: $primary-color;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  // Table CSS Ends
-  
-  // Pagination CSS Starts
-  .numberListContainer {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-  }
-  
-  li.numberList {
-    padding: 0px 10px;
-    border: 1px solid #7386d5;
-    margin: 5px;
-    color: #316c71;
-    font-weight: 500;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  li.numberList:hover {
-    background: #7386d5;
-    color: white;
-    border: 1px solid #6375c0;
-  }
-
-  //Icon Styles
-  .icons {
-    font-size: 10px;
-    color: white;
-    padding: 7px;
-    border-radius: 5px;
-    margin: 0px 5px;
-    cursor: pointer;
+  width: 100%;
+  border-collapse: collapse;
+  margin-inline: auto;
+  margin-top: 30px;
 }
-  
-  .active {
-    background-color: #1d8d97 !important;
-    color: white !important;
-    border: #7386d5 !important;
-  }
-  
-  .searchPage {
-    width: 100%;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    height: 36px;
-  }
-  
-  .searchPage::placeholder {
-    padding-left: 10px;
-  }
-  
-  .searchPage:focus-visible {
-    border: 1px solid #7386d5;
-    outline: none !important;
-  }
-  
-  .pageStatus {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  //Pagination CSS Ends
-  
-  //Button CSS Starts
-  .goBtn {
-    background-color: #7386d5;
-    color: white;
-    border-radius: 0px 5px 5px 0px;
-  }
-  
-  .goBtn:hover {
-    color: white;
-  }
-  
-  //Button CSS Ends
+
+th,
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: $third-color;
+  color: $primary-color;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+// Table CSS Ends
+
+// Pagination CSS Starts
+.numberListContainer {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+li.numberList {
+  padding: 0px 10px;
+  border: 1px solid #9fc1c1;
+  margin: 5px;
+  color: #316c71;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+li.numberList:hover {
+  background: #9fc1c1;
+  color: white;
+  border: 1px solid #9fc1c1;
+}
+
+//Icon Styles
+.icons {
+  font-size: 10px;
+  color: white;
+  padding: 7px;
+  border-radius: 5px;
+  margin: 0px 5px;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #1d8d97 !important;
+  color: white !important;
+  border: #1d8d97 !important;
+}
+
+.searchPage {
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  height: 36px;
+}
+
+.searchPage::placeholder {
+  padding-left: 10px;
+}
+
+.searchPage:focus-visible {
+  border: 1px solid #9fc1c1;
+  outline: none !important;
+}
+
+.pageStatus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//Pagination CSS Ends
+
+//Button CSS Starts
+.goBtn {
+  background-color: #1d8d97;
+  color: white;
+  border-radius: 0px 5px 5px 0px;
+  border: #1d8d97;
+}
+
+.goBtn:hover {
+  color: white;
+}
+
+//Button CSS Ends

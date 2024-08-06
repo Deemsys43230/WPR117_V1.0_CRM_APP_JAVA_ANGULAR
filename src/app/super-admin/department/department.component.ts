@@ -20,12 +20,11 @@ export class DepartmentComponent implements OnInit {
   public searchData: any;
   public searchPoliceDepartmentForm: any;
   public currentPage: any = 1;
-  public itemsPerPage = 5;
+  public items_per_page = 5;
   public callChildComponent: boolean | undefined;
   public count: any[] = [];
   public countyList: any[] = [];
   public searchValue: any;
-  public isSearch: boolean = false;
 
   constructor(
     private router: Router,
@@ -38,13 +37,9 @@ export class DepartmentComponent implements OnInit {
     this.initializationSearchAccessmanagementForm();
     this.searchData = {
       page: this.currentPage,
-      items_per_page: this.itemsPerPage,
-      name: this.searchPoliceDepartmentForm.value.name
-        ? this.searchPoliceDepartmentForm.value.name
-        : '',
-      county: this.searchPoliceDepartmentForm.value.county
-        ? this.searchPoliceDepartmentForm.value.county
-        : '',
+      items_per_page: this.items_per_page,
+      name: (this.searchPoliceDepartmentForm.value.name != undefined) ? this.searchPoliceDepartmentForm.value.name : "",
+      county: (this.searchPoliceDepartmentForm.value.county != undefined) ? this.searchPoliceDepartmentForm.value.county : "",
     };
     this.getPoliceDepartmentByPagination();
     this.getAllCounty();
@@ -61,12 +56,6 @@ export class DepartmentComponent implements OnInit {
   //To Get all Police department details
   getPoliceDepartmentByPagination() {
     var policeData: any[] = [];
-    this.searchData = {
-      page: this.currentPage,
-      items_per_page: this.itemsPerPage,
-      name: (this.isSearch) ? this.searchPoliceDepartmentForm.value.name : '',
-      county: (this.isSearch) ? this.searchPoliceDepartmentForm.value.county : '',
-    };
     this.policeDepartmentService.getPoliceDepartmentDetailsByPagination(this.searchData).subscribe((res) => {
       if (res.status) {
         this.callChildComponent = true;
@@ -110,11 +99,7 @@ export class DepartmentComponent implements OnInit {
             county_name: element.name,
           };
           this.countyList.push(data);
-          // this.selectedMemberRole = this.roleList[0].role_id
         });
-        // this.searchAccessmanagementForm.patchValue({
-        //   role_id: this.selectedRole
-        // })
       }
     });
   }
@@ -124,7 +109,9 @@ export class DepartmentComponent implements OnInit {
   //Page change events
   page(value: any) {
     this.currentPage = value.page;
-    this.itemsPerPage = Number(value.item);
+    this.items_per_page = Number(value.item);
+    this.searchData["items_per_page"] = this.items_per_page;
+    this.searchData["page"] = this.currentPage;
     this.getPoliceDepartmentByPagination();
   }
 
@@ -150,21 +137,26 @@ export class DepartmentComponent implements OnInit {
   //On search Police Department
   onSearch() {
     this.currentPage = 1;
-    this.isSearch = true;
+    this.searchData = {
+      page: this.currentPage,
+      items_per_page: this.items_per_page,
+      name: (this.searchPoliceDepartmentForm.value.name != undefined) ? this.searchPoliceDepartmentForm.value.name : "",
+      county: (this.searchPoliceDepartmentForm.value.county != undefined) ? this.searchPoliceDepartmentForm.value.county : "",
+    };
     this.getPoliceDepartmentByPagination();
   }
 
   //On reset Police Department Search
   resetSearch() {
     this.currentPage = 1;
-    this.itemsPerPage = 5;
-    this.isSearch = false;
-    this.searchPoliceDepartmentForm.patchValue({
+    this.items_per_page = 5;
+    this.searchPoliceDepartmentForm.reset({ county: '' });
+    this.searchData = {
       page: this.currentPage,
-      items_per_page: this.itemsPerPage,
-      name: '',
-      county: '',
-    });
+      items_per_page: this.items_per_page,
+      name: "",
+      county: "",
+    };
     this.getPoliceDepartmentByPagination();
   }
 }
