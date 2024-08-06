@@ -31,7 +31,6 @@ export class OccupantsComponent implements OnInit {
   public pages: any[] = [];
   public occupantDetail: any = [];
   public error: boolean = false;
-  public isSearch: boolean = false;
 
   constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService,) {
     this.ItemsPerPage = ItemsPerPage
@@ -108,15 +107,15 @@ export class OccupantsComponent implements OnInit {
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.isSearch) ? (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "" : "",
-      addedOnToDate: (this.isSearch) ? (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "" : "",
-      countyId: (this.isSearch) ? (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "" : "",
-      crashDate: (this.isSearch) ? (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "" : "",
-      firstName: (this.isSearch) ? (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "" : "",
-      lastName: (this.isSearch) ? (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "" : "",
-      policeDepartmentId: (this.isSearch) ? (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "" : "",
-      location: (this.isSearch) ? (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "" : "",
-      reportNumber: (this.isSearch) ? (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "" : "",
+      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "",
+      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "",
+      countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
+      crashDate: (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "",
+      firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
+      lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
+      policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
+      location: (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "",
+      reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
       reportType: 2,
       searchType: 1,
       accountId: 0,
@@ -355,16 +354,47 @@ export class OccupantsComponent implements OnInit {
   // Search Function  For  Account
   onSearch() {
     this.currentPage = 1
-    this.isSearch = true;
+    this.searchData = {
+      page: this.currentPage,
+      itemsPerPage: this.pageValue,
+      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "",
+      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "",
+      countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
+      crashDate: (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "",
+      firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
+      lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
+      policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
+      location: (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "",
+      reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
+      reportType: 2,
+      searchType: 1,
+      accountId: 0,
+    };
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
     this.getAllOccupants();
   }
 
   // Reset  Search
   resetSearch() {
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
+    this.currentPage = 1;
     this.searchOccupantsForm.reset();
-    this.isSearch = false;
+    this.searchData = {
+      page: this.currentPage,
+      itemsPerPage: this.pageValue,
+      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "",
+      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "",
+      countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
+      crashDate: (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "",
+      firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
+      lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
+      policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
+      location: (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "",
+      reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
+      reportType: 2,
+      searchType: 1,
+      accountId: 0,
+    };
     this.getAllOccupants();
+    this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
   }
 }
