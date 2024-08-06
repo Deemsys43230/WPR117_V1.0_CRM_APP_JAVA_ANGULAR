@@ -19,7 +19,7 @@ class createPoliceDepartment(Resource):
                 search_link = data['search_link']
                 )
             police.savePoliceDepartment()
-            return jsonify({'msg':'Police Department Added Sucessfully','status':True,'data':{**data}})
+            return jsonify({'msg':'Police Department Added Sucessfully','status':True,'police_department_id':police.police_department_id,'data':{**data}})
         
         except Exception as e:
             return jsonify({'msg':'Error While Adding Police Department','status':False,'error':str(e)})
