@@ -26,6 +26,8 @@ export class AccountsComponent implements OnInit {
   public count: any[] = [];
   public roleList: any[] = [];
   public departmentList: any[] = [];
+  public searchValue: any;
+
 
   constructor(
     private router: Router,

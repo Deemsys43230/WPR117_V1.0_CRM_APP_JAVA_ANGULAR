@@ -24,6 +24,7 @@ export class DepartmentComponent implements OnInit {
   public callChildComponent: boolean | undefined;
   public count: any[] = [];
   public countyList: any[] = [];
+  public searchValue: any;
 
   constructor(
     private router: Router,

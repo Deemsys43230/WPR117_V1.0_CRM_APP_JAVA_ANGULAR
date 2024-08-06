@@ -71,6 +71,6 @@
 <!-- Search form ends -->
 
 <!-- Table Starts -->
-<table-config *ngIf="callChildComponent" [tableData]="table_data" (page)="page($event)"
-  (actionOutput)="actionOutput($event)" />
+<table-config *ngIf="callChildComponent" [tableData]="table_data" [search]="searchValue" (page)="page($event)"
+  (actionOutput)="actionOutput($event)"></table-config>
 <!-- Table Ends -->

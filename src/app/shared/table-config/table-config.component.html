@@ -1,72 +1,56 @@
 <!-- Table Starts -->
 <table>
   <thead>
-    <tr>
-      <th *ngFor="let column of tableData?.tableHeading">{{ column }}</th>
-    </tr>
+      <tr>
+          <th *ngFor="let column of tableData.tableHeading">{{ column }}</th>
+      </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let row of tableData?.data; let i = index">
-      <td *ngFor="let label of tableData?.labelName">{{ row[label] }}</td>
-      <td>
-        <ng-container *ngFor="let icon of selectedIcons">
-          <i title="{{ icon.title }}" [ngClass]="[icon.icon, 'icons']" [ngStyle]="{ backgroundColor: icon.bgColor }"
-            tooltip="delete" aria-hidden="true" (click)="action(row, icon.title)"
-            *ngIf="row[icon.checkVariable] == icon.checkValue"></i>
-        </ng-container>
-      </td>
-    </tr>
+      <tr *ngFor="let row of tableData.data; let i = index">
+          <td *ngFor="let label of tableData.labelName">{{ row[label] }}</td>
+          <td>
+              <ng-container *ngFor="let icon of selectedIcons">
+                  <i [ngClass]="[icon.icon,'icons']" [ngStyle]="{backgroundColor:icon.bgColor}" title="{{icon.title}}"
+                      aria-hidden="true" (click)="action(row, icon.title)"
+                      *ngIf="row[icon.checkVariable] == icon.checkValue"></i>
+              </ng-container>
+          </td>
+      </tr>
   </tbody>
 </table>
-<p class="text-center text-danger mt-3" *ngIf="tableData?.totalCount == 0">
-  No Records Found!
-</p>
+<p class="text-center text-danger mt-3" *ngIf="tableData.totalCount == 0">No Records Found!</p>
 <!-- Table Ends -->
 
 <!-- Pagination Starts -->
-<section *ngIf="tableData?.totalCount != 0 && count.length > 1">
+<section *ngIf="tableData.totalCount != 0 && count.length > 1">
   <div class="row mt-4">
-    <div class="col-lg-4 col-xl-4">
-      <div class="d-flex">
-        <input type="number" placeholder="Search Page" class="searchPage" #searchPageNumber [min]="1" />
-        <button class="button goBtn" (click)="pageSearch(searchPageNumber.value)">
-          GO
-        </button>
+      <div class="col-lg-4">
+          <div class="d-flex">
+              <input type="number" placeholder="Search Page" class="searchPage" #searchPageNumber [min]="1" />
+              <button class="button goBtn" (click)="pageSearch(searchPageNumber.value)">GO</button>
+          </div>
+          <p class="text-danger ms-1" *ngIf="isValid">Please Enter Valid Page Number</p>
+          <p class="text-danger ms-1" *ngIf="isSearchValidation">Please Enter Page Number</p>
       </div>
-      <p class="text-danger ms-1" *ngIf="isValid">
-        Please Enter Valid Page Number
-      </p>
-      <p class="text-danger ms-1" *ngIf="isSearchValidation">
-        Please Enter Page Number
-      </p>
-    </div>
-    <div class="col-lg-4 col-xl-4 pageStatus">
-      <p class="mb-0 text-center">
-        Showing {{ startItem }}-{{ endItem }} of
-        {{ tableData.totalCount }} records
-      </p>
-    </div>
-    <div class="col-lg-4 col-xl-4">
-      <select name="pages" id="pages" class="searchPage" (change)="onChangeItem($event)">
-        <option *ngFor="let item of items" value="{{ item.value }}">
-          {{ item.data }}
-        </option>
-      </select>
-    </div>
+      <div class="col-lg-4 pageStatus">
+          <p class="mb-0 text-center">Showing {{startItem}}-{{endItem}} of {{tableData.totalCount}} records</p>
+      </div>
+      <div class="col-lg-4">
+          <select name="pages" id="pages" class="searchPage" (change)="onChangeItem($event)">
+              <option *ngFor="let item of items" value="{{item.value}}">{{item.data}}</option>
+          </select>
+      </div>
   </div>
   <div class="mt-4">
-    <ul class="numberListContainer p-0">
-      <li [ngClass]="{ numberList: currentPage != 1 }">
-        <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1" (click)="previousPage()"></i>
-      </li>
-      <li class="numberList" *ngFor="let row of pagination" [ngClass]="{ active: currentPage == row }"
-        (click)="row != '...' ? selectedPage(row) : ''">
-        {{ row }}
-      </li>
-      <li [ngClass]="{ numberList: count.length != currentPage }">
-        <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="count.length != currentPage" (click)="nextPage()"></i>
-      </li>
-    </ul>
+      <ul class="numberListContainer p-0">
+          <li [ngClass]="{'numberList':currentPage != 1}"><i class="fa fa-arrow-left" aria-hidden="true"
+                  *ngIf="currentPage != 1" (click)="previousPage()"></i></li>
+          <li class="numberList" *ngFor="let row of pagination" [ngClass]="{'active': currentPage == row}"
+              (click)="(row !='...')?selectedPage(row):''">{{row}}</li>
+          <li [ngClass]="{'numberList':count.length != currentPage}"><i class="fa fa-arrow-right" aria-hidden="true"
+                  *ngIf="count.length != currentPage" (click)="nextPage()"></i></li>
+      </ul>
   </div>
 </section>
+
 <!-- Pagination Ends -->

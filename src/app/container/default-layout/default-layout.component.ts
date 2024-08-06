@@ -16,6 +16,8 @@ export class DefaultLayoutComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    // Toggle Sidebar menu Button
     const $button = document.querySelector('#sidebar-toggle');
     const $wrapper = document.querySelector('#wrapper');
 
@@ -26,6 +28,7 @@ export class DefaultLayoutComponent implements OnInit {
       });
     }
 
+    // For active url
     const moduleUrl = this.router.url.split('/');
     this.active = moduleUrl.slice(2).join('/');
 

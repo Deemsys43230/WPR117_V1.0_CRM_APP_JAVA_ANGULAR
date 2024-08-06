@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppHttpInterceptor } from './shared/httpInterceptor/app-http-interceptor.interceptor';
@@ -11,8 +12,8 @@ import { AppComponent } from './app.component';
 import { DefaultLayoutComponent } from './container/default-layout/default-layout.component';
 import { LoginComponent } from './auth/login/login.component';
 import { CommonLayoutComponent } from './container/common-layout/common-layout.component';
-import { TableConfigComponent } from './shared/table-config/table-config.component';
 import { AccountsComponent } from './super-admin/accounts/accounts.component';
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -25,12 +26,13 @@ import { AccountsComponent } from './super-admin/accounts/accounts.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    TableConfigComponent,
     RouterModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    SharedModule,
+    CommonModule
   ],
   providers: [
     {

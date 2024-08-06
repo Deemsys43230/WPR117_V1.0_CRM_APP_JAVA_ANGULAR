@@ -5,11 +5,10 @@ import { SuperAdminRoutingModule } from './super-admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DepartmentComponent } from './department/department.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
-import { TableConfigComponent } from '../shared/table-config/table-config.component';
 import { AddNewAccountComponent } from './accounts/add-new-account/add-new-account.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OccupantsComponent } from './occupants/occupants.component';
-
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -22,9 +21,9 @@ import { OccupantsComponent } from './occupants/occupants.component';
   imports: [
     CommonModule,
     SuperAdminRoutingModule,
-    TableConfigComponent,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   exports: [
     DashboardComponent,
