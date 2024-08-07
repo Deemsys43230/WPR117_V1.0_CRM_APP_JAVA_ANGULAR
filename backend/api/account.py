@@ -154,16 +154,16 @@ class enableDisableAccountById(Resource):
             user = Users.query.filter_by(account_id =(uuid)).first()
             data = request.get_json()
             if account:
-                if data['is_enabled'] == 0:
+                if data['is_enable'] == 0:
                     account.status = data['is_enable']
                     user.is_enable = data ['is_enable']
                     db.session.commit()
-                    return jsonify({'status':True,'msg':'Account Disabled Successfully','is_enabled':account.status})
+                    return jsonify({'status':True,'msg':'Account Disabled Successfully','is_enable':account.status})
                 else:
                     account.status = data['is_enable']
                     user.is_enable = data ['is_enable']
                     db.session.commit()
-                    return jsonify({'status':True,'msg':'Account Enabled Successfully','is_enabled':account.status})
+                    return jsonify({'status':True,'msg':'Account Enabled Successfully','is_enable':account.status})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
                
