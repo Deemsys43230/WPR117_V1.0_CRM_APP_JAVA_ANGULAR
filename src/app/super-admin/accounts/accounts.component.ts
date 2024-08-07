@@ -65,7 +65,7 @@ export class AccountsComponent implements OnInit {
         ? this.searchAccountsDepartmentForm.value.police_department_id
         : '',
     };
-    // this.getAllRoles();
+    this.getAllRoles();
     this.getAllDepartments();
     this.getAccountsDepartmentByPagination();
   }

@@ -1,0 +1,40 @@
+.container {
+    max-width: 1435px;
+}
+
+.min-content-container {
+    min-height: 200px;
+    width: 100%;
+}
+
+.search-form {
+    background-color: white;
+    padding: 20px;
+}
+
+.section {
+    background-color: #f5f5f5;
+    padding: 50px;
+}
+
+.right {
+    float: right;
+}
+
+.btn-default {
+    background-color: #f8f9fa;
+    color: #030303;
+    border: 1px solid gray;
+    padding: 0.5rem 1rem;
+}
+
+.btn-default:hover {
+    background-color: #e2e6ea;
+    color: #050505;
+}
+
+hr.my-4 {
+    border: 0;
+    height: 1px;
+    background: black;
+}

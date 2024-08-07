@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: "accountsDepartment", component: AccountsComponent },
   { path: "accounts/add-new-account", component: AddNewAccountComponent },
   { path: "accounts/add-new-account/:id", component: AddNewAccountComponent },
-  { path: "occupants", component: OccupantsComponent },
+  { path: "occupants", component: OccupantsComponent }
 ];
 
 @NgModule({

@@ -15,6 +15,7 @@ import { CommonLayoutComponent } from './container/common-layout/common-layout.c
 import { AccountsComponent } from './super-admin/accounts/accounts.component';
 import { SharedModule } from "./shared/shared.module";
 import { NgxSpinnerModule } from "ngx-spinner";
+import { PoliceDepartmentLoginComponent } from './auth/police-department-login/police-department-login.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     LoginComponent,
     CommonLayoutComponent,
     AccountsComponent,
+    PoliceDepartmentLoginComponent,
   ],
   imports: [
     BrowserModule,
