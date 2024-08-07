@@ -128,3 +128,14 @@ class CrashReports(db.Model):
         db.create_all()
         db.session.add(self)
         db.session.commit()
+
+class TokenBlacklist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), unique=True, nullable=False)
+    token_type = db.Column(db.String(20), nullable=False)
+    revoked = db.Column(db.Boolean, default=False)
+
+    def __init__(self, jti, token_type, revoked):
+        self.jti = jti
+        self.token_type = token_type
+        self.revoked = revoked

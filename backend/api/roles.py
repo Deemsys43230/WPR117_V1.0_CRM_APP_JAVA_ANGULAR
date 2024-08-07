@@ -15,7 +15,7 @@ class CreateRoles(Resource):
         return jsonify({'msg':'role added successfully','data':{**data},'status':True})
     
 class getRoles(Resource):
-    @role_required('ROLE_SUPER_ADMIN')
+    # @role_required('ROLE_SUPER_ADMIN')
     def get(self):
         roles123=Roles.query.all()
         role_list=[{

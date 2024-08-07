@@ -20,7 +20,7 @@ s3 = boto3.client(
 # Authentication code
 def role_required(*roles):
     def decorator(f):
-        @jwt_required(refresh=True)
+        @jwt_required()
         @wraps(f)
         def decorated_function(*args, **kwargs):
             try:

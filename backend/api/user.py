@@ -1,8 +1,8 @@
 from datetime import timedelta
-from flask_jwt_extended import create_refresh_token,create_access_token,get_jwt_identity
-from models import  Roles,Users,Accounts
+from flask_jwt_extended import (JWTManager, jwt_required, get_jwt_identity, get_jwt, create_access_token, create_refresh_token)
+from models import  Roles,Users,Accounts,TokenBlacklist
 from db import db
-from flask import jsonify,request,Blueprint
+from flask import jsonify,request,Blueprint,session
 from flask_restful import Api,Resource
 import hashlib
 
@@ -53,12 +53,13 @@ class userLogin(Resource):
             return jsonify({'message': 'Password Wrong','status':False})
         if user is None:
             return jsonify({'message': 'failed no such user','status':False})
+        session['username'] = user.username 
         rolename = Roles.query.filter_by(role_id=user.role_id).first()
         refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=1))
         access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=1))
         return jsonify({'status':True,
-                        'refresh_token':access_token,
-                       'access_token':refresh_token,
+                        'refresh_token':refresh_token,
+                       'access_token':access_token,
                         'role_id':user.role_id,
                         'roleName':rolename.role,
                         'userDetails':{
@@ -93,7 +94,19 @@ class resetPassword(Resource):
             sendMailToResetPassword(accounts.email_id,body)
             return jsonify({'mail send':'Password Updated','status':True})
         except Exception as e:
-            return jsonify({'status':False,'error':str(e)})       
+            return jsonify({'status':False,'error':str(e)})  
+             
+
+class userLogout(Resource):
+    @jwt_required(refresh=True)  # Ensures the request has a valid access token
+    def post(self):
+        jti = get_jwt()['jti']
+        token = TokenBlacklist(jti=jti, token_type='access', revoked=True)
+        db.session.add(token)
+        db.session.commit()
+        session.pop('username', None)  # Remove username from session
+        return jsonify({'message': 'Successfully logged out', 'status': True})
+    
 
 user_blueprint = Blueprint('user',__name__)
 api = Api(user_blueprint)
@@ -102,4 +115,5 @@ api = Api(user_blueprint)
 api.add_resource(resetPassword,'/resetPassword')
 api.add_resource(ChangePassword,'/ChangePassword')
 api.add_resource(userLogin,'/login/getToken')
+api.add_resource(userLogout, '/logout')
 
