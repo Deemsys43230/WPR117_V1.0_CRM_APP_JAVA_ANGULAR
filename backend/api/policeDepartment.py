@@ -57,6 +57,7 @@ class getAllPoliceDepartment(Resource):
                     'login_link':data.login_link,
                     'search_link':data.search_link,
                     'status':data.status,
+                    'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link
                 }
@@ -81,6 +82,7 @@ class getByIdPoliceDepartment(Resource):
                     'login_link':data.login_link,
                     'search_link':data.search_link,
                     'status':data.status,
+                     'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     'url':bucketURL+""+str(id)+""+bannerLocation

@@ -63,14 +63,17 @@ def sendMailToResetPassword(to,body):
 def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
     try:
         if upload_status == 1:
-            object_key = f"{folderName}{department_id}{innerFolderName}{file_name}"
+            object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"
         else:
-            object_key = f"{folderName}{department_id}{innerFolderName}{file_name}"
+            object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"
         s3.upload_file(
             filepath, 
             AWSCredentials['PUBLIC_BUCKET_NAME'], 
             object_key
         )
+        print(f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}")
         return f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
     except FileNotFoundError:
         return f"The file {filepath} was not found."
+    
+    
