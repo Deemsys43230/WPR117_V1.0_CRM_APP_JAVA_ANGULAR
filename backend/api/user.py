@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask_jwt_extended import (JWTManager, jwt_required, get_jwt_identity, get_jwt, create_access_token, create_refresh_token)
-from models import  Roles,Users,Accounts,TokenBlacklist
+from models import  Roles,Users,Accounts
 from db import db
 from flask import jsonify,request,Blueprint,session
 from flask_restful import Api,Resource
@@ -95,18 +95,7 @@ class resetPassword(Resource):
             return jsonify({'mail send':'Password Updated','status':True})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})  
-             
-
-class userLogout(Resource):
-    @jwt_required(refresh=True)  # Ensures the request has a valid access token
-    def post(self):
-        jti = get_jwt()['jti']
-        token = TokenBlacklist(jti=jti, token_type='access', revoked=True)
-        db.session.add(token)
-        db.session.commit()
-        session.pop('username', None)  # Remove username from session
-        return jsonify({'message': 'Successfully logged out', 'status': True})
-    
+                
 
 user_blueprint = Blueprint('user',__name__)
 api = Api(user_blueprint)
@@ -115,5 +104,5 @@ api = Api(user_blueprint)
 api.add_resource(resetPassword,'/resetPassword')
 api.add_resource(ChangePassword,'/ChangePassword')
 api.add_resource(userLogin,'/login/getToken')
-api.add_resource(userLogout, '/logout')
+
 
