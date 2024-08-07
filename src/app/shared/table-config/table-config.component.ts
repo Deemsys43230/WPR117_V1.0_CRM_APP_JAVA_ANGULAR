@@ -32,13 +32,13 @@ export class TableConfigComponent implements OnInit {
 
   ngOnInit(): void {
     icons.forEach(val => {
-      this.tableData.actionButton.forEach((ele: any) => {
+      this.tableData?.actionButton.forEach((ele: any) => {
         if (val.title == ele) {
           this.selectedIcons.push(val);
         }
       })
     })
-    var length = Math.ceil(this.tableData.totalCount / this.pageItem);
+    var length = Math.ceil(this.tableData?.totalCount / this.pageItem);
     this.count = Array.from({ length }, (_, i) => i + 1);
     this.paginationFunction(this.count);
     this.itemCalculation();

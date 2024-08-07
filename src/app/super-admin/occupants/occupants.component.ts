@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 import { ItemsPerPage } from 'src/app/constants';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-occupants',
@@ -32,7 +33,8 @@ export class OccupantsComponent implements OnInit {
   public occupantDetail: any = [];
   public error: boolean = false;
 
-  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService,) {
+  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService,     private spinner: NgxSpinnerService
+  ) {
     this.ItemsPerPage = ItemsPerPage
   }
   ngOnInit() {
@@ -77,12 +79,14 @@ export class OccupantsComponent implements OnInit {
   }
   //To Get all Account department details
   getAccountsDepartmentByPagination() {
+    this.spinner.show();
     var policeData: any[] = [];
     var policeDepData = { page: 1, items_per_page: "", name: "", county: "" };
     const departmentMap = new Map<number, string>();
 
     this.policeDepartmentService.getPoliceDepartmentDetailsByPagination(policeDepData).subscribe((res) => {
       if (res.status) {
+        this.spinner.hide();
         this.departmentList = [];
         res.data.forEach(item => {
           departmentMap.set(item.department_id, item.name);
@@ -98,6 +102,8 @@ export class OccupantsComponent implements OnInit {
           };
           this.departmentList.push(data);
         });
+      } else {
+        this.spinner.hide();
       }
     });
   }

@@ -24,4 +24,9 @@ export class AuthService {
       public updatePassword(data:any) {
         return this.authDataService.updatePassword(data);
     }
+
+    //Reset Password
+    public resetPassword(data: any) {
+        return this.authDataService.resetPassword(data);
+    }
 }

@@ -57,4 +57,11 @@ export class AuthDataService {
           catchError(error => throwError(error))
         );
       }
+
+    //Reset Password
+    public resetPassword(data: any)  : Observable<any> {
+        return this.httpClient.post('user/resetPassword', data).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(error)))
+    }
 }

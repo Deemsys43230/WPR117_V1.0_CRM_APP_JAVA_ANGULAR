@@ -14,6 +14,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { CommonLayoutComponent } from './container/common-layout/common-layout.component';
 import { AccountsComponent } from './super-admin/accounts/accounts.component';
 import { SharedModule } from "./shared/shared.module";
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SharedModule } from "./shared/shared.module";
     HttpClientModule,
     FormsModule,
     SharedModule,
-    CommonModule
+    CommonModule,
+    NgxSpinnerModule
   ],
   providers: [
     {

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 import { TableConfigComponent } from 'src/app/shared/table-config/table-config.component';
 import { CountyService } from 'src/app/shared/services/county.service';
-
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-department',
   templateUrl: './department.component.html',
@@ -30,7 +30,8 @@ export class DepartmentComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private policeDepartmentService: PoliceDepartmentService,
-    private countyService: CountyService
+    private countyService: CountyService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -55,9 +56,11 @@ export class DepartmentComponent implements OnInit {
 
   //To Get all Police department details
   getPoliceDepartmentByPagination() {
+    this.spinner.show();
     var policeData: any[] = [];
     this.policeDepartmentService.getPoliceDepartmentDetailsByPagination(this.searchData).subscribe((res) => {
       if (res.status) {
+        this.spinner.hide();
         this.callChildComponent = true;
         res.data.forEach((ele: any) => {
           policeData.push({
@@ -82,9 +85,9 @@ export class DepartmentComponent implements OnInit {
         };
         this.TableConfigComponent?.initialFunction(res.count);
       }
-      // else {
-      //   // this.spinner.hide();
-      // }
+      else {
+        this.spinner.hide();
+      }
     });
   }
 

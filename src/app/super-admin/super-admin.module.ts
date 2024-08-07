@@ -9,7 +9,7 @@ import { AddNewAccountComponent } from './accounts/add-new-account/add-new-accou
 import { ReactiveFormsModule } from '@angular/forms';
 import { OccupantsComponent } from './occupants/occupants.component';
 import { SharedModule } from '../shared/shared.module';
-
+import { NgxSpinnerModule } from "ngx-spinner";
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -23,7 +23,8 @@ import { SharedModule } from '../shared/shared.module';
     SuperAdminRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    NgxSpinnerModule
   ],
   exports: [
     DashboardComponent,

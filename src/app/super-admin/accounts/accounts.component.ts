@@ -6,7 +6,8 @@ import { AccountsDepartmentService } from 'src/app/shared/services/accounts-depa
 import { TableConfigComponent } from 'src/app/shared/table-config/table-config.component';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 import { RoleService } from 'src/app/shared/services/role.service';
-
+import { AuthService } from 'src/app/shared/services/auth-service';
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-accounts-component',
   templateUrl: './accounts.component.html',
@@ -34,7 +35,9 @@ export class AccountsComponent implements OnInit {
     private accountsDepartmentService: AccountsDepartmentService,
     private policeDepartmentService: PoliceDepartmentService,
     private roleService: RoleService,
-    private enableDisableAccountsDepartment: AccountsDepartmentService
+    private enableDisableAccountsDepartment: AccountsDepartmentService,
+    private resetPassword: AuthService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -62,9 +65,9 @@ export class AccountsComponent implements OnInit {
         ? this.searchAccountsDepartmentForm.value.police_department_id
         : '',
     };
-    this.getAccountsDepartmentByPagination();
-    this.getAllRoles();
+    // this.getAllRoles();
     this.getAllDepartments();
+    this.getAccountsDepartmentByPagination();
   }
 
   //initialization of searchAccessManagementForm
@@ -81,26 +84,42 @@ export class AccountsComponent implements OnInit {
 
   //To Get all Account department details
   getAccountsDepartmentByPagination() {
-    var policeData: any[] = [];
+    this.spinner.show();
+    var policeData = [];
     this.accountsDepartmentService.getAccountsDepartmentDetailsByPagination(this.searchData).subscribe((res) => {
       if (res.status) {
+          this.spinner.hide();
         this.callChildComponent = true;
-        res.data.forEach((ele: any) => {
-          this.policeDepartmentService.getByIdPoliceDepartmentDetails(ele.police_department_id).subscribe((val) => {
-            policeData.push({
-              account_id: ele.account_id,
-              email_id: ele.email_id,
-              first_name: ele.first_name,
-              last_name: ele.last_name,
-              username: ele.username,
-              role_id: ele.role_id,
-              status: ele.status,
-              police_department_id: val.data.name,
-              is_enable: ele.is_enable
+        const requests = res.data.map((ele: any) => {
+          return this.policeDepartmentService.getByIdPoliceDepartmentDetails(ele.police_department_id).toPromise()
+            .then((val) => {
+              if (val.status) {
+                return {
+                  account_id: ele.account_id,
+                  email_id: ele.email_id,
+                  first_name: ele.first_name,
+                  last_name: ele.last_name,
+                  username: ele.username,
+                  role_id: ele.role_id,
+                  status: ele.status,
+                  police_department_id: val.data.name,
+                  is_enable: ele.is_enable
+                };
+              }
+              return undefined;
+            })
+            .catch(() => {
+              return undefined;
             });
-          });
         });
-        this.table_data = {
+        Promise.all(requests)
+          .then((results) => {
+            policeData.push(...results.filter(result => result !== undefined));
+          })
+          .catch((error) => {
+            console.error('Error occurred:', error);
+          });
+          this.table_data = {
           data: policeData,
           totalCount: res.count,
           labelName: [
@@ -122,6 +141,9 @@ export class AccountsComponent implements OnInit {
         };
         this.TableConfigComponent?.initialFunction(res.count);
       }
+      else {
+        this.spinner.hide();
+      }
     });
   }
 
@@ -129,24 +151,7 @@ export class AccountsComponent implements OnInit {
   getAllRoles() {
     this.roleService.getAllRoles().subscribe((res) => {
       if (res.status) {
-        this.roleList = [];
-        let roles = res.data;
-        roles.forEach(
-          (element) => {
-            let data = {
-              role_id: element.role_id,
-              role: element.role,
-            };
-            this.roleList.push(data);
-            // this.selectedMemberRole = this.roleList[0].role_id
-          },
-          (error) => {
-            console.error('Error fetching roles:', error);
-          }
-        );
-        // this.searchAccessmanagementForm.patchValue({
-        //   role_id: this.selectedRole
-        // })
+        this.roleList = res.data;
       }
     });
   }
@@ -162,20 +167,7 @@ export class AccountsComponent implements OnInit {
       })
       .subscribe((res) => {
         if (res.status) {
-          this.departmentList = [];
-          let departments = res.data;
-          departments.forEach(
-            (element) => {
-              let data = {
-                department_id: element.department_id,
-                name: element.name,
-              };
-              this.departmentList.push(data);
-            },
-            (error) => {
-              console.error('Error fetching roles:', error);
-            }
-          );
+          this.departmentList = res.data;
         }
       });
   }
@@ -191,46 +183,43 @@ export class AccountsComponent implements OnInit {
 
   // Call Function based on action click's in table
   actionOutput(event: any) {
-    console.log(event);
     if (event.action == 'Edit') {
+      console.log(event.data)
       this.handleEdit(event.data);
-    } else if (event.action == 'Enable') {
-      console.log('enable',event.data);
-      this.handleEnable(event.data);
-    } else if (event.action == 'Disable') {
-      this.handleDisable(event.data);
+    } else if (event.action == 'Enable' || event.action == 'Disable') {
+      this.handleEnableOrDisable(event.data);
     } else if (event.action == 'Reset Password') {
-      // this.handleView(event.data);
+      this.handleResetPassword(event.data);
     }
   }
 
   private handleEdit(data: any) {
-    this.router.navigate(['/superAdmin/accounts/add-new-account/'+data.account_id]);
+    this.router.navigate(['/superAdmin/accounts/add-new-account/' + data.account_id]);
   }
 
-  private handleEnable(data: any) {
+  private handleEnableOrDisable(data: any) {
+    const newIsEnable = data.is_enable === 0 ? 1 : 0;
     const payload = {
-      is_enable: data.is_enable ? 1 : 0
+      is_enable: newIsEnable
     };
     this.enableDisableAccountsDepartment.enableDisableAccountsDepartment(data.account_id, payload).subscribe(
       (response) => {
-        alert('Item enabled successfully');
+        if (response.status) {
+          this.getAccountsDepartmentByPagination();
+        }
       },
     );
   }
-  
-  private handleDisable(data: any) {
-    this.enableDisableAccountsDepartment.enableDisableAccountsDepartment(data.account_id, data).subscribe(
-      (response) => {
-        alert('Item disabled successfully');
-      },
-    );
-  }
-  
-  // private handleResetPassword(data: any) {
-  //   console.log('ResetPassword:', data);
-  //   this.router.navigate(['ResetPassword', data.id]);
-  // }
+
+  private handleResetPassword(data: any) {
+    const payload = {
+      account_id: data.account_id
+    };
+    this.resetPassword.resetPassword(payload).subscribe((response) => {
+      if(response.status) {
+        alert('Password reset successfully')
+    }
+   })}
 
   addAccountsDepartment() {
     this.router.navigate(['superAdmin/accounts/add-new-account']);

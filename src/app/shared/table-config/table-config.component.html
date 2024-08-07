@@ -2,11 +2,11 @@
 <table>
   <thead>
       <tr>
-          <th *ngFor="let column of tableData.tableHeading">{{ column }}</th>
+          <th *ngFor="let column of tableData?.tableHeading">{{ column }}</th>
       </tr>
   </thead>
   <tbody>
-      <tr *ngFor="let row of tableData.data; let i = index">
+      <tr *ngFor="let row of tableData?.data; let i = index">
           <td *ngFor="let label of tableData.labelName">{{ row[label] }}</td>
           <td>
               <ng-container *ngFor="let icon of selectedIcons">
@@ -18,11 +18,11 @@
       </tr>
   </tbody>
 </table>
-<p class="text-center text-danger mt-3" *ngIf="tableData.totalCount == 0">No Records Found!</p>
+<p class="text-center text-danger mt-3" *ngIf="tableData?.totalCount == 0">No Records Found!</p>
 <!-- Table Ends -->
 
 <!-- Pagination Starts -->
-<section *ngIf="tableData.totalCount != 0 && count.length > 1">
+<section *ngIf="tableData?.totalCount != 0 && count.length > 1">
   <div class="row mt-4">
       <div class="col-lg-4">
           <div class="d-flex">
@@ -33,7 +33,7 @@
           <p class="text-danger ms-1" *ngIf="isSearchValidation">Please Enter Page Number</p>
       </div>
       <div class="col-lg-4 pageStatus">
-          <p class="mb-0 text-center">Showing {{startItem}}-{{endItem}} of {{tableData.totalCount}} records</p>
+          <p class="mb-0 text-center">Showing {{startItem}}-{{endItem}} of {{tableData?.totalCount}} records</p>
       </div>
       <div class="col-lg-4">
           <select name="pages" id="pages" class="searchPage" (change)="onChangeItem($event)">
