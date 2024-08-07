@@ -1,10 +1,11 @@
 import os
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify,request
 from flask_restful import Resource,Api
 from config import CRMAppDomain,bucketURL,bannerLocation,awsUpload,fileName,tempFolder,defaultBannerName
 from models import PoliceDepartmentModel
 from db import db
-from test import uploadFileToAWSS3
+from test import get_property, uploadFileToAWSS3
+import requests
 
 # TO CREATE POLICE DEPARTMENT 
 class createPoliceDepartment(Resource):
@@ -19,11 +20,32 @@ class createPoliceDepartment(Resource):
                 search_link = data['search_link']
                 )
             police.savePoliceDepartment()
+            createPoliceAccounts(police)
             return jsonify({'msg':'Police Department Added Sucessfully','status':True,'police_department_id':police.police_department_id,'data':{**data}})
-        
         except Exception as e:
             return jsonify({'msg':'Error While Adding Police Department','status':False,'error':str(e)})
 
+def createPoliceAccounts(police):
+    payload = {
+        "agency_id":police.police_department_id,
+        "name":police.name,
+        "county":police.county_id,
+        "scheduler_type":1
+    }
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    url = get_property("CRODomain") + get_property("createPolice")
+   
+    response = requests.post(url, json=payload, headers=headers)
+    if response is not None and response.status_code == 200:
+        return jsonify({'status': True})    
+    else:
+        return jsonify({
+            'status': False,
+            'msg': 'Failed to get a valid response from the server.',
+        })
+        
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
     def post(self):
@@ -154,7 +176,6 @@ class UploadImageForPoliceDepartment(Resource):
         
         if awsUpload == 1:
             saved_file_path = save_temporary_file(file, path)
-            print("saved_file_path",saved_file_path)
             if saved_file_path:
                 uploadFileToAWSS3(saved_file_path, file.filename, dep_id, 2)
                 try:
@@ -164,6 +185,8 @@ class UploadImageForPoliceDepartment(Resource):
             else:
                 return jsonify({'msg': 'Failed to save file'})
             return jsonify({'msg':'File Uploaded Successfully'})
+
+
 
 police_blueprint = Blueprint('police',__name__)
 api = Api(police_blueprint)

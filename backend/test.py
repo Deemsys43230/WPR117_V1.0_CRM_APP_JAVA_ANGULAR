@@ -1,4 +1,5 @@
 from email.message import EmailMessage
+from fileinput import filename
 import smtplib
 import ssl
 from db import db
@@ -7,7 +8,7 @@ from flask import make_response,jsonify
 from models import Users,Roles
 from flask_jwt_extended import jwt_required,get_jwt_identity  # type: ignore
 import jwt
-from config import mail_password
+from config import CROCredentials, mail_password
 import boto3
 from config import AWSCredentials,folderName,innerFolderName,bannerFolderName,bucketName
 
@@ -61,19 +62,33 @@ def sendMailToResetPassword(to,body):
 
 # FUNCTION FOR UPLOAD IMAGE IN AWS
 def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
+    if upload_status == 1:
+        object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"  
+        try:
+            try:
+                s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+                s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+            except s3.exceptions.ClientError as e:
+                if e.response['Error']['Code'] != '404':
+                    raise  
+            s3.upload_file(
+                filepath,
+                AWSCredentials['PUBLIC_BUCKET_NAME'],
+                object_key
+            )
+            file_url = f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
+            print(file_url)
+            return file_url
+        
+        except FileNotFoundError:
+            return f"The file {filepath} was not found."
+
+def get_property(property_name):
     try:
-        if upload_status == 1:
-            object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"
+        if property_name in CROCredentials:
+            return CROCredentials[property_name]
         else:
-            object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"
-        s3.upload_file(
-            filepath, 
-            AWSCredentials['PUBLIC_BUCKET_NAME'], 
-            object_key
-        )
-        print(f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}")
-        return f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
-    except FileNotFoundError:
-        return f"The file {filepath} was not found."
-    
-    
+            return None  # Handle case where property_name doesn't exist in marketingApp
+ 
+    except Exception as e:
+        return None
