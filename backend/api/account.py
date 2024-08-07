@@ -57,7 +57,7 @@ class GetAllAccounts(Resource):
             email_id = data.get('email_id',None)
             offset = (page - 1) * items_per_page
             # Query accounts
-            query = Accounts.query.filter_by(status=1)
+            query = Accounts.query
             if first_name:
                 query = query.filter(Accounts.first_name.ilike(f"%{first_name}%"))
             if last_name:

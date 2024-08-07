@@ -147,12 +147,12 @@ class UploadImageForPoliceDepartment(Resource):
         data = request.form
         file = request.files.get('file')    
         dep_id = data.get('dep_id')
-        
         path = os.path.join(tempFolder, str(dep_id), file.filename).replace('\\', '/')
         os.makedirs(os.path.dirname(path), exist_ok=True)
         
         if awsUpload == 1:
             saved_file_path = save_temporary_file(file, path)
+            print("saved_file_path",saved_file_path)
             if saved_file_path:
                 uploadFileToAWSS3(saved_file_path, file.filename, dep_id, 2)
                 try:
@@ -160,8 +160,8 @@ class UploadImageForPoliceDepartment(Resource):
                 except OSError as e:
                     return jsonify({'msg': 'File Uploaded Successfully'})
             else:
-                return jsonify({'msg': 'Failed to save file'}), 500
-        return jsonify({'msg': 'AWS upload not enabled'}), 400
+                return jsonify({'msg': 'Failed to save file'})
+            return jsonify({'msg':'File Uploaded Successfully'})
 
 police_blueprint = Blueprint('police',__name__)
 api = Api(police_blueprint)
