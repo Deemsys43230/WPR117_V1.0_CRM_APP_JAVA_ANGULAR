@@ -10,7 +10,8 @@ import { OccupantsComponent } from './occupants/occupants.component';
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
   { path: "policeDepartment", component: DepartmentComponent },
-  { path: "department/add-department", component: AddDepartmentComponent },
+  { path: "department/add-police-department", component: AddDepartmentComponent },
+  { path: "department/add-police-department/:id", component: AddDepartmentComponent },
   { path: "accountsDepartment", component: AccountsComponent },
   { path: "accounts/add-new-account", component: AddNewAccountComponent },
   { path: "accounts/add-new-account/:id", component: AddNewAccountComponent },

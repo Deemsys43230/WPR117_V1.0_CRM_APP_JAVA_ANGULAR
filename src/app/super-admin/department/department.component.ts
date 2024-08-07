@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { TableData } from 'src/app/constants';
 import { Router } from '@angular/router';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
@@ -69,6 +69,8 @@ export class DepartmentComponent implements OnInit {
             status: ele.status,
             viewLoginLink: ele.viewLoginLink,
             viewSearchLink: ele.viewSearchLink,
+            department_id: ele.department_id,
+            is_enabled: ele.is_enabled
           });
         });
         this.table_data = {
@@ -105,7 +107,6 @@ export class DepartmentComponent implements OnInit {
   }
 
   // Pagination methods Starts
-
   //Page change events
   page(value: any) {
     this.currentPage = value.page;
@@ -117,21 +118,25 @@ export class DepartmentComponent implements OnInit {
 
   // Call Function based on action click's in table
   actionOutput(event: any) {
-    console.log(event);
-    // if (event.action == 'Edit') {
-    //   this.editLawyerAdmin(event.data);
+    if (event.action == 'Edit') {
+      this.editPoliceDepartment(event.data);
+    }
     // } else if (event.action == 'Enable' || event.action == 'Disable') {
     //   this.enabledisableLawyerAdmin(event.data);
-    // } else if (event.action == 'Reset') {
+    // } else if (event.action == 'View') {
     //   this.resetPasswordModalOpen(event.data)
     // }
   }
-
   // Pagination methods Ends
+
+  //Navigate to edit Police department page
+  editPoliceDepartment(data) {
+    this.router.navigate(['superAdmin/department/add-police-department', `${data.department_id}`]);
+  }
 
   //Navigate to Add Police department page
   addDepartment() {
-    this.router.navigate(['superAdmin/department/add-department']);
+    this.router.navigate(['superAdmin/department/add-police-department']);
   }
 
   //On search Police Department

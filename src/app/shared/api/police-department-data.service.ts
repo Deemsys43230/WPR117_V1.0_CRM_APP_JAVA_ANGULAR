@@ -10,18 +10,45 @@ export class PoliceDepartmentDataService {
 
   constructor(private httpClient: HttpClient) { }
 
-   //get all police department details by pagination
-   public getPoliceDepartmentDetailsByPagination(data): Observable<any> {
+  //get all police department details by pagination
+  public getPoliceDepartmentDetailsByPagination(data): Observable<any> {
     return this.httpClient.post('getAllSearchPoliceDepartment', data).pipe(tap(res => {
-        return res;
+      return res;
     }), catchError(error => throwError(() => error)));
-}
+  }
 
-   //get by id police department details
-   public getByIdPoliceDepartmentDetails(id: number): Observable<any> {
+  //get by id police department details
+  public getByIdPoliceDepartmentDetails(id: number): Observable<any> {
     return this.httpClient.get(`getByIdPoliceDepartment/${id}`).pipe(tap(res => {
-        return res;
+      return res;
     }), catchError(error => throwError(() => error)));
-}
+  }
+
+  //Save Police Deaprtment details
+  public savePoliceDepartment(data): Observable<any> {
+    return this.httpClient.post('savePoliceDepartment', data).pipe(tap(res => {
+      return res;
+    }), catchError(error => throwError(() => error)));
+  }
+
+  //Save or Update Police Department by id
+  public savePoliceDepartmentImage(data: any, id: number): Observable<any> {
+    return this.httpClient.post(`uploadimageForPoliceDepartment/${id}`, data).pipe(tap(res => {
+      return res;
+    }), catchError(error => throwError(() => error)));
+  }
+  //Update Police Department details by id
+  public updatePoliceDepartment(data: any, id: number): Observable<any> {
+    return this.httpClient.put(`updatePoliceDepartment/${id}`, data).pipe(tap(res => {
+      return res;
+    }), catchError(error => throwError(() => error)));
+  }
+
+  // disable enable Police Department by id
+  public enableDisablePoliceDepartment(data: any, id: number): Observable<any> {
+    return this.httpClient.post(`enableDisablePoliceDepartment/${id}`, data).pipe(tap(res => {
+      return res;
+    }), catchError(error => throwError(() => error)))
+  }
 
 }
