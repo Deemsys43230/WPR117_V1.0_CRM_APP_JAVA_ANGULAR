@@ -145,7 +145,7 @@ class GetAllCrashReports(Resource):
                 query = query.filter(CrashReports.added_date <= to_date)
             except ValueError:
                 return jsonify({'message': 'Invalid date format for addedOnToDate. Use YYYY-MM-DD.'}), 400
-        
+        query = query.distinct()
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
        
         report_list = []
