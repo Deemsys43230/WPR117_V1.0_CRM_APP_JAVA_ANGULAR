@@ -3,3 +3,40 @@
 .btn{
     background-color: $secondary-color;
 }
+.detailModalSize {
+    width: 200%;
+    position:absolute;
+    left:-35%;
+}
+.modal-header{
+    background-color: $secondary-color;
+}
+.detail-table {
+    margin: 13px;
+}
+.tablehead {
+    font-size: 18px;
+    font-family: 'Roboto';
+    text-align: center;
+    margin-top: 3%;
+    font-weight: bolder;
+}
+
+.table-detail th,
+.table-detail td {
+  border: 1px solid #dee2e6; 
+  padding: 8px; 
+}
+
+.table-detail {
+  border-collapse: collapse;
+  width: 100%;
+}
+.button-close{
+    background-color: $primary-color;
+    border: white;
+}
+
+
+
+

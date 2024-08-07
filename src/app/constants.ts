@@ -29,9 +29,7 @@ export const icons = [
     {
         'title': 'View',
         'icon': 'fa fa-eye',
-        'bgColor': '#1d8d97',
-        'checkVariable': 'status',
-        'checkValue': 1
+        'bgColor': '#1d8d97'
     }
 ]
  

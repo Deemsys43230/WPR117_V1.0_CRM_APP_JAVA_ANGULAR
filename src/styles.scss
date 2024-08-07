@@ -74,9 +74,12 @@ $third-color: #9fc1c1;
 .custom-margin {
   margin-bottom: 10px;
 }
-// .form-control{
-//   width: 330px !important;
-// }
+.form-control{
+  border-color: #9ec1c1;
+}
+.form-control:focus{
+  box-shadow: 0 0 0 .25rem rgb(158 193 193 / 43%);
+}
 .input-group-text{
   background-color: $third-color;
 }
@@ -92,7 +95,33 @@ $third-color: #9fc1c1;
   gap: 10px;
 }
 
+.error-msg-area {
+  min-height: 20px;
+}
+.error-msg {
+  font-size: 15px;
+  color: red;
+  min-height: 12px;
+}
+
 /* Form Styles ends*/
+
+/* modal */
+.modal-header {
+  background-color: #2a8dae;
+  color: #fff !important;
+  justify-content: space-between !important;
+}
+
+.close {
+  background-color: #2a8dae;
+  font-weight: 900;
+  border: none !important;
+  font-size: 25px;
+  color: white;
+}
+
+/* modal end */
 
 /* Media query for header starts */
 @media screen and (max-width: 425px) {

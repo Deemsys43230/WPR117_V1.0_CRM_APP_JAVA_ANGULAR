@@ -6,6 +6,8 @@ import { PoliceDepartmentService } from 'src/app/shared/services/police-departme
 import { TableConfigComponent } from 'src/app/shared/table-config/table-config.component';
 import { CountyService } from 'src/app/shared/services/county.service';
 import { NgxSpinnerService } from "ngx-spinner";
+
+declare var bootstrap: any;
 @Component({
   selector: 'app-department',
   templateUrl: './department.component.html',
@@ -25,6 +27,11 @@ export class DepartmentComponent implements OnInit {
   public count: any[] = [];
   public countyList: any[] = [];
   public searchValue: any;
+  public supportingImage: any;
+  public openModel: boolean = false;
+  public policeDepartment: any = null;
+  public viewModal: any;
+  public isImage : boolean = false;
 
   constructor(
     private router: Router,
@@ -42,6 +49,11 @@ export class DepartmentComponent implements OnInit {
       name: (this.searchPoliceDepartmentForm.value.name != undefined) ? this.searchPoliceDepartmentForm.value.name : "",
       county: (this.searchPoliceDepartmentForm.value.county != undefined) ? this.searchPoliceDepartmentForm.value.county : "",
     };
+    //Create up view Model 
+    const modalElement = document.getElementById('viewModal');
+    if (modalElement) {
+      this.viewModal = new bootstrap.Modal(modalElement);
+    }
     this.getPoliceDepartmentByPagination();
     this.getAllCounty();
   }
@@ -69,11 +81,10 @@ export class DepartmentComponent implements OnInit {
             login_link: ele.login_link,
             name: ele.name,
             search_link: ele.search_link,
-            status: ele.status,
             viewLoginLink: ele.viewLoginLink,
             viewSearchLink: ele.viewSearchLink,
             department_id: ele.department_id,
-            is_enabled: ele.is_enabled
+            status: ele.is_enabled
           });
         });
         this.table_data = {
@@ -109,6 +120,26 @@ export class DepartmentComponent implements OnInit {
     });
   }
 
+  //Get Police Department details by id
+  getPoliceDepartmentById(id) {
+    this.policeDepartmentService.getByIdPoliceDepartmentDetails(id).subscribe(res => {
+      if (res.status) {
+        this.policeDepartment = {
+          police_department_id: res.data.department_id,
+          name: res.data.name,
+          county_name: res.data.count_name,
+          code: res.data.code,
+          loginLink: res.data.login_link,
+          searchLink: res.data.search_link,
+        }
+        if (res.data.url) {
+          this.supportingImage = res.data.url
+          this.isImage = true
+        }
+      }
+    })
+  }
+
   // Pagination methods Starts
   //Page change events
   page(value: any) {
@@ -124,13 +155,23 @@ export class DepartmentComponent implements OnInit {
     if (event.action == 'Edit') {
       this.editPoliceDepartment(event.data);
     }
-    // } else if (event.action == 'Enable' || event.action == 'Disable') {
-    //   this.enabledisableLawyerAdmin(event.data);
-    // } else if (event.action == 'View') {
-    //   this.resetPasswordModalOpen(event.data)
-    // }
+    else if (event.action == 'Enable' || event.action == 'Disable') {
+      this.enableDisablePoliceDepartment(event.data)
+    }
+    else if (event.action == 'View') {
+      const dep_id = event.data.department_id;
+      this.getPoliceDepartmentById(dep_id)
+      this.openModal()
+    }
   }
   // Pagination methods Ends
+
+  //Open view modal
+  openModal() {
+    if (this.viewModal) {
+      this.viewModal.show();
+    }
+  }
 
   //Navigate to edit Police department page
   editPoliceDepartment(data) {
@@ -140,6 +181,18 @@ export class DepartmentComponent implements OnInit {
   //Navigate to Add Police department page
   addDepartment() {
     this.router.navigate(['superAdmin/department/add-police-department']);
+  }
+
+  enableDisablePoliceDepartment(data) {
+    const dep_id = data.department_id;
+    const body = {
+      "is_enabled": data.status == 0 ? 1 : 0
+    }
+    this.policeDepartmentService.enableDisablePoliceDepartment(body, dep_id).subscribe((res) => {
+      if (res.status) {
+        this.getPoliceDepartmentByPagination();
+      }
+    })
   }
 
   //On search Police Department

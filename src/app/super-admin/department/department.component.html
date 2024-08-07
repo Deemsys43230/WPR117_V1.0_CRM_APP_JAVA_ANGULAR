@@ -16,14 +16,13 @@
 <!-- Header Ends -->
 
 <!-- Search form Starts -->
-
 <div class="row">
   <form class="row" [formGroup]="searchPoliceDepartmentForm">
     <div class="col-lg-3 col-md-4 col-sm-12">
       <label for="" class="form-label">Name</label>
       <input type="text" class="form-control" placeholder="Search Name" formControlName="name" />
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12">
       <label for="" class="form-label">County</label>
       <select class="form-control" formControlName="county">
         <option value="">All Counties</option>
@@ -32,7 +31,7 @@
         </option>
       </select>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+    <div class="col-lg-3 col-md-4 col-sm-12">
       <div class="btn-box">
         <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"
           type="submit" (click)="onSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
@@ -48,3 +47,65 @@
 <table-config *ngIf="callChildComponent" [tableData]="table_data" (page)="page($event)" [search]="searchValue"
   (actionOutput)="actionOutput($event)"></table-config>
 <!-- Table Ends -->
+
+<!-- Police Department View modal start -->
+<!-- Modal Open -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabeled"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content detailModalSize">
+      <div class="modal-header fs-5">
+        <h5 class="modal-title" id="viewModalLabel">View Department Details</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body fs-5">
+        <div *ngIf="policeDepartment" class="modal-body detail-table">
+          <div *ngIf="isImage" class="col-14">
+            <img class="w-100" [src]="supportingImage ? supportingImage : ''" />
+          </div>
+          <div *ngIf="!isImage" class="col-14">
+            <p>No Image Uploaded</p>
+          </div>
+          <table class="table-detail table-bordered w-100">
+            <tr class="p-2">
+              <th class="p-2">Police Department ID</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.police_department_id }}
+              </td>
+              <th class="p-2">County</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.county_name}}
+              </td>
+            </tr>
+
+            <tr class="p-2">
+              <th class="p-2">Name</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.name }}
+              </td>
+              <th class="p-2">Code</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.code}}
+              </td>
+            </tr>
+
+            <tr class="p-2">
+              <th class="p-2">Login Link</th>
+              <td class="p-2" colspan="3">{{ policeDepartment?.loginLink }}</td>
+              <th class="p-2">Search Link</th>
+              <td class="p-2" colspan="3">{{ policeDepartment?.searchLink }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger fs-6 button-close" type="button" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Close -->
