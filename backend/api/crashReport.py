@@ -1,7 +1,7 @@
 import uuid
 import boto3
 from flask import request, jsonify, Blueprint
-from models import CrashReports, Occupants, PoliceDepartmentModel, Users
+from models import CrashReports, Occupants, PoliceDepartmentModel, Users,Accounts
 from flask_restful import Api, Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import create_refresh_token, create_access_token, get_jwt_identity
@@ -60,10 +60,28 @@ class CreateCrashReport(Resource):
             "no_of_occupants": request.form.get('no_of_occupants'),
             "status": 1
         }
-        
-        occupants_list = request.form.getlist('occupantsForms')
-        for occupant in occupants_list:
-            occupants_data = Occupants(
+        occupants_list = []
+        for i in range(len(request.form.getlist('occupantsForms[0][first_name]'))):
+            occupant = {
+                "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
+                "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
+                "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
+                "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
+                "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
+                "status": request.form.get(f'occupantsForms[{i}][status]')
+            }
+            occupants_list.append(occupant)        
+        if 'crashReportFile' not in request.files:
+            return jsonify({'msg': 'crashReportFile not provided'})
+        print(request.files.get('crashReportFile'))
+        crash_report_file = request.files.get('crashReportFile')
+        try:
+            file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
+            value['file_name'] = f'{value["report_id"]}.pdf'
+            crash_report = CrashReports(**value)
+            crash_report.save_to_crash_reports()
+            for occupant in occupants_list:
+                occupants_data = Occupants(
                 report_id=value['report_id'],
                 first_name=occupant['first_name'],
                 last_name=occupant['last_name'],
@@ -71,26 +89,12 @@ class CreateCrashReport(Resource):
                 seating_position=occupant['seating_position'],
                 sequence_no=occupant['sequence_no'],
                 status=occupant['status']
-            )
-            db.session.add(occupants_data)
-        
-        if 'crashReportFile' not in request.files:
-            return jsonify({'msg': 'crashReportFile not provided'}), 400
-
-        crash_report_file = request.files['crashReportFile']
-
-        try:
-            file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
-            value['file_name'] = f'{value["report_id"]}.pdf'
-            del value['crashReportFile']
-            
-            crash_report = CrashReports(**value)
-            db.session.add(crash_report)
-            db.session.commit()
-            return jsonify({'msg': 'Crash Report Added Successfully', 'data': value})
+                )
+                occupants_data.save_to_users()
+            return jsonify({'msg': 'Crash Report Added Successfully','data':value})
         except SQLAlchemyError as e:
             db.session.rollback()
-            return jsonify({'msg': 'Error saving data to database', 'error': str(e)}), 500
+            return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
 
 # Get All Crash Reports
 class GetAllCrashReports(Resource):
@@ -112,10 +116,14 @@ class GetAllCrashReports(Resource):
         countyId= requestDetails.get('countyId')
         policeDepartmentId=requestDetails.get('policeDepartmentId')
         query = CrashReports.query
+        # user = Users.query.filter_by(username=get_jwt_identity()).first()
         # if(reportType==1):
-        #    user = Users.query.filter_by(username=get_jwt_identity()).first()
         #    if user:
-        #         accountId = user.account_id
+        #         accountId = user.account_id     
+        # if(reportType==2):
+        #             police_department=Accounts.query.filter_by(account_id=user.account_id)
+        #             if police_department:
+        #                 policeDepartmentId = police_department.police_department_id
         if (accountId!="0"):
             query = query.filter_by(account_id=accountId)
         if (reportNumber!=""):
