@@ -17,6 +17,8 @@ import { SharedModule } from "./shared/shared.module";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PoliceDepartmentLoginComponent } from './auth/police-department-login/police-department-login.component';
 import { FlashMessageComponent } from './shared/flash-message/flash-message.component';
+import { PoliceLoginComponent } from './auth/police-login/police-login.component';
+import { ReportsComponent } from './police-department/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { FlashMessageComponent } from './shared/flash-message/flash-message.comp
     CommonLayoutComponent,
     AccountsComponent,
     PoliceDepartmentLoginComponent,
-    FlashMessageComponent
+    FlashMessageComponent,
+    PoliceLoginComponent,
+    ReportsComponent,
   ],
   imports: [
     BrowserModule,

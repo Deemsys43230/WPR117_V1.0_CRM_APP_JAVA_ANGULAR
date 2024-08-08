@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './container/default-layout/default-layout.component';
 import { LoginComponent } from './auth/login/login.component';
 import { PoliceDepartmentLoginComponent } from './auth/police-department-login/police-department-login.component';
+import { PoliceLoginComponent } from './auth/police-login/police-login.component';
+import { ReportsComponent } from './police-department/reports/reports.component';
 
 const routes: Routes = [
   {
@@ -10,15 +12,19 @@ const routes: Routes = [
     component:LoginComponent,
   },
   {
-    path:"auth/policeDepartmentLogin/:departmentName",
-    component:LoginComponent,
+    path:"ohio/:departmentName",
+    component:PoliceLoginComponent,
+  },
+  {
+    path:"reports/:departmentName",
+    component: ReportsComponent
   },
   {
     path:'superAdmin',
     component:DefaultLayoutComponent,
     loadChildren: () => import('./super-admin/super-admin.module').then(m => m.SuperAdminModule)
   },  
-  { path: "auth/policeDepartmentLogin", component: PoliceDepartmentLoginComponent }
+  { path: "ohio", component: PoliceDepartmentLoginComponent }
 ];
 
 @NgModule({

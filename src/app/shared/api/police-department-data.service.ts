@@ -24,6 +24,13 @@ export class PoliceDepartmentDataService {
     }), catchError(error => throwError(() => error)));
   }
 
+   //get by name police department details
+   public getByNamePoliceDepartmentDetails(name: any): Observable<any> {
+    return this.httpClient.get(`getByNamePoliceDepartment/${name}`).pipe(tap(res => {
+      return res;
+    }), catchError(error => throwError(() => error)));
+  }
+
   //Save Police Deaprtment details
   public savePoliceDepartment(data): Observable<any> {
     return this.httpClient.post('savePoliceDepartment', data).pipe(tap(res => {

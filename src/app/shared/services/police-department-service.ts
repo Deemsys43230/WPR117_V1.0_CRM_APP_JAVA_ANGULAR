@@ -17,6 +17,11 @@ export class PoliceDepartmentService {
     return this.policeDepartmentDataService.getByIdPoliceDepartmentDetails(id);
   }
 
+   //get by name police department
+   public getByNamePoliceDepartmentDetails(name) {
+    return this.policeDepartmentDataService.getByNamePoliceDepartmentDetails(name);
+  }
+
   //Save Police Deaprtment details
   public savePoliceDepartment(data) {
     return this.policeDepartmentDataService.savePoliceDepartment(data)

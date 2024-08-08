@@ -9,13 +9,13 @@ import { PoliceDepartmentService } from 'src/app/shared/services/police-departme
   styleUrls: ['./police-department-login.component.scss']
 })
 export class PoliceDepartmentLoginComponent implements OnInit {
-  myForm: FormGroup;
+  policeDepartmentForm: FormGroup;
   public departmentList: any[] = [];
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentService, private router: Router) {}
 
   ngOnInit(): void {
-    this.myForm = this.fb.group({
+    this.policeDepartmentForm = this.fb.group({
       police_department_id: ['']
     });
     this.getAllDepartments();
@@ -37,8 +37,13 @@ export class PoliceDepartmentLoginComponent implements OnInit {
         });
     }
 
-    //on submit
     onSubmit() {
-      this.router.navigate(['auth/policeDepartmentLogin/'+this.myForm.controls['police_department_id'].value])
+      const departmentId = this.policeDepartmentForm.controls['police_department_id'].value;
+      const department = this.departmentList.find(dep => dep.department_id.toString() === departmentId.toString());
+      if (department) {
+        this.router.navigate(['ohio', department.name]);
+      } else {
+        console.error('Department not found for ID:', departmentId);
+      }
     }
 }
