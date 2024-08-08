@@ -18,8 +18,7 @@ export class AuthDataService {
         const body = new HttpParams()
             .set('username', loginData.username)
             .set('password', loginData.password)
-        return this.httpClient.post('login/post', body.toString(), {
-
+        return this.httpClient.post('user/login/getToken', body.toString(), {
             headers: new HttpHeaders()
                 .set('Content-Type', 'application/x-www-form-urlencoded')
 
@@ -53,13 +52,13 @@ export class AuthDataService {
     }
     public updatePassword(data: any): Observable<any> {
         return this.httpClient.post("updatePassword", data).pipe(
-          tap(res => res),
-          catchError(error => throwError(error))
+            tap(res => res),
+            catchError(error => throwError(error))
         );
-      }
+    }
 
     //Reset Password
-    public resetPassword(data: any)  : Observable<any> {
+    public resetPassword(data: any): Observable<any> {
         return this.httpClient.post('user/resetPassword', data).pipe(tap(res => {
             return res;
         }), catchError(error => throwError(error)))

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
 import { CountyService } from 'src/app/shared/services/county.service';
@@ -36,15 +36,18 @@ export class AddDepartmentComponent implements OnInit {
     }
     this.getAllCounty()
     this.initializationAddPoliceDepartmentForm()
+    this.addPoliceDepartmentForm.get('name')?.valueChanges.subscribe(value => {
+      this.onChangeName(value);
+    });
   }
 
 
   //Initialize Add Police Department Form
   initializationAddPoliceDepartmentForm() {
     this.addPoliceDepartmentForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required,Validators.pattern("[a-zA-Z ]*")]],
       countyId: ['', Validators.required],
-      code: ['', Validators.required],
+      code: ['', [Validators.required,this.codePatternValidator()]],
       loginLink: ['', Validators.required],
       searchLink: ['', Validators.required],
       image: [""]
@@ -87,6 +90,27 @@ export class AddDepartmentComponent implements OnInit {
         this.addPoliceDepartmentForm.patchValue(data)
       }
     })
+  }
+
+  //Custom Validator for Code Input Field
+  codePatternValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      const valid = /^RR_.*_$/.test(value);
+      return valid ? null : { invalidCodePattern: true };
+    };
+  }
+
+  onChangeName(value){
+    if (value) {
+      const lowercaseValue = value?.toLowerCase();
+      const searchLinkValue = `${lowercaseValue}_search`;
+  
+      this.addPoliceDepartmentForm.patchValue({
+        loginLink: lowercaseValue,
+        searchLink: searchLinkValue
+      });
+    }
   }
 
   //Toggle edit image

@@ -50,7 +50,7 @@
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-user"></i>
           </span>
-          <input type="text" class="form-control w-100" placeholder="Name" formControlName="name" />
+          <input type="text" class="form-control w-100" placeholder="Name" formControlName="name" (change)="onChangeName($event)" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -61,6 +61,12 @@
             <div [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['required']" class="text-danger">
               Please Enter Name
             </div>
+            <div
+            [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['pattern']"
+            class="text-danger"
+          >
+            Name can only contain alphabets and spaces
+          </div>
           </div>
         </div>
       </div>
@@ -82,6 +88,12 @@
             <div [hidden]="!addPoliceDepartmentForm.controls['code'].errors?.['required']" class="text-danger">
               Please Enter Code
             </div>
+            <div
+            [hidden]="!addPoliceDepartmentForm.controls['code'].errors?.['invalidCodePattern'] || addPoliceDepartmentForm.controls['code'].errors?.['required']"
+            class="text-danger"
+          >
+            Code must start with 'RR_' and end with '_' (_ Eg: RR_AB_ )
+          </div>
           </div>
         </div>
       </div>

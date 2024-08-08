@@ -8,8 +8,9 @@ import { ReportsComponent } from './police-department/reports/reports.component'
 
 const routes: Routes = [
   {
-    path:"auth/login",
-    component:LoginComponent,
+    path: '',
+    redirectTo: 'auth/login',
+    pathMatch: 'full',
   },
   {
     path:"ohio/:departmentName",
@@ -19,9 +20,17 @@ const routes: Routes = [
     path:"reports/:departmentName",
     component: ReportsComponent
   },
+  { 
+    path: "auth/login",
+    component: LoginComponent,
+  },
   {
-    path:'superAdmin',
-    component:DefaultLayoutComponent,
+    path: "auth/policeDepartmentLogin/:departmentName",
+    component: LoginComponent,
+  },
+  {
+    path: 'superAdmin',
+    component: DefaultLayoutComponent,
     loadChildren: () => import('./super-admin/super-admin.module').then(m => m.SuperAdminModule)
   },  
   { path: "ohio", component: PoliceDepartmentLoginComponent }

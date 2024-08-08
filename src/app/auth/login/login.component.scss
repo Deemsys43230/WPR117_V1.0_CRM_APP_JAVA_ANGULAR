@@ -1,5 +1,6 @@
 @import '../../../styles.scss';
 
+
 .row{
   display: flex !important;
   flex-direction: row;
@@ -8,8 +9,8 @@
 
 .background-color {
     background-color: $primary-color;
-    width: 100%;
     height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,6 +39,14 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 
   @media (max-width: 767.98px) {
