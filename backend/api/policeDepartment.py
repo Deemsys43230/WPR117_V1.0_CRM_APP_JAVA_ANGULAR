@@ -1,8 +1,9 @@
+from operator import and_
 import os
 from flask import Blueprint, jsonify,request
 from flask_restful import Resource,Api
 from config import CRMAppDomain,bucketURL,bannerLocation,awsUpload,fileName,tempFolder,defaultBannerName
-from models import PoliceDepartmentModel
+from models import Accounts, PoliceDepartmentModel, Users
 from db import db
 from test import get_property, uploadFileToAWSS3
 import requests
@@ -12,22 +13,35 @@ class createPoliceDepartment(Resource):
     def post(self):
         try:
             data = request.get_json()
-            name = data['name']
-            police_department_name = PoliceDepartmentModel.query.filter_by(name = name).first()
+            name = data.get('name')
+            code = data.get('code')
+            police_department_name = PoliceDepartmentModel.query.filter_by(name=name).first()
+            police_department_code = PoliceDepartmentModel.query.filter_by(code=code).first()
             if police_department_name is None:
-                police = PoliceDepartmentModel(
-                    county_id=data['county_id'],
-                    name = name,
-                    code = data['code'],
-                    login_link = data['login_link'],
-                    search_link = data['search_link']
+                if police_department_code is None:
+                    police = PoliceDepartmentModel(
+                        county_id=data.get('county_id'),
+                        name=name,
+                        code=code,
+                        login_link=data.get('login_link'),
+                        search_link=data.get('search_link')
                     )
-                police.savePoliceDepartment()
-                createPoliceAccounts(police)
-                return jsonify({'msg':'Police Department Added Sucessfully','status':True,'police_department_id':police.police_department_id,'data':{**data}})
-            return jsonify({'msg':'Duplicate Creation Of Department Name','status':False})
+                    police.savePoliceDepartment()
+                    createPoliceAccounts(police)
+                    return jsonify({
+                        'msg': 'Police Department Added Successfully',
+                        'status': True,
+                        'police_department_id': police.police_department_id,
+                        'data': {**data}
+                    })
+                else:
+                    return jsonify({'msg': 'Duplicate Creation Of Department Code', 'status': False})
+            else:
+                return jsonify({'msg': 'Duplicate Creation Of Department Name', 'status': False})
         except Exception as e:
-            return jsonify({'msg':'Error While Adding Police Department','status':False,'error':str(e)})
+            return jsonify({'msg': 'An error occurred', 'status': False, 'error': str(e)})
+
+# TO STORE IN CRO APP - POLICE AGENCY
 
 def createPoliceAccounts(police):
     payload = {
@@ -217,8 +231,43 @@ class UploadImageForPoliceDepartment(Resource):
                 return jsonify({'msg': 'Failed to save file'})
             return jsonify({'msg':'File Uploaded Successfully'})
 
-
-
+class policeDepartmentDetailsByUsername(Resource):
+    def post(self):
+        data = request.get_json()
+        username = data['username']
+        user = Users.query.filter_by(username=username).first()
+        account = Accounts.query.filter_by(account_id = user.account_id).first()
+        if account:
+            police_data = {
+                'account_id':account.account_id,
+                        'first_name':account.first_name,
+                        'last_name':account.last_name,
+                        'middle_name':account.middle_name,
+                        'email_id':account.email_id,
+                        'phone_number':account.phone_number,
+                        'username':user.username,
+                'police_data':{     
+                    'department_id':account.police_department_id,
+                    'county_id':account.police_dep_id.county_id,
+                    'count_name':account.police_dep_id.county.name,
+                    'status':account.police_dep_id.county.status,
+                    'name':account.police_dep_id.name,
+                    'code':account.police_dep_id.code,
+                    'login_link':account.police_dep_id.login_link,
+                    'search_link':account.police_dep_id.search_link,
+                    'status':account.police_dep_id.status,
+                     'is_enabled':account.police_dep_id.is_enabled,
+                    'viewLoginLink':CRMAppDomain+""+account.police_dep_id.login_link,
+                    'viewSearchLink':CRMAppDomain+""+account.police_dep_id.search_link,
+                    'url':bucketURL+""+str(account.police_dep_id.police_department_id)+""+bannerLocation
+                }
+                }
+            return jsonify({'msg':'Police Department Details','data':police_data,'status':True})
+        return jsonify({'msg':'Police Department Details Not Found','status':False})
+        
+        
+        
+    
 police_blueprint = Blueprint('police',__name__)
 api = Api(police_blueprint)
 
@@ -230,3 +279,4 @@ api.add_resource(enableDisablePoliceDepartment,'/enableDisablePoliceDepartment/<
 api.add_resource(UploadImageForPoliceDepartment,'/uploadimageForPoliceDepartment')
 api.add_resource(getByNamePoliceDepartment,'/getByNamePoliceDepartment/<string:name>')
 api.add_resource(uploadPoliceDepartmentWithoutFile,'/uploadPoliceDepartmentWithoutFile/<int:dep_id>')
+api.add_resource(policeDepartmentDetailsByUsername,'/policeDepartmentDetailsByUsername')
