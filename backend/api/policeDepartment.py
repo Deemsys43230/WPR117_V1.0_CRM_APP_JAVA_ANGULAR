@@ -138,7 +138,7 @@ class getByNamePoliceDepartment(Resource):
                      'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
-                    'url':bucketURL+""+str(id)+""+bannerLocation
+                    'url':bucketURL+""+str(data.police_department_id)+""+bannerLocation
                 }
                 return jsonify({'status':True,'data':police_data})
             return jsonify({'status':False,'msg':'No Such Details Found'})
