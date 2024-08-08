@@ -5,12 +5,8 @@
       Add Police Department
     </div>
     <div class="col-md-2 col-lg-2 text-end">
-      <button
-        (click)="back()"
-        class="btn-back btn add-back-btn text-white"
-        data-bs-toggle="modal"
-        data-bs-target="#memberModal"
-      >
+      <button (click)="back()" class="btn-back btn add-back-btn text-white" data-bs-toggle="modal"
+        data-bs-target="#memberModal">
         <i class="fa fa-reply"></i>&nbsp;<b>Back</b>
       </button>
     </div>
@@ -23,36 +19,25 @@
   <form class="d-flex flex-column gap-3" [formGroup]="addPoliceDepartmentForm">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
-          >County <span class="text-danger">*</span></label
-        >
+        <label for="" class="form-label">County <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-globe"></i>
           </span>
           <select class="form-control" formControlName="countyId">
             <option value="">--Select--</option>
-            <option
-              *ngFor="let county of countyList"
-              value="{{ county?.county_id }}"
-            >
+            <option *ngFor="let county of countyList" value="{{ county?.county_id }}">
               {{ county?.county_name }}
             </option>
           </select>
         </div>
         <div class="error-msg-area">
-          <div
-            *ngIf="
+          <div *ngIf="
               addPoliceDepartmentForm.controls['countyId'].errors &&
               (!addPoliceDepartmentForm.controls['countyId'].pristine ||
                 isAddFormSubmitted)
-            "
-            class="error-msg"
-          >
-            <div
-              [hidden]="!addPoliceDepartmentForm.controls['countyId'].errors?.['required']"
-              class="text-danger"
-            >
+            " class="error-msg">
+            <div [hidden]="!addPoliceDepartmentForm.controls['countyId'].errors?.['required']" class="text-danger">
               Please Select a County
             </div>
           </div>
@@ -60,33 +45,20 @@
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
-          >Name<span class="text-danger">*</span></label
-        >
+        <label for="" class="form-label">Name<span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-user"></i>
           </span>
-          <input
-            type="text"
-            class="form-control w-100"
-            placeholder="Name"
-            formControlName="name"
-          />
+          <input type="text" class="form-control w-100" placeholder="Name" formControlName="name" />
         </div>
         <div class="error-msg-area">
-          <div
-            *ngIf="
+          <div *ngIf="
               addPoliceDepartmentForm.controls['name'].errors &&
               (!addPoliceDepartmentForm.controls['name'].pristine ||
                 isAddFormSubmitted)
-            "
-            class="error-msg"
-          >
-            <div
-              [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['required']"
-              class="text-danger"
-            >
+            " class="error-msg">
+            <div [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['required']" class="text-danger">
               Please Enter Name
             </div>
           </div>
@@ -94,33 +66,20 @@
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
-          >Code<span class="text-danger">*</span></label
-        >
+        <label for="" class="form-label">Code<span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-code"></i>
           </span>
-          <input
-            type="text"
-            class="form-control w-100"
-            placeholder="Code"
-            formControlName="code"
-          />
+          <input type="text" class="form-control w-100" placeholder="Code" formControlName="code" />
         </div>
         <div class="error-msg-area">
-          <div
-            *ngIf="
+          <div *ngIf="
               addPoliceDepartmentForm.controls['code'].errors &&
               (!addPoliceDepartmentForm.controls['code'].pristine ||
                 isAddFormSubmitted)
-            "
-            class="error-msg"
-          >
-            <div
-              [hidden]="!addPoliceDepartmentForm.controls['code'].errors?.['required']"
-              class="text-danger"
-            >
+            " class="error-msg">
+            <div [hidden]="!addPoliceDepartmentForm.controls['code'].errors?.['required']" class="text-danger">
               Please Enter Code
             </div>
           </div>
@@ -130,33 +89,20 @@
 
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
-          >Login Link<span class="text-danger">*</span></label
-        >
+        <label for="" class="form-label">Login Link<span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-link"></i>
           </span>
-          <input
-            type="text"
-            class="form-control w-100"
-            placeholder="Login Url"
-            formControlName="loginLink"
-          />
+          <input type="text" class="form-control w-100" placeholder="Login Url" formControlName="loginLink" />
         </div>
         <div class="error-msg-area">
-          <div
-            *ngIf="
+          <div *ngIf="
               addPoliceDepartmentForm.controls['loginLink'].errors &&
               (!addPoliceDepartmentForm.controls['loginLink'].pristine ||
                 isAddFormSubmitted)
-            "
-            class="error-msg"
-          >
-            <div
-              [hidden]="!addPoliceDepartmentForm.controls['loginLink'].errors?.['required']"
-              class="text-danger"
-            >
+            " class="error-msg">
+            <div [hidden]="!addPoliceDepartmentForm.controls['loginLink'].errors?.['required']" class="text-danger">
               Please Enter Login Link
             </div>
           </div>
@@ -164,33 +110,20 @@
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="" class="form-label"
-          >Search Link<span class="text-danger">*</span></label
-        >
+        <label for="" class="form-label">Search Link<span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-link"></i>
           </span>
-          <input
-            type="text"
-            class="form-control w-100"
-            placeholder="Search Url"
-            formControlName="searchLink"
-          />
+          <input type="text" class="form-control w-100" placeholder="Search Url" formControlName="searchLink" />
         </div>
         <div class="error-msg-area">
-          <div
-            *ngIf="
+          <div *ngIf="
               addPoliceDepartmentForm.controls['searchLink'].errors &&
               (!addPoliceDepartmentForm.controls['searchLink'].pristine ||
                 isAddFormSubmitted)
-            "
-            class="error-msg"
-          >
-            <div
-              [hidden]="!addPoliceDepartmentForm.controls['searchLink'].errors?.['required']"
-              class="text-danger"
-            >
+            " class="error-msg">
+            <div [hidden]="!addPoliceDepartmentForm.controls['searchLink'].errors?.['required']" class="text-danger">
               Please Enter Search Link
             </div>
           </div>
@@ -202,41 +135,35 @@
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </span>
-          <input
-            class="w-100"
-            type="file"
-            accept="image/*"
-            placeholder="Supporting"
-            formControlName="image"
-            (change)="imageConverter($event)"
-          />
+          <input class="w-100" type="file" accept="image/*" placeholder="Supporting" formControlName="image" (change)="onChangeNewImage($event)"  />
         </div>
+        <div class="form-error">
+          <div *ngIf="addPoliceDepartmentForm.controls['image'].errors && (!addPoliceDepartmentForm.controls['image'].pristine|| isAddFormSubmitted)"
+              class="error-msg">
+              <div [hidden]="!addPoliceDepartmentForm.controls['image'].errors['invalidType']">
+                  Please
+                  Choose
+                  A Valid File.(supported file types - Image (jpg,jpeg,png))
+              </div>
+              <div [hidden]="!addPoliceDepartmentForm.controls['image'].errors['invalidDimensions']">
+                Please Select Image With 1400*450 Dimension
+            </div>
+          </div>
+      </div>
         <div class="col-12" *ngIf="isEdit && isImageEdit">
           <img class="w-100" [src]="supportingImage ? supportingImage : ''" />
         </div>
         <div *ngIf="isEdit">
-          <a
-            *ngIf="!isImageEdit"
-            class="text-decoration-none txt cursor-pointer"
-            (click)="toggleEditImage()"
-            ><i class="fa-solid fa-xmark"></i>Cancel</a
-          >
-          <a
-            *ngIf="isImageEdit"
-            class="text-decoration-none txt cursor-pointer"
-            (click)="toggleEditImage()"
-            ><i class="fa-solid fa-pen"></i>Click to change</a
-          >
+          <a *ngIf="!isImageEdit" class="text-decoration-none txt cursor-pointer" (click)="toggleEditImage()"><i
+              class="fa-solid fa-xmark"></i>Cancel</a>
+          <a *ngIf="isImageEdit" class="text-decoration-none txt cursor-pointer" (click)="toggleEditImage()"><i
+              class="fa-solid fa-pen"></i>Click to change</a>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="text-end">
-        <button
-          (click)="onSubmit()"
-          class="btn common-btn-css common-btn-color"
-          type="submit"
-        >
+        <button (click)="onSubmit()" class="btn common-btn-css common-btn-color" type="submit">
           Submit
         </button>
       </div>

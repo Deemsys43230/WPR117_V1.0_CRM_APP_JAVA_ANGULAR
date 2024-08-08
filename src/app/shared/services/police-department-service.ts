@@ -23,8 +23,8 @@ export class PoliceDepartmentService {
   }
 
   //Save or Update Police Department by id
-  public savePoliceDepartmentImage(data: any, id: number) {
-    return this.policeDepartmentDataService.savePoliceDepartmentImage(data, id)
+  public savePoliceDepartmentImage(data: any) {
+    return this.policeDepartmentDataService.savePoliceDepartmentImage(data)
   }
 
   //Update Police Department details by id

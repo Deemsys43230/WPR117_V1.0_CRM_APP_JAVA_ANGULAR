@@ -6,6 +6,7 @@ import { PoliceDepartmentService } from 'src/app/shared/services/police-departme
 import { TableConfigComponent } from 'src/app/shared/table-config/table-config.component';
 import { CountyService } from 'src/app/shared/services/county.service';
 import { NgxSpinnerService } from "ngx-spinner";
+import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
 
 declare var bootstrap: any;
 @Component({
@@ -31,14 +32,15 @@ export class DepartmentComponent implements OnInit {
   public openModel: boolean = false;
   public policeDepartment: any = null;
   public viewModal: any;
-  public isImage : boolean = false;
+  public isImage: boolean = false;
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private policeDepartmentService: PoliceDepartmentService,
     private countyService: CountyService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private flashMessageService: FlashMessageService
   ) { }
 
   ngOnInit(): void {
@@ -129,8 +131,8 @@ export class DepartmentComponent implements OnInit {
           name: res.data.name,
           county_name: res.data.count_name,
           code: res.data.code,
-          loginLink: res.data.login_link,
-          searchLink: res.data.search_link,
+          loginLink: res.data.viewLoginLink,
+          searchLink: res.data.viewSearchLink,
         }
         if (res.data.url) {
           this.supportingImage = res.data.url
@@ -191,6 +193,12 @@ export class DepartmentComponent implements OnInit {
     this.policeDepartmentService.enableDisablePoliceDepartment(body, dep_id).subscribe((res) => {
       if (res.status) {
         this.getPoliceDepartmentByPagination();
+        if (res.is_enabled == 1) {
+          this.flashMessageService.successMessage(res.msg)
+        }
+        else {
+          this.flashMessageService.successMessage(res.msg)
+        }
       }
     })
   }

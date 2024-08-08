@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
 import { CountyService } from 'src/app/shared/services/county.service';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 
@@ -19,8 +20,10 @@ export class AddDepartmentComponent implements OnInit {
   public imageFile: any;
   public isImage: boolean = false;
   public isImageEdit: boolean = true;
+  public selectedFile: File | null = null;
+  public invalidImageType:boolean = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private countyService: CountyService, private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private countyService: CountyService, private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentService, private flashMessageService: FlashMessageService) { }
 
   ngOnInit(): void {
     //Get Police Department id for Edit
@@ -44,7 +47,7 @@ export class AddDepartmentComponent implements OnInit {
       code: ['', Validators.required],
       loginLink: ['', Validators.required],
       searchLink: ['', Validators.required],
-      image: ""
+      image: [""]
     })
   }
 
@@ -91,26 +94,33 @@ export class AddDepartmentComponent implements OnInit {
     this.isImageEdit = !this.isImageEdit
   }
 
-  // image convertor to show preview of selected image
-  imageConverter(e) {
-    const file: File = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String: string = reader.result as string;
-        this.supportingImage = base64String;
+  // To   Change Image In Product Form  Function 
+  onChangeNewImage(event: any): void {
+    const file = event.target.files[0];
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/jfif"];
+    const fileType = file.type;
+    if (!allowedTypes.includes(fileType)) {
+      this.addPoliceDepartmentForm.get('image')?.setErrors({ 'invalidType': true });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const img = new Image();
+      img.onload = () => {
+        if (img.width !== 1400 || img.height !== 450) {
+          this.addPoliceDepartmentForm.get('image')?.setErrors({ 'invalidDimensions': true });
+          return;
+        }
+        this.addPoliceDepartmentForm.get('image')?.setErrors(null);
+        this.addPoliceDepartmentForm.get('image')?.updateValueAndValidity();
+        this.selectedFile = file;
       };
-      reader.readAsDataURL(file);
-    }
-    if (file) {
-      this.imageFile = file
-    }
-    else {
-      console.log('Please select a image file')
-    }
-    console.log(typeof (this.imageFile))
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
+  //Submit form data
   onSubmit() {
     const data = this.addPoliceDepartmentForm.value;
     const formData = {
@@ -126,27 +136,35 @@ export class AddDepartmentComponent implements OnInit {
       if (this.isEdit) {
         this.policeDepartmentService.updatePoliceDepartment(formData, this.id).subscribe(res => {
           if (res.status) {
-            console.log('Police Department updated !')
+            if (this.id && this.selectedFile) {
+              const imageData = new FormData()
+              imageData.append('dep_id' , this.id)
+              imageData.append('file',this.selectedFile)
+              this.policeDepartmentService.savePoliceDepartmentImage(imageData).subscribe(res=>console.log(res.msg))
+            }
+            this.flashMessageService.successMessage(res.msg, 2)
             this.back()
           }
           else {
-            console.log('Error in Updating Police Department !')
+            this.flashMessageService.errorMessage(res.msg, 2)
           }
         })
       }
       else {
         this.policeDepartmentService.savePoliceDepartment(formData).subscribe(res => {
           if (res?.status) {
-            const dep_id = res.police_department_id;
-            const imageFile = this.addPoliceDepartmentForm.value.image;
-            if (dep_id && imageFile) {
-              this.policeDepartmentService.savePoliceDepartmentImage(imageFile, dep_id)
-            }
-
+              const dep_id = res.police_department_id
+              if (dep_id && this.selectedFile) {
+                const imageData = new FormData()
+                imageData.append('dep_id' , dep_id)
+                imageData.append('file',this.selectedFile)
+                this.policeDepartmentService.savePoliceDepartmentImage(imageData).subscribe(res=>console.log(res.msg))
+              }
+            this.flashMessageService.successMessage(res.msg, 2)
             this.back()
           }
           else {
-            console.log('Error in adding Police Department!')
+            this.flashMessageService.errorMessage(res.msg, 2)
           }
         })
       }

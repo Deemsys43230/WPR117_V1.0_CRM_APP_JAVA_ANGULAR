@@ -32,8 +32,8 @@ export class PoliceDepartmentDataService {
   }
 
   //Save or Update Police Department by id
-  public savePoliceDepartmentImage(data: any, id: number): Observable<any> {
-    return this.httpClient.post(`uploadimageForPoliceDepartment/${id}`, data).pipe(tap(res => {
+  public savePoliceDepartmentImage(data: any): Observable<any> {
+    return this.httpClient.post(`uploadimageForPoliceDepartment`, data).pipe(tap(res => {
       return res;
     }), catchError(error => throwError(() => error)));
   }

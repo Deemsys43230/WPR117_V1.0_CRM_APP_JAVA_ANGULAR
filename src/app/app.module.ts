@@ -16,6 +16,7 @@ import { AccountsComponent } from './super-admin/accounts/accounts.component';
 import { SharedModule } from "./shared/shared.module";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PoliceDepartmentLoginComponent } from './auth/police-department-login/police-department-login.component';
+import { FlashMessageComponent } from './shared/flash-message/flash-message.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { PoliceDepartmentLoginComponent } from './auth/police-department-login/p
     CommonLayoutComponent,
     AccountsComponent,
     PoliceDepartmentLoginComponent,
+    FlashMessageComponent
   ],
   imports: [
     BrowserModule,
