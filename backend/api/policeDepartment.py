@@ -12,16 +12,20 @@ class createPoliceDepartment(Resource):
     def post(self):
         try:
             data = request.get_json()
-            police = PoliceDepartmentModel(
-                county_id=data['county_id'],
-                name = data['name'],
-                code = data['code'],
-                login_link = data['login_link'],
-                search_link = data['search_link']
-                )
-            police.savePoliceDepartment()
-            createPoliceAccounts(police)
-            return jsonify({'msg':'Police Department Added Sucessfully','status':True,'police_department_id':police.police_department_id,'data':{**data}})
+            name = data['name']
+            police_department_name = PoliceDepartmentModel.query.filter_by(name = name).first()
+            if police_department_name is None:
+                police = PoliceDepartmentModel(
+                    county_id=data['county_id'],
+                    name = name,
+                    code = data['code'],
+                    login_link = data['login_link'],
+                    search_link = data['search_link']
+                    )
+                police.savePoliceDepartment()
+                createPoliceAccounts(police)
+                return jsonify({'msg':'Police Department Added Sucessfully','status':True,'police_department_id':police.police_department_id,'data':{**data}})
+            return jsonify({'msg':'Duplicate Creation Of Department Name','status':False})
         except Exception as e:
             return jsonify({'msg':'Error While Adding Police Department','status':False,'error':str(e)})
 
@@ -93,6 +97,33 @@ class getByIdPoliceDepartment(Resource):
     def get(self,id):
         try:
             data = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
+            if data:
+                police_data = {
+                    'department_id':data.police_department_id,
+                    'county_id':data.county_id,
+                    'count_name':data.county.name,
+                    'status':data.county.status,
+                    'name':data.name,
+                    'code':data.code,
+                    'login_link':data.login_link,
+                    'search_link':data.search_link,
+                    'status':data.status,
+                     'is_enabled':data.is_enabled,
+                    'viewLoginLink':CRMAppDomain+""+data.login_link,
+                    'viewSearchLink':CRMAppDomain+""+data.search_link,
+                    'url':bucketURL+""+str(id)+""+bannerLocation
+                }
+                return jsonify({'status':True,'data':police_data})
+            return jsonify({'status':False,'msg':'No Such Details Found'})
+                
+        except Exception as e:
+            return jsonify({'status':False,'error':str(e)})
+
+# GET POLICE DEPARTMENT BY NAME
+class getByNamePoliceDepartment(Resource):
+    def get(self,name):
+        try:
+            data = PoliceDepartmentModel.query.filter_by(name=name).first()
             if data:
                 police_data = {
                     'department_id':data.police_department_id,
@@ -197,4 +228,5 @@ api.add_resource(getByIdPoliceDepartment,'/getByIdPoliceDepartment/<int:id>')
 api.add_resource(updatePoliceDepartment,'/updatePoliceDepartment/<int:id>')
 api.add_resource(enableDisablePoliceDepartment,'/enableDisablePoliceDepartment/<int:id>')
 api.add_resource(UploadImageForPoliceDepartment,'/uploadimageForPoliceDepartment')
+api.add_resource(getByNamePoliceDepartment,'/getByNamePoliceDepartment/<string:name>')
 api.add_resource(uploadPoliceDepartmentWithoutFile,'/uploadPoliceDepartmentWithoutFile/<int:dep_id>')
