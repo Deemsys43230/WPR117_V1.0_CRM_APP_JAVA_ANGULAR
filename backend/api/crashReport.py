@@ -217,7 +217,6 @@ class UpdateCrashReport(Resource):
         crash_report = CrashReports.query.filter_by(report_id=id).first()
         if not crash_report:
             return jsonify({'msg': 'Crash Report not found', 'status': False}), 404
-
         crash_report.account_id = request.form.get('account_id')
         crash_report.police_department_id = request.form.get('police_department_id')
         crash_report.report_number = request.form.get('report_number')
@@ -226,10 +225,28 @@ class UpdateCrashReport(Resource):
         crash_report.county_id = request.form.get('county_id')
         crash_report.crash_severity = request.form.get('crash_severity')
         crash_report.no_of_occupants = request.form.get('no_of_occupants')
-
-        occupants_list = request.form.getlist('occupantsForms')
-        for occupant in occupants_list:
-            occupants_data = Occupants(
+        occupants_list = []
+        for i in range(len(request.form.getlist('occupantsForms[0][first_name]'))):
+            occupant = {
+                "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
+                "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
+                "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
+                "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
+                "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
+                "status": request.form.get(f'occupantsForms[{i}][status]')
+            }
+            occupants_list.append(occupant)  
+        if 'crashReportFile' in request.files:
+            crash_report_file = request.files['crashReportFile']
+            file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, crash_report.report_id)
+        try:
+            crash_report.file_name = f'{crash_report.report_id}.pdf'
+            occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
+            for occupant in occupants_to_delete:
+                db.session.delete(occupant)           
+                db.session.commit()
+            for occupant in occupants_list:
+                occupants_data = Occupants(
                 report_id=crash_report.report_id,
                 first_name=occupant['first_name'],
                 last_name=occupant['last_name'],
@@ -237,17 +254,8 @@ class UpdateCrashReport(Resource):
                 seating_position=occupant['seating_position'],
                 sequence_no=occupant['sequence_no'],
                 status=occupant['status']
-            )
-            db.session.add(occupants_data)
-
-        if 'crashReportFile' not in request.files:
-            return jsonify({'msg': 'crashReportFile not provided'}), 400
-
-        crash_report_file = request.files['crashReportFile']
-        try:
-            file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, crash_report.report_id)
-            crash_report.file_name = f'{crash_report.report_id}.pdf'
-            db.session.commit()
+                )
+                occupants_data.save_to_users()
             value={
                 "report_id": crash_report.report_id,
                 "account_id": crash_report.account_id,
