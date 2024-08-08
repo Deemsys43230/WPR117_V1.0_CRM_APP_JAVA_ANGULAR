@@ -35,9 +35,9 @@ class createAccount(Resource):
             account_data.saveAccounts()
             user1 = Users(role_id=data['role_id'],account_id = _id,username= username,password =self.hash_password(username))
             user1.save_to_users()
-            return jsonify({'status':True,'data':{**data}})
+            return jsonify({'status':True,'data':{**data},'msg':'Account Added Successfully'})
         except Exception as e:
-            return jsonify({'status':False,'error':str(e)})
+            return jsonify({'status':False,'error':str(e),'msg':'Accounts Creation Failed'})
 
 # TO GET ALL ACCOUNTS WITH SEARCH AND PAGINATION 
 class GetAllAccounts(Resource):
@@ -142,7 +142,7 @@ class updateAccount(Resource):
                 user.username = data['username']
                 user.role_id = data['role_id']
                 db.session.commit()
-            return jsonify({'status': True, 'data': {**data}})
+            return jsonify({'status': True,'msg':'Updated Account Details', 'data': {**data}})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
     

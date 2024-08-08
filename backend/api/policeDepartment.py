@@ -126,7 +126,7 @@ class updatePoliceDepartment(Resource):
                 police.name = data['name']
                 police.code = data['code']
                 db.session.commit()
-                return jsonify({'status':True,'msg':'Updated Pricing Plans Details','data':{**data}})
+                return jsonify({'status':True,'msg':'Updated Police Department Details','data':{**data}})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
 
