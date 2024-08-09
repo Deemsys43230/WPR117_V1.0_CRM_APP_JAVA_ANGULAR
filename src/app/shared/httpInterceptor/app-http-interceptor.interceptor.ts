@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { Injectable } from "@angular/core";
 import { Observable, of, throwError } from 'rxjs';
 import { AuthDataService } from '../api/auth-data-service';
+import { AuthService } from '../services/auth-service';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
-    constructor(private router: Router,private authService: AuthDataService ) { }
+    constructor(private router: Router,private authService: AuthService ) { }
    intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         let domain = environment.domainName;
         const request = req.clone({
@@ -31,11 +32,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
                             });
                             return next.handle(refreshRequest)
                         }), catchError(err => {
-                            this.authService.handleLogout();
+                            this.authService.logout();
                             return throwError(err);
                         })
                     );
-                // }
             }
             else {
                 let errorMessage;

@@ -9,10 +9,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 
 export class AuthDataService {
-    handleLogout() {
-        throw new Error('Method not implemented.');
-    }
+
     constructor(private router: Router, private httpClient: HttpClient) { }
+
     // Login Data
     public login(loginData: any): Observable<any> {
         const body = new HttpParams()
@@ -26,8 +25,9 @@ export class AuthDataService {
             return res;
         }), catchError(error => throwError(error)));
     }
+
     // Refresh Token
-    refreshToken(refresh_token: any): Observable<any> {
+    public refreshToken(refresh_token: any): Observable<any> {
         const body = new HttpParams()
             .set('refresh_token', refresh_token);
         return this.httpClient.post("login/get", body.toString(),
@@ -38,23 +38,11 @@ export class AuthDataService {
                 map((res) => res))
     }
 
-    //forgot password
-    public ForgetPassword(passwordData: any): Observable<any> {
-        return this.httpClient.post('forgotpassword/user', passwordData).pipe(tap(res => {
-            return res;
-        }), catchError(error => throwError(error)));
-    }
     // Change Password
     public changePassword(data: any): Observable<any> {
-        return this.httpClient.post("changepassword/user/", data).pipe(tap(res => {
+        return this.httpClient.post("ChangePassword", data).pipe(tap(res => {
             return res;
         }), catchError(error => throwError(error)))
-    }
-    public updatePassword(data: any): Observable<any> {
-        return this.httpClient.post("updatePassword", data).pipe(
-            tap(res => res),
-            catchError(error => throwError(error))
-        );
     }
 
     //Reset Password
