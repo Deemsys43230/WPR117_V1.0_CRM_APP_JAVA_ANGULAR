@@ -16,6 +16,11 @@ export class navItems {
       icon: 'fa fa-users'
     },
     {
+      name: 'Reports',
+      url: 'report',
+      icon: 'fa fa-file'
+    },
+    {
       name: 'Occupants',
       url: 'occupants',
       icon: 'fa fa-user'
