@@ -15,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: "ohio/:departmentName",
-    component: PoliceLoginComponent,
+    component: PoliceLoginComponent
   },
   {
     path: "reports/:departmentName",
@@ -24,10 +24,9 @@ const routes: Routes = [
   {
     path: "auth/login",
     component: LoginComponent,
-  },
-  {
-    path: "auth/policeDepartmentLogin/:departmentName",
-    component: LoginComponent,
+  },  
+  { path: "ohio",
+    component: PoliceDepartmentLoginComponent 
   },
   {
     path: 'superAdmin',
@@ -35,7 +34,6 @@ const routes: Routes = [
     loadChildren: () => import('./super-admin/super-admin.module').then(m => m.SuperAdminModule),
     canActivate: [AuthGuard]
   },
-  { path: "ohio", component: PoliceDepartmentLoginComponent },
 
   //Any undefined route will goes to Login Page
   // {

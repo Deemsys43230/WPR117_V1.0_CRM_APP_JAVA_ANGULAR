@@ -55,7 +55,7 @@ export class OccupantsComponent implements OnInit {
       reportNumber: (this.searchOccupantsForm.value.reportNumber != undefined) ? this.searchOccupantsForm.value.reportNumber : "",
       reportType: 2,
       searchType: 1,
-      accountId: 0,
+      accountId: "0",
     };
     this.getAllOccupants();
   }
@@ -124,7 +124,7 @@ export class OccupantsComponent implements OnInit {
       reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
       reportType: 2,
       searchType: 1,
-      accountId: 0,
+      accountId: "0",
     };
     this.occupantsService.getAllOccupants(this.searchData).subscribe(res => {
       if (res.status) {
@@ -374,7 +374,7 @@ export class OccupantsComponent implements OnInit {
       reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
       reportType: 2,
       searchType: 1,
-      accountId: 0,
+      accountId: "0",
     };
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
     this.getAllOccupants();
@@ -398,7 +398,7 @@ export class OccupantsComponent implements OnInit {
       reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
       reportType: 2,
       searchType: 1,
-      accountId: 0,
+      accountId: "0",
     };
     this.getAllOccupants();
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';

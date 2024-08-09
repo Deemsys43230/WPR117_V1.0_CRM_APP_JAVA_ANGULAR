@@ -19,64 +19,235 @@
                     <i class="fa fa-key"></i> Change Password
                 </button>
                 <button class="btn btn-secondary ml-2">
-                    <i class="fa fa-sign-out"></i> Logout                    
+                    <i class="fa fa-sign-out"></i> Logout
                 </button>
             </div>
         </div>
 
         <!-- Reports Form -->
-        <div class="row">
-            <div class="col-md-12">
-                <h3 class="mb-4">Reports</h3>
-                <button class="btn btn-primary float-right">
-                    <i class="fa fa-plus"></i> Add New Report
-                </button>
-                <form [formGroup]="policeDepartmentForm" class="row">
-                    <!-- Form Controls -->
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="crashDate" class="form-label">Crash Date:</label>
-                        <input type="date" id="crashDate" class="form-control" formControlName="crashDate" />
+        <div class="row col-md-12 outer-div">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3 class="mb-4 highlighted-header">Reports</h3>
+                </div>
+                <div class="col-md-3 text-md-right">
+                    <button class="btn">
+                        <i class="fa fa-plus"></i> Add New Report
+                    </button>
+                </div>
+            </div>
+            <form [formGroup]="policeDepartmentForm" class="row">
+                <!-- Form Controls -->
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="crashDate" class="form-label">Crash Date:</label>
+                    <input type="date" id="crashDate" class="form-control" formControlName="crashDate" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="reportNumber" class="form-label">Report Number:</label>
+                    <input type="text" id="reportNumber" class="form-control" placeholder="Search Report Number"
+                        formControlName="reportNumber" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="firstName" class="form-label">First Name:</label>
+                    <input type="text" id="firstName" class="form-control" placeholder="Search First Name"
+                        formControlName="firstName" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="lastName" class="form-label">Last Name:</label>
+                    <input type="text" id="lastName" class="form-control" placeholder="Search Last Name"
+                        formControlName="lastName" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="location" class="form-label">Location:</label>
+                    <input type="text" id="location" class="form-control" placeholder="Search Location"
+                        formControlName="location" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="addedOnFromDate" class="form-label">Added On From Date:</label>
+                    <input type="date" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <label for="addedOnToDate" class="form-label">Added On To Date:</label>
+                    <input type="date" id="addedOnToDate" class="form-control" formControlName="addedOnToDate" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                    <div class="d-flex gap-3">
+                        <button
+                            class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
+                            type="submit" (click)="onSearch()">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        </button>
+                        <button
+                            class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
+                            type="submit" (click)="resetSearch()">
+                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                        </button>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="reportNumber" class="form-label">Report Number:</label>
-                        <input type="text" id="reportNumber" class="form-control" placeholder="Search Report Number"
-                            formControlName="reportNumber" />
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-4">
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': currentTab === 'uploadReports'}"
+                        (click)="setActiveTab('uploadReports')">Upload Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': currentTab === 'viewAllReports'}"
+                        (click)="setActiveTab('viewAllReports')">View All Reports</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-3">
+                <!-- Upload Reports Tab -->
+                <div class="tab-pane fade show" [ngClass]="{'active': currentTab === 'uploadReports'}">
+                    <!-- Table Starts -->
+                    <table class="table table-bordered mt-5">
+                        <thead>
+                            <tr>
+                                <th class="report-table-header" colspan="2">First Name</th>
+                                <th class="report-table-header" colspan="2">Last Name</th>
+                                <th class="report-table-header">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="!error">
+                            <ng-container *ngFor="let data of reportsData">
+                                <tr>
+                                    <td class="report-header">
+                                        <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                                    </td>
+                                    <td class="report-header">
+                                        <label class="label-color">Report Number:</label><br />{{data.report_number}}
+                                    </td>
+                                    <td class="report-header">
+                                        <label class="label-color">Location:</label><br />{{data.location}}
+                                    </td>
+                                    <td class="report-header">
+                                        <label class="label-color">No. of
+                                            Occupants:</label><br />{{data.no_of_occupants}}
+                                    </td>
+                                    <td class="report-header">
+                                        <a class="edit-btn" title="Edit"><i class="fa fa-pencil fa-sm"></i></a>
+                                        <a class="delete-btn" title="Delete"><i class="fa fa-trash fa-sm"></i></a>
+                                        <a class="view-btn" title="View Report Details"><i
+                                                class="fa fa-eye fa-sm"></i></a>
+                                        <a href="{{data.file_name}}" target="_blank" class="info-btn"
+                                            title="View Report File"><i class="fas fa-file"></i></a>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let item of data.occupantsForms">
+                                    <td colspan="2">{{item.first_name}}</td>
+                                    <td colspan="4">{{item.last_name}}</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                        <tbody *ngIf="error">
+                            <tr>
+                                <td class="warn" colspan="6">No Records Found!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Table Ends -->
+                </div>
+
+                <div class="tab-pane fade"
+                    [ngClass]="{ 'show active': currentTab === 'viewAllReports', 'fade': currentTab !== 'viewAllReports' }">
+                    <!-- Table Starts -->
+                    <table class="table table-bordered mt-5">
+                        <thead>
+                            <tr>
+                                <th class="report-table-header" colspan="2">First Name</th>
+                                <th class="report-table-header" colspan="2">Last Name</th>
+                                <th class="report-table-header">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="!error">
+                            <ng-container *ngFor="let data of reportsData">
+                                <tr>
+                                    <td class="report-header">
+                                        <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                                    </td>
+                                    <td class="report-header">
+                                        <label class="label-color">Report Number:</label><br />{{data.report_number}}
+                                    </td>
+                                    <td class="report-header">
+                                        <label class="label-color">Location:</label><br />{{data.location}}
+                                    </td>
+                                    <td class="report-header">
+                                        <label class="label-color">No. of
+                                            Occupants:</label><br />{{data.no_of_occupants}}
+                                    </td>
+                                    <td class="report-header">
+                                        <a class="view-btn" title="View Report Details"><i
+                                                class="fa fa-eye fa-sm"></i></a>
+                                        <a href="{{data.file_name}}" target="_blank" class="info-btn"
+                                            title="View Report File"><i class="fas fa-file"></i></a>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let item of data.occupantsForms">
+                                    <td colspan="2">{{item.first_name}}</td>
+                                    <td colspan="4">{{item.last_name}}</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                        <tbody *ngIf="error">
+                            <tr>
+                                <td class="warn" colspan="6">No Records Found!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Table Ends -->
+                </div>
+
+                <!-- Pagination starts -->
+                <div class="row mt-4" *ngIf="!error">
+                    <div class="col-lg-4" *ngIf="pagebutton"></div>
+                    <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
+                        <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1"
+                            placeholder="Search By page no" />
+                        <button class="button goBtn" (change)="searchPageno()">
+                            GO
+                        </button>
+                        <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="firstName" class="form-label">First Name:</label>
-                        <input type="text" id="firstName" class="form-control" placeholder="Search First Name"
-                            formControlName="firstName" />
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="lastName" class="form-label">Last Name:</label>
-                        <input type="text" id="lastName" class="form-control" placeholder="Search Last Name"
-                            formControlName="lastName" />
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="location" class="form-label">Location:</label>
-                        <input type="text" id="location" class="form-control" placeholder="Search Location"
-                            formControlName="location" />
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="addedOnFromDate" class="form-label">Added On From Date:</label>
-                        <input type="date" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate" />
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <label for="addedOnToDate" class="form-label">Added On To Date:</label>
-                        <input type="date" id="addedOnToDate" class="form-control" formControlName="addedOnToDate" />
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-                        <div class="d-flex">
-                            <button class="btn btn-success mr-2" type="submit" (click)="onSearch()">
-                                <i class="fa-solid fa-magnifying-glass"></i> 
-                            </button>
-                            <button class="btn btn-danger" type="button" (click)="resetSearch()">
-                                <i class="fa-solid fa-arrows-rotate"></i> 
-                            </button>
+                    <div class="col-lg-4 pageStatus">
+                        <div class="data-list">
+                            <p>
+                                Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
+                            </p>
                         </div>
                     </div>
-                </form>
+                    <div class="col-lg-4">
+                        <select *ngIf="!pagebutton" title="pagination" id="showPageType"
+                            class="form-control page-dropdown" type="text" (change)="onChangePagination($event)">
+                            <option *ngFor="let data of ItemsPerPage" [value]="data.value">
+                                {{ data.data }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row justify-content-center" *ngIf="!error">
+                    <div class="col-md-4">
+                        <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
+                            <ul class="numberListContainer p-0">
+                                <li [ngClass]="{ numberList: currentPage != 1 }">
+                                    <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1"
+                                        (click)="previousPage()"></i>
+                                </li>
+                                <li class="numberList" *ngFor="let page of pages"
+                                    [ngClass]="{ active: currentPage === page }" (click)="goToPage(page)">
+                                    {{ page }}
+                                </li>
+                                <li [ngClass]="{ numberList: currentPage !== totalPages }">
+                                    <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
+                                        (click)="nextPage()"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination ends -->
             </div>
-        </div>
-    </div>
-</div>

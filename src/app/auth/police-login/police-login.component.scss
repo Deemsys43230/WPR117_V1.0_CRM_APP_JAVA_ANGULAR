@@ -13,17 +13,29 @@
   .heading {    
     color: #316c71;
   }
-  
-  .form-floating {
-    max-width: 400px; /* Adjust as needed */
-  }
-  
+    
   .btn {
-    max-width: 100%; /* Ensure button fits the container */    
+    max-width: 100%; 
     background-color: #1d8d97;
     color: white;
   }
 
   .container {
     max-width: 1450px;
+  }
+
+  .form-floating {
+    position: relative;
+  }
+  
+  .toggle-password {
+    cursor: pointer;
+    top: 50%;
+    right: 10px; 
+    transform: translateY(-50%);
+    z-index: 10; 
+  }
+  
+  .form-control {
+    padding-right: 40px;
   }
