@@ -98,7 +98,7 @@ class CreateCrashReport(Resource):
 
 # Get All Crash Reports
 class GetAllCrashReports(Resource):
-    # @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
+    @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
         requestDetails = request.get_json()
         page = requestDetails.get('page')
