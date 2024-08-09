@@ -116,14 +116,14 @@ class GetAllCrashReports(Resource):
         countyId= requestDetails.get('countyId')
         policeDepartmentId=requestDetails.get('policeDepartmentId')
         query = CrashReports.query
-        # user = Users.query.filter_by(username=get_jwt_identity()).first()
-        # if(reportType==1):
-        #    if user:
-        #         accountId = user.account_id     
-        # if(reportType==2):
-        #             police_department=Accounts.query.filter_by(account_id=user.account_id)
-        #             if police_department:
-        #                 policeDepartmentId = police_department.police_department_id
+        user = Users.query.filter_by(username=get_jwt_identity()).first()
+        if(reportType==1):
+           if user:
+                accountId = user.account_id     
+        if(reportType==2):
+                    police_department=Accounts.query.filter_by(account_id=user.account_id)
+                    if police_department:
+                        policeDepartmentId = police_department.police_department_id
         if (accountId!="0"):
             query = query.filter_by(account_id=accountId)
         if (reportNumber!=""):
