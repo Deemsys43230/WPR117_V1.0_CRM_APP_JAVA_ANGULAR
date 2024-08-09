@@ -147,25 +147,19 @@ export class AddDepartmentComponent implements OnInit {
   //Submit form data
   onSubmit() {
     const data = this.addPoliceDepartmentForm.value;
-    const formData = {
-      'county_id': data.countyId,
-      'name': data.name,
-      'code': data.code,
-      'login_link': data.loginLink,
-      'search_link': data.searchLink,
-    };
+    const formData = new FormData();
+    formData.append('county_id',data.countyId)
+    formData.append('name',data.name)
+    formData.append('code',data.code)
+    formData.append('login_link',data.loginLink)
+    formData.append('search_link',data.searchLink)
+    formData.append('image', this.selectedFile ? this.selectedFile : null)
 
     this.isAddFormSubmitted = true;
     if (this.addPoliceDepartmentForm.valid) {
       if (this.isEdit) {
         this.policeDepartmentService.updatePoliceDepartment(formData, this.id).subscribe(res => {
           if (res.status) {
-            if (this.id && this.selectedFile) {
-              const imageData = new FormData()
-              imageData.append('dep_id' , this.id)
-              imageData.append('file',this.selectedFile)
-              this.policeDepartmentService.savePoliceDepartmentImage(imageData).subscribe(res=>console.log(res.msg))
-            }
             this.flashMessageService.successMessage(res.msg, 2)
             this.back()
           }
@@ -177,13 +171,6 @@ export class AddDepartmentComponent implements OnInit {
       else {
         this.policeDepartmentService.savePoliceDepartment(formData).subscribe(res => {
           if (res?.status) {
-              const dep_id = res.police_department_id
-              if (dep_id && this.selectedFile) {
-                const imageData = new FormData()
-                imageData.append('dep_id' , dep_id)
-                imageData.append('file',this.selectedFile)
-                this.policeDepartmentService.savePoliceDepartmentImage(imageData).subscribe(res=>console.log(res.msg))
-              }
             this.flashMessageService.successMessage(res.msg, 2)
             this.back()
           }

@@ -30,10 +30,5 @@ export class navItems {
       url: 'settings',
       icon: 'fa fa-male'
     },
-    {
-      name: 'Logout',
-      url: 'auth/login',
-      icon: 'fa fa-sign-out'
-    },
   ];
 }

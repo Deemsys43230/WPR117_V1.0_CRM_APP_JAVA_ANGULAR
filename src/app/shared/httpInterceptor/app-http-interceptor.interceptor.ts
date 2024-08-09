@@ -19,8 +19,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
             url: domain + req.url
         });
         return next.handle(request).pipe(catchError(err => {
-            if (err.status === 401) {
-                // if (err.statusText == "Unauthorized") {
+            if (err.status === 401 || err.status === 422) {
                     return this.authService.refreshToken(localStorage.getItem('Refresh-Token')).pipe(
                         switchMap((authResponse) => {
                             localStorage.setItem("Authorization-Token", authResponse.accessToken)
