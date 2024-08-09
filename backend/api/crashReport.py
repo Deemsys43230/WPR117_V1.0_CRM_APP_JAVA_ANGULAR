@@ -121,9 +121,9 @@ class GetAllCrashReports(Resource):
            if user:
                 accountId = user.account_id     
         if(reportType==2):
-                    police_department=Accounts.query.filter_by(account_id=user.account_id)
-                    if police_department:
-                        policeDepartmentId = police_department.police_department_id
+                    accountDetail=Accounts.query.filter_by(account_id=user.account_id).first()
+                    if accountDetail:
+                        policeDepartmentId = accountDetail.police_department_id
         if (accountId!="0"):
             query = query.filter_by(account_id=accountId)
         if (reportNumber!=""):
@@ -142,22 +142,14 @@ class GetAllCrashReports(Resource):
         if(policeDepartmentId!="" and (policeDepartmentId) is not None):
             query = query.join(CrashReports.police).filter(PoliceDepartmentModel.police_department_id == policeDepartmentId)
         if (addedOnFromDate!=""):
-            try:
                 from_date = datetime.strptime(addedOnFromDate, '%Y-%m-%d')
                 query = query.filter(CrashReports.added_date >= from_date)
-            except ValueError:
-                return jsonify({'message': 'Invalid date format for addedOnFromDate. Use YYYY-MM-DD.'}), 400
         if (addedOnToDate!=""):
-            try:
                 to_date = datetime.strptime(addedOnToDate, '%Y-%m-%d')
                 query = query.filter(CrashReports.added_date <= to_date)
-            except ValueError:
-                return jsonify({'message': 'Invalid date format for addedOnToDate. Use YYYY-MM-DD.'}), 400
         query = query.distinct()
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
-       
         report_list = []
-        
         # Iterate through crash reports and add occupants
         for crash in data.items:
             # Use the relationship to get occupants for the current crash report
