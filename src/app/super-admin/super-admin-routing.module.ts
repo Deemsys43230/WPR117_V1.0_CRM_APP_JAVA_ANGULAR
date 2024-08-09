@@ -6,6 +6,7 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
 import { AddNewAccountComponent } from './accounts/add-new-account/add-new-account.component';
 import { OccupantsComponent } from './occupants/occupants.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: "accounts/add-new-account/:id", component: AddNewAccountComponent },
   { path: "occupants", component: OccupantsComponent },
   { path: 'superAdmin/policeDepartment', component: DepartmentComponent },
+  { path: "auth/change-password", component: ChangePasswordComponent },
 ];
 
 @NgModule({

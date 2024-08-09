@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OccupantsComponent } from './occupants/occupants.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { ChangePasswordComponent } from './change-password/change-password.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -17,6 +18,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     AddDepartmentComponent,
     AddNewAccountComponent,
     OccupantsComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     CommonModule,

@@ -12,6 +12,8 @@ export class DefaultLayoutComponent implements OnInit {
   public active: string | undefined;
   public navItems: any;
   public role: any;
+  public currentYear :any;
+  public username : any;
   constructor(public router: Router) { }
 
 
@@ -27,6 +29,12 @@ export class DefaultLayoutComponent implements OnInit {
         $wrapper.classList.toggle('toggled');
       });
     }
+    //Calculate current year
+    var currentDate = new Date()
+    this.currentYear = currentDate.getFullYear()
+
+    //Get username
+    this.username = localStorage.getItem("userName")
 
     // For active url
     const moduleUrl = this.router.url.split('/');

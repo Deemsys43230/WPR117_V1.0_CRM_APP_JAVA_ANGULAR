@@ -4,8 +4,25 @@ body {
     position: relative;
     min-height: 100%;
   }
-  .navbar-header h2{
-    color: white;
+  .header {
+    color: white !important;
+  }
+
+  #navbar-wrapper .navbar {
+    display: flex;
+    justify-content: space-between; /* Adjusts spacing between the brand and the dropdown */
+    align-items: center; /* Vertically centers the content */
+    padding: 10px 20px; /* Optional: Adds some padding for better spacing */
+    background-color: $secondary-color; /* Keeps the background consistent */
+  }
+  
+  .navbar-header {
+    display: flex;
+    align-items: center; /* Vertically center the brand text and icon */
+  }
+  
+  .dropdown {
+    margin-left: auto; /* Pushes the dropdown to the far right */
   }
   
   a {
@@ -86,12 +103,13 @@ body {
     font-size: 24px;
     width: 50px;
   }
-  
   #navbar-wrapper {
-      width: 100%;
-      position: absolute;
-      z-index: 2;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
   }
+  
   #wrapper.toggled #navbar-wrapper {
       position: absolute;
       margin-right: -250px;
@@ -103,6 +121,36 @@ body {
     margin-bottom: 0;
     border-radius: 0;
   }
+  .dropdown{
+    display: flex;
+    justify-content: center;
+  }
+  .username{
+    font-size: large;
+    color: white !important;
+  }
+  .dropdown-item {
+    border-bottom: 1px solid #495057;
+    padding: 10px 20px;
+  }
+  
+  .dropdown-item:hover {
+    background-color: $primary-color;
+    color: white !important;
+  }
+  
+  .dropdown-item:last-child {
+    border-bottom: 1px solid #cccccc;
+  }
+  
+  .navbar-nav .dropdown-menu-end {
+    right: 0;
+    left: auto;
+  }
+  
+  .navbar-toggler-icon {
+    color: white;
+  }
   #navbar-wrapper .navbar a {
     color: #757575;
   }
@@ -111,16 +159,32 @@ body {
   }
   
   #content-wrapper {
-    width: 100%;
+    width: 99%;
     position: absolute;
-    padding: 15px;
+    padding-top: 70px;
+    padding-bottom: 130px;
     top: 100px;
   }
   #wrapper.toggled #content-wrapper {
     position: absolute;
     margin-right: -250px;
   }
-  
+  footer {
+    position: fixed;
+    bottom: 0px;
+    background-color: #c4c7d1;
+    margin: auto;
+    width: -webkit-fill-available;
+    padding: 5px 10px;
+}
+  .footer-wrapper{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+  }
+  .footerText {
+    color: black !important;
+}
   @media (min-width: 992px) {
     #wrapper {
       padding-left: 250px;
@@ -149,7 +213,10 @@ body {
     }
   
     #navbar-wrapper {
-      position: relative;
+      position: fixed;
+      top: 0;
+      z-index: 1001;
+      border-bottom: 1px solid #444; 
     }
   
     #wrapper.toggled {
@@ -188,7 +255,8 @@ body {
     }
   
     #navbar-wrapper {
-      position: relative;
+      position: fixed;
+      z-index: 1001;
     }
   
     #wrapper.toggled {
@@ -230,7 +298,8 @@ body {
     }
   
     #navbar-wrapper {
-      position: relative;
+      position: fixed;
+      z-index: 1001;
     }
   
     #wrapper.toggled {
