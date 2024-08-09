@@ -18,34 +18,40 @@ class createPoliceDepartment(Resource):
             police_department_name = PoliceDepartmentModel.query.filter_by(name=name).first()
             police_department_code = PoliceDepartmentModel.query.filter_by(code=code).first()
             image = request.files.get('image')
-            police = PoliceDepartmentModel(
-                county_id=data.get('county_id'),
-                name=name,
-                code=code,
-                login_link=data.get('login_link'),
-                search_link=data.get('search_link')
-            )
-            police.savePoliceDepartment()
-            createPoliceAccounts(police)
-            if image is None:
-                default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\', '/')
-                default_file_name='banner.jpg'
-                file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
+            if police_department_name is None:
+                if police_department_code is None:
+                    police = PoliceDepartmentModel(
+                        county_id=data.get('county_id'),
+                        name=name,
+                        code=code,
+                        login_link=data.get('login_link'),
+                        search_link=data.get('search_link')
+                    )
+                    police.savePoliceDepartment()
+                    createPoliceAccounts(police)
+                    if image is None:
+                        default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\', '/')
+                        default_file_name='banner.jpg'
+                        file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
+                    else:
+                        path = os.path.join(tempFolder, str(police.police_department_id), image.filename).replace('\\', '/')
+                        os.makedirs(os.path.dirname(path), exist_ok=True)
+                        if awsUpload == 1:
+                            saved_file_path = save_temporary_file(image, path)
+                            if saved_file_path:
+                                file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
+                                os.remove(saved_file_path)
+                    return jsonify({
+                                'msg': 'Police Department Added Successfully',
+                                'status': True,
+                                'police_department_id': police.police_department_id,
+                                'data': {**data},
+                                'file_url':file_url
+                            })
+                else:
+                    return jsonify({'msg': 'Duplicate Creation Of Department Code', 'status': False})
             else:
-                path = os.path.join(tempFolder, str(police.police_department_id), image.filename).replace('\\', '/')
-                os.makedirs(os.path.dirname(path), exist_ok=True)
-                if awsUpload == 1:
-                    saved_file_path = save_temporary_file(image, path)
-                    if saved_file_path:
-                        file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
-                        os.remove(saved_file_path)
-            return jsonify({
-                        'msg': 'Police Department Added Successfully',
-                        'status': True,
-                        'police_department_id': police.police_department_id,
-                        'data': {**data},
-                        'file_url':file_url
-                    })
+                return jsonify({'msg': 'Duplicate Creation Of Department Name', 'status': False})
         except Exception as e:
             return jsonify({'msg': 'An error occurred', 'status': False, 'error': str(e)})
 
