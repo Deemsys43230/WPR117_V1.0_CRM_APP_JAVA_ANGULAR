@@ -62,26 +62,25 @@ def sendMailToResetPassword(to,body):
 
 # FUNCTION FOR UPLOAD IMAGE IN AWS
 def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
-    if upload_status == 1:
-        object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"  
+    object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"  
+    try:
         try:
-            try:
-                s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-                s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-            except s3.exceptions.ClientError as e:
-                if e.response['Error']['Code'] != '404':
-                    raise  
-            s3.upload_file(
-                filepath,
-                AWSCredentials['PUBLIC_BUCKET_NAME'],
-                object_key
-            )
-            file_url = f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
-            print(file_url)
-            return file_url
-        
-        except FileNotFoundError:
-            return f"The file {filepath} was not found."
+            s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+            s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+        except s3.exceptions.ClientError as e:
+            if e.response['Error']['Code'] != '404':
+                raise  
+        s3.upload_file(
+            filepath,
+            AWSCredentials['PUBLIC_BUCKET_NAME'],
+            object_key
+        )
+        file_url = f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
+        print(file_url)
+        return file_url
+    
+    except FileNotFoundError:
+        return f"The file {filepath} was not found."
 
 def get_property(property_name):
     try:

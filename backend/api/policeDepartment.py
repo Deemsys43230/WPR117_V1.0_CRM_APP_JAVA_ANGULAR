@@ -2,7 +2,7 @@ from operator import and_
 import os
 from flask import Blueprint, jsonify,request
 from flask_restful import Resource,Api
-from config import CRMAppDomain,bucketURL,bannerLocation,awsUpload,fileName,tempFolder,defaultBannerName
+from config import AWSCredentials, CRMAppDomain,bucketURL,bannerLocation,awsUpload,tempFolder,folderName
 from models import Accounts, PoliceDepartmentModel, Users
 from db import db
 from test import get_property, uploadFileToAWSS3
@@ -12,37 +12,44 @@ import requests
 class createPoliceDepartment(Resource):
     def post(self):
         try:
-            data = request.get_json()
+            data = request.form
             name = data.get('name')
             code = data.get('code')
             police_department_name = PoliceDepartmentModel.query.filter_by(name=name).first()
             police_department_code = PoliceDepartmentModel.query.filter_by(code=code).first()
-            if police_department_name is None:
-                if police_department_code is None:
-                    police = PoliceDepartmentModel(
-                        county_id=data.get('county_id'),
-                        name=name,
-                        code=code,
-                        login_link=data.get('login_link'),
-                        search_link=data.get('search_link')
-                    )
-                    police.savePoliceDepartment()
-                    createPoliceAccounts(police)
-                    return jsonify({
+            image = request.files.get('image')
+            police = PoliceDepartmentModel(
+                county_id=data.get('county_id'),
+                name=name,
+                code=code,
+                login_link=data.get('login_link'),
+                search_link=data.get('search_link')
+            )
+            police.savePoliceDepartment()
+            createPoliceAccounts(police)
+            if image is None:
+                default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\', '/')
+                default_file_name='banner.jpg'
+                file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
+            else:
+                path = os.path.join(tempFolder, str(police.police_department_id), image.filename).replace('\\', '/')
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                if awsUpload == 1:
+                    saved_file_path = save_temporary_file(image, path)
+                    if saved_file_path:
+                        file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
+                        os.remove(saved_file_path)
+            return jsonify({
                         'msg': 'Police Department Added Successfully',
                         'status': True,
                         'police_department_id': police.police_department_id,
-                        'data': {**data}
+                        'data': {**data},
+                        'file_url':file_url
                     })
-                else:
-                    return jsonify({'msg': 'Duplicate Creation Of Department Code', 'status': False})
-            else:
-                return jsonify({'msg': 'Duplicate Creation Of Department Name', 'status': False})
         except Exception as e:
             return jsonify({'msg': 'An error occurred', 'status': False, 'error': str(e)})
 
 # TO STORE IN CRO APP - POLICE AGENCY
-
 def createPoliceAccounts(police):
     payload = {
         "agency_id":police.police_department_id,
@@ -125,7 +132,7 @@ class getByIdPoliceDepartment(Resource):
                      'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
-                    'url':bucketURL+""+str(id)+""+bannerLocation
+                    'url':f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{folderName}{id}{bannerLocation}"
                 }
                 return jsonify({'status':True,'data':police_data})
             return jsonify({'status':False,'msg':'No Such Details Found'})
@@ -193,14 +200,7 @@ class enableDisablePoliceDepartment(Resource):
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
 
-# TO UPLOAD IMAGE WHEN IMAGE IS NOT PROVIDED        
-class uploadPoliceDepartmentWithoutFile(Resource):
-    def post(self,dep_id): 
-        path = tempFolder +""+ defaultBannerName
-        if awsUpload == 1:
-            uploadFileToAWSS3(path,fileName,dep_id,2)
-        return None
-    
+
  # TO SAVE IMAGE IN TEMPORARY STORAGE
 def save_temporary_file(file, path):
     try:
@@ -209,28 +209,6 @@ def save_temporary_file(file, path):
         return path
     except Exception as e:
         return str(e)
-
-# TO UPLOAD IMAGE IN AWS
-class UploadImageForPoliceDepartment(Resource):
-    def post(self):
-        data = request.form
-        file = request.files.get('file')    
-        dep_id = data.get('dep_id')
-        path = os.path.join(tempFolder, str(dep_id), file.filename).replace('\\', '/')
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        
-        if awsUpload == 1:
-            saved_file_path = save_temporary_file(file, path)
-            if saved_file_path:
-                uploadFileToAWSS3(saved_file_path, file.filename, dep_id, 2)
-                try:
-                    os.remove(saved_file_path)
-                except OSError as e:
-                    return jsonify({'msg': 'File Uploaded Successfully'})
-            else:
-                return jsonify({'msg': 'Failed to save file'})
-            return jsonify({'msg':'File Uploaded Successfully'})
-
 class policeDepartmentDetailsByUsername(Resource):
     def post(self):
         data = request.get_json()
@@ -265,8 +243,6 @@ class policeDepartmentDetailsByUsername(Resource):
             return jsonify({'msg':'Police Department Details','data':police_data,'status':True})
         return jsonify({'msg':'Police Department Details Not Found','status':False})
         
-        
-        
     
 police_blueprint = Blueprint('police',__name__)
 api = Api(police_blueprint)
@@ -276,7 +252,5 @@ api.add_resource(getAllPoliceDepartment,'/getAllSearchPoliceDepartment')
 api.add_resource(getByIdPoliceDepartment,'/getByIdPoliceDepartment/<int:id>')
 api.add_resource(updatePoliceDepartment,'/updatePoliceDepartment/<int:id>')
 api.add_resource(enableDisablePoliceDepartment,'/enableDisablePoliceDepartment/<int:id>')
-api.add_resource(UploadImageForPoliceDepartment,'/uploadimageForPoliceDepartment')
 api.add_resource(getByNamePoliceDepartment,'/getByNamePoliceDepartment/<string:name>')
-api.add_resource(uploadPoliceDepartmentWithoutFile,'/uploadPoliceDepartmentWithoutFile/<int:dep_id>')
 api.add_resource(policeDepartmentDetailsByUsername,'/policeDepartmentDetailsByUsername')
