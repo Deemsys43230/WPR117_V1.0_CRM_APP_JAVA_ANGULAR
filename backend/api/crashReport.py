@@ -119,7 +119,7 @@ class GetAllCrashReports(Resource):
         query = CrashReports.query
         user = Users.query.filter_by(username=get_jwt_identity()).first()
         
-        if reportType == 1 and user:
+        if reportType == 1 and policeDepartmentId=="" and user:
             accountId = user.account_id
         elif reportType == 2:
             accountDetail = Accounts.query.filter_by(account_id=user.account_id).first()
