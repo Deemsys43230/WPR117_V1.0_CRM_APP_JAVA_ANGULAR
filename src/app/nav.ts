@@ -17,7 +17,7 @@ export class navItems {
     },
     {
       name: 'Reports',
-      url: 'report',
+      url: 'reports',
       icon: 'fa fa-file'
     },
     {

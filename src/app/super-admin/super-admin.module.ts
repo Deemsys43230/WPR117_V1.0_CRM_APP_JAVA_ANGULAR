@@ -11,6 +11,7 @@ import { OccupantsComponent } from './occupants/occupants.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ReportsComponent } from './reports/reports.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -19,6 +20,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AddNewAccountComponent,
     OccupantsComponent,
     ChangePasswordComponent,
+    ReportsComponent,
   ],
   imports: [
     CommonModule,

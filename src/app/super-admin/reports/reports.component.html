@@ -1,0 +1,81 @@
+<!-- Header Starts -->
+<div class="card-header h5 mb-3">
+    <div class="custom-row">
+        <div class="headerStyle">
+            <i class="fa fa-phone custom-icon"></i>
+            Reports
+        </div>
+    </div>
+</div>
+<!-- Header Ends -->
+
+<!-- Search form Starts -->
+<div class="row">
+    <form class="row" [formGroup]="searchReportsForm">
+
+        <div class="col-lg-3 col-md-4 col-sm-12 py-2">
+            <label for="crashDate" class="form-label">Crash Date</label>
+            <input id="crashDate" type="date" class="form-control" formControlName="crashDate" />
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label for="" class="form-label">Report Number</label>
+            <input type="text" class="form-control" placeholder="Search Name" formControlName="reportNumber" />
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label for="" class="form-label">Location</label>
+            <input type="text" class="form-control" placeholder="Search Name" formControlName="location" />
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label for="" class="form-label">Police Department</label>
+            <select class="form-control" formControlName="department">
+                <option value="">-Select-</option>
+                <option *ngFor="let police of departmentList" value="{{police?.department_id}}">
+                    {{police?.name}}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label for="" class="form-label">County</label>
+            <select class="form-control" formControlName="county">
+                <option value="">-Select-</option>
+                <option *ngFor="let county of countyList" value="{{county?.county_id}}">
+                    {{county?.county_name}}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label for="addedOnFromDate" class="form-label">Added On From Date</label>
+            <input id="addedOnFromDate" type="date" class="form-control" formControlName="addedOnFromDate" />
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label for="addedOnToDate" class="form-label">Added On To Date</label>
+            <input id="addedOnToDate" type="date" class="form-control" formControlName="addedOnToDate" />
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <div class="btn-box">
+                <button
+                    class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"
+                    type="submit" (click)="onSearch()"><i class="fa-solid fa-magnifying-glass"
+                        aria-hidden="true"></i></button>
+                <button
+                    class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn  border-0 text-white"
+                    type="submit" (click)="resetSearch()"><i class="fa-solid fa-arrows-rotate"
+                        aria-hidden="true"></i></button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<!-- Search form ends -->
+
+<!-- Table Starts -->
+<table-config *ngIf="callChildComponent" [tableData]="table_data" (page)="page($event)" [search]="searchValue"
+    (actionOutput)="actionOutput($event)"></table-config>
+<!-- Table Ends -->

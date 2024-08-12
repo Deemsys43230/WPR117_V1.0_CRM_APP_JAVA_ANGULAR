@@ -30,6 +30,11 @@ export const icons = [
         'title': 'View',
         'icon': 'fa fa-eye',
         'bgColor': '#1d8d97'
+    },
+    {
+        'title': 'View Report File',
+        'icon': 'fa fa-file',
+        'bgColor': '#1d8d97'
     }
 ]
  

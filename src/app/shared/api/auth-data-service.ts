@@ -40,7 +40,7 @@ export class AuthDataService {
 
     // Change Password
     public changePassword(data: any): Observable<any> {
-        return this.httpClient.post("ChangePassword", data).pipe(tap(res => {
+        return this.httpClient.post("user/ChangePassword", data).pipe(tap(res => {
             return res;
         }), catchError(error => throwError(error)))
     }

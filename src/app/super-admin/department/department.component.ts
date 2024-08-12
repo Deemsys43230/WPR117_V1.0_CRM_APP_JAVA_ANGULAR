@@ -25,7 +25,6 @@ export class DepartmentComponent implements OnInit {
   public currentPage: any = 1;
   public items_per_page = 5;
   public callChildComponent: boolean | undefined;
-  public count: any[] = [];
   public countyList: any[] = [];
   public searchValue: any;
   public supportingImage: any;
@@ -104,7 +103,7 @@ export class DepartmentComponent implements OnInit {
     });
   }
 
-  //get the role of the admin
+  //Get All County
   getAllCounty() {
     var data = {};
     this.countyService.getAllCounty(data).subscribe((res) => {

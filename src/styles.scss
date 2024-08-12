@@ -39,6 +39,11 @@ $third-color: #9fc1c1;
   color: white;
 }
 
+.common-btn-color2{
+  background-color: $primary-color;
+  color: white;
+}
+
 .common-btn-color:active {
   background-color: darken($secondary-color, 10%);
   color: lighten(white, 10%);
