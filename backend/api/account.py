@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource
 from db import db
 from models import  Accounts,Users
+from test import role_required
 
 
 def generate_short_uuid():
@@ -19,6 +20,7 @@ class createAccount(Resource):
         md5 = hashlib.md5()
         md5.update(password.encode('utf-8'))
         return md5.hexdigest()
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         try:
             data = request.get_json()
@@ -41,6 +43,7 @@ class createAccount(Resource):
 
 # TO GET ALL ACCOUNTS WITH SEARCH AND PAGINATION 
 class GetAllAccounts(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         data = request.get_json()
         items_per_page = data.get('items_per_page', '')
@@ -103,6 +106,7 @@ class GetAllAccounts(Resource):
 
 # GET ACCOUNTS BY ID 
 class getAccountsById(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def get(self,uuid):
         try:
             data = Accounts.query.filter_by(account_id = (uuid)).first()
@@ -125,6 +129,7 @@ class getAccountsById(Resource):
     
 # UPDATE ACCOUNT DETAILS 
 class updateAccount(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def put(self,uuid):
         try:
             accounts = Accounts.query.filter_by(account_id = (uuid)).first()
@@ -148,6 +153,7 @@ class updateAccount(Resource):
     
 # ENABLE DISABLE ACCOUNTS BY ID
 class enableDisableAccountById(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self,uuid):
         try:
             account = Accounts.query.filter_by(account_id=(uuid)).first()

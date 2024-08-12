@@ -5,11 +5,12 @@ from flask_restful import Resource,Api
 from config import AWSCredentials, CRMAppDomain,bucketURL,bannerLocation,awsUpload,tempFolder,folderName
 from models import Accounts, PoliceDepartmentModel, Users
 from db import db
-from test import get_property, uploadFileToAWSS3
+from test import get_property, role_required, uploadFileToAWSS3
 import requests
 
 # TO CREATE POLICE DEPARTMENT 
 class createPoliceDepartment(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         try:
             data = request.form
@@ -79,6 +80,7 @@ def createPoliceAccounts(police):
         
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         data = request.get_json()
         items_per_page = data.get('items_per_page',None)
@@ -121,6 +123,7 @@ class getAllPoliceDepartment(Resource):
     
 # GET POLICE DEPARTMENT BY ID
 class getByIdPoliceDepartment(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def get(self,id):
         try:
             data = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
@@ -148,6 +151,7 @@ class getByIdPoliceDepartment(Resource):
 
 # GET POLICE DEPARTMENT BY NAME
 class getByNamePoliceDepartment(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def get(self,name):
         try:
             data = PoliceDepartmentModel.query.filter_by(name=name).first()
@@ -175,6 +179,7 @@ class getByNamePoliceDepartment(Resource):
 
 # UPDATE POLICE DEPARTMENT BY ID
 class updatePoliceDepartment(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def put(self,id):
         try:
             police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
@@ -190,6 +195,7 @@ class updatePoliceDepartment(Resource):
 
 # ENABLE DISABLE POLICE DEPARTMENT BY ID
 class enableDisablePoliceDepartment(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self,id):
         try:
             police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
@@ -216,6 +222,7 @@ def save_temporary_file(file, path):
     except Exception as e:
         return str(e)
 class policeDepartmentDetailsByUsername(Resource):
+    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         data = request.get_json()
         username = data['username']
