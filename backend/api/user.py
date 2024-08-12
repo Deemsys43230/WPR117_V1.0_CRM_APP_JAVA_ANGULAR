@@ -9,7 +9,6 @@ import hashlib
 from flask_cors import cross_origin
 
 from test import role_required, sendMailToResetPassword
-
         
 # Change password
 class ChangePassword(Resource):
@@ -22,17 +21,20 @@ class ChangePassword(Resource):
     def post(self):
         try:
             data = request.get_json()
+            account_id = data.get('account_id')
             old_password = data.get('old_password')
             new_password = data.get('new_password')
             confirm_password = data.get('confirm_password')
-            user = Users.query.filter_by(password=self.hash_password(old_password)).first()
+            if old_password == new_password:
+                return jsonify({'msg':'Same As Old Password'})
+            user = Users.query.filter(Users.account_id ==account_id,Users.password==self.hash_password(old_password)).first()
             if user:
                 if new_password == confirm_password:
                     user.password = self.hash_password(new_password)
                     db.session.commit()
                     return jsonify({'msg':'Password Updated Successfully, Please Login Again','status':True})
                 return jsonify({'msg': 'Passwords Do Not Match','status':False})
-            return jsonify({'msg':'Authenticate Failed','status':False})
+            return jsonify({'msg':'Old password is not correct','status':False})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})    
 
