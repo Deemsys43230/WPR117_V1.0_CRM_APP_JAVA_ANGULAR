@@ -1,0 +1,16 @@
+@import 'src/styles.scss';
+
+.btn {
+    background-color: $secondary-color;
+}
+
+.custom-margin {
+    margin-bottom: 10px;
+}
+
+.outer-div {
+    background-color: #58a4aa; 
+    padding: 7px;
+    border-radius: 10px;
+    color: white;
+  }

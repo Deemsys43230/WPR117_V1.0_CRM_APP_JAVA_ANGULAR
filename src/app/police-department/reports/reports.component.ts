@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoliceDepartmentDataService } from 'src/app/shared/api/police-department-data.service';
-import { CountyService } from 'src/app/shared/services/county.service';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 
 @Component({
@@ -30,14 +29,13 @@ export class ReportsComponent {
   public pages: any[] = [];
   public ItemsPerPage: any = [];
   public countyList: any[] = [];
-  currentTab: string ='uploadReports'; // Default active tab
+  currentTab: string = 'uploadReports'; // Default active tab
 
-  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService,) { }
+  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService,) { }
 
   //ngOnInit
   ngOnInit(): void {
     this.initializationSearchOccupantsForm();
-    this.getAllCounty();
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
@@ -50,7 +48,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm.value.policeDepartmentId != undefined) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm.value.location != undefined) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm.value.reportNumber != undefined) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 2,
+      reportType: 1,
       searchType: 1,
       accountId: "0",
     };
@@ -63,38 +61,20 @@ export class ReportsComponent {
     this.getAllOccupants();
   }
 
-    // Initialization Search Occupants Form
-    initializationSearchOccupantsForm() {
-      this.policeDepartmentForm = this.fb.group({
-        addedOnFromDate: "",
-        addedOnToDate: "",
-        countyId: "",
-        crashDate: "",
-        firstName: "",
-        lastName: "",
-        policeDepartmentId: "",
-        location: "",
-        reportNumber: "",
-        reportType: 2,
-        searchType: 1
-      })  
-    }
-
-     //Get All County
-  getAllCounty() {
-    var data = {}
-    this.countyService?.getAllCounty(data).subscribe(res => {
-      if (res.status) {
-        this.countyList = []
-        let counties = res.data;
-        counties.forEach((element) => {
-          let data = {
-            "county_id": element.county_id,
-            "county_name": element.name
-          }
-          this.countyList.push(data)
-        });
-      }
+  // Initialization Search Occupants Form
+  initializationSearchOccupantsForm() {
+    this.policeDepartmentForm = this.fb.group({
+      addedOnFromDate: "",
+      addedOnToDate: "",
+      countyId: "",
+      crashDate: "",
+      firstName: "",
+      lastName: "",
+      policeDepartmentId: "",
+      location: "",
+      reportNumber: "",
+      reportType: 1,
+      searchType: 1
     })
   }
 
@@ -122,7 +102,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm?.value.location) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm?.value.reportNumber) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 2,
+      reportType: 1,
       searchType: 1,
       accountId: "0",
     };
@@ -146,7 +126,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm?.value.location) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm?.value.reportNumber) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 2,
+      reportType: 1,
       searchType: 1,
       accountId: "0",
     };
@@ -180,13 +160,12 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm?.value.location) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm?.value.reportNumber) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 2,
+      reportType: 1,
       searchType: 1,
       accountId: "0",
     };
     this.occupantsService?.getAllOccupants(this.searchData).subscribe(res => {
       if (res.status) {
-        console.log('res',res)
         this.occupantDetail = res.data
         this.count = res.total;
         this.calculateTotalPages();
@@ -385,9 +364,58 @@ export class ReportsComponent {
     }
   }
 
-   // Function to change tabs
-   setActiveTab(tab: string) {
-    this.currentTab = tab;
+  private setupSearchData(reportType: number) {
+    return {
+      page: this.currentPage,
+      itemsPerPage: this.pageValue,
+      addedOnFromDate: this.policeDepartmentForm.value.addedOnFromDate || "",
+      addedOnToDate: this.policeDepartmentForm.value.addedOnToDate || "",
+      countyId: this.policeDepartmentForm.value.countyId || "",
+      crashDate: this.policeDepartmentForm.value.crashDate || "",
+      firstName: this.policeDepartmentForm.value.firstName || "",
+      lastName: this.policeDepartmentForm.value.lastName || "",
+      policeDepartmentId: this.policeDepartmentForm.value.policeDepartmentId || "",
+      location: this.policeDepartmentForm.value.location || "",
+      reportNumber: this.policeDepartmentForm.value.reportNumber || "",
+      reportType: reportType,
+      searchType: 1,
+      accountId: "0",
+    };
   }
 
+  private processApiResponse(res: any) {
+    if (res.status) {
+      this.occupantDetail = res.data;
+      this.count = res.total;
+      this.calculateTotalPages();
+      this.setPaginatedData();
+      this.togglePagination();
+      this.pagesArray(this.currentPage, this.count, this.pageValue, 5);
+      this.reportsData = this.occupantDetail.map(data => ({
+        crashDate: this.convertGMTDateToMMDDYYYY(data.crash_date),
+        report_number: data.report_number,
+        location: data.location,
+        no_of_occupants: data.no_of_occupants,
+        file_name: data.file_name,
+        occupantsForms: data.occupantsForms,
+        police_department: data.police_department
+      }));
+      this.error = this.occupantDetail.length === 0;
+    }
+  }
+
+  // Function to change tabs
+  setActiveTab(tab: string) {
+    this.currentTab = tab;  
+    let reportType = tab === 'uploadReports' ? 1 : 2;
+    this.searchData = this.setupSearchData(reportType);  
+    this.occupantsService?.getAllOccupants(this.searchData).subscribe(res => {
+      this.processApiResponse(res);
+    });
+  } 
+
+  // Navigate to new report
+  addNewReport() {
+    this.router.navigate(['reports/', this.police_name, 'add-new-report'])
+  }
 }

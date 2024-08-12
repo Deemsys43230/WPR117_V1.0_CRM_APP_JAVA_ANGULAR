@@ -31,7 +31,7 @@
                     <h3 class="mb-4 highlighted-header">Reports</h3>
                 </div>
                 <div class="col-md-3 text-md-right">
-                    <button class="btn">
+                    <button class="btn" (click)="addNewReport()">
                         <i class="fa fa-plus"></i> Add New Report
                     </button>
                 </div>
@@ -99,6 +99,7 @@
                         (click)="setActiveTab('viewAllReports')">View All Reports</a>
                 </li>
             </ul>
+        </div>
 
             <!-- Tab Content -->
             <div class="tab-content mt-3">
@@ -250,4 +251,7 @@
                     </div>
                 </div>
                 <!-- Pagination ends -->
+            </div>
+
+            </div>
             </div>

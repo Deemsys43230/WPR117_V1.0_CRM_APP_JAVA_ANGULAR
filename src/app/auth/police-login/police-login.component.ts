@@ -19,7 +19,7 @@ export class PoliceLoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private flashMessageService: FlashMessageService) { }
 
-  //ngOnInit
+  // ngOnInit
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.police_name = params.get('departmentName');
@@ -31,7 +31,7 @@ export class PoliceLoginComponent implements OnInit {
     localStorage.clear();
   }
 
-  //intialize Login Form
+  // Intialize Login Form
   intializeLoginForm() {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -39,7 +39,7 @@ export class PoliceLoginComponent implements OnInit {
     })
   }
 
-  //get by name
+  // Get by name
   getByNamePoliceDepartment() {
     this.policeDepartmentService.getByNamePoliceDepartmentDetails(this.police_name).subscribe(res => {
       if (res.status) {
@@ -48,12 +48,12 @@ export class PoliceLoginComponent implements OnInit {
     })
   }
 
-  //show password
+  // Show password
   togglePasswordVisibility() {
     this.passwordHidden = !this.passwordHidden;
   }
 
-  //Login and set data to local storage
+  // Login and set data to local storage
   login() {
     this.isFormSubmitted = true;
     var data = {
@@ -78,7 +78,7 @@ export class PoliceLoginComponent implements OnInit {
     }
   }
 
-  //navigation based on role
+  // Navigation based on role
   navigateBasedOnRole(LoginData: any) {
     if (LoginData.roleName === "ROLE_SUPER_ADMIN") {
       this.router.navigate(['superAdmin/dashboard']);
