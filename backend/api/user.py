@@ -63,6 +63,7 @@ class userLogin(Resource):
                         'refresh_token':refresh_token,
                        'access_token':access_token,
                         'role_id':user.role_id,
+                        'account_id':user.account_id,
                         'roleName':rolename.role,
                         'userDetails':{
                             'user':user.user_id,
