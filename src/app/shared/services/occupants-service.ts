@@ -13,4 +13,9 @@ export class OccupantsService {
         return this.occupantsDataService.getAllOccupants(data);
     }
 
+    //delete crash report
+    public deleteCrashReport(id) {
+        return this.occupantsDataService.deleteCrashReport(id);
+    }
+
 }

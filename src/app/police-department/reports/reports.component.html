@@ -101,157 +101,156 @@
             </ul>
         </div>
 
-            <!-- Tab Content -->
-            <div class="tab-content mt-3">
-                <!-- Upload Reports Tab -->
-                <div class="tab-pane fade show" [ngClass]="{'active': currentTab === 'uploadReports'}">
-                    <!-- Table Starts -->
-                    <table class="table table-bordered mt-5">
-                        <thead>
+        <!-- Tab Content -->
+        <div class="tab-content mt-3">
+            <!-- Upload Reports Tab -->
+            <div class="tab-pane fade show" [ngClass]="{'active': currentTab === 'uploadReports'}">
+                <!-- Table Starts -->
+                <table class="table table-bordered mt-5">
+                    <thead>
+                        <tr>
+                            <th class="report-table-header" colspan="2">First Name</th>
+                            <th class="report-table-header" colspan="2">Last Name</th>
+                            <th class="report-table-header">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!error">
+                        <ng-container *ngFor="let data of reportsData">
                             <tr>
-                                <th class="report-table-header" colspan="2">First Name</th>
-                                <th class="report-table-header" colspan="2">Last Name</th>
-                                <th class="report-table-header">Action</th>
+                                <td class="report-header">
+                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                                </td>
+                                <td class="report-header">
+                                    <label class="label-color">Report Number:</label><br />{{data.report_number}}
+                                </td>
+                                <td class="report-header">
+                                    <label class="label-color">Location:</label><br />{{data.location}}
+                                </td>
+                                <td class="report-header">
+                                    <label class="label-color">No. of
+                                        Occupants:</label><br />{{data.no_of_occupants}}
+                                </td>
+                                <td class="report-header">
+                                    <a class="edit-btn" title="Edit"><i class="fa fa-pencil fa-sm"></i></a>
+                                    <a class="delete-btn" title="Delete" (click)="delete(data.report_id)"><i
+                                            class="fa fa-trash fa-sm"></i></a>
+                                    <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a>
+                                    <a href="{{data.file_name}}" target="_blank" class="info-btn"
+                                        title="View Report File"><i class="fas fa-file"></i></a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody *ngIf="!error">
-                            <ng-container *ngFor="let data of reportsData">
-                                <tr>
-                                    <td class="report-header">
-                                        <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
-                                    </td>
-                                    <td class="report-header">
-                                        <label class="label-color">Report Number:</label><br />{{data.report_number}}
-                                    </td>
-                                    <td class="report-header">
-                                        <label class="label-color">Location:</label><br />{{data.location}}
-                                    </td>
-                                    <td class="report-header">
-                                        <label class="label-color">No. of
-                                            Occupants:</label><br />{{data.no_of_occupants}}
-                                    </td>
-                                    <td class="report-header">
-                                        <a class="edit-btn" title="Edit"><i class="fa fa-pencil fa-sm"></i></a>
-                                        <a class="delete-btn" title="Delete"><i class="fa fa-trash fa-sm"></i></a>
-                                        <a class="view-btn" title="View Report Details"><i
-                                                class="fa fa-eye fa-sm"></i></a>
-                                        <a href="{{data.file_name}}" target="_blank" class="info-btn"
-                                            title="View Report File"><i class="fas fa-file"></i></a>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let item of data.occupantsForms">
-                                    <td colspan="2">{{item.first_name}}</td>
-                                    <td colspan="4">{{item.last_name}}</td>
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                        <tbody *ngIf="error">
-                            <tr>
-                                <td class="warn" colspan="6">No Records Found!</td>
+                            <tr *ngFor="let item of data.occupantsForms">
+                                <td colspan="2">{{item.first_name}}</td>
+                                <td colspan="4">{{item.last_name}}</td>
                             </tr>
-                        </tbody>
-                    </table>
-                    <!-- Table Ends -->
-                </div>
-
-                <div class="tab-pane fade"
-                    [ngClass]="{ 'show active': currentTab === 'viewAllReports', 'fade': currentTab !== 'viewAllReports' }">
-                    <!-- Table Starts -->
-                    <table class="table table-bordered mt-5">
-                        <thead>
-                            <tr>
-                                <th class="report-table-header" colspan="2">First Name</th>
-                                <th class="report-table-header" colspan="2">Last Name</th>
-                                <th class="report-table-header">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngIf="!error">
-                            <ng-container *ngFor="let data of reportsData">
-                                <tr>
-                                    <td class="report-header">
-                                        <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
-                                    </td>
-                                    <td class="report-header">
-                                        <label class="label-color">Report Number:</label><br />{{data.report_number}}
-                                    </td>
-                                    <td class="report-header">
-                                        <label class="label-color">Location:</label><br />{{data.location}}
-                                    </td>
-                                    <td class="report-header">
-                                        <label class="label-color">No. of
-                                            Occupants:</label><br />{{data.no_of_occupants}}
-                                    </td>
-                                    <td class="report-header">
-                                        <a class="view-btn" title="View Report Details"><i
-                                                class="fa fa-eye fa-sm"></i></a>
-                                        <a href="{{data.file_name}}" target="_blank" class="info-btn"
-                                            title="View Report File"><i class="fas fa-file"></i></a>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let item of data.occupantsForms">
-                                    <td colspan="2">{{item.first_name}}</td>
-                                    <td colspan="4">{{item.last_name}}</td>
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                        <tbody *ngIf="error">
-                            <tr>
-                                <td class="warn" colspan="6">No Records Found!</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- Table Ends -->
-                </div>
-
-                <!-- Pagination starts -->
-                <div class="row mt-4" *ngIf="!error">
-                    <div class="col-lg-4" *ngIf="pagebutton"></div>
-                    <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
-                        <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1"
-                            placeholder="Search By page no" />
-                        <button class="button goBtn" (change)="searchPageno()">
-                            GO
-                        </button>
-                        <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
-                    </div>
-                    <div class="col-lg-4 pageStatus">
-                        <div class="data-list">
-                            <p>
-                                Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <select *ngIf="!pagebutton" title="pagination" id="showPageType"
-                            class="form-control page-dropdown" type="text" (change)="onChangePagination($event)">
-                            <option *ngFor="let data of ItemsPerPage" [value]="data.value">
-                                {{ data.data }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row justify-content-center" *ngIf="!error">
-                    <div class="col-md-4">
-                        <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
-                            <ul class="numberListContainer p-0">
-                                <li [ngClass]="{ numberList: currentPage != 1 }">
-                                    <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1"
-                                        (click)="previousPage()"></i>
-                                </li>
-                                <li class="numberList" *ngFor="let page of pages"
-                                    [ngClass]="{ active: currentPage === page }" (click)="goToPage(page)">
-                                    {{ page }}
-                                </li>
-                                <li [ngClass]="{ numberList: currentPage !== totalPages }">
-                                    <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
-                                        (click)="nextPage()"></i>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- Pagination ends -->
+                        </ng-container>
+                    </tbody>
+                    <tbody *ngIf="error">
+                        <tr>
+                            <td class="warn" colspan="6">No Records Found!</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Table Ends -->
             </div>
 
+            <div class="tab-pane fade"
+                [ngClass]="{ 'show active': currentTab === 'viewAllReports', 'fade': currentTab !== 'viewAllReports' }">
+                <!-- Table Starts -->
+                <table class="table table-bordered mt-5">
+                    <thead>
+                        <tr>
+                            <th class="report-table-header" colspan="2">First Name</th>
+                            <th class="report-table-header" colspan="2">Last Name</th>
+                            <th class="report-table-header">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!error">
+                        <ng-container *ngFor="let data of reportsData">
+                            <tr>
+                                <td class="report-header">
+                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                                </td>
+                                <td class="report-header">
+                                    <label class="label-color">Report Number:</label><br />{{data.report_number}}
+                                </td>
+                                <td class="report-header">
+                                    <label class="label-color">Location:</label><br />{{data.location}}
+                                </td>
+                                <td class="report-header">
+                                    <label class="label-color">No. of
+                                        Occupants:</label><br />{{data.no_of_occupants}}
+                                </td>
+                                <td class="report-header">
+                                    <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a>
+                                    <a href="{{data.file_name}}" target="_blank" class="info-btn"
+                                        title="View Report File"><i class="fas fa-file"></i></a>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let item of data.occupantsForms">
+                                <td colspan="2">{{item.first_name}}</td>
+                                <td colspan="4">{{item.last_name}}</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                    <tbody *ngIf="error">
+                        <tr>
+                            <td class="warn" colspan="6">No Records Found!</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Table Ends -->
             </div>
+
+            <!-- Pagination starts -->
+            <div class="row mt-4" *ngIf="!error">
+                <div class="col-lg-4" *ngIf="pagebutton"></div>
+                <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
+                    <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1"
+                        placeholder="Search By page no" />
+                    <button class="button goBtn" (change)="searchPageno()">
+                        GO
+                    </button>
+                    <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
+                </div>
+                <div class="col-lg-4 pageStatus">
+                    <div class="data-list">
+                        <p>
+                            Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown"
+                        type="text" (change)="onChangePagination($event)">
+                        <option *ngFor="let data of ItemsPerPage" [value]="data.value">
+                            {{ data.data }}
+                        </option>
+                    </select>
+                </div>
             </div>
+            <div class="row justify-content-center" *ngIf="!error">
+                <div class="col-md-4">
+                    <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
+                        <ul class="numberListContainer p-0">
+                            <li [ngClass]="{ numberList: currentPage != 1 }">
+                                <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1"
+                                    (click)="previousPage()"></i>
+                            </li>
+                            <li class="numberList" *ngFor="let page of pages"
+                                [ngClass]="{ active: currentPage === page }" (click)="goToPage(page)">
+                                {{ page }}
+                            </li>
+                            <li [ngClass]="{ numberList: currentPage !== totalPages }">
+                                <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
+                                    (click)="nextPage()"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Pagination ends -->
+        </div>
+
+    </div>
+</div>

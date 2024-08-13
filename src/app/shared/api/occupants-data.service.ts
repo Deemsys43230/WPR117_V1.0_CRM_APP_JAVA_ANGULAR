@@ -16,4 +16,12 @@ export class OccupantsDataService {
             return res;
         }), catchError(error => throwError(() => error)));
     }
+
+    //delete crash report
+    public deleteCrashReport(id): Observable<any> {
+        return this.httpClient.get(`crash_reports/deleteCrashReport/${id}`).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
+
 }

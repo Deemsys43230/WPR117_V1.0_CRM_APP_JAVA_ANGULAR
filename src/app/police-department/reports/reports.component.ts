@@ -1,3 +1,4 @@
+import { compileNgModule } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,6 +31,7 @@ export class ReportsComponent {
   public ItemsPerPage: any = [];
   public countyList: any[] = [];
   currentTab: string = 'uploadReports'; // Default active tab
+  public report_id: any;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService,) { }
 
@@ -181,7 +183,8 @@ export class ReportsComponent {
             no_of_occupants: data.no_of_occupants,
             file_name: data.file_name,
             occupantsForms: data.occupantsForms,
-            police_department: data.police_department
+            police_department: data.police_department,
+            report_id: data.report_id
           });
         });
         if (this.occupantDetail.length == 0) {
@@ -406,16 +409,23 @@ export class ReportsComponent {
 
   // Function to change tabs
   setActiveTab(tab: string) {
-    this.currentTab = tab;  
+    this.currentTab = tab;
     let reportType = tab === 'uploadReports' ? 1 : 2;
-    this.searchData = this.setupSearchData(reportType);  
+    this.searchData = this.setupSearchData(reportType);
     this.occupantsService?.getAllOccupants(this.searchData).subscribe(res => {
       this.processApiResponse(res);
     });
-  } 
+  }
 
   // Navigate to new report
   addNewReport() {
     this.router.navigate(['reports/', this.police_name, 'add-new-report'])
+  }
+
+  delete(report_id: string) {
+    this.occupantsService.deleteCrashReport(report_id).subscribe(res => {
+      alert(res.message)
+      this.getAllOccupants();
+    })
   }
 }
