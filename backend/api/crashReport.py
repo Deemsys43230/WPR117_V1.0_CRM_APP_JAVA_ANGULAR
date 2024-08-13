@@ -231,16 +231,23 @@ class UpdateCrashReport(Resource):
         crash_report.crash_severity = request.form.get('crash_severity')
         crash_report.no_of_occupants = request.form.get('no_of_occupants')
         occupants_list = []
-        for i in range(len(request.form.getlist('occupantsForms[0][first_name]'))):
+        
+        # Determine how many occupants forms are provided
+        i = 0
+        while True:
+            first_name = request.form.get(f'occupantsForms[{i}][first_name]')
+            if not first_name:
+                break
             occupant = {
-                "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
+                "first_name": first_name,
                 "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
                 "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
                 "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
                 "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
                 "status": request.form.get(f'occupantsForms[{i}][status]')
             }
-            occupants_list.append(occupant)  
+            occupants_list.append(occupant)
+            i += 1 
         if 'crashReportFile' in request.files:
             crash_report_file = request.files['crashReportFile']
             file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, crash_report.report_id)
