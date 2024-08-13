@@ -383,7 +383,8 @@ export class OccupantsComponent implements OnInit {
   // Reset  Search
   resetSearch() {
     this.currentPage = 1;
-    this.searchOccupantsForm.reset();
+    this.searchOccupantsForm.reset(
+      {countyId : "",policeDepartmentId : "" });
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,

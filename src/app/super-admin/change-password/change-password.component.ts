@@ -53,12 +53,13 @@ export class ChangePasswordComponent implements OnInit {
         "old_password": currentPassword,
         "new_password": newPassword,
         "confirm_password": confirmNewPassword,
-        "account_id": "59f16a5acc59432b69dafbe90ca6137"
+        "account_id": localStorage.getItem('account_id')
       };
 
       this.authService.changePassword(data).subscribe(res => {
         if (res.status) {
           this.flashMessage.successMessage(res.msg, 2);
+          this.router.navigate(['auth/login']);
         } else {
           this.flashMessage.errorMessage(res.msg, 2);
         }

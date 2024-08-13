@@ -51,9 +51,9 @@
             </select>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin ">
-            <label for="" class="form-label">Country:</label>
+            <label for="" class="form-label">County:</label>
             <select class="form-control" formControlName="countyId">
-                <option value="">All Countries</option>
+                <option value="">All Counties</option>
                 <option *ngFor="let county of countyList" value="{{county?.county_id}}">
                     {{county?.county_name}}
                 </option>

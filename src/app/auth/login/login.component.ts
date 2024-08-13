@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
           if (res.status) {
             localStorage.setItem('Authorization-Token', res.access_token);
             localStorage.setItem('Refresh-Token', res.refresh_token);
+            localStorage.setItem('account_id',res.account_id);
             localStorage.setItem('userName',res.userDetails.username)
             localStorage.setItem('user_id',res.userDetails.user)
             localStorage.setItem('role', res.roleName);
@@ -53,6 +54,8 @@ export class LoginComponent implements OnInit {
             this.flashMessageService.successMessage("Successfully Login !", 2);
             this.navigateBasedOnRole(res);
           } else {
+            this.loginForm.controls['password'].reset();
+            this.isFormSubmitted = false
             this.flashMessageService.errorMessage('Failed Incorrect Password', 2);
           }
         });

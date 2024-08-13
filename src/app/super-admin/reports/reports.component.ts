@@ -40,13 +40,13 @@ export class ReportsComponent implements OnInit {
       lastName: "",
       searchType: 1,
       reportType: 2,
-      crashDate: this.searchReportsForm.value.crashDate || "",
-      reportNumber: this.searchReportsForm.value.reportNumber || "",
-      location: this.searchReportsForm.value.location || "",
-      policeDepartmentId: this.searchReportsForm.value.department || "",
-      countyId: this.searchReportsForm.value.county || "",
-      addedOnFromDate: this.searchReportsForm.value.addedOnFromDate || "",
-      addedOnToDate: this.searchReportsForm.value.addedOnToDate || ""
+      crashDate: "",
+      reportNumber: "",
+      location: "",
+      policeDepartmentId: "",
+      countyId: "",
+      addedOnFromDate: "",
+      addedOnToDate: ""
     };
     this.getAllPoliceDepartment()
     this.getAllCounty()
@@ -157,7 +157,6 @@ export class ReportsComponent implements OnInit {
     if (fileUrl) {
       window.open(fileUrl, '_blank'); // Opens the link in a new tab
     }
-
   }
   // Pagination methods Ends
 
@@ -197,7 +196,7 @@ export class ReportsComponent implements OnInit {
       firstName: "",
       lastName: "",
       searchType: 1,
-      reportType: 2,
+      reportType: this.searchReportsForm.value.department !== "" || this.searchReportsForm.value.county !== "" ? 1 : 2 ,
       crashDate: this.searchReportsForm.value.crashDate || "",
       reportNumber: this.searchReportsForm.value.reportNumber || "",
       location: this.searchReportsForm.value.location || "",
@@ -222,13 +221,13 @@ export class ReportsComponent implements OnInit {
       lastName: "",
       searchType: 1,
       reportType: 2,
-      crashDate: this.searchReportsForm.value.crashDate || "",
-      reportNumber: this.searchReportsForm.value.reportNumber || "",
-      location: this.searchReportsForm.value.location || "",
-      policeDepartmentId: this.searchReportsForm.value.department || "",
-      countyId: this.searchReportsForm.value.county || "",
-      addedOnFromDate: this.searchReportsForm.value.addedOnFromDate || "",
-      addedOnToDate: this.searchReportsForm.value.addedOnToDate || ""
+      crashDate: "",
+      reportNumber: "",
+      location: "",
+      policeDepartmentId: "",
+      countyId: "",
+      addedOnFromDate: "",
+      addedOnToDate: ""
     };
     this.getReportsByPagination()
   }
