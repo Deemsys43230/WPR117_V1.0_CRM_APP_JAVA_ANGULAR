@@ -73,7 +73,6 @@ class CreateCrashReport(Resource):
             occupants_list.append(occupant)        
         if 'crashReportFile' not in request.files:
             return jsonify({'msg': 'crashReportFile not provided'})
-        print(request.files.get('crashReportFile'))
         crash_report_file = request.files.get('crashReportFile')
         try:
             file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
@@ -118,7 +117,6 @@ class GetAllCrashReports(Resource):
 
         query = CrashReports.query
         user = Users.query.filter_by(username=get_jwt_identity()).first()
-        print(user.role_id)
         if reportType == 1 and policeDepartmentId=="" and user:
             accountId = user.account_id
         elif reportType == 2 and user.role_id==2:
@@ -128,47 +126,33 @@ class GetAllCrashReports(Resource):
 
         if accountId != "0":
             query = query.filter(CrashReports.account_id == accountId)
-            print("accountId")
-
         if reportNumber:
-            print("reportNumber")
             query = query.filter(CrashReports.report_number == reportNumber)
 
         if crashDate:
-            print("crashDate")
             query = query.filter(CrashReports.crash_date == crashDate)
 
         if firstName:
-            print("firstName")
             query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
 
         if lastName:
             query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
-
         if location:
-            print("location")
             query = query.filter(CrashReports.location.ilike(f'%{location}%'))
-            print(query)
-
         if countyId:
-            print("countyId")
             query = query.filter(CrashReports.county_id == countyId)
 
         if policeDepartmentId and policeDepartmentId is not None:
-            print("policeDepartmentId",policeDepartmentId)
             query = query.join(CrashReports.police).filter(PoliceDepartmentModel.police_department_id == policeDepartmentId)
 
         if addedOnFromDate:
-            print("addedOnFromDate")
             from_date = datetime.strptime(addedOnFromDate, '%Y-%m-%d')
             query = query.filter(CrashReports.added_date >= from_date)
 
         if addedOnToDate:
-            print("addedOnToDate")
             to_date = datetime.strptime(addedOnToDate, '%Y-%m-%d')
             query = query.filter(CrashReports.added_date <= to_date)
 
-        print(query)
         query = query.distinct()
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
 
