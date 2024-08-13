@@ -37,7 +37,7 @@
           <div class="row mb-2">
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Upload Report:</label>
-              <input class="form-control" type="file">
+              <input class="form-control" type="file" formControlName="uploadReport" accept=".pdf" (change)="onFileChange($event)">
             </div>
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Country:</label>
@@ -76,11 +76,11 @@
                 <div class="row mb-2">
                   <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
                     <label class="form-label">First Name:</label>
-                    <input type="text" class="form-control" placeholder="Enter First Name" formControlName="firstName" />
+                    <input type="text" class="form-control" placeholder="Enter First Name" formControlName="first_name" />
                   </div>
                   <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
                     <label class="form-label">Last Name:</label>
-                    <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="lastName" />
+                    <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="last_name" />
                   </div>
                   <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
                     <label class="form-label">Injuries:</label>
@@ -91,7 +91,7 @@
                   </div>
                   <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
                     <label class="form-label">Seating Position:</label>
-                    <select class="form-control" formControlName="seatingPosition">
+                    <select class="form-control" formControlName="seating_position">
                       <option value="" disabled>Select</option>
                       <option *ngFor="let position of seatingPosition" [value]="position.value">{{ position.label }}</option>
                     </select>
@@ -110,6 +110,16 @@
                 <i class="fa fa-plus"></i> Add One More Occupant
               </a>
             </div>
+            <div class="row text-end">
+              <div>
+                <button (click)="onSubmit()" class="btn common-btn-css common-btn-color mr-3" type="submit">
+                  Submit
+                </button>
+                <button (click)="onCancel()" class="btn common-btn-css common-btn-color" type="button">
+                  Cancel
+                </button>
+              </div>
+            </div>              
           </div>
         </form>
       </div>

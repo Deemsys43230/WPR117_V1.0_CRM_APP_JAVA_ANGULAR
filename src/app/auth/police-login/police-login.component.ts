@@ -66,6 +66,7 @@ export class PoliceLoginComponent implements OnInit {
           localStorage.setItem('Authorization-Token', res.access_token);
           localStorage.setItem('Refresh-Token', res.refresh_token);
           localStorage.setItem('userName', res.userDetails.username)
+          localStorage.setItem('account_id',res.account_id);
           localStorage.setItem('user_id', res.userDetails.user)
           localStorage.setItem('role', res.roleName);
           localStorage.setItem('role_id', res.role_id);

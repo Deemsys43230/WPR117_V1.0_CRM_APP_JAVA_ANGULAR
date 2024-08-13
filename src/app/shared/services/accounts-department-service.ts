@@ -19,4 +19,9 @@ export class AccountsDepartmentService {
   public enableDisableAccountsDepartment(id, data) {
     return this.accountsDepartmentDataService.enableDisableAccountsDepartment(id, data)
   }
+
+  //get accounts details by id
+  public getByIdAccountsDetails(id) {
+    return this.accountsDepartmentDataService.getByIdAccountsDetails(id);
+  }  
 }

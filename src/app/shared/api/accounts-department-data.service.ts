@@ -28,4 +28,14 @@ export class AccountsDepartmentDataService {
       catchError((error) => throwError(() => error))
     );
   }
+
+   //get accounts details by id
+   public getByIdAccountsDetails(id): Observable<any> {
+    return this.httpClient.get(`getAccountsById/${id}`).pipe(
+      tap((res) => {
+        return res;
+      }),
+      catchError((error) => throwError(() => error))
+    );
+  }
 }
