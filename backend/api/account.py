@@ -43,7 +43,6 @@ class createAccount(Resource):
 
 # TO GET ALL ACCOUNTS WITH SEARCH AND PAGINATION 
 class GetAllAccounts(Resource):
-    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         data = request.get_json()
         items_per_page = data.get('items_per_page', '')

@@ -80,7 +80,6 @@ def createPoliceAccounts(police):
         
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
-    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         data = request.get_json()
         items_per_page = data.get('items_per_page',None)
@@ -151,7 +150,6 @@ class getByIdPoliceDepartment(Resource):
 
 # GET POLICE DEPARTMENT BY NAME
 class getByNamePoliceDepartment(Resource):
-    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def get(self,name):
         try:
             data = PoliceDepartmentModel.query.filter_by(name=name).first()
@@ -222,7 +220,6 @@ def save_temporary_file(file, path):
     except Exception as e:
         return str(e)
 class policeDepartmentDetailsByUsername(Resource):
-    @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):
         data = request.get_json()
         username = data['username']
