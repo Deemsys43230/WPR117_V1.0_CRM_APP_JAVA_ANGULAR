@@ -31,6 +31,7 @@ export class ChangePasswordComponent implements OnInit {
 
   //On Submit Form
   onSubmit() {
+    this.isChangePasswordFormSubmitted = true;
     if (this.changePasswordForm.valid) {
       const currentPassword = this.changePasswordForm.value.current_password;
       const newPassword = this.changePasswordForm.value.new_password;
@@ -39,6 +40,7 @@ export class ChangePasswordComponent implements OnInit {
       if (newPassword !== confirmNewPassword) {
         this.flashMessage.errorMessage("New Password and Confirm Password do not match.", 2);
         this.changePasswordForm.controls["confirm_new_password"].reset()
+        this.isChangePasswordFormSubmitted = false;
         return;
       }
 
@@ -46,6 +48,7 @@ export class ChangePasswordComponent implements OnInit {
         this.flashMessage.errorMessage("New Password cannot be the same as the Current Password.", 2);
         this.changePasswordForm.controls["new_password"].reset()
         this.changePasswordForm.controls["confirm_new_password"].reset()
+        this.isChangePasswordFormSubmitted = false;
         return;
       }
 
@@ -59,6 +62,7 @@ export class ChangePasswordComponent implements OnInit {
       this.authService.changePassword(data).subscribe(res => {
         if (res.status) {
           this.flashMessage.successMessage(res.msg, 2);
+          this.isChangePasswordFormSubmitted = false;
           this.router.navigate(['auth/login']);
         } else {
           this.flashMessage.errorMessage(res.msg, 2);

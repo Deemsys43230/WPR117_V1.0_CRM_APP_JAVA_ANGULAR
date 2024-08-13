@@ -12,6 +12,7 @@ import { SharedModule } from '../shared/shared.module';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ReportsComponent } from './reports/reports.component';
+import {CalendarModule} from 'primeng/calendar';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -28,7 +29,8 @@ import { ReportsComponent } from './reports/reports.component';
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    CalendarModule
   ],
   exports: [
     DashboardComponent,
