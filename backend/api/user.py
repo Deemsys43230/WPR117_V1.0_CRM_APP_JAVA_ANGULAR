@@ -57,8 +57,8 @@ class userLogin(Resource):
             return jsonify({'message': 'failed no such user','status':False})
         session['username'] = user.username 
         rolename = Roles.query.filter_by(role_id=user.role_id).first()
-        refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=1))
-        access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=1))
+        refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=24))
+        access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=24))
         return jsonify({'status':True,
                         'refresh_token':refresh_token,
                        'access_token':access_token,
