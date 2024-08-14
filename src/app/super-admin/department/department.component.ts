@@ -44,12 +44,7 @@ export class DepartmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializationSearchAccessmanagementForm();
-    this.searchData = {
-      page: this.currentPage,
-      items_per_page: this.items_per_page,
-      name: (this.searchPoliceDepartmentForm.value.name != undefined) ? this.searchPoliceDepartmentForm.value.name : "",
-      county: (this.searchPoliceDepartmentForm.value.county != undefined) ? this.searchPoliceDepartmentForm.value.county : "",
-    };
+    this.setupSearchData()
     //Create up view Model 
     const modalElement = document.getElementById('viewModal');
     if (modalElement) {
@@ -65,6 +60,15 @@ export class DepartmentComponent implements OnInit {
       name: '',
       county: '',
     });
+  }
+
+  setupSearchData() {
+    this.searchData = {
+      page: this.currentPage,
+      items_per_page: this.items_per_page,
+      name: "",
+      county: "",
+    };
   }
 
   //To Get all Police department details
@@ -208,8 +212,8 @@ export class DepartmentComponent implements OnInit {
     this.searchData = {
       page: this.currentPage,
       items_per_page: this.items_per_page,
-      name: (this.searchPoliceDepartmentForm.value.name != undefined) ? this.searchPoliceDepartmentForm.value.name : "",
-      county: (this.searchPoliceDepartmentForm.value.county != undefined) ? this.searchPoliceDepartmentForm.value.county : "",
+      name: this.searchPoliceDepartmentForm.value.name ? this.searchPoliceDepartmentForm.value.name : "",
+      county: this.searchPoliceDepartmentForm.value.county ? this.searchPoliceDepartmentForm.value.county : "",
     };
     this.getPoliceDepartmentByPagination();
   }
@@ -219,12 +223,7 @@ export class DepartmentComponent implements OnInit {
     this.currentPage = 1;
     this.items_per_page = 5;
     this.searchPoliceDepartmentForm.reset({ county: '' });
-    this.searchData = {
-      page: this.currentPage,
-      items_per_page: this.items_per_page,
-      name: "",
-      county: "",
-    };
+    this.setupSearchData();
     this.getPoliceDepartmentByPagination();
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { navItems } from '../../nav'
 import * as $ from 'jquery';
 
@@ -12,13 +12,19 @@ export class DefaultLayoutComponent implements OnInit {
   public active: string | undefined;
   public navItems: any;
   public role: any;
-  public currentYear :any;
-  public username : any;
-  constructor(public router: Router) { }
+  public currentYear: any;
+  public username: any;
 
+  constructor(public router: Router) {
+    //To Track route change from Dashboard select
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.active = this.getSecondPathSegment(event.url)
+      };
+    })
+  }
 
   ngOnInit(): void {
-
     // Toggle Sidebar menu Button
     const $button = document.querySelector('#sidebar-toggle');
     const $wrapper = document.querySelector('#wrapper');
@@ -57,6 +63,12 @@ export class DefaultLayoutComponent implements OnInit {
     else {
       this.navItems = new navItems().superAdminNavItems
     }
+  }
+
+  //Convert urLPath for Active check
+  getSecondPathSegment(urlPath) {
+    const segments = urlPath.split('/'); 
+    return segments.length > 2 ? segments[2] : null; 
   }
 
   //Receiving url from choosing the menu

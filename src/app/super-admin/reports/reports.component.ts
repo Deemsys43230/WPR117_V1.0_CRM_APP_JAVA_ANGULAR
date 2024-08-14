@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,26 +29,11 @@ export class ReportsComponent implements OnInit {
   public departmentList: any;
   public countyList: any;
 
-  constructor(  private router: Router,private fb: FormBuilder, private spinner: NgxSpinnerService, private reportsService: ReportsService, private policeDepartmentService: PoliceDepartmentService, private countyService: CountyService,) { }
+  constructor(private router: Router, private fb: FormBuilder, private spinner: NgxSpinnerService, private reportsService: ReportsService, private policeDepartmentService: PoliceDepartmentService, private countyService: CountyService,) { }
 
   ngOnInit(): void {
     this.initializeSearchReportsForm();
-    this.searchData = {
-      page: this.currentPage,
-      itemsPerPage: this.items_per_page,
-      accountId: "0",
-      firstName: "",
-      lastName: "",
-      searchType: 1,
-      reportType: 2,
-      crashDate: "",
-      reportNumber: "",
-      location: "",
-      policeDepartmentId: "",
-      countyId: "",
-      addedOnFromDate: "",
-      addedOnToDate: ""
-    };
+    this.setupSearchData()
     this.getAllPoliceDepartment()
     this.getAllCounty()
     this.getReportsByPagination()
@@ -66,6 +52,26 @@ export class ReportsComponent implements OnInit {
     });
   }
 
+  //Setup Search Data
+  setupSearchData() {
+    this.searchData = {
+      page: this.currentPage,
+      itemsPerPage: this.items_per_page,
+      accountId: "0",
+      firstName: "",
+      lastName: "",
+      searchType: 1,
+      reportType: 2,
+      crashDate: "",
+      reportNumber: "",
+      location: "",
+      policeDepartmentId: "",
+      countyId: "",
+      addedOnFromDate: "",
+      addedOnToDate: ""
+    };
+  }
+
   //To Get all Police department details
   getReportsByPagination() {
     this.spinner.show();
@@ -81,7 +87,7 @@ export class ReportsComponent implements OnInit {
             location: ele.location,
             no_of_occupants: ele.no_of_occupants,
             police_department: ele.police_department,
-            file_name : ele.file_name
+            file_name: ele.file_name
           });
         });
         this.table_data = {
@@ -112,9 +118,9 @@ export class ReportsComponent implements OnInit {
         this.departmentList = [];
         let departments = res.data;
         departments.forEach(ele => {
-         let data = { 
-            department_id: ele.department_id, 
-            name: ele.name 
+          let data = {
+            department_id: ele.department_id,
+            name: ele.name
           }
           this.departmentList.push(data);
         });
@@ -160,33 +166,40 @@ export class ReportsComponent implements OnInit {
   }
   // Pagination methods Ends
 
-    // Convert GMT Date into MM/DD/YYYY Format For Date And Time 
-    convertGMTDateToMMDDYYYY(gmtDate) {
-      let date = new Date(gmtDate);
-      let month = (date.getUTCMonth() + 1).toString(); 
-      let day = date.getUTCDate().toString(); 
-      let year = date.getUTCFullYear();
+  // Convert GMT Date into MM/DD/YYYY Format For Date And Time 
+  convertGMTDateToMMDDYYYY(gmtDate) {
+    let date = new Date(gmtDate);
+    let month = (date.getUTCMonth() + 1).toString();
+    let day = date.getUTCDate().toString();
+    let year = date.getUTCFullYear();
 
-      month = month.padStart(2, '0');
-      day = day.padStart(2, '0');
+    month = month.padStart(2, '0');
+    day = day.padStart(2, '0');
 
-      let hours = date.getUTCHours();
-      let minutes = date.getUTCMinutes().toString();
-      let seconds = date.getUTCSeconds().toString();
-  
-      let period = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12; 
-  
-      let hoursStr = hours.toString().padStart(2, '0');
-      minutes = minutes.padStart(2, '0');
-      seconds = seconds.padStart(2, '0');
-   
-      return { date: `${month}/${day}/${year}`, time: ` ${hoursStr}:${minutes} ${period}` }
-    }
+    let hours = date.getUTCHours();
+    let minutes = date.getUTCMinutes().toString();
+    let seconds = date.getUTCSeconds().toString();
+
+    let period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    let hoursStr = hours.toString().padStart(2, '0');
+    minutes = minutes.padStart(2, '0');
+    seconds = seconds.padStart(2, '0');
+
+    return { date: `${month}/${day}/${year}`, time: ` ${hoursStr}:${minutes} ${period}` }
+  }
+
+  adjustDateToLocal(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
 
-    //On Serach
+  //On Serach
   onSearch() {
     this.currentPage = 1;
     this.searchData = {
@@ -196,14 +209,14 @@ export class ReportsComponent implements OnInit {
       firstName: "",
       lastName: "",
       searchType: 1,
-      reportType: this.searchReportsForm.value.department !== "" || this.searchReportsForm.value.county !== "" ? 1 : 2 ,
-      crashDate: this.searchReportsForm.value.crashDate || "",
+      reportType: this.searchReportsForm.value.department !== "" || this.searchReportsForm.value.county !== "" ? 1 : 2,
+      crashDate: this.searchReportsForm.value.crashDate ? this.adjustDateToLocal(this.searchReportsForm.value.crashDate) : "",
       reportNumber: this.searchReportsForm.value.reportNumber || "",
       location: this.searchReportsForm.value.location || "",
       policeDepartmentId: Number(this.searchReportsForm.value.department) || "",
       countyId: Number(this.searchReportsForm.value.county) || "",
-      addedOnFromDate: this.searchReportsForm.value.addedOnFromDate || "",
-      addedOnToDate: this.searchReportsForm.value.addedOnToDate || ""
+      addedOnFromDate: this.searchReportsForm.value.addedOnFromDate ? this.adjustDateToLocal(this.searchReportsForm.value.addedOnFromDate) : "",
+      addedOnToDate: this.searchReportsForm.value.addedOnToDate ? this.adjustDateToLocal(this.searchReportsForm.value.addedOnToDate) : "",
     };
     this.getReportsByPagination();
   }
@@ -212,23 +225,8 @@ export class ReportsComponent implements OnInit {
   resetSearch() {
     this.currentPage = 1;
     this.items_per_page = 5;
-    this.searchReportsForm.reset({county : '' , department : ''});
-    this.searchData = {
-      page: this.currentPage,
-      itemsPerPage: this.items_per_page,
-      accountId: "0",
-      firstName: "",
-      lastName: "",
-      searchType: 1,
-      reportType: 2,
-      crashDate: "",
-      reportNumber: "",
-      location: "",
-      policeDepartmentId: "",
-      countyId: "",
-      addedOnFromDate: "",
-      addedOnToDate: ""
-    };
+    this.searchReportsForm.reset({ county: '', department: '' });
+    this.setupSearchData()
     this.getReportsByPagination()
   }
 

@@ -14,7 +14,8 @@
     <form class="row" [formGroup]="searchOccupantsForm">
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Crash Date:</label>
-            <input type="date" class="form-control" formControlName="crashDate" />
+            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="crashDate"  formControlName="crashDate" inputId="basic">
+            </p-calendar>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Report Number:</label>
@@ -24,7 +25,6 @@
             <label for="" class="form-label">First Name:</label>
             <input type="text" class="form-control" placeholder="Search First Name" formControlName="firstName" />
         </div>
-
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Last Name:</label>
             <input type="text" class="form-control" placeholder="Search Last Name" formControlName="lastName" />
@@ -35,11 +35,13 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label"> Added On From Date:</label>
-            <input type="date" class="form-control" formControlName="addedOnFromDate" />
+            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic">
+            </p-calendar>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Added On To Date:</label>
-            <input type="date" class="form-control" formControlName="addedOnToDate" />
+            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnToDate"  formControlName="addedOnToDate" inputId="basic">
+            </p-calendar>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Department:</label>

@@ -33,7 +33,7 @@ export class OccupantsComponent implements OnInit {
   public occupantDetail: any = [];
   public error: boolean = false;
 
-  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService,     private spinner: NgxSpinnerService
+  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService
   ) {
     this.ItemsPerPage = ItemsPerPage
   }
@@ -41,22 +41,7 @@ export class OccupantsComponent implements OnInit {
     this.initializationSearchOccupantsForm();
     this.getAllCounty();
     this.getAccountsDepartmentByPagination();
-    this.searchData = {
-      page: this.currentPage,
-      itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate != undefined) ? this.searchOccupantsForm.value.addedOnFromDate : "",
-      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate != undefined) ? this.searchOccupantsForm.value.addedOnToDate : "",
-      countyId: (this.searchOccupantsForm.value.countyId != undefined) ? this.searchOccupantsForm.value.countyId : "",
-      crashDate: (this.searchOccupantsForm.value.crashDate != undefined) ? this.searchOccupantsForm.value.crashDate : "",
-      firstName: (this.searchOccupantsForm.value.firstName != undefined) ? this.searchOccupantsForm.value.firstName : "",
-      lastName: (this.searchOccupantsForm.value.lastName != undefined) ? this.searchOccupantsForm.value.lastName : "",
-      policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId != undefined) ? this.searchOccupantsForm.value.policeDepartmentId : "",
-      location: (this.searchOccupantsForm.value.location != undefined) ? this.searchOccupantsForm.value.location : "",
-      reportNumber: (this.searchOccupantsForm.value.reportNumber != undefined) ? this.searchOccupantsForm.value.reportNumber : "",
-      reportType: 2,
-      searchType: 1,
-      accountId: "0",
-    };
+    this.setupSearchData();
     this.getAllOccupants();
   }
 
@@ -75,8 +60,28 @@ export class OccupantsComponent implements OnInit {
       reportType: 2,
       searchType: 1
     })
-
   }
+
+  //Setting up SearchData
+  setupSearchData() {
+    this.searchData = {
+      page: this.currentPage,
+      itemsPerPage: this.pageValue,
+      addedOnFromDate: "",
+      addedOnToDate: "",
+      countyId: "",
+      crashDate: "",
+      firstName: "",
+      lastName: "",
+      policeDepartmentId: "",
+      location: "",
+      reportNumber: "",
+      reportType: 2,
+      searchType: 1,
+      accountId: "0",
+    };
+  }
+
   //To Get all Account department details
   getAccountsDepartmentByPagination() {
     this.spinner.show();
@@ -110,22 +115,6 @@ export class OccupantsComponent implements OnInit {
 
   //Get All Occupants 
   getAllOccupants() {
-    this.searchData = {
-      page: this.currentPage,
-      itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "",
-      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "",
-      countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
-      crashDate: (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "",
-      firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
-      lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
-      policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
-      location: (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "",
-      reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
-      reportType: 2,
-      searchType: 1,
-      accountId: "0",
-    };
     this.occupantsService.getAllOccupants(this.searchData).subscribe(res => {
       if (res.status) {
         this.occupantDetail = res.data
@@ -180,6 +169,13 @@ export class OccupantsComponent implements OnInit {
     seconds = seconds.padStart(2, '0');
     // Construct the formatted date string in mm/dd/yyyy hh:mm:ss AM/PM format
     return { date: `${month}/${day}/${year}`, time: ` ${hoursStr}:${minutes} ${period}` }
+  }
+
+  adjustDateToLocal(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   //Get All County
@@ -363,10 +359,10 @@ export class OccupantsComponent implements OnInit {
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "",
-      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "",
+      addedOnFromDate: this.searchOccupantsForm.value.addedOnFromDate ? this.adjustDateToLocal(this.searchOccupantsForm.value.addedOnFromDate) : "",
+      addedOnToDate: this.searchOccupantsForm.value.addedOnToDate ? this.adjustDateToLocal(this.searchOccupantsForm.value.addedOnToDate) : "",
       countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
-      crashDate: (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "",
+      crashDate: this.searchOccupantsForm.value.crashDate ? this.adjustDateToLocal(this.searchOccupantsForm.value.crashDate) : "",
       firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
       lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
       policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
@@ -384,23 +380,8 @@ export class OccupantsComponent implements OnInit {
   resetSearch() {
     this.currentPage = 1;
     this.searchOccupantsForm.reset(
-      {countyId : "",policeDepartmentId : "" });
-    this.searchData = {
-      page: this.currentPage,
-      itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.searchOccupantsForm.value.addedOnFromDate) ? this.searchOccupantsForm.value.addedOnFromDate : "",
-      addedOnToDate: (this.searchOccupantsForm.value.addedOnToDate) ? this.searchOccupantsForm.value.addedOnToDate : "",
-      countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
-      crashDate: (this.searchOccupantsForm.value.crashDate) ? this.searchOccupantsForm.value.crashDate : "",
-      firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
-      lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
-      policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
-      location: (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "",
-      reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
-      reportType: 2,
-      searchType: 1,
-      accountId: "0",
-    };
+      { countyId: "", policeDepartmentId: "" });
+    this.setupSearchData();
     this.getAllOccupants();
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
   }
