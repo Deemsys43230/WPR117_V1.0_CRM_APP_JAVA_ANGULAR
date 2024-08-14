@@ -1,0 +1,32 @@
+<div style="background-color: #f0f0f0">
+  <app-police-department-header/>
+
+        <!-- View Deparment -->
+        <div class=" container">
+            <div class="header-section d-flex justify-content-between align-items-center mb-3 white-form">
+                <h1>My Department</h1>
+                <button (click)="backToReportList()" class="outer-div">
+                    <i class="fa fa-reply"></i> Back to Reports list
+                </button>
+            </div>
+        
+            <div class="table-wrapper">
+                <div class="table-row">
+                    <div class="table-cell"><strong>County:</strong></div>
+                    <div class="table-cell">{{ county }}</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell"><strong>Name:</strong></div>
+                    <div class="table-cell">{{ name }}</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell"><strong>Login Link:</strong></div>
+                    <div class="table-cell"><a href="#">{{ loginLink }}</a></div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell"><strong>Search Link:</strong></div>
+                    <div class="table-cell"><a href="#">{{ searchLink }}</a></div>
+                </div>
+            </div>
+        </div>
+        

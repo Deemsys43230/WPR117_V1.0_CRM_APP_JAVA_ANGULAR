@@ -20,6 +20,8 @@ import { FlashMessageComponent } from './shared/flash-message/flash-message.comp
 import { PoliceLoginComponent } from './auth/police-login/police-login.component';
 import { ReportsComponent } from './police-department/reports/reports.component';
 import { AddNewReportComponent } from './police-department/reports/add-new-report/add-new-report.component';
+import { ViewDepartmentComponent } from './police-department/view-department/view-department.component';
+import { PoliceDepartmentHeaderComponent } from './police-department/police-department-header/police-department-header.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { AddNewReportComponent } from './police-department/reports/add-new-repor
     PoliceLoginComponent,
     ReportsComponent,
     AddNewReportComponent,
+    ViewDepartmentComponent,
+    PoliceDepartmentHeaderComponent,
   ],
   imports: [
     BrowserModule,

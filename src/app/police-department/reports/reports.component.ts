@@ -434,4 +434,10 @@ export class ReportsComponent {
   edit(report_id: string) {
       this.router.navigate(['reports/',this.police_name,report_id])
   }
+
+  // View department
+viewDepartment() {
+  console.log('routed')
+  this.router.navigate(['reports/',this.police_name,'view-department'])
+}
 }

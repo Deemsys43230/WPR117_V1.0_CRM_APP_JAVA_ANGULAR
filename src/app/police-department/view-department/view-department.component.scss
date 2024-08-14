@@ -1,0 +1,60 @@
+.btn {
+    max-width: 100%;
+    background-color: #1d8d97;
+    color: white;
+}
+
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+.view-container {
+    background-color: white;
+}
+
+.header-section {
+    background-color: #fff; /* Example background color */
+    padding: 15px;
+}
+
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd; /* Border for separation */
+}
+
+.table-cell {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.table-cell a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.table-cell a:hover {
+    text-decoration: underline;
+}
+
+.outer-div i {
+    margin-right: 5px;
+}
+
+.outer-div {
+    background-color: #58a4aa;
+    color: #fff;
+    border: none;
+    padding: 7px;
+    cursor: pointer;
+    border-radius: 10px;
+}

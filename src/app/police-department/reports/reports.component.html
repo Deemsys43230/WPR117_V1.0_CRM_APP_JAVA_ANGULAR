@@ -12,13 +12,13 @@
         <!-- Action Buttons -->
         <div class="row mb-3">
             <div class="col-md-12 text-right">
-                <button class="btn btn-secondary ml-2">
+                <button class="btn btn-secondary ml-2" (click)="viewDepartment()">
                     <i class="fa fa-eye"></i> My Department
                 </button>
                 <button class="btn btn-secondary ml-2">
                     <i class="fa fa-key"></i> Change Password
                 </button>
-                <button class="btn btn-secondary ml-2">
+                <button class="btn btn-secondary ml-2" [routerLink]="['/ohio',police_name]">
                     <i class="fa fa-sign-out"></i> Logout
                 </button>
             </div>

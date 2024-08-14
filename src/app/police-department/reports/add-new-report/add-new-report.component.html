@@ -18,7 +18,7 @@
             <button class="btn btn-secondary ml-2">
                 <i class="fa fa-key"></i> Change Password
             </button>
-            <button class="btn btn-secondary ml-2">
+            <button class="btn btn-secondary ml-2" [routerLink]="['/ohio',police_name]">
                 <i class="fa fa-sign-out"></i> Logout
             </button>
         </div>
@@ -70,7 +70,7 @@
             </div>          
             
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
-              <label class="form-label">Country:</label>
+              <label class="form-label">County:</label>
               <select class="form-control" formControlName="county_id">
                 <option value="" disabled selected>Select</option>
                 <option *ngFor="let country of countries" [value]="country.value">
