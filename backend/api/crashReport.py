@@ -200,6 +200,18 @@ class GetAllCrashReports(Resource):
 class GetCrashReportById(Resource):
     def get(self,id):
         data=CrashReports.query.filter_by(report_id=id).first()
+        occupants_list=[]
+        for occupant in data.occupants:
+                occupants_data = {
+                "report_id":occupant.report_id,
+                "first_name":occupant.first_name,
+                "last_name":occupant.last_name,
+                "injuries":occupant.injuries,
+                "seating_position":occupant.seating_position,
+                "sequence_no":occupant.sequence_no,
+                "status":occupant.status
+                }
+                occupants_list.append(occupants_data)
         crashReport={
             "report_id":data.report_id,
             "account_id": data.account_id,
@@ -214,6 +226,7 @@ class GetCrashReportById(Resource):
             "added_date": data.added_date,
             "added_date_time": data.added_date_time,
             "status": data.status,
+            "occupants":occupants_list
         }
         return jsonify({'data': crashReport, 'status': True})
 
