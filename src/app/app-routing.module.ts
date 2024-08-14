@@ -27,6 +27,10 @@ const routes: Routes = [
     component: AddNewReportComponent
   },
   {
+    path: "reports/:departmentName/:id",
+    component: AddNewReportComponent
+  },
+  {
     path: "auth/login",
     component: LoginComponent,
   },  

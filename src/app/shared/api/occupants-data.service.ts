@@ -10,7 +10,7 @@ export class OccupantsDataService {
 
     constructor(private httpClient: HttpClient) { }
 
-    //get All Occupants details by pagination
+    //get all occupants details by pagination
     public getAllOccupants(data): Observable<any> {
         return this.httpClient.post('crash_reports/getAllCrashReports', data).pipe(tap(res => {
             return res;
@@ -24,4 +24,10 @@ export class OccupantsDataService {
         }), catchError(error => throwError(() => error)));
     }
 
+    //get by id crash report
+    public getByIdCrashReport(id): Observable<any> {
+        return this.httpClient.get(`crash_reports/getCrashReportById/${id}`).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
 }

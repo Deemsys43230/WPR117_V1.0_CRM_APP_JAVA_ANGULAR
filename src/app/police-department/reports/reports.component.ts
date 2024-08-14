@@ -33,7 +33,7 @@ export class ReportsComponent {
   currentTab: string = 'uploadReports'; // Default active tab
   public report_id: any;
 
-  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService,) { }
+  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService) { }
 
   //ngOnInit
   ngOnInit(): void {
@@ -422,10 +422,16 @@ export class ReportsComponent {
     this.router.navigate(['reports/', this.police_name, 'add-new-report'])
   }
 
+  // Handle delete
   delete(report_id: string) {
     this.occupantsService.deleteCrashReport(report_id).subscribe(res => {
       alert(res.message)
       this.getAllOccupants();
     })
+  }
+
+  // Handle edit
+  edit(report_id: string) {
+      this.router.navigate(['reports/',this.police_name,report_id])
   }
 }

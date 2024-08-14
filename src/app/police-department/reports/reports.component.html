@@ -131,7 +131,7 @@
                                         Occupants:</label><br />{{data.no_of_occupants}}
                                 </td>
                                 <td class="report-header">
-                                    <a class="edit-btn" title="Edit"><i class="fa fa-pencil fa-sm"></i></a>
+                                    <a class="edit-btn" title="Edit" (click)="edit(data.report_id)"><i class="fa fa-pencil fa-sm"></i></a>
                                     <a class="delete-btn" title="Delete" (click)="delete(data.report_id)"><i
                                             class="fa fa-trash fa-sm"></i></a>
                                     <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a>

@@ -35,13 +35,43 @@
     <div class="container">
         <form class="row ml-5" [formGroup]="addNewReportForm">
           <div class="row mb-2">
+            <!-- <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
+              <label class="form-label">Upload Report:</label>
+              <input class="form-control" type="file" formControlName="file_name" accept=".pdf" (change)="onFileChange($event)">
+            </div> -->
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Upload Report:</label>
-              <input class="form-control" type="file" formControlName="uploadReport" accept=".pdf" (change)="onFileChange($event)">
-            </div>
+            
+              <!-- Display file name and change button if not in new form -->
+              <div *ngIf="!isNewForm">
+                <div *ngIf="fileName">
+                  <small>{{ fileName }}</small>
+                  <button type="button" class="btn btn-link ml-2" (click)="showFileInputField = true">Change File</button>
+                </div>
+                
+                <!-- File input field for editing, visible when showFileInputField is true -->
+                <input 
+                  *ngIf="showFileInputField" 
+                  class="form-control" 
+                  type="file" 
+                  formControlName="file_name" 
+                  accept=".pdf" 
+                  (change)="onFileChange($event)">
+              </div>
+              
+              <!-- File input field for new form creation, always visible -->
+              <input 
+                *ngIf="isNewForm" 
+                class="form-control" 
+                type="file" 
+                formControlName="file_name" 
+                accept=".pdf" 
+                (change)="onFileChange($event)">
+            </div>          
+            
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Country:</label>
-              <select class="form-control" formControlName="country">
+              <select class="form-control" formControlName="county_id">
                 <option value="" disabled selected>Select</option>
                 <option *ngFor="let country of countries" [value]="country.value">
                   {{ country.value }} - {{ country.label }}
@@ -50,11 +80,11 @@
             </div>
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Crash Date:</label>
-              <input type="date" class="form-control" placeholder="Enter Crash Date" formControlName="crashDate" />
+              <input type="date" class="form-control" placeholder="Enter Crash Date" formControlName="crash_date" />
             </div>
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Report Number:</label>
-              <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="reportNumber" />
+              <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />
             </div>
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Location:</label>
@@ -62,7 +92,7 @@
             </div>
             <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
               <label class="form-label">Crash Severity:</label>
-              <select class="form-control" formControlName="crashSeverity">
+              <select class="form-control" formControlName="crash_severity">
                 <option value="" disabled selected>Select</option>
                 <option *ngFor="let severity of crashSeverityOptions" [value]="severity.value">
                   {{ severity.label }}
@@ -113,7 +143,7 @@
             <div class="row text-end">
               <div>
                 <button (click)="onSubmit()" class="btn common-btn-css common-btn-color mr-3" type="submit">
-                  Submit
+                  {{ report_id ? 'Update' : 'Submit' }}
                 </button>
                 <button (click)="onCancel()" class="btn common-btn-css common-btn-color" type="button">
                   Cancel

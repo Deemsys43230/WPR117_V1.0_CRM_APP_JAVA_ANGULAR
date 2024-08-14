@@ -7,6 +7,7 @@ import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.
 import { CountyService } from 'src/app/shared/services/county.service';
 import { CrashReportService } from 'src/app/shared/services/crash-report-service';
 import { AccountsDepartmentService } from 'src/app/shared/services/accounts-department-service';
+import { OccupantsService } from 'src/app/shared/services/occupants-service';
 @Component({
   selector: 'app-add-new-report',
   templateUrl: './add-new-report.component.html',
@@ -19,15 +20,18 @@ export class AddNewReportComponent {
   policeImageUrl: string = '';
   public isAddFormSubmitted: any = false;
   public selectedFile: File | null = null;
-  public isEdit: boolean = false;
   public id: any;
   public account_id: any;
   public police_department_id: any;
   crashSeverityOptions = CrashSeverity;
   injuries = Injuries;
   seatingPosition = SeatingPosition;
+  public report_id: any;
+  fileName: string = '';
+  isNewForm: boolean = true; // Flag to determine if it's a new form or edit form
+  showFileInputField: boolean = false; 
 
-  constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService) { }
+  constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService) { }
 
   // ngOnInit
   ngOnInit(): void {
@@ -38,19 +42,26 @@ export class AddNewReportComponent {
       if (this.police_name) {
         this.getByNamePoliceDepartment();
       }
-    })
+    });
     this.getByIdAccounts();
+    this.activatedRoute.params.subscribe(param => {
+      this.report_id = param['id'];
+      this.isNewForm = !this.report_id; // Determine if it's a new form or edit form
+      if (!this.isNewForm) {
+        this.getByIdCrashReport();
+      }
+    });
   }
 
   // Initialization new report form
   initializationNewReportForm() {
     this.addNewReportForm = this.fb.group({
-      uploadReport: [''],
-      country: [''],
-      crashDate: [''],
-      reportNumber: [''],
+      file_name: [''],
+      county_id: [''],
+      crash_date: [''],
+      report_number: [''],
       location: [''],
-      crashSeverity: [''],
+      crash_severity: [''],
       occupants: this.fb.array([this.createOccupant()])
     })
   }
@@ -118,29 +129,17 @@ export class AddNewReportComponent {
     })
   }
 
-  // Report file change
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type !== 'application/pdf') {
-      alert('Please upload a PDF file.');
-      this.addNewReportForm.get('uploadReport')?.reset();
-    }
-    else {
-      this.selectedFile = file;
-    }
-  }
-
   // On submit
   onSubmit() {
     const data = this.addNewReportForm.value;
     const formData = new FormData();
     formData.append('account_id', this.account_id)
     formData.append('police_department_id', this.police_department_id)
-    formData.append('report_number', data.reportNumber)
-    formData.append('crash_date', data.crashDate)
+    formData.append('report_number', data.report_number)
+    formData.append('crash_date', data.crash_date)
     formData.append('location', data.location)
-    formData.append('county_id', data.country)
-    formData.append('crash_severity', data.crashSeverity)
+    formData.append('county_id', data.county_id)
+    formData.append('crash_severity', data.crash_severity)
     formData.append('no_of_occupants', data.occupants.length)
     this.occupants.controls.forEach((control, index) => {
       const group = control as FormGroup;
@@ -155,8 +154,8 @@ export class AddNewReportComponent {
 
     this.isAddFormSubmitted = true;
     if (this.addNewReportForm.valid) {
-      if (this.isEdit) {
-        this.crashReportService.updateCrashReport(formData, this.id).subscribe(res => {
+      if (this.report_id) {
+        this.crashReportService.updateCrashReport(formData, this.report_id).subscribe(res => {
           if (res.status) {
             this.flashMessageService.successMessage(res.msg, 2)
             this.onCancel()
@@ -168,7 +167,7 @@ export class AddNewReportComponent {
       }
       else {
         this.crashReportService.saveCrashReport(formData).subscribe(res => {
-          if (res?.status) {
+          if (res) {
             this.flashMessageService.successMessage(res.msg, 2)
             this.onCancel()
           }
@@ -178,6 +177,64 @@ export class AddNewReportComponent {
         })
       }
     }
+  }
+
+  //get by id crash report
+  getByIdCrashReport() {
+    this.occupantsService.getByIdCrashReport(this.report_id).subscribe((res) => {
+      this.fileName = this.extractFileName(res.data.file_name);
+      const crashDate = this.convertToDateFormat(res.data.crash_date);
+      this.addNewReportForm.patchValue({
+        county_id: res.data.county_id,
+        crash_date: crashDate,
+        report_number: res.data.report_number,
+        location: res.data.location,
+        crash_severity: res.data.crash_severity
+      });
+      const occupantsArray = this.addNewReportForm.get('occupants') as FormArray;
+      occupantsArray.clear();
+      res.data.occupants.forEach((occupant: any) => {
+        occupantsArray.push(this.fb.group({
+          first_name: [occupant.first_name],
+          last_name: [occupant.last_name],
+          injuries: [occupant.injuries],
+          seating_position: [occupant.seating_position]
+        }));
+      });
+      this.showFileInputField = false;
+    });
+  }
+
+  // Convert date format
+  convertToDateFormat(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  // Report file change
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        alert('Please upload a PDF file.');
+        this.addNewReportForm.get('file_name')?.reset();
+      } else {
+        this.selectedFile = file;
+        this.fileName = file.name;
+      }
+    }
+  }
+
+  showFileInput() {
+    this.showFileInputField = true;
+  }
+
+  extractFileName(url: string): string {
+    const parts = url.split('/');
+    return parts[parts.length - 1];
   }
 
   // On Cancel

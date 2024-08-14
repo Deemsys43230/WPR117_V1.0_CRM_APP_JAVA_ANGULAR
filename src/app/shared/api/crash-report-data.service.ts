@@ -18,9 +18,9 @@ export class CrashReportDataService {
         }), catchError(error => throwError(() => error)));
     }
 
-    //Save crash report
+    //Update crash report
     public updateCrashReport(data, id: any): Observable<any> {
-        return this.httpClient.post(`crash_reports/updateCrashReport/${id}`,data).pipe(tap(res => {
+        return this.httpClient.put(`crash_reports/updateCrashReport/${id}`,data).pipe(tap(res => {
             return res;
         }), catchError(error => throwError(() => error)));
     }

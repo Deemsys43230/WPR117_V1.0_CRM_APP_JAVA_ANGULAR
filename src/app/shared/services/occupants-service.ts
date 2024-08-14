@@ -8,7 +8,7 @@ import { OccupantsDataService } from '../api/occupants-data.service';
 export class OccupantsService {
     constructor(private occupantsDataService: OccupantsDataService) { }
 
-    //get All County
+    //get All occupants
     public getAllOccupants(data) {
         return this.occupantsDataService.getAllOccupants(data);
     }
@@ -18,4 +18,8 @@ export class OccupantsService {
         return this.occupantsDataService.deleteCrashReport(id);
     }
 
+    //get by id
+    public getByIdCrashReport(id) {
+        return this.occupantsDataService.getByIdCrashReport(id);
+    }
 }
