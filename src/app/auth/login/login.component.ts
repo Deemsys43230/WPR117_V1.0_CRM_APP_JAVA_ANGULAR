@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   public errorMessage: any;
   public isFormSubmitted: boolean = false;
   public role: any;
-  public passwordHidden: boolean = false;
+  public passwordHidden: boolean = true;
   public roleData: any = [];
 
 

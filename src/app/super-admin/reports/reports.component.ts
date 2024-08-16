@@ -191,6 +191,7 @@ export class ReportsComponent implements OnInit {
     return { date: `${month}/${day}/${year}`, time: ` ${hoursStr}:${minutes} ${period}` }
   }
 
+  //Change Date for Date Pickers
   adjustDateToLocal(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -229,8 +230,4 @@ export class ReportsComponent implements OnInit {
     this.setupSearchData()
     this.getReportsByPagination()
   }
-
-
-
-
 }

@@ -35,7 +35,7 @@
                         </div>
                         <div class="col-12">
                           <div class="form-floating mb-3">
-                            <input [type]="!passwordHidden ? 'password' : 'text'" type="password" class="form-control" name="password" id="password" value="" placeholder="Password" formControlName="password" required>
+                            <input [type]="passwordHidden ? 'password' : 'text'" type="password" class="form-control" name="password" id="password" value="" placeholder="Password" formControlName="password" required>
                             <span class="toggle-password" (click)="togglePasswordVisibility()">
                               <i class="fa" [ngClass]="{'fa-eye-slash':!passwordHidden, 'fa-eye': passwordHidden}"></i>
                           </span>

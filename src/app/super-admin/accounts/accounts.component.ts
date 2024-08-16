@@ -42,29 +42,7 @@ export class AccountsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializationSearchAccessManagementForm();
-    this.searchData = {
-      page: this.currentPage,
-      items_per_page: this.itemsPerPage,
-      first_name: this.searchAccountsDepartmentForm.value.first_name
-        ? this.searchAccountsDepartmentForm.value.first_name
-        : '',
-      last_name: this.searchAccountsDepartmentForm.value.last_name
-        ? this.searchAccountsDepartmentForm.value.last_name
-        : '',
-      username: this.searchAccountsDepartmentForm.value.username
-        ? this.searchAccountsDepartmentForm.value.username
-        : '',
-      email_id: this.searchAccountsDepartmentForm.value.email_id
-        ? this.searchAccountsDepartmentForm.value.email_id
-        : '',
-      role_id: this.searchAccountsDepartmentForm.value.role_id
-        ? this.searchAccountsDepartmentForm.value.role_id
-        : '',
-      police_department_id: this.searchAccountsDepartmentForm.value
-        .police_department_id
-        ? this.searchAccountsDepartmentForm.value.police_department_id
-        : '',
-    };
+    this.setupSearchData()
     this.getAllRoles();
     this.getAllDepartments();
     this.getAccountsDepartmentByPagination();
@@ -82,13 +60,27 @@ export class AccountsComponent implements OnInit {
     });
   }
 
+   // setup Search Data
+  setupSearchData() {
+    this.searchData = {
+      page: this.currentPage,
+      items_per_page: this.itemsPerPage,
+      first_name: '',
+      last_name: '',
+      username: '',
+      email_id: '',
+      role_id: '',
+      police_department_id: '',
+    }
+  }
+
   //To Get all Account department details
   getAccountsDepartmentByPagination() {
     this.spinner.show();
     var policeData = [];
     this.accountsDepartmentService.getAccountsDepartmentDetailsByPagination(this.searchData).subscribe((res) => {
       if (res.status) {
-          this.spinner.hide();
+        this.spinner.hide();
         this.callChildComponent = true;
         const requests = res.data.map((ele: any) => {
           return this.policeDepartmentService.getByIdPoliceDepartmentDetails(ele.police_department_id).toPromise()
@@ -119,7 +111,7 @@ export class AccountsComponent implements OnInit {
           .catch((error) => {
             console.error('Error occurred:', error);
           });
-          this.table_data = {
+        this.table_data = {
           data: policeData,
           totalCount: res.count,
           labelName: [
@@ -216,10 +208,11 @@ export class AccountsComponent implements OnInit {
       account_id: data.account_id
     };
     this.resetPassword.resetPassword(payload).subscribe((response) => {
-      if(response.status) {
+      if (response.status) {
         alert('Password reset successfully')
-    }
-   })}
+      }
+    })
+  }
 
   addAccountsDepartment() {
     this.router.navigate(['superAdmin/accounts/add-new-account']);
@@ -231,25 +224,12 @@ export class AccountsComponent implements OnInit {
     this.searchData = {
       page: this.currentPage,
       items_per_page: this.itemsPerPage,
-      first_name: this.searchAccountsDepartmentForm.value.first_name
-        ? this.searchAccountsDepartmentForm.value.first_name
-        : '',
-      last_name: this.searchAccountsDepartmentForm.value.last_name
-        ? this.searchAccountsDepartmentForm.value.last_name
-        : '',
-      username: this.searchAccountsDepartmentForm.value.username
-        ? this.searchAccountsDepartmentForm.value.username
-        : '',
-      email_id: this.searchAccountsDepartmentForm.value.email_id
-        ? this.searchAccountsDepartmentForm.value.email_id
-        : '',
-      role_id: this.searchAccountsDepartmentForm.value.role_id
-        ? this.searchAccountsDepartmentForm.value.role_id
-        : '',
-      police_department_id: this.searchAccountsDepartmentForm.value
-        .police_department_id
-        ? this.searchAccountsDepartmentForm.value.police_department_id
-        : '',
+      first_name: this.searchAccountsDepartmentForm.value.first_name ? this.searchAccountsDepartmentForm.value.first_name : '',
+      last_name: this.searchAccountsDepartmentForm.value.last_name ? this.searchAccountsDepartmentForm.value.last_name : '',
+      username: this.searchAccountsDepartmentForm.value.username ? this.searchAccountsDepartmentForm.value.username : '',
+      email_id: this.searchAccountsDepartmentForm.value.email_id? this.searchAccountsDepartmentForm.value.email_id : '',
+      role_id: this.searchAccountsDepartmentForm.value.role_id ? this.searchAccountsDepartmentForm.value.role_id : '',
+      police_department_id: this.searchAccountsDepartmentForm.value.police_department_id ? this.searchAccountsDepartmentForm.value.police_department_id : '',
     };
     this.getAccountsDepartmentByPagination();
   }
@@ -258,39 +238,11 @@ export class AccountsComponent implements OnInit {
   resetSearch() {
     this.currentPage = 1;
     this.itemsPerPage = 5;
-    this.searchAccountsDepartmentForm.patchValue({
-      page: this.currentPage,
-      items_per_page: this.itemsPerPage,
-      first_name: '',
-      last_name: '',
-      username: '',
-      email_id: '',
+    this.searchAccountsDepartmentForm.reset({
       role_id: '',
       police_department_id: '',
     });
-    this.searchData = {
-      page: this.currentPage,
-      items_per_page: this.itemsPerPage,
-      first_name: this.searchAccountsDepartmentForm.value.first_name
-        ? this.searchAccountsDepartmentForm.value.first_name
-        : '',
-      last_name: this.searchAccountsDepartmentForm.value.last_name
-        ? this.searchAccountsDepartmentForm.value.last_name
-        : '',
-      username: this.searchAccountsDepartmentForm.value.username
-        ? this.searchAccountsDepartmentForm.value.username
-        : '',
-      email_id: this.searchAccountsDepartmentForm.value.email_id
-        ? this.searchAccountsDepartmentForm.value.email_id
-        : '',
-      role_id: this.searchAccountsDepartmentForm.value.role_id
-        ? this.searchAccountsDepartmentForm.value.role_id
-        : '',
-      police_department_id: this.searchAccountsDepartmentForm.value
-        .police_department_id
-        ? this.searchAccountsDepartmentForm.value.police_department_id
-        : '',
-    };
+    this.setupSearchData()
     this.getAccountsDepartmentByPagination();
   }
 }

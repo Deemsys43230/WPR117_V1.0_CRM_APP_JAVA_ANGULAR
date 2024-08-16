@@ -2,8 +2,7 @@ import { switchMap, catchError, retry } from 'rxjs/operators';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { Injectable } from "@angular/core";
-import { Observable, of, throwError } from 'rxjs';
-import { AuthDataService } from '../api/auth-data-service';
+import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 import { environment } from '../../../environments/environment';
 

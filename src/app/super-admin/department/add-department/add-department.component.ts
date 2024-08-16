@@ -54,7 +54,7 @@ export class AddDepartmentComponent implements OnInit {
     })
   }
 
-  //get the role of the admin
+  //Get the role of the admin
   getAllCounty() {
     var data = {}
     this.countyService.getAllCounty(data).subscribe(res => {
@@ -101,6 +101,7 @@ export class AddDepartmentComponent implements OnInit {
     };
   }
 
+  //Auto Data Patching while entering Name
   onChangeName(value){
     if (value) {
       const lowercaseValue = value?.toLowerCase();
@@ -182,6 +183,7 @@ export class AddDepartmentComponent implements OnInit {
     }
   }
 
+// Go Back to Department Page
   back() {
     this.router.navigate(['superAdmin/policeDepartment/'])
   }

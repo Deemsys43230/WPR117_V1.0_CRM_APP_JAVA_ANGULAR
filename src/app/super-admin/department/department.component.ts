@@ -62,6 +62,7 @@ export class DepartmentComponent implements OnInit {
     });
   }
 
+  // Setup Search Data
   setupSearchData() {
     this.searchData = {
       page: this.currentPage,
@@ -188,6 +189,7 @@ export class DepartmentComponent implements OnInit {
     this.router.navigate(['superAdmin/department/add-police-department']);
   }
 
+  // Enable and Disbale Department
   enableDisablePoliceDepartment(data) {
     const dep_id = data.department_id;
     const body = {
