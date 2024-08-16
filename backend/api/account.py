@@ -46,7 +46,7 @@ class GetAllAccounts(Resource):
     def post(self):
         data = request.get_json()
         items_per_page = data.get('items_per_page', '')
-        query_count = Accounts.query.filter_by(status=1).count()
+        query_count = Accounts.query.filter_by().count()
         if items_per_page == "":
             items_per_page = query_count
         try:
@@ -68,6 +68,7 @@ class GetAllAccounts(Resource):
                 query = query.filter(Accounts.email_id.ilike(f"%{email_id}%"))
             if police_department_id:
                 query = query.filter(Accounts.police_department_id.ilike(f"%{police_department_id}%"))
+            count = query.count()
             accounts = query.limit(items_per_page).offset(offset).all()
             result = []
             for account in accounts:
@@ -99,7 +100,7 @@ class GetAllAccounts(Resource):
                     'status':account.status
                     }
                 result.append(payload)
-            return {'data': result, 'status':True,'count': query_count}, 200
+            return {'data': result, 'status':True,'count': count}, 200
         except Exception as e:
             return {'message': 'An error occurred', 'error': str(e)}, 500
 
