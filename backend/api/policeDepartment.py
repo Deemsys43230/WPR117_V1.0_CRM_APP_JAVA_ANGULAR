@@ -182,7 +182,7 @@ class updatePoliceDepartment(Resource):
         try:
             police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if police:
-                data = request.get_json()
+                data = request.form
                 police.county_id = data['county_id']
                 police.name = data['name']
                 police.code = data['code']
