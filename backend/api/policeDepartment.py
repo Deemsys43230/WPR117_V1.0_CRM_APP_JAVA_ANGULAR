@@ -183,11 +183,24 @@ class updatePoliceDepartment(Resource):
             police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if police:
                 data = request.form
-                police.county_id = data['county_id']
-                police.name = data['name']
-                police.code = data['code']
+                police.county_id=data.get('county_id')
+                police.name = data.get('name')
+                police.code = data.get('code')
+                police.image = request.files.get('image')
+                if police.image is None:
+                        default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\', '/')
+                        default_file_name='banner.jpg'
+                        file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
+                else:
+                    path = os.path.join(tempFolder, str(police.police_department_id), police.image.filename).replace('\\', '/')
+                    os.makedirs(os.path.dirname(path), exist_ok=True)
+                    if awsUpload == 1:
+                        saved_file_path = save_temporary_file(police.image, path)
+                        if saved_file_path:
+                            file_url = uploadFileToAWSS3(saved_file_path,police.image.filename, police.police_department_id, 2)
+                            os.remove(saved_file_path)
                 db.session.commit()
-                return jsonify({'status':True,'msg':'Updated Police Department Details','data':{**data}})
+                return jsonify({'status':True,'image':file_url,'msg':'Updated Police Department Details','data':{**data}})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
 
