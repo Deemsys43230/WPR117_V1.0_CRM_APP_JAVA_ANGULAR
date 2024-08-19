@@ -220,6 +220,7 @@ class GetCrashReportById(Resource):
             "crash_date": data.crash_date,
             "location": data.location,
             "county_id": data.county_id,
+            "countyName":data.county.name,
             "crash_severity": data.crash_severity,
             "no_of_occupants": data.no_of_occupants,
             "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{data.police_department_id}/reports/{data.report_id}.pdf',
