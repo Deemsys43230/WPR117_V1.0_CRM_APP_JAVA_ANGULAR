@@ -8,6 +8,7 @@ import { ReportsComponent } from './police-department/reports/reports.component'
 import { AuthGuard } from './shared/auth.guard';
 import { AddNewReportComponent } from './police-department/reports/add-new-report/add-new-report.component';
 import { ViewDepartmentComponent } from './police-department/view-department/view-department.component';
+import { ChangePasswordComponent } from './police-department/change-password/change-password.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: "reports/:departmentName/view-department",
     component: ViewDepartmentComponent
+  },
+  {
+    path: "reports/:departmentName/change-password",
+    component: ChangePasswordComponent
   },
   {
     path: "reports/:departmentName/:id",

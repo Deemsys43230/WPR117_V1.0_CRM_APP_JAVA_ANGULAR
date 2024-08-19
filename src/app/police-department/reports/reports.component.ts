@@ -1,7 +1,7 @@
-import { compileNgModule } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CrashSeverity, Injuries, SeatingPosition } from 'src/app/constants';
 import { PoliceDepartmentDataService } from 'src/app/shared/api/police-department-data.service';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 
@@ -32,6 +32,12 @@ export class ReportsComponent {
   public countyList: any[] = [];
   currentTab: string = 'uploadReports'; // Default active tab
   public report_id: any;
+  crashSeverityOptions = CrashSeverity;
+  injuries = Injuries;
+  seatingPosition = SeatingPosition;
+  occupants = []; 
+  reportData: any = {};
+  public reportType: number = 1;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService) { }
 
@@ -50,7 +56,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm.value.policeDepartmentId != undefined) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm.value.location != undefined) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm.value.reportNumber != undefined) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 1,
+      reportType: this.reportType,
       searchType: 1,
       accountId: "0",
     };
@@ -75,7 +81,7 @@ export class ReportsComponent {
       policeDepartmentId: "",
       location: "",
       reportNumber: "",
-      reportType: 1,
+      reportType: this.reportType,
       searchType: 1
     })
   }
@@ -104,7 +110,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm?.value.location) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm?.value.reportNumber) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 1,
+      reportType: this.reportType,
       searchType: 1,
       accountId: "0",
     };
@@ -128,7 +134,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm?.value.location) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm?.value.reportNumber) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 1,
+      reportType: this.reportType,
       searchType: 1,
       accountId: "0",
     };
@@ -162,7 +168,7 @@ export class ReportsComponent {
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
       location: (this.policeDepartmentForm?.value.location) ? this.policeDepartmentForm.value.location : "",
       reportNumber: (this.policeDepartmentForm?.value.reportNumber) ? this.policeDepartmentForm.value.reportNumber : "",
-      reportType: 1,
+      reportType: this.reportType,
       searchType: 1,
       accountId: "0",
     };
@@ -295,6 +301,16 @@ export class ReportsComponent {
     return { date: `${month}/${day}/${year}`, time: ` ${hoursStr}:${minutes} ${period}` }
   }
 
+  convertGMTDateToMMDDYYYYFormat(gmtDate: string): string {
+    let date = new Date(gmtDate);
+    let day = date.getUTCDate().toString();
+    let month = (date.getUTCMonth() + 1).toString(); 
+    let year = date.getUTCFullYear();
+    day = day.padStart(2, '0');
+    month = month.padStart(2, '0');
+    return `${month}-${day}-${year}`;
+}
+
   // To Calculate Page Number  Based On Current Page Number
   calculatePageNumber(
     i: number,
@@ -410,6 +426,7 @@ export class ReportsComponent {
   // Function to change tabs
   setActiveTab(tab: string) {
     this.currentTab = tab;
+    this.reportType = tab === 'uploadReports' ? 1 : 2;
     let reportType = tab === 'uploadReports' ? 1 : 2;
     this.searchData = this.setupSearchData(reportType);
     this.occupantsService?.getAllOccupants(this.searchData).subscribe(res => {
@@ -432,12 +449,43 @@ export class ReportsComponent {
 
   // Handle edit
   edit(report_id: string) {
-      this.router.navigate(['reports/',this.police_name,report_id])
+    this.router.navigate(['reports/', this.police_name, report_id])
   }
 
   // View department
-viewDepartment() {
-  console.log('routed')
-  this.router.navigate(['reports/',this.police_name,'view-department'])
-}
+  viewDepartment() {
+    this.router.navigate(['reports/', this.police_name, 'view-department'])
+  }
+
+  // Change password
+  changePassword() {
+    this.router.navigate(['reports/', this.police_name, 'change-password'])
+  }
+
+  // Get by id
+  getById(report_id) {
+    console.log('report id',report_id)
+    this.occupantsService.getByIdCrashReport(report_id).subscribe(res => {
+      this.occupants = res.data.occupants;
+      this.reportData = res.data;
+    })
+  }
+
+  // Get injury name
+  getInjuryLabel(injuryValue: string): string {
+    const injury = this.injuries.find(inj => inj.value === injuryValue);
+    return injury ? injury.label : 'Unknown';
+  }
+
+  // Get seating position name
+  getSeatingPositionLabel(seatingPositionValue: string): string {
+    const seatingPosition = this.seatingPosition.find(sp => sp.value === seatingPositionValue);
+    return seatingPosition ? seatingPosition.label : 'Unknown';
+  }
+
+  // Get severity name
+  getSeverityLabel(severityValue: any): any {
+    const severity = this.crashSeverityOptions.find(s => s.value === severityValue);
+    return severity ? severity.label : 'Unknown';
+  }
 }

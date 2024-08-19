@@ -69,16 +69,16 @@ actionButton: any[]
 //Uses for police department adding new report form --- starts
 export const CrashSeverity = [
     {
-        value: '1', label: '1 - FATAL'
+        value: 1, label: '1 - FATAL'
     },
     {
-        value: '2', label: '2 - INJURY'
+        value: 2, label: '2 - INJURY'
     },
     {
-        value: '3', label: '3 - PDO'
+        value: 3, label: '3 - PDO'
     },
     {
-        value: '4', label: '4 - NOT AVAILABLE'
+        value: 4, label: '4 - NOT AVAILABLE'
     }
 ]
 

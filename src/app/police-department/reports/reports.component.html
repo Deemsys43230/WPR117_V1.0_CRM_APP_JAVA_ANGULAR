@@ -15,7 +15,7 @@
                 <button class="btn btn-secondary ml-2" (click)="viewDepartment()">
                     <i class="fa fa-eye"></i> My Department
                 </button>
-                <button class="btn btn-secondary ml-2">
+                <button class="btn btn-secondary ml-2" (click)="changePassword()">
                     <i class="fa fa-key"></i> Change Password
                 </button>
                 <button class="btn btn-secondary ml-2" [routerLink]="['/ohio',police_name]">
@@ -131,10 +131,88 @@
                                         Occupants:</label><br />{{data.no_of_occupants}}
                                 </td>
                                 <td class="report-header">
-                                    <a class="edit-btn" title="Edit" (click)="edit(data.report_id)"><i class="fa fa-pencil fa-sm"></i></a>
+                                    <a class="edit-btn" title="Edit" (click)="edit(data.report_id)"><i
+                                            class="fa fa-pencil fa-sm"></i></a>
                                     <a class="delete-btn" title="Delete" (click)="delete(data.report_id)"><i
                                             class="fa fa-trash fa-sm"></i></a>
-                                    <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a>
+                                    <a class="view-btn" title="View Report Details" data-toggle="modal"
+                                        data-target="#viewReportModalUpload" (click)="getById(data.report_id)">
+                                        <i class="fa fa-eye fa-sm"></i>
+                                    </a>
+                                    <!-- Modal Structure -->
+                                    <div class="modal fade" id="viewReportModalUpload" tabindex="-1" role="dialog"
+                                        aria-labelledby="viewReportModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="viewReportModalLabel">Report Details
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- Read-Only Fields -->
+                                                    <div class="form-group">
+                                                        <label>County:</label>
+                                                        <input type="text" class="form-control" [value]="reportData.countyName"
+                                                            readonly />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Crash Date:</label>
+                                                        <input type="text" class="form-control" [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)"
+                                                            readonly />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Report Number:</label>
+                                                        <input type="text" class="form-control" [value]="reportData.report_number"
+                                                            readonly />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Location:</label>
+                                                        <input type="text" class="form-control" [value]="reportData.location" 
+                                                            readonly />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Crash Severity:</label>
+                                                        <input type="text" class="form-control" [value]="getSeverityLabel(reportData.crash_severity)"
+                                                            readonly />
+                                                    </div>
+
+                                                    <!-- Table -->
+                                                    <h4 class="occupants">Occupants</h4>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>First Name</th>
+                                                                <th>Last Name</th>
+                                                                <th>Injuries</th>
+                                                                <th>Seating Position</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody *ngIf="occupants.length > 0; else noDataTemplate">
+                                                            <tr *ngFor="let occupant of occupants">
+                                                                <td>{{ occupant.first_name }}</td>
+                                                                <td>{{ occupant.last_name }}</td>
+                                                                <td>{{ getInjuryLabel(occupant.injuries) }}</td>
+                                                                <td>{{ getSeatingPositionLabel(occupant.seating_position) }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <ng-template #noDataTemplate>
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">No occupants</td>
+                                                            </tr>
+                                                        </ng-template>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <a href="{{data.file_name}}" target="_blank" class="info-btn"
                                         title="View Report File"><i class="fas fa-file"></i></a>
                                 </td>
@@ -182,7 +260,85 @@
                                         Occupants:</label><br />{{data.no_of_occupants}}
                                 </td>
                                 <td class="report-header">
-                                    <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a>
+                                    <!-- <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a> -->
+                                    <a class="view-btn" title="View Report Details" data-toggle="modal"
+                                    data-target="#viewReportModalViewAll" (click)="getById(data.report_id)">
+                                    <i class="fa fa-eye fa-sm"></i>
+                                </a>
+                                  <!-- Modal Structure -->
+                                  <div class="modal fade" id="viewReportModalViewAll" tabindex="-1" role="dialog"
+                                  aria-labelledby="viewReportModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h5 class="modal-title" id="viewReportModalLabel">Report Details
+                                              </h5>
+                                              <button type="button" class="close" data-dismiss="modal"
+                                                  aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                              </button>
+                                          </div>
+                                          <div class="modal-body">
+                                              <!-- Read-Only Fields -->
+                                              <div class="form-group">
+                                                  <label>County:</label>
+                                                  <input type="text" class="form-control" [value]="reportData.countyName"
+                                                      readonly />
+                                              </div>
+                                              <div class="form-group">
+                                                  <label>Crash Date:</label>
+                                                  <input type="text" class="form-control" [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)"
+                                                      readonly />
+                                              </div>
+                                              <div class="form-group">
+                                                  <label>Report Number:</label>
+                                                  <input type="text" class="form-control" [value]="reportData.report_number"
+                                                      readonly />
+                                              </div>
+                                              <div class="form-group">
+                                                  <label>Location:</label>
+                                                  <input type="text" class="form-control" [value]="reportData.location" 
+                                                      readonly />
+                                              </div>
+                                              <div class="form-group">
+                                                  <label>Crash Severity:</label>
+                                                  <input type="text" class="form-control" [value]="getSeverityLabel(reportData.crash_severity)"
+                                                      readonly />
+                                              </div>
+
+                                              <!-- Table -->
+                                              <h4 class="occupants">Occupants</h4>
+                                              <table class="table">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>First Name</th>
+                                                          <th>Last Name</th>
+                                                          <th>Injuries</th>
+                                                          <th>Seating Position</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody *ngIf="occupants.length > 0; else noDataTemplate">
+                                                      <tr *ngFor="let occupant of occupants">
+                                                          <td>{{ occupant.first_name }}</td>
+                                                          <td>{{ occupant.last_name }}</td>
+                                                          <td>{{ getInjuryLabel(occupant.injuries) }}</td>
+                                                          <td>{{ getSeatingPositionLabel(occupant.seating_position) }}</td>
+                                                      </tr>
+                                                  </tbody>
+                                                  <ng-template #noDataTemplate>
+                                                      <tr>
+                                                          <td colspan="4" class="text-center">No occupants</td>
+                                                      </tr>
+                                                  </ng-template>
+                                              </table>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary"
+                                                  data-dismiss="modal">Close</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
                                     <a href="{{data.file_name}}" target="_blank" class="info-btn"
                                         title="View Report File"><i class="fas fa-file"></i></a>
                                 </td>

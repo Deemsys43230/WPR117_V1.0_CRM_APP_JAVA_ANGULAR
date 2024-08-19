@@ -54,8 +54,6 @@ export class ViewDepartmentComponent {
             if(countyExists) {
               this.county = countyExists.name;
             }
-          } else {
-            console.log('County ID is undefined');
           }
         }
       })
