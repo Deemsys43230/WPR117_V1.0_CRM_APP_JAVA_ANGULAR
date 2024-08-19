@@ -31,11 +31,11 @@ class createPoliceDepartment(Resource):
                     police.savePoliceDepartment()
                     createPoliceAccounts(police)
                     if image is None:
-                        default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\', '/')
+                        default_image_path = os.path.join(tempFolder,'banner.jpg')
                         default_file_name='banner.jpg'
                         file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
                     else:
-                        path = os.path.join(tempFolder, str(police.police_department_id), image.filename).replace('\\', '/')
+                        path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
                         os.makedirs(os.path.dirname(path), exist_ok=True)
                         if awsUpload == 1:
                             saved_file_path = save_temporary_file(image, path)
