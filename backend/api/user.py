@@ -1,6 +1,6 @@
 from datetime import timedelta
 from flask_jwt_extended import (JWTManager, jwt_required, get_jwt_identity, get_jwt, create_access_token, create_refresh_token)
-from models import  Roles,Users,Accounts
+from models import  CrashReports, Occupants, PoliceDepartmentModel, Roles,Users,Accounts
 from db import db
 from flask import jsonify,request,Blueprint,session
 from flask_restful import Api,Resource
@@ -98,7 +98,16 @@ class resetPassword(Resource):
             return jsonify({'mail send':'Password Updated','status':True})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})  
-                
+          
+class dashboardGetAll(Resource):
+    def get(self):
+        department = PoliceDepartmentModel.query.count()
+        account = Accounts.query.count()
+        occupants = Occupants.query.count()
+        crashreport = CrashReports.query.count()
+        return jsonify({'Total Department':department,'Total Accounts':account,'Total Occupants':occupants,'Total Crash Reports':crashreport})
+        
+      
 
 user_blueprint = Blueprint('user',__name__)
 api = Api(user_blueprint)
@@ -107,5 +116,6 @@ api = Api(user_blueprint)
 api.add_resource(resetPassword,'/resetPassword')
 api.add_resource(ChangePassword,'/ChangePassword')
 api.add_resource(userLogin,'/login/getToken')
+api.add_resource(dashboardGetAll,'/getAllCount')
 
 
