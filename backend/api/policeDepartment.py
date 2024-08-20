@@ -2,7 +2,7 @@ from operator import and_
 import os
 from flask import Blueprint, jsonify,request
 from flask_restful import Resource,Api
-from config import AWSCredentials, CRMAppDomain,bucketURL,bannerLocation,awsUpload,tempFolder,folderName
+from config import AWSCredentials, CRMAppDomain,bucketURL,bannerLocation,awsUpload,tempFolder,folderName,bannerFolderName
 from models import Accounts, PoliceDepartmentModel, Users
 from db import db
 from test import get_property, role_required, uploadFileToAWSS3
@@ -28,20 +28,26 @@ class createPoliceDepartment(Resource):
                         login_link=data.get('login_link'),
                         search_link=data.get('search_link')
                     )
-                    police.savePoliceDepartment()
+                    db.create_all()
+                    db.session.add(police)
+                    db.session.flush()
                     createPoliceAccounts(police)
                     if image is None:
-                        default_image_path = os.path.join(tempFolder,'banner.jpg')
+                        default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\','/')
                         default_file_name='banner.jpg'
                         file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
                     else:
                         path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
                         os.makedirs(os.path.dirname(path), exist_ok=True)
                         if awsUpload == 1:
-                            saved_file_path = save_temporary_file(image, path)
+                            saved_file_path = save_temporary_file(image, path).replace('\\','/')
                             if saved_file_path:
                                 file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
                                 os.remove(saved_file_path)
+                                folder_path = os.path.dirname(saved_file_path)
+                                if not os.listdir(folder_path):
+                                    os.rmdir(folder_path)
+                    db.session.commit()           
                     return jsonify({
                                 'msg': 'Police Department Added Successfully',
                                 'status': True,
@@ -186,20 +192,21 @@ class updatePoliceDepartment(Resource):
                 police.county_id=data.get('county_id')
                 police.name = data.get('name')
                 police.code = data.get('code')
-                police.image = request.files.get('image')
-                if police.image is None:
-                        default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\', '/')
-                        default_file_name='banner.jpg'
-                        file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
-                else:
-                    path = os.path.join(tempFolder, str(police.police_department_id), police.image.filename).replace('\\', '/')
+                image = request.files.get('image')
+                if image:
+                    path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
                     os.makedirs(os.path.dirname(path), exist_ok=True)
                     if awsUpload == 1:
-                        saved_file_path = save_temporary_file(police.image, path)
+                        saved_file_path = save_temporary_file(image, path).replace('\\','/')
                         if saved_file_path:
-                            file_url = uploadFileToAWSS3(saved_file_path,police.image.filename, police.police_department_id, 2)
+                            file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
+                            police.image = file_url
+                            db.session.commit()
                             os.remove(saved_file_path)
-                db.session.commit()
+                            folder_path = os.path.dirname(saved_file_path)
+                            if not os.listdir(folder_path):
+                                os.rmdir(folder_path)
+                           
                 return jsonify({'status':True,'image':file_url,'msg':'Updated Police Department Details','data':{**data}})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})

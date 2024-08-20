@@ -98,7 +98,7 @@ class CreateCrashReport(Resource):
                 status=occupant['status']
                 )
                 occupants_data.save_to_users()
-            return jsonify({'msg': 'Crash Report Added Successfully','data':value})
+            return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':value})
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
