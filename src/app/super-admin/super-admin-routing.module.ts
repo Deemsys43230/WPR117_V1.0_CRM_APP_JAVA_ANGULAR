@@ -12,14 +12,14 @@ import { ReportsComponent } from './reports/reports.component';
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
   { path: "policeDepartment", component: DepartmentComponent },
-  { path: "department/add-police-department", component: AddDepartmentComponent },
-  { path: "department/add-police-department/:id", component: AddDepartmentComponent },
+  { path: "policeDepartment/add-police-department", component: AddDepartmentComponent },
+  { path: "policeDepartment/add-police-department/:id", component: AddDepartmentComponent },
   { path: "accountsDepartment", component: AccountsComponent },
-  { path: "accounts/add-new-account", component: AddNewAccountComponent },
-  { path: "accounts/add-new-account/:id", component: AddNewAccountComponent },
+  { path: "accountsDepartment/add-new-account", component: AddNewAccountComponent },
+  { path: "accountsDepartment/add-new-account/:id", component: AddNewAccountComponent },
   { path: "occupants", component: OccupantsComponent },
   { path: 'superAdmin/policeDepartment', component: DepartmentComponent },
-  { path: "auth/change-password", component: ChangePasswordComponent },
+  { path: "change-password", component: ChangePasswordComponent },
   {path: "reports", component: ReportsComponent}
 ];
 

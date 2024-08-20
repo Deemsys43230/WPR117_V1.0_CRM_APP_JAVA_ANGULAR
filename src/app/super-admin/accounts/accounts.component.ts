@@ -186,7 +186,7 @@ export class AccountsComponent implements OnInit {
   }
 
   private handleEdit(data: any) {
-    this.router.navigate(['/superAdmin/accounts/add-new-account/' + data.account_id]);
+    this.router.navigate(['/superAdmin/accountsDepartment/add-new-account/' + data.account_id]);
   }
 
   private handleEnableOrDisable(data: any) {
@@ -215,7 +215,7 @@ export class AccountsComponent implements OnInit {
   }
 
   addAccountsDepartment() {
-    this.router.navigate(['superAdmin/accounts/add-new-account']);
+    this.router.navigate(['superAdmin/accountsDepartment/add-new-account']);
   }
 
   //On search Police Department

@@ -181,12 +181,12 @@ export class DepartmentComponent implements OnInit {
 
   //Navigate to edit Police department page
   editPoliceDepartment(data) {
-    this.router.navigate(['superAdmin/department/add-police-department', `${data.department_id}`]);
+    this.router.navigate(['superAdmin/policeDepartment/add-police-department', `${data.department_id}`]);
   }
 
   //Navigate to Add Police department page
   addDepartment() {
-    this.router.navigate(['superAdmin/department/add-police-department']);
+    this.router.navigate(['superAdmin/policeDepartment/add-police-department']);
   }
 
   // Enable and Disbale Department
