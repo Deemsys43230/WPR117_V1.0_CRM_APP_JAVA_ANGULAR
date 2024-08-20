@@ -18,4 +18,10 @@ export class CountyDataService {
         }), catchError(error => throwError(() => error)));
     }
 
+    //Get All Count for Dashboard
+    public getDashboardCount(): Observable<any> {
+        return this.httpClient.get('user/getAllCount').pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
 }

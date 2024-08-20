@@ -12,7 +12,7 @@
             <i class="fa fa-bank icon-style"></i><br>
             <div class="center-content"><a routerLink="/superAdmin/policeDepartment" class="btn" routerLinkActive="active" >Police Department<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
             <div class="total-style">
-                <span class="total-background">Total Departments: 5</span>
+                <span class="total-background">Total Departments: {{allCount?.department}}</span>
               </div>
           </div>
         </div>
@@ -23,7 +23,7 @@
             <i class="fa-solid fa-users icon-style"></i><br>
             <div class="center-content"><a routerLink="/superAdmin/accountsDepartment" class="btn">Accounts<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
             <div class="total-style">
-                <span class="total-background">Total Accounts: 40</span>
+                <span class="total-background">Total Accounts: {{allCount?.accounts}}</span>
               </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
             <i class="fa-solid fa-file icon-style"></i><br>
             <div class="center-content"><a routerLink="/superAdmin/reports" class="btn">Crash Reports<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
             <div class="total-style">
-                <span class="total-background">Total Crash Reports: 15000</span>
+                <span class="total-background">Total Crash Reports: {{allCount?.reports}}</span>
               </div>
           </div>
         </div>
@@ -45,7 +45,7 @@
             <i class="fa-solid fa-user icon-style"></i><br>
             <div class="center-content"><a routerLink="/superAdmin/occupants" class="btn">Occupants<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
             <div class="total-style">
-                <span class="total-background">Total Occupants: 35000</span>
+                <span class="total-background">Total Occupants: {{allCount?.occupants}}</span>
               </div>
           </div>
         </div>

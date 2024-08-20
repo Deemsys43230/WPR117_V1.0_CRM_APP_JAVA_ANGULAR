@@ -15,7 +15,7 @@ $third-color: #9fc1c1;
 
 .custom-row .custom-icon {
   margin-right: 8px;
-  color: #316c71;
+  color: $secondary-color;
   font-weight: 600;
   font-size: xx-large;
 }
@@ -23,7 +23,7 @@ $third-color: #9fc1c1;
 .custom-row .headerStyle {
   font-weight: 600;
   font-size: xx-large;
-  color: #316c71;
+  color: $secondary-color;
 }
 /* Header styles ends */
 

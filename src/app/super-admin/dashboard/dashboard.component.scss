@@ -1,15 +1,26 @@
+@import 'src/styles.scss';
+
 .card {
   width: 75%;
   margin-bottom: 30px;
+  transition: 0.3s ease;
+  will-change: transform;
+}
+.card:hover {
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition: 0.3s ease;
+  will-change: transform;
 }
 
 .btn {
-  background-color: #316c71;
+  background-color: $secondary-color;
   color: white;
 }
 
 .icon-style {
-  color: #316c71;
+  color: $secondary-color;
   font-size: 50px;
   text-align: center;
   display: flex;
@@ -29,11 +40,11 @@
 }
 
 .total-background {
-  color: #316c71;
+  color: $primary-color;
   font-size: 14px;
   padding: 10px;
   border-radius: 12px;
-  border: 1px solid #1d8d97;
+  border: 1px solid $primary-color;
 }
 
 .icon-spacing {
@@ -46,5 +57,5 @@
 
 .active {
   font-weight: bold;
-  color: #316c71; 
+  color: white; 
 }

@@ -13,4 +13,8 @@ export class CountyService {
         return this.countyDataService.getAllCounty(data);
     }
 
+    public getDashboardCount(){
+        return this.countyDataService.getDashboardCount();
+    }
+
 }
