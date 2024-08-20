@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CrashSeverity, Injuries, SeatingPosition } from 'src/app/constants';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
@@ -56,12 +56,12 @@ export class AddNewReportComponent {
   // Initialization new report form
   initializationNewReportForm() {
     this.addNewReportForm = this.fb.group({
-      file_name: [''],
+      file_name: ['', Validators.required],
       county_id: [''],
-      crash_date: [''],
-      report_number: [''],
-      location: [''],
-      crash_severity: [''],
+      crash_date: ['', Validators.required],
+      report_number: ['', Validators.required],
+      location: ['', Validators.required],
+      crash_severity: ['', Validators.required],
       occupants: this.fb.array([this.createOccupant()])
     })
   }
@@ -90,8 +90,8 @@ export class AddNewReportComponent {
   // New occupant creation
   createOccupant(): FormGroup {
     return this.fb.group({
-      first_name: [''],
-      last_name: [''],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       injuries: [''],
       seating_position: ['']
     });
@@ -158,7 +158,7 @@ export class AddNewReportComponent {
         this.crashReportService.updateCrashReport(formData, this.report_id).subscribe(res => {
           if (res.status) {
             this.flashMessageService.successMessage(res.msg, 2)
-            this.onCancel()
+            this.router.navigate(['reports/', this.police_name])
           }
           else {
             this.flashMessageService.errorMessage(res.msg, 2)
@@ -167,9 +167,9 @@ export class AddNewReportComponent {
       }
       else {
         this.crashReportService.saveCrashReport(formData).subscribe(res => {
-          if (res) {
+          if (res.status) {
             this.flashMessageService.successMessage(res.msg, 2)
-            this.onCancel()
+            this.router.navigate(['reports/', this.police_name])
           }
           else {
             this.flashMessageService.errorMessage(res.msg, 2)
@@ -224,6 +224,7 @@ export class AddNewReportComponent {
       } else {
         this.selectedFile = file;
         this.fileName = file.name;
+        this.addNewReportForm.get('file_name')?.setValue(file);
       }
     }
   }

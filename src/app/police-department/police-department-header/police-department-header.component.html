@@ -11,10 +11,10 @@
     <!-- Action Buttons -->
     <div class="row mb-3">
         <div class="col-md-12 text-right">
-            <button class="btn btn-secondary ml-2">
+            <button class="btn btn-secondary ml-2" [routerLink]="['/reports',police_name,'view-department']">
                 <i class="fa fa-eye"></i> My Department
             </button>
-            <button class="btn btn-secondary ml-2">
+            <button class="btn btn-secondary ml-2" [routerLink]="['/reports',police_name,'change-password']">
                 <i class="fa fa-key"></i> Change Password
             </button>
             <button class="btn btn-secondary ml-2" [routerLink]="['/ohio',police_name]">

@@ -18,12 +18,10 @@
 
 .form-floating {
     max-width: 400px;
-    /* Adjust as needed */
 }
 
 .btn {
     max-width: 100%;
-    /* Ensure button fits the container */
     background-color: #1d8d97;
     color: white;
 }
@@ -38,7 +36,7 @@
 }
 
 .report-header {
-    background-color: #9fc1c173;
+    background-color: #d4e3e3;
     color: $primary-color;
 }
 
@@ -54,7 +52,7 @@
     border-radius: 5px;
     margin: 0px 5px;
     cursor: pointer;
-    background-color: #3450cf;
+    background-color: #1d8d97;
 }
 
 .info-btn {
@@ -74,7 +72,7 @@
     border-radius: 5px;
     margin: 0px 5px;
     cursor: pointer;
-    background-color: #1b688b;
+    background-color: rgb(36, 52, 73);
 }
 
 .delete-btn {
@@ -84,7 +82,7 @@
     border-radius: 5px;
     margin: 0px 5px;
     cursor: pointer;
-    background-color: rgb(233 13 13);
+    background-color: rgba(237, 62, 47, 0.8);
 }
 
 .warn {
@@ -178,7 +176,7 @@ li.numberList:hover {
   }
   
   .outer-div {
-    background-color: #58a4aa; 
+    background-color: #d4e3e3; 
     padding: 15px;
     border-radius: 15px;
     padding-bottom: 30px;
@@ -186,4 +184,12 @@ li.numberList:hover {
 
   .occupants {
     text-decoration: underline;
+  }
+
+  .modal-content {
+    width: 150% !important;
+  }
+
+  .modal-header {
+    background-color: #9fc1c1;
   }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoliceDepartmentDataService } from 'src/app/shared/api/police-department-data.service';
 import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
@@ -15,6 +15,7 @@ export class ChangePasswordComponent {
   police_name: any;
   public changePasswordForm: any;
   public changePasswordData: any;
+  public isPasswordChanged: any = false;
 
   constructor(private router: Router, private fb: FormBuilder, private changePasswordService: AuthService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentDataService, private activatedRoute: ActivatedRoute) {}
 
@@ -30,13 +31,15 @@ export class ChangePasswordComponent {
 
   initializationForm() {
     this.changePasswordForm = this.fb.group({
-    current_password: "",
-    new_password: "",
-    confirm_new_password: "",
+    current_password: ["", Validators.required], 
+    new_password: ["", Validators.required], 
+    confirm_new_password: ["", Validators.required], 
     })
   }
 
   changePassword() {
+    this.isPasswordChanged = true;
+    if(this.changePasswordForm.valid) {
     this.changePasswordData = {
     "old_password": (this.changePasswordForm.value.current_password != undefined) ? this.changePasswordForm.value.current_password : "",
     "new_password": (this.changePasswordForm.value.new_password != undefined) ? this.changePasswordForm.value.new_password : "",
@@ -44,11 +47,14 @@ export class ChangePasswordComponent {
     "account_id": (localStorage["account_id"] != undefined) ? localStorage["account_id"] : ""
     }
     this.changePasswordService.changePassword(this.changePasswordData).subscribe(res => {
-      this.flashMessageService.successMessage(res.msg, 2);
       if(res.status) {
-      this.router.navigate(['ohio/',this.police_name])
+        this.flashMessageService.successMessage(res.msg, 2);
+        this.router.navigate(['ohio/',this.police_name])
+      } else {
+        this.flashMessageService.successMessage(res.msg, 2);
       }
-    })
+    })    
+  }
   }
 
     //get by name

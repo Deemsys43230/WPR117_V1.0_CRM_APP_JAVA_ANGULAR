@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CrashSeverity, Injuries, SeatingPosition } from 'src/app/constants';
+import { CrashSeverity, Injuries, ItemsPerPage, SeatingPosition } from 'src/app/constants';
 import { PoliceDepartmentDataService } from 'src/app/shared/api/police-department-data.service';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 
@@ -28,7 +28,6 @@ export class ReportsComponent {
   public startIndex: number;
   public endIndex: number;
   public pages: any[] = [];
-  public ItemsPerPage: any = [];
   public countyList: any[] = [];
   currentTab: string = 'uploadReports'; // Default active tab
   public report_id: any;
@@ -38,6 +37,7 @@ export class ReportsComponent {
   occupants = []; 
   reportData: any = {};
   public reportType: number = 1;
+  ItemsPerPage = ItemsPerPage;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService) { }
 

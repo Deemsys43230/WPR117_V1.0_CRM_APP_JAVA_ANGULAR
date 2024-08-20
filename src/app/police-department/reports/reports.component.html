@@ -1,28 +1,6 @@
 <div style="background-color: #f0f0f0">
     <div class="container">
-        <!-- Image Section -->
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="mb-4">
-                    <img [src]="policeImageUrl" alt="TrafficPoliceReport" class="img-fluid" *ngIf="policeImageUrl">
-                </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="row mb-3">
-            <div class="col-md-12 text-right">
-                <button class="btn btn-secondary ml-2" (click)="viewDepartment()">
-                    <i class="fa fa-eye"></i> My Department
-                </button>
-                <button class="btn btn-secondary ml-2" (click)="changePassword()">
-                    <i class="fa fa-key"></i> Change Password
-                </button>
-                <button class="btn btn-secondary ml-2" [routerLink]="['/ohio',police_name]">
-                    <i class="fa fa-sign-out"></i> Logout
-                </button>
-            </div>
-        </div>
+        <app-police-department-header/>
 
         <!-- Reports Form -->
         <div class="row col-md-12 outer-div">
@@ -147,39 +125,40 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="viewReportModalLabel">Report Details
                                                     </h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <!-- Read-Only Fields -->
-                                                    <div class="form-group">
+                                                     <div class="row">
+                                                    <div class="col-md-6 form-group">
                                                         <label>County:</label>
                                                         <input type="text" class="form-control" [value]="reportData.countyName"
                                                             readonly />
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="col-md-6 form-group">
                                                         <label>Crash Date:</label>
                                                         <input type="text" class="form-control" [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)"
                                                             readonly />
                                                     </div>
-                                                    <div class="form-group">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
                                                         <label>Report Number:</label>
                                                         <input type="text" class="form-control" [value]="reportData.report_number"
                                                             readonly />
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="col-md-6 form-group">
                                                         <label>Location:</label>
                                                         <input type="text" class="form-control" [value]="reportData.location" 
                                                             readonly />
                                                     </div>
-                                                    <div class="form-group">
+                                                </div>
+                                                    <div class="row">
+                                                    <div class="col-md-6 form-group">
                                                         <label>Crash Severity:</label>
                                                         <input type="text" class="form-control" [value]="getSeverityLabel(reportData.crash_severity)"
                                                             readonly />
                                                     </div>
-
+                                                </div>
                                                     <!-- Table -->
                                                     <h4 class="occupants">Occupants</h4>
                                                     <table class="table">
@@ -264,7 +243,7 @@
                                     <a class="view-btn" title="View Report Details" data-toggle="modal"
                                     data-target="#viewReportModalViewAll" (click)="getById(data.report_id)">
                                     <i class="fa fa-eye fa-sm"></i>
-                                </a>
+                                    </a>
                                   <!-- Modal Structure -->
                                   <div class="modal fade" id="viewReportModalViewAll" tabindex="-1" role="dialog"
                                   aria-labelledby="viewReportModalLabel" aria-hidden="true">
@@ -273,65 +252,61 @@
                                           <div class="modal-header">
                                               <h5 class="modal-title" id="viewReportModalLabel">Report Details
                                               </h5>
-                                              <button type="button" class="close" data-dismiss="modal"
-                                                  aria-label="Close">
-                                                  <span aria-hidden="true">&times;</span>
-                                              </button>
                                           </div>
                                           <div class="modal-body">
-                                              <!-- Read-Only Fields -->
-                                              <div class="form-group">
-                                                  <label>County:</label>
-                                                  <input type="text" class="form-control" [value]="reportData.countyName"
-                                                      readonly />
+                                            <!-- Read-Only Fields -->
+                                            <div class="row">
+                                              <div class="col-md-6 form-group">
+                                                <label>County:</label>
+                                                <input type="text" class="form-control" [value]="reportData.countyName" readonly />
                                               </div>
-                                              <div class="form-group">
-                                                  <label>Crash Date:</label>
-                                                  <input type="text" class="form-control" [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)"
-                                                      readonly />
+                                              <div class="col-md-6 form-group">
+                                                <label>Crash Date:</label>
+                                                <input type="text" class="form-control" [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)" readonly />
                                               </div>
-                                              <div class="form-group">
-                                                  <label>Report Number:</label>
-                                                  <input type="text" class="form-control" [value]="reportData.report_number"
-                                                      readonly />
+                                            </div>                                          
+                                            <div class="row">
+                                              <div class="col-md-6 form-group">
+                                                <label>Report Number:</label>
+                                                <input type="text" class="form-control" [value]="reportData.report_number" readonly />
                                               </div>
-                                              <div class="form-group">
-                                                  <label>Location:</label>
-                                                  <input type="text" class="form-control" [value]="reportData.location" 
-                                                      readonly />
+                                              <div class="col-md-6 form-group">
+                                                <label>Location:</label>
+                                                <input type="text" class="form-control" [value]="reportData.location" readonly />
                                               </div>
-                                              <div class="form-group">
-                                                  <label>Crash Severity:</label>
-                                                  <input type="text" class="form-control" [value]="getSeverityLabel(reportData.crash_severity)"
-                                                      readonly />
+                                            </div>                                          
+                                            <div class="row">
+                                              <div class="col-md-6 form-group">
+                                                <label>Crash Severity:</label>
+                                                <input type="text" class="form-control" [value]="getSeverityLabel(reportData.crash_severity)" readonly />
                                               </div>
-
-                                              <!-- Table -->
-                                              <h4 class="occupants">Occupants</h4>
-                                              <table class="table">
-                                                  <thead>
-                                                      <tr>
-                                                          <th>First Name</th>
-                                                          <th>Last Name</th>
-                                                          <th>Injuries</th>
-                                                          <th>Seating Position</th>
-                                                      </tr>
-                                                  </thead>
-                                                  <tbody *ngIf="occupants.length > 0; else noDataTemplate">
-                                                      <tr *ngFor="let occupant of occupants">
-                                                          <td>{{ occupant.first_name }}</td>
-                                                          <td>{{ occupant.last_name }}</td>
-                                                          <td>{{ getInjuryLabel(occupant.injuries) }}</td>
-                                                          <td>{{ getSeatingPositionLabel(occupant.seating_position) }}</td>
-                                                      </tr>
-                                                  </tbody>
-                                                  <ng-template #noDataTemplate>
-                                                      <tr>
-                                                          <td colspan="4" class="text-center">No occupants</td>
-                                                      </tr>
-                                                  </ng-template>
-                                              </table>
-                                          </div>
+                                            </div>                                          
+                                            <!-- Table -->
+                                            <h4 class="occupants">Occupants</h4>
+                                            <table class="table">
+                                              <thead>
+                                                <tr>
+                                                  <th>First Name</th>
+                                                  <th>Last Name</th>
+                                                  <th>Injuries</th>
+                                                  <th>Seating Position</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody *ngIf="occupants.length > 0; else noDataTemplate">
+                                                <tr *ngFor="let occupant of occupants">
+                                                  <td>{{ occupant.first_name }}</td>
+                                                  <td>{{ occupant.last_name }}</td>
+                                                  <td>{{ getInjuryLabel(occupant.injuries) }}</td>
+                                                  <td>{{ getSeatingPositionLabel(occupant.seating_position) }}</td>
+                                                </tr>
+                                              </tbody>
+                                              <ng-template #noDataTemplate>
+                                                <tr>
+                                                  <td colspan="4" class="text-center">No occupants</td>
+                                                </tr>
+                                              </ng-template>
+                                            </table>
+                                          </div>                                          
                                           <div class="modal-footer">
                                               <button type="button" class="btn btn-secondary"
                                                   data-dismiss="modal">Close</button>
@@ -364,7 +339,7 @@
                 <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
                     <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1"
                         placeholder="Search By page no" />
-                    <button class="button goBtn" (change)="searchPageno()">
+                    <button class="button goBtn" (click)="searchPageno()">
                         GO
                     </button>
                     <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
