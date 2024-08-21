@@ -10,9 +10,10 @@
     </div>
     
     <div class="container">
-        <form class="row ml-5" [formGroup]="addNewReportForm">
+        <form class="row" [formGroup]="addNewReportForm">
           <div class="row mb-2">
-            <div class="col-lg-6 col-md-4 col-sm-12">
+            <div class="col-lg-1 col-md-1"></div>
+            <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Upload Report:</label><span class="span"> *</span>
                <div *ngIf="!isNewForm">
                 <div *ngIf="fileName">
@@ -46,8 +47,9 @@
                     </div>
                   </div>
                 </div>
-            </div>               
-            <div class="col-lg-6 col-md-4 col-sm-12 mb-4">
+            </div>         
+            <div class="col-lg-1 col-md-1"></div>      
+            <div class="col-lg-5 col-md-5 col-sm-12 mb-4">
               <label class="form-label">County:</label>
               <select class="form-control" formControlName="county_id">
                 <option value="" disabled selected>Select</option>
@@ -56,7 +58,8 @@
                 </option>
               </select>
             </div>
-            <div class="col-lg-6 col-md-4 col-sm-12">
+            <div class="col-lg-1 col-md-1"></div>
+            <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Crash Date:</label><span class="span"> *</span>
               <input type="date" class="form-control" placeholder="Enter Crash Date" formControlName="crash_date" />
               <!-- Validation Error Message -->
@@ -72,7 +75,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-6 col-md-4 col-sm-12">
+            <div class="col-lg-1 col-md-1"></div>
+            <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Report Number:</label><span class="span"> *</span>
               <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />
               <!-- Validation Error Message -->
@@ -88,7 +92,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-6 col-md-4 col-sm-12">
+            <div class="col-lg-1 col-md-1"></div>
+            <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Location:</label><span class="span"> *</span>
               <input type="text" class="form-control" placeholder="Enter Location" formControlName="location" />
                 <!-- Validation Error Message -->
@@ -104,7 +109,8 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-4 col-sm-12">
+            <div class="col-lg-1 col-md-1"></div>
+            <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Crash Severity:</label><span class="span"> *</span>
               <select class="form-control" formControlName="crash_severity">
                 <option value="" disabled selected>Select</option>
@@ -125,12 +131,14 @@
                   </div>
                 </div>
             </div>   
-            <div class="occupants">
+            <div class="col-lg-1 col-md-12"></div>
+            <div class="col-lg-11 col-md-12 occupants mb-2">
             <h2 style="text-decoration: underline;">Occupants</h2>
             <div formArrayName="occupants">
               <div *ngFor="let occupant of occupants.controls; let i = index" [formGroupName]="i">
                 <div class="row mb-2">
-                  <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
+                  <div class="col-lg-1 col-md-1"></div>
+                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                     <label class="form-label">First Name:</label><span class="span"> *</span>
                     <input type="text" class="form-control" placeholder="Enter First Name" formControlName="first_name" />
                      <!-- Validation Error Message -->
@@ -148,7 +156,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
+                  <div class="col-lg-1 col-md-1"></div>
+                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                     <label class="form-label">Last Name:</label><span class="span"> *</span>
                     <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="last_name" />
                      <!-- Validation Error Message -->
@@ -166,14 +175,16 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
+                  <div class="col-lg-1 col-md-1"></div>
+                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 margin-custom">
                     <label class="form-label">Injuries:</label>
                     <select class="form-control" formControlName="injuries">
                       <option value="" disabled>Select</option>
                       <option *ngFor="let injury of injuries" [value]="injury.value">{{ injury.label }}</option>
                     </select>
                   </div>
-                  <div class="col-lg-6 col-md-4 col-sm-12 custom-margin">
+                  <div class="col-lg-1 col-md-1"></div>
+                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 margin-custom">
                     <label class="form-label">Seating Position:</label>
                     <select class="form-control" formControlName="seating_position">
                       <option value="" disabled>Select</option>
@@ -182,7 +193,7 @@
                   </div>
                   <div class="col-lg-10"></div>
                   <div class="col-lg-2 mt-2">
-                    <button *ngIf="occupants.length > 1" type="button" class="btn btn-danger" (click)="removeOccupant(i)">
+                    <button *ngIf="occupants.length > 1" type="button" class="btn" (click)="removeOccupant(i)">
                       <i class="fa fa-minus"></i> Remove
                     </button>
                   </div>
@@ -190,17 +201,19 @@
               </div>
             </div>
           </div>
-            <div class="col-lg-12">
-              <a style="font-size: 14px; cursor: pointer;" (click)="addOneMoreOccupant()">
+          <div class="col-lg-1"></div>
+            <div class="col-lg-11 margin-custom">
+              <button style="font-size: 14px; cursor: pointer;" type="button" class="btn" (click)="addOneMoreOccupant()">
                 <i class="fa fa-plus"></i> Add One More Occupant
-              </a>
+              </button>
             </div>
-            <div class="row text-end">
-              <div>
-                <button (click)="onCancel()" class="btn mr-3" type="button">
+            <div class="row mt-2">
+              <div class="col-lg-5 col-md-5 col-12"></div>
+                <div class="col-lg-6 col-md-6 col-12">
+                <button (click)="onCancel()" class="btn" type="button">
                   Cancel
                 </button>
-                <button (click)="onSubmit()" class="btn" type="submit">
+                <button (click)="onSubmit()" class="btn btn-change ml-2" type="submit">
                   {{ report_id ? 'Update' : 'Submit' }}
                 </button>
               </div>

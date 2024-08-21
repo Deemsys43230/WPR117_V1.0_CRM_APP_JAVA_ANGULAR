@@ -18,20 +18,28 @@
 
 .table-wrapper {
     margin-top: 20px;
+    display: table;
 }
 
 .table-row {
     display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
+    padding: 5px;
     border-bottom: 1px solid #ccc;
-    line-height: 35px;
 }
 
 .table-cell {
-    padding-right: 15px;
-    font-size: 16px;
     flex: 1;
+    padding: 10px;
+    vertical-align: middle;
+    border-right: 1px solid #ccc;
+}
+
+.table-cell-2 {    
+    flex: 1;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  padding: 10px;
+  vertical-align: middle;
 }
 
 .table-cell a {
@@ -65,4 +73,11 @@
     text-transform: uppercase;
     letter-spacing: 1px; 
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 320px) {
+    .header-section button {
+       font-size: 12px;
+       padding: 5px 10px;
+    }
   }

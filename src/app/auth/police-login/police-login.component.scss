@@ -1,114 +1,75 @@
-// .login-container {
-//     background: #ffffff;
-//     padding: 2rem;
-//     border-radius: 8px;
-//     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-//   }
-  
-//   .img-fluid {
-//     max-width: 100%;
-//     height: auto;
-//   }
-  
-//   .heading {    
-//     color: #316c71;
-//   }
-    
-//   .btn {
-//     max-width: 100%; 
-//     background-color: #1d8d97;
-//     color: white;
-//   }
-
-//   .container {
-//     max-width: 1450px;
-//   }
-
-//   .form-floating {
-//     position: relative;
-//   }
-  
-//   .toggle-password {
-//     cursor: pointer;
-//     top: 50%;
-//     right: 10px; 
-//     transform: translateY(-50%);
-//     z-index: 10; 
-//   }
-  
-//   .form-control {
-//     padding-right: 40px;
-//   }
-
 @import '../../../styles.scss';
 
-
-.row{
+.row {
   display: flex !important;
   flex-direction: row;
   gap: 0px;
 }
 
 .background-color {
-    background-color: $primary-color;
-    height: 50vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-.card{
-    border-radius: 50px !important;
-    padding: 20px;
+  background-color: $primary-color;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-  .heading{
-    font-weight: 700;
-    margin-bottom: 30px;
-    padding: 5px;
-    color: $secondary-color;
-  }
-  .link{
-    color: $secondary-color;
+
+.card {
+  border-radius: 50px !important;
+  padding: 20px;
+}
+
+.heading {
+  font-weight: 700;
+  margin-bottom: 30px;
+  padding: 5px;
+  color: $secondary-color;
+}
+
+.link {
+  color: $secondary-color;
+}
+
+.btn {
+  background-color: $secondary-color;
+}
+
+img {
+  height: 70vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+@media (max-width: 767.98px) {
+  img {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
-  .btn{
-    background-color: $secondary-color;
-  }
-  img{
-    height: 70vh;
-  }
-  form{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  .background-color {
+    height: max-content;
   }
 
-  .toggle-password {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+  .card {
+    padding: 0;
   }
 
-  .container {
-    height: 100px;
+  form {
+    gap: 0px;
   }
-
-  @media (max-width: 767.98px) {
-    img {
-      border-top-left-radius: 50px;
-      border-top-right-radius: 50px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    .background-color{
-      height: max-content;
-    }
-    .card{
-      padding: 0;
-    }
-    form{
-      gap: 0px;
-    }
-  }
+}

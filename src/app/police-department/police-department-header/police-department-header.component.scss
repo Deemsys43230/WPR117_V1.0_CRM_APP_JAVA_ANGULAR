@@ -4,7 +4,14 @@
     color: white;
 }
 
-.container {
-    width: 100%;
-    padding: 20px;
+.custom-image {
+  width: 1535px;
+  height: 500px;
 }
+
+@media (max-width: 425px) {
+    .col-12 {
+      justify-content: center !important;
+      text-align: center !important;
+    }
+  }

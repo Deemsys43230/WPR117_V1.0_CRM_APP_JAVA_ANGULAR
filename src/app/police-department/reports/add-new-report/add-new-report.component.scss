@@ -3,13 +3,16 @@
 .btn {
     background-color: $secondary-color;
     color: white;
+    border: none;
+    padding: 9px;
 }
 
 .outer-div {
     background-color: $secondary-color; 
-    padding: 7px;
+    padding: 9px;
     border-radius: 10px;
     color: white;
+    border: none;
   }
 
   .container {
@@ -26,4 +29,15 @@
 
   .span {
     color: red;
+  }
+
+  .margin-custom {
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 425px) { 
+    .col-12 {
+      justify-content: center !important;
+      text-align: center !important;
+    }  
   }
