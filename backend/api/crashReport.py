@@ -324,7 +324,17 @@ class DeleteCrashReport(Resource):
         except Exception as e:
             db.session.rollback()
             return {'message': f'Error deleting record from the database: {str(e)}'}, 500
-        
+
+class checkReportNumberExist(Resource):
+    def post(self):
+         requestDetails = request.get_json()
+         reportNumber=requestDetails.get('report_number')
+         crash_report=CrashReports.query.filter_by(report_number=reportNumber).first()
+         if crash_report:
+             return jsonify({'status':False,'isExist':1,'message':'Report Number Already Exist'})
+         else:
+             return jsonify({'status':True,'isExist':0,'message':'Report Number not Exist'})
+
 
 CrashReport_Blueprint = Blueprint('crash_reports', __name__)
 api = Api(CrashReport_Blueprint)
@@ -333,3 +343,4 @@ api.add_resource(GetAllCrashReports, '/getAllCrashReports')
 api.add_resource(GetCrashReportById,'/getCrashReportById/<id>')
 api.add_resource(UpdateCrashReport,'/updateCrashReport/<id>')
 api.add_resource(DeleteCrashReport,'/deleteCrashReport/<id>')
+api.add_resource(checkReportNumberExist,'/checkReportNumberExist')
