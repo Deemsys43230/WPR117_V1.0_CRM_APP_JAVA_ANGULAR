@@ -73,30 +73,35 @@ class policeDepartmentLogin(Resource):
         department_name = data.get('department_name')
         username = data.get('username')
         password = data.get('password')
-        police = PoliceDepartmentModel.query.filter_by(name = department_name).first()
-        account_data = Accounts.query.filter_by(police_department_id= police.police_department_id).first()
-        user_data = Users.query.filter_by(account_id=account_data.account_id).first()
-        if not user_data:
-            return jsonify({'msg':'No Login'})
-        user = Users.query.filter_by(username=username,status=1).first()
-        if user is None or not check_md5_hash(user.password, password):  # Compare using MD5 hash
-            return jsonify({'message': 'Password Wrong','status':False})
-        if user is None:
-            return jsonify({'message': 'failed no such user','status':False})
-        rolename = Roles.query.filter_by(role_id=user.role_id).first()
-        refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=24))
-        access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=24))
-        return jsonify({'status':True,
-                        'refresh_token':refresh_token,
-                       'access_token':access_token,
-                        'role_id':user.role_id,
-                        'account_id':user.account_id,
-                        'roleName':rolename.role,
-                        'userDetails':{
-                            'user':user.user_id,
-                            'username':user.username
-                        }})
-
+        if not department_name:
+            return jsonify({'message': 'Department name is required', 'status': False})
+        police = PoliceDepartmentModel.query.filter_by(name=department_name).first()
+        if not police:
+            return jsonify({'message': 'Department not found', 'status': False})
+        account_data = Accounts.query.filter_by(police_department_id=police.police_department_id).all()
+        for acc in account_data:
+            user_data = Users.query.filter_by(account_id=acc.account_id,username=username).first() 
+            if user_data:
+                user = Users.query.filter_by(username=username, status=1).first()
+                if not user or not check_md5_hash(user.password, password):  
+                    return jsonify({'message': 'Incorrect username or password', 'status': False})
+                rolename = Roles.query.filter_by(role_id=user.role_id).first()
+                refresh_token = create_refresh_token(identity=user.username, expires_delta=timedelta(hours=24))
+                access_token = create_access_token(identity=user.username, expires_delta=timedelta(hours=24))
+                return jsonify({
+                    'status': True,
+                    'refresh_token': refresh_token,
+                    'access_token': access_token,
+                    'role_id': user.role_id,
+                    'account_id': user.account_id,
+                    'roleName': rolename.role,
+                    'userDetails': {
+                        'user': user.user_id,
+                        'username': user.username
+                    }
+                })
+            return jsonify({'msg':'No User Found For This Department','status':False})
+    
  # Reset Password for caller admin
 class resetPassword(Resource):
     @staticmethod
