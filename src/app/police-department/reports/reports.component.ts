@@ -428,10 +428,12 @@ export class ReportsComponent {
     this.currentTab = tab;
     this.reportType = tab === 'uploadReports' ? 1 : 2;
     let reportType = tab === 'uploadReports' ? 1 : 2;
+    this.currentPage=1;
     this.searchData = this.setupSearchData(reportType);
     this.occupantsService?.getAllOccupants(this.searchData).subscribe(res => {
       this.processApiResponse(res);
     });
+
   }
 
   // Navigate to new report

@@ -39,4 +39,9 @@ export class AuthService {
         localStorage.clear();
         this.router.navigateByUrl('/auth/login');
     }
+
+     //Police Login Data
+     public policeLogin(loginData: any) {
+        return this.authDataService.policeLogin(loginData);
+    }
 }

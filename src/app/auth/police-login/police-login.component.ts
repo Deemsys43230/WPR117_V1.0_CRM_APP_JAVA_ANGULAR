@@ -59,9 +59,10 @@ export class PoliceLoginComponent implements OnInit {
     var data = {
       "username": this.loginForm.value.username,
       "password": this.loginForm.value.password,
+      "department_name": this.police_name
     }
     if (this.loginForm.valid) {
-      this.authService.login(data).subscribe((res) => {
+      this.authService.policeLogin(data).subscribe((res) => {
         if (res.status) {
           localStorage.setItem('Authorization-Token', res.access_token);
           localStorage.setItem('Refresh-Token', res.refresh_token);
@@ -73,7 +74,7 @@ export class PoliceLoginComponent implements OnInit {
           this.flashMessageService.successMessage("Successfully Login !", 2);
           this.navigateBasedOnRole(res);
         } else {
-          this.flashMessageService.errorMessage('Failed Incorrect Password', 2);
+          this.flashMessageService.errorMessage(res.msg, 2);
         }
       });
     }

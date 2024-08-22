@@ -35,6 +35,23 @@
           formControlName="first_name"
           />
         </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['first_name'].errors &&
+              (!accountForm.controls['first_name'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['first_name'].errors?.['required']" class="text-danger">
+              Please Enter First Name
+            </div>
+            <div
+            [hidden]="!accountForm.controls['first_name'].errors?.['pattern']"
+            class="text-danger"
+          >
+            Name can only contain alphabets and spaces
+          </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
@@ -71,6 +88,23 @@
           formControlName="last_name"
           />
         </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['last_name'].errors &&
+              (!accountForm.controls['last_name'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['last_name'].errors?.['required']" class="text-danger">
+              Please Enter Last Name
+            </div>
+            <div
+            [hidden]="!accountForm.controls['last_name'].errors?.['pattern']"
+            class="text-danger"
+          >
+            Name can only contain alphabets and spaces
+          </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -91,6 +125,23 @@
             formControlName="username"
           />
         </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['username'].errors &&
+              (!accountForm.controls['username'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['username'].errors?.['required']" class="text-danger">
+              Please Enter User Name
+            </div>
+            <div
+            [hidden]="!accountForm.controls['username'].errors?.['pattern']"
+            class="text-danger"
+          >
+            Name can only contain alphabets and spaces
+          </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
@@ -107,6 +158,23 @@
           class="form-control"
           placeholder="Email Id"
           formControlName="email_id" />
+        </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['email_id'].errors &&
+              (!accountForm.controls['email_id'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['email_id'].errors?.['required']" class="text-danger">
+              Please Enter Email Id
+            </div>
+            <div
+            [hidden]="!accountForm.controls['email_id'].errors?.['email']"
+            class="text-danger"
+          >
+          Enter a Valid Email (e.g., example&#64;domain.com)
+        </div>
+          </div>
         </div>
       </div>
 
@@ -125,6 +193,23 @@
           placeholder="Phone Number"
           formControlName="phone_number"
           />
+        </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['phone_number'].errors &&
+              (!accountForm.controls['phone_number'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['phone_number'].errors?.['required']" class="text-danger">
+              Please Enter Phone Number
+            </div>
+            <div
+            [hidden]="!accountForm.controls['phone_number'].errors?.['pattern']"
+            class="text-danger"
+          >
+          Enter a Valid 10-Digit Phone Number    
+              </div>
+          </div>
         </div>
       </div>
     </div>
@@ -145,6 +230,17 @@
             </option>
           </select>
         </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['role_id'].errors &&
+              (!accountForm.controls['role_id'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['role_id'].errors?.['required']" class="text-danger">
+              Please Select Role Id
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-12">
         <label for="department" class="form-label"
@@ -160,6 +256,17 @@
               {{department?.name}}
             </option>
           </select>
+        </div>
+        <div class="error-msg-area">
+          <div *ngIf="
+              accountForm.controls['police_department_id'].errors &&
+              (!accountForm.controls['police_department_id'].pristine ||
+                isAddFormSubmitted)
+            " class="error-msg">
+            <div [hidden]="!accountForm.controls['police_department_id'].errors?.['required']" class="text-danger">
+              Please Select Department Id
+            </div>
+          </div>
         </div>
       </div>
     </div>

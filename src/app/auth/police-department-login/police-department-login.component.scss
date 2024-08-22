@@ -9,7 +9,7 @@
 
 .search-form {
     background-color: white;
-    padding: 20px;
+    padding: 15px;
 }
 
 .section {
@@ -33,8 +33,18 @@
     color: #050505;
 }
 
-hr.my-4 {
-    border: 0;
-    height: 1px;
-    background: black;
-}
+@media (max-width: 375px) {
+    .btn-default {
+        font-size: small;
+        padding: 2px;
+        margin-left: 8px;
+        text-wrap: nowrap;
+    }
+    .h-default {
+        font-size: large;
+    }
+    .section {
+        padding: 20px;
+    }
+  }
+  

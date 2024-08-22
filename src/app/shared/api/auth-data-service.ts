@@ -51,4 +51,19 @@ export class AuthDataService {
             return res;
         }), catchError(error => throwError(error)))
     }
+
+    // Police Login Data
+    public policeLogin(loginData: any): Observable<any> {
+        const body = new HttpParams()
+            .set('username', loginData.username)
+            .set('password', loginData.password)
+            .set('department_name', loginData.department_name)
+        return this.httpClient.post('user/police/login', body.toString(), {
+            headers: new HttpHeaders()
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+
+        }).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(error)));
+    }
 }

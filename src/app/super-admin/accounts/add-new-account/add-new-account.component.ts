@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 import { RoleService } from 'src/app/shared/services/role.service';
 import { AddNewAccountService } from 'src/app/shared/services/add-new-account-service';
+import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
 
 @Component({
   selector: 'app-add-new-account',
@@ -15,9 +16,10 @@ export class AddNewAccountComponent implements OnInit {
   public roleList: any[] = [];
   public departmentList: any[] = [];
   public account_id:any
+  public isAddFormSubmitted: any = false;
 
   constructor(private fb: FormBuilder, private router: Router, private activateRoute: ActivatedRoute, private addNewAccountService: AddNewAccountService, private policeDepartmentService: PoliceDepartmentService,
-    private roleService: RoleService, private getByIdAccountData: AddNewAccountService, private updateAccountData: AddNewAccountService) {}
+    private roleService: RoleService, private getByIdAccountData: AddNewAccountService, private updateAccountData: AddNewAccountService, private flashMessageService: FlashMessageService) {}
 
   ngOnInit(): void {
     this.getAllRoles();
@@ -34,41 +36,40 @@ export class AddNewAccountComponent implements OnInit {
    //Initialize form
    initializeAccountForm(){
      this.accountForm = this.fb.group({
-      first_name: ['', Validators.required],
+      first_name: ['', [Validators.required, Validators.pattern("[a-zA-Z ]*")]],
       middle_name: [''],
-      last_name: ['', Validators.required],
-      username: ['', Validators.required],
+      last_name: ['', [Validators.required, Validators.pattern("[a-zA-Z ]*")]],
+      username: ['', [Validators.required, Validators.pattern("[a-zA-Z ]*")]],
       email_id: ['', [Validators.required, Validators.email]],
-      phone_number: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       role_id: ['', Validators.required],
       police_department_id: ['', Validators.required]
     });
    }
 
    onSubmit(): void {
+    this.isAddFormSubmitted = true;
     if (this.accountForm.valid) {  
       if (this.account_id) {
         //Update existing account
         this.updateAccountData.updateAccountData(this.account_id, this.accountForm.value).subscribe({
-          next: () => {
-            alert('Account updated successfully');
+          next: (res) => {
+            this.flashMessageService.successMessage(res.msg, 2)
             this.router.navigate(['superAdmin/accountsDepartment/']);
           },
           error: (err) => {
-            console.error('Error updating account:', err);
-            alert('Error updating account');
+            this.flashMessageService.successMessage(err.msg, 2)
           }
         });
       } else {
         //Create new account
         this.addNewAccountService.addNewAccountData(this.accountForm.value).subscribe({
-          next: () => {
-            alert('Account created successfully');
+          next: (res) => {
+            this.flashMessageService.successMessage(res.msg, 2)
             this.router.navigate(['superAdmin/accountsDepartment/']);
           },
           error: (err) => {
-            console.error('Error creating account:', err);
-            alert('Error creating account');
+            this.flashMessageService.successMessage(err.msg, 2)
           }
         });
       }
@@ -88,15 +89,11 @@ export class AddNewAccountComponent implements OnInit {
               role: element.role,
             };
             this.roleList.push(data);
-            // this.selectedMemberRole = this.roleList[0].role_id
           },
           (error) => {
             console.error('Error fetching roles:', error);
           }
         );
-        // this.searchAccessmanagementForm.patchValue({
-        //   role_id: this.selectedRole
-        // })
       }
     });
   }
