@@ -23,6 +23,7 @@ import { AddNewReportComponent } from './police-department/reports/add-new-repor
 import { ViewDepartmentComponent } from './police-department/view-department/view-department.component';
 import { PoliceDepartmentHeaderComponent } from './police-department/police-department-header/police-department-header.component';
 import { ChangePasswordComponent } from './police-department/change-password/change-password.component';
+import { SearchComponent } from './police-department/search/search.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ChangePasswordComponent } from './police-department/change-password/cha
     ViewDepartmentComponent,
     PoliceDepartmentHeaderComponent,
     ChangePasswordComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

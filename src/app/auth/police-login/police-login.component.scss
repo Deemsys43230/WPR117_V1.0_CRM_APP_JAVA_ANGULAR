@@ -1,11 +1,5 @@
 @import '../../../styles.scss';
 
-.row {
-  display: flex !important;
-  flex-direction: row;
-  gap: 0px;
-}
-
 .background-color {
   background-color: $primary-color;
   height: 100vh;
@@ -27,22 +21,13 @@
   color: $secondary-color;
 }
 
-.link {
-  color: $secondary-color;
-}
-
 .btn {
   background-color: $secondary-color;
 }
 
-img {
-  height: 70vh;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.custom-img {
+    width: 100%;
+    height: auto;
 }
 
 .toggle-password {
@@ -51,25 +36,4 @@ form {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-}
-
-@media (max-width: 767.98px) {
-  img {
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .background-color {
-    height: max-content;
-  }
-
-  .card {
-    padding: 0;
-  }
-
-  form {
-    gap: 0px;
-  }
 }

@@ -9,12 +9,21 @@ import { AuthGuard } from './shared/auth.guard';
 import { AddNewReportComponent } from './police-department/reports/add-new-report/add-new-report.component';
 import { ViewDepartmentComponent } from './police-department/view-department/view-department.component';
 import { ChangePasswordComponent } from './police-department/change-password/change-password.component';
+import { SearchComponent } from './police-department/search/search.component';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   redirectTo: 'auth/login',
+  //   pathMatch: 'full',
+  // },
+  {
+    path: "auth/login",
+    component: LoginComponent, // Route for 'auth/login'
+  },  
   {
     path: '',
-    redirectTo: 'auth/login',
-    pathMatch: 'full',
+    component: SearchComponent, // Route for '/' 
   },
   {
     path: "ohio/:departmentName",
@@ -40,10 +49,6 @@ const routes: Routes = [
     path: "reports/:departmentName/:id",
     component: AddNewReportComponent
   },
-  {
-    path: "auth/login",
-    component: LoginComponent,
-  },  
   { path: "ohio",
     component: PoliceDepartmentLoginComponent 
   },
@@ -53,12 +58,11 @@ const routes: Routes = [
     loadChildren: () => import('./super-admin/super-admin.module').then(m => m.SuperAdminModule),
     canActivate: [AuthGuard]
   },
-
   //Any undefined route will goes to Login Page
-  // {
-  //   path: '**',
-  //   redirectTo: 'auth/login',
-  // },
+  {
+    path: '**',
+    redirectTo: 'auth/login',
+  },
 ];
 
 @NgModule({

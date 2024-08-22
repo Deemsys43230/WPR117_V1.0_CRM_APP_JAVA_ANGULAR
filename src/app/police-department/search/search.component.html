@@ -1,0 +1,73 @@
+<div style="background-color: #f0f0f0">
+  <div>
+    <img src="assets/images/policeman.jpg" alt="TrafficPoliceReport" class="img-container">
+  </div>
+  <br>
+  <div class="custom-container">
+        <div class="row content-wrapper">
+          <div class="col-md-3">
+            <div class="search-form-wrapper">
+              <div class="search-form">
+                <h2 class="mb-3" style="font-weight: 500; font-size: x-large;">Search Crash Reports</h2>
+                <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                      <label for="firstName" style="display: inline;">First Name</label><span style="color: red; display: inline;"> *</span>
+                      <input style="border-radius: 5px;" id="firstName" formControlName="firstName" placeholder="Enter first name">
+                      <div *ngIf="isSubmitted && searchForm.get('firstName')?.invalid" style="color: red">
+                        First Name is required.
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="lastName" style="display: inline;">Last Name</label><span style="color: red; display: inline;"> *</span>
+                      <input style="border-radius: 5px;" id="lastName" formControlName="lastName" placeholder="Enter last name">
+                      <div *ngIf="isSubmitted && searchForm.get('lastName')?.invalid" style="color: red">
+                        Last Name is required.
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="crashDate" style="display: inline;">Crash Date</label>
+                        <input
+                          style="border: 2px solid #464444;" 
+                          id="crashDate" 
+                          type="text" 
+                          formControlName="crashDate" 
+                          placeholder="MM/DD/YYYY"
+                          class="form-control"
+                          bsDatepicker                      
+                        >
+                      </div>
+                    <div class="form-group">
+                      <label for="reportNumber" style="display: inline;">Report Number</label>
+                      <input style="border-radius: 5px;" id="reportNumber" formControlName="reportNumber" placeholder="Enter report number">
+                    </div>
+                    <div class="form-group">
+                      <label for="location" style="display: inline;">Location</label>
+                      <input style="border-radius: 5px;" id="location" formControlName="location" placeholder="Enter location">
+                    </div>
+                    <div class="form-group mt-4" style="font-size: large;">
+                      <button type="submit" style=" border-radius: 15px;">Search Report</button>
+                    </div>
+                  </form>            
+              </div> 
+            </div>
+          </div>
+          <div class="col-md-9 mt-4">
+            <h2 style="font-size: x-large;">Search Results</h2>
+            <div class="search-results">
+              <i class="fa fa-search fa-10x" aria-hidden="true"></i>
+            </div>
+            <div class="search-message">
+              <h3>
+                <span>Please Use First and Last Name Only to Start and Make Sure Your Pop Up Blocker is Off.</span>
+              </h3>
+            </div>
+          </div>
+          <div class="custom-search-margin">
+            <span>Please note that currently we provide service only for the Boardman & Fairborn Police Departments in Ohio. We are in the process of integrating<br>with more Departments.</span>
+            <h3>Could not find what you were looking for? Please <a href="contact.html">Contact Us.</a></h3>
+          </div>
+          <br>
+        </div>
+      </div>
+    </div>
+      
