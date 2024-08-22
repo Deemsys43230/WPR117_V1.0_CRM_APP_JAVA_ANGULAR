@@ -41,21 +41,17 @@ class ChangePassword(Resource):
 def check_md5_hash(hashed_password, password):
     md5 = hashlib.md5()
     md5.update(password.encode('utf-8'))
-    print (password,md5,md5.hexdigest(),hashed_password)
     return hashed_password == md5.hexdigest()
 class userLogin(Resource):
     def post(self):
-
         data = request.form
         username = data.get('username')
         password = data.get('password')
         user = Users.query.filter_by(username=username,status=1).first()
-        print('user',user)
         if user is None or not check_md5_hash(user.password, password):  # Compare using MD5 hash
             return jsonify({'message': 'Password Wrong','status':False})
         if user is None:
             return jsonify({'message': 'failed no such user','status':False})
-        session['username'] = user.username 
         rolename = Roles.query.filter_by(role_id=user.role_id).first()
         refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=24))
         access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=24))
@@ -69,7 +65,38 @@ class userLogin(Resource):
                             'user':user.user_id,
                             'username':user.username
                         }})
-        
+
+# police department login 
+class policeDepartmentLogin(Resource):
+    def post(self):
+        data = request.form
+        department_name = data.get('department_name')
+        username = data.get('username')
+        password = data.get('password')
+        police = PoliceDepartmentModel.query.filter_by(name = department_name).first()
+        account_data = Accounts.query.filter_by(police_department_id= police.police_department_id).first()
+        user_data = Users.query.filter_by(account_id=account_data.account_id).first()
+        if not user_data:
+            return jsonify({'msg':'No Login'})
+        user = Users.query.filter_by(username=username,status=1).first()
+        if user is None or not check_md5_hash(user.password, password):  # Compare using MD5 hash
+            return jsonify({'message': 'Password Wrong','status':False})
+        if user is None:
+            return jsonify({'message': 'failed no such user','status':False})
+        rolename = Roles.query.filter_by(role_id=user.role_id).first()
+        refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=24))
+        access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=24))
+        return jsonify({'status':True,
+                        'refresh_token':refresh_token,
+                       'access_token':access_token,
+                        'role_id':user.role_id,
+                        'account_id':user.account_id,
+                        'roleName':rolename.role,
+                        'userDetails':{
+                            'user':user.user_id,
+                            'username':user.username
+                        }})
+
  # Reset Password for caller admin
 class resetPassword(Resource):
     @staticmethod
@@ -116,6 +143,7 @@ api = Api(user_blueprint)
 api.add_resource(resetPassword,'/resetPassword')
 api.add_resource(ChangePassword,'/ChangePassword')
 api.add_resource(userLogin,'/login/getToken')
+api.add_resource(policeDepartmentLogin,'/police/login')
 api.add_resource(dashboardGetAll,'/getAllCount')
 
 
