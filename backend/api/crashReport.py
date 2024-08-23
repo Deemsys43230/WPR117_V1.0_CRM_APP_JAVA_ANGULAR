@@ -197,6 +197,67 @@ class GetAllCrashReports(Resource):
             report_list.append(report_data)
 
         return jsonify({'data': report_list, 'status': True, 'total': data.total, 'pages': data.pages})
+
+# Search Crash Report for All User
+class SearchCrashReportAllUser(Resource):
+    def post(self):
+        requestDetails = request.get_json()
+        page = requestDetails.get('page', 1)
+        itemsPerPage = requestDetails.get('itemsPerPage', 10)
+        reportNumber = requestDetails.get('reportNumber')
+        crashDate = requestDetails.get('crashDate')
+        firstName = requestDetails.get('firstName')
+        lastName = requestDetails.get('lastName')
+        location = requestDetails.get('location')
+       
+        query = CrashReports.query
+        if reportNumber:
+            query = query.filter(CrashReports.report_number == reportNumber)
+        if crashDate:
+            query = query.filter(CrashReports.crash_date == crashDate)
+        if firstName:
+            query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
+        if lastName:
+            query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
+        if location:
+            query = query.filter(CrashReports.location.ilike(f'%{location}%'))
+        query = query.distinct()
+        data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
+        report_list = []
+        for crash in data.items:
+            occupants_forms = [{
+                "occupants_id": occupant.occupants_id,
+                "report_id": occupant.report_id,
+                "first_name": occupant.first_name,
+                "last_name": occupant.last_name,
+                "injuries": occupant.injuries,
+                "seating_position": occupant.seating_position,
+                "sequence_no": occupant.sequence_no,
+                "status": occupant.status
+            } for occupant in crash.occupants]
+
+            report_data = {
+                "report_id": crash.report_id,
+                "account_id": crash.account_id,
+                "police_department": crash.police.name,
+                "report_number": crash.report_number,
+                "crash_date": crash.crash_date,
+                "location": crash.location,
+                "county_id": crash.county_id,
+                "crash_severity": crash.crash_severity,
+                "no_of_occupants": crash.no_of_occupants,
+                "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                "added_date": crash.added_date,
+                "added_date_time": crash.added_date_time,
+                "status": crash.status,
+                "occupantsForms": occupants_forms
+            }
+
+            report_list.append(report_data)
+
+        return jsonify({'data': report_list, 'status': True, 'total': data.total, 'pages': data.pages})
+
+# Get Crash Report By Id
 class GetCrashReportById(Resource):
     def get(self,id):
         data=CrashReports.query.filter_by(report_id=id).first()
@@ -231,6 +292,7 @@ class GetCrashReportById(Resource):
         }
         return jsonify({'data': crashReport, 'status': True})
 
+# Update crash report by id
 class UpdateCrashReport(Resource):
     def put(self, id):
         crash_report = CrashReports.query.filter_by(report_id=id).first()
@@ -301,6 +363,7 @@ class UpdateCrashReport(Resource):
             db.session.rollback()
             return jsonify({'msg': 'Error updating data to database', 'error': str(e)}), 500
 
+# Delete Crash Report by id
 class DeleteCrashReport(Resource):
     def get(self,id):
         crash_report=CrashReports.query.filter_by(report_id=id).first()
@@ -344,3 +407,4 @@ api.add_resource(GetCrashReportById,'/getCrashReportById/<id>')
 api.add_resource(UpdateCrashReport,'/updateCrashReport/<id>')
 api.add_resource(DeleteCrashReport,'/deleteCrashReport/<id>')
 api.add_resource(checkReportNumberExist,'/checkReportNumberExist')
+api.add_resource(SearchCrashReportAllUser,'/searchCrashReportAllUser')
