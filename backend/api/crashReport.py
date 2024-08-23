@@ -392,7 +392,11 @@ class checkReportNumberExist(Resource):
     def post(self):
          requestDetails = request.get_json()
          reportNumber=requestDetails.get('report_number')
-         crash_report=CrashReports.query.filter_by(report_number=reportNumber).first()
+         reportId=requestDetails.get('report_id')
+         query = CrashReports.query
+         if reportId!="":
+            query = query.filter(CrashReports.report_id != reportId)
+         crash_report = query.filter_by(report_number=reportNumber).first()
          if crash_report:
              return jsonify({'status':False,'isExist':1,'message':'Report Number Already Exist'})
          else:
