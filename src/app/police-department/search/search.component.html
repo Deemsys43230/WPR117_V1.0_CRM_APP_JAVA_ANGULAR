@@ -4,70 +4,170 @@
   </div>
   <br>
   <div class="custom-container">
-        <div class="row content-wrapper">
-          <div class="col-md-3">
-            <div class="search-form-wrapper">
-              <div class="search-form">
-                <h2 class="mb-3" style="font-weight: 500; font-size: x-large;">Search Crash Reports</h2>
-                <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-                    <div class="form-group">
-                      <label for="firstName" style="display: inline;">First Name</label><span style="color: red; display: inline;"> *</span>
-                      <input style="border-radius: 5px;" id="firstName" formControlName="firstName" placeholder="Enter first name">
-                      <div *ngIf="isSubmitted && searchForm.get('firstName')?.invalid" style="color: red">
-                        First Name is required.
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="lastName" style="display: inline;">Last Name</label><span style="color: red; display: inline;"> *</span>
-                      <input style="border-radius: 5px;" id="lastName" formControlName="lastName" placeholder="Enter last name">
-                      <div *ngIf="isSubmitted && searchForm.get('lastName')?.invalid" style="color: red">
-                        Last Name is required.
-                      </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="crashDate" style="display: inline;">Crash Date</label>
-                        <input
-                          style="border: 2px solid #464444;" 
-                          id="crashDate" 
-                          type="text" 
-                          formControlName="crashDate" 
-                          placeholder="MM/DD/YYYY"
-                          class="form-control"
-                          bsDatepicker                      
-                        >
-                      </div>
-                    <div class="form-group">
-                      <label for="reportNumber" style="display: inline;">Report Number</label>
-                      <input style="border-radius: 5px;" id="reportNumber" formControlName="reportNumber" placeholder="Enter report number">
-                    </div>
-                    <div class="form-group">
-                      <label for="location" style="display: inline;">Location</label>
-                      <input style="border-radius: 5px;" id="location" formControlName="location" placeholder="Enter location">
-                    </div>
-                    <div class="form-group mt-4" style="font-size: large;">
-                      <button type="submit" style=" border-radius: 15px;">Search Report</button>
-                    </div>
-                  </form>            
-              </div> 
-            </div>
+    <div class="row content-wrapper">
+      <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="search-form-wrapper">
+          <div class="search-form">
+            <h2 class="mb-3" style="font-weight: 500; font-size: x-large;">Search Crash Reports</h2>
+            <form [formGroup]="searchForm">
+              <div class="form-group">
+                <label for="firstName" style="display: inline;">First Name</label><span
+                  style="color: red; display: inline;"> *</span>
+                <input style="border-radius: 5px;" id="firstName" formControlName="firstName"
+                  placeholder="Enter first name">
+                <div *ngIf="
+                        searchForm.controls['firstName'].errors &&
+                        (!searchForm.controls['firstName'].pristine ||
+                        isSubmitted)
+                      " class="error-msg">
+                  <div [hidden]="!searchForm.controls['firstName'].errors?.['required']" class="text-danger">
+                    Please Enter First Name
+                  </div>
+                  <div [hidden]="!searchForm.controls['firstName'].errors?.['pattern']" class="text-danger">
+                    Name can only contain alphabets and spaces
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="lastName" style="display: inline;">Last Name</label><span
+                  style="color: red; display: inline;"> *</span>
+                <input style="border-radius: 5px;" id="lastName" formControlName="lastName"
+                  placeholder="Enter last name">
+                <div *ngIf="
+                        searchForm.controls['lastName'].errors &&
+                        (!searchForm.controls['lastName'].pristine ||
+                        isSubmitted)
+                      " class="error-msg">
+                  <div [hidden]="!searchForm.controls['lastName'].errors?.['required']" class="text-danger">
+                    Please Enter Last Name
+                  </div>
+                  <div [hidden]="!searchForm.controls['lastName'].errors?.['pattern']" class="text-danger">
+                    Name can only contain alphabets and spaces
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="crashDate" style="display: inline;">Crash Date</label>
+                <input style="border: 2px solid #464444;" id="crashDate" type="text" formControlName="crashDate"
+                  placeholder="MM/DD/YYYY" class="form-control" bsDatepicker>
+              </div>
+              <div class="form-group">
+                <label for="reportNumber" style="display: inline;">Report Number</label>
+                <input style="border-radius: 5px;" id="reportNumber" formControlName="reportNumber"
+                  placeholder="Enter report number">
+              </div>
+              <div class="form-group">
+                <label for="location" style="display: inline;">Location</label>
+                <input style="border-radius: 5px;" id="location" formControlName="location"
+                  placeholder="Enter location">
+              </div>
+              <div class="form-group mt-4">
+                <button type="submit" style=" border-radius: 10px;" (click)="onSearch()">Search Report</button>
+              </div>
+            </form>
           </div>
-          <div class="col-md-9 mt-4">
-            <h2 style="font-size: x-large;">Search Results</h2>
-            <div class="search-results">
-              <i class="fa fa-search fa-10x" aria-hidden="true"></i>
-            </div>
-            <div class="search-message">
-              <h3>
-                <span>Please Use First and Last Name Only to Start and Make Sure Your Pop Up Blocker is Off.</span>
-              </h3>
-            </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-8 col-sm-12 mt-4">
+        <h2 style="font-size: x-large;">Search Results</h2>
+        <div *ngIf="!isSearchPerformed" class="search-results">
+          <i class="fa fa-search fa-10x" aria-hidden="true"></i>
+        </div>
+        <div *ngIf="!isSearchPerformed" class="search-message">
+          <h3>
+            <span>Please Use First and Last Name Only to Start and Make Sure Your Pop Up Blocker is Off.</span>
+          </h3>
+        </div>
+        <!-- Table Start -->
+        <div *ngIf="isSearchPerformed">
+          <table class="table table-bordered mt-1">
+            <thead>
+              <tr>
+                <th class="report-table-header">Report</th>
+                <th class="report-table-header">First Name</th>
+                <th class="report-table-header">Last Name</th>
+                <th class="report-table-header">Location</th>
+                <th class="report-table-header">Action</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="!error">
+              <ng-container *ngFor="let data of occupantsData">
+                <tr>
+                  <td class="report-header"><br />{{data.report_number}}
+                  </td>
+                  <td class="report-header"><br />{{data.occupantsForms.first_name}}
+                  </td>
+                  <td class="report-header"><br />{{data.occupantsForms.last_name}}
+                  </td>
+                  <td class="report-header"><br />{{data.location}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+            <tbody *ngIf="error">
+              <tr>
+                <td class="warn text-center" colspan="12">No Records Found!</td>
+              </tr>
+            </tbody>
+          </table>
+        <!-- Table End -->
+      <!-- Pagination Starts -->
+      <div class="row mt-4" *ngIf="!error">
+        <div class="col-lg-4" *ngIf="pagebutton"></div>
+        <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
+          <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search By page no" />
+          <button class="button goBtn" (change)="searchPageno()">
+            GO
+          </button>
+          <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
+        </div>
+        <div class="col-lg-4 pageStatus">
+          <div class="data-list">
+            <p>
+              Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
+            </p>
           </div>
-          <div class="custom-search-margin">
-            <span>Please note that currently we provide service only for the Boardman & Fairborn Police Departments in Ohio. We are in the process of integrating<br>with more Departments.</span>
-            <h3>Could not find what you were looking for? Please <a href="contact.html">Contact Us.</a></h3>
+        </div>
+        <div class="col-lg-4">
+          <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown"
+            type="text" (change)="onChangePagination($event)">
+            <option *ngFor="let data of ItemsPerPage" [value]="data.value">
+              {{ data.data }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row justify-content-center" *ngIf="!error">
+        <div class="col-md-4">
+          <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
+            <ul class="numberListContainer p-0">
+              <li [ngClass]="{ numberList: currentPage != 1 }">
+                <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1" (click)="previousPage()"></i>
+              </li>
+              <li class="numberList" *ngFor="let page of pages" [ngClass]="{ active: currentPage === page }"
+                (click)="goToPage(page)">
+                {{ page }}
+              </li>
+              <li [ngClass]="{ numberList: currentPage !== totalPages }">
+                <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
+                  (click)="nextPage()"></i>
+              </li>
+            </ul>
           </div>
-          <br>
+        </div>
+      </div>
+      <!-- Pagination Close -->
+    </div>
+  </div>
+      <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-9 mt-3">
+          <span>Please note that currently we provide service only for the Boardman & Fairborn Police Departments in
+            Ohio. We are in the process of integrating with more Departments.</span>
+          <h3>Could not find what you were looking for? Please
+            <a [routerLink]="['/ohio']">Contact Us.</a>
+          </h3>
         </div>
       </div>
     </div>
-      
+  </div>
+</div>

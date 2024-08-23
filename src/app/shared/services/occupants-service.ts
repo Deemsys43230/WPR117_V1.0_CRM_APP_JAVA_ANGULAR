@@ -22,4 +22,14 @@ export class OccupantsService {
     public getByIdCrashReport(id) {
         return this.occupantsDataService.getByIdCrashReport(id);
     }
+
+    //check report number exists
+    public checkReportNumber(data) {
+        return this.occupantsDataService.checkReportNumber(data);
+    }
+
+    //get all search crash reports details by pagination
+    public getAllSearchCrashReports(data) {
+        return this.occupantsDataService.getAllSearchCrashReports(data);
+    }
 }

@@ -30,4 +30,18 @@ export class OccupantsDataService {
             return res;
         }), catchError(error => throwError(() => error)));
     }
+
+    //check report number exists
+    public checkReportNumber(data): Observable<any> {
+        return this.httpClient.post('crash_reports/checkReportNumberExist', data).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
+
+      //get all search crash reports details by pagination
+      public getAllSearchCrashReports(data): Observable<any> {
+        return this.httpClient.post('crash_reports/searchCrashReportAllUser', data).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
 }

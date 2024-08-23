@@ -78,20 +78,20 @@
             <div class="col-lg-1 col-md-1"></div>
             <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Report Number:</label><span class="span"> *</span>
-              <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />
-              <!-- Validation Error Message -->
+              <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />            
+              <!-- Validation and Backend Error Messages -->
               <div class="error-msg-area">
-                <div *ngIf="
-                    addNewReportForm.controls['report_number'].errors &&
-                    (!addNewReportForm.controls['report_number'].pristine ||
-                      isAddFormSubmitted)
-                  " class="error-msg">
+                <div *ngIf="addNewReportForm.controls['report_number'].errors && (!addNewReportForm.controls['report_number'].pristine || isAddFormSubmitted)" class="error-msg">                  
                   <div [hidden]="!addNewReportForm.controls['report_number'].errors?.['required']" class="text-danger">
-                   Report Number is required.
+                    Report Number is required.
+                  </div>         
+                  <div [hidden]="!addNewReportForm.controls['report_number'].errors?.['reportExists']" class="text-danger">
+                    {{ backendMessage }}
                   </div>
                 </div>
               </div>
             </div>
+            
             <div class="col-lg-1 col-md-1"></div>
             <div class="col-lg-5 col-md-5 col-sm-12">
               <label class="form-label">Location:</label><span class="span"> *</span>

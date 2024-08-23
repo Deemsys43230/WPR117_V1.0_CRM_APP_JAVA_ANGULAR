@@ -8,6 +8,9 @@ import { CountyService } from 'src/app/shared/services/county.service';
 import { CrashReportService } from 'src/app/shared/services/crash-report-service';
 import { AccountsDepartmentService } from 'src/app/shared/services/accounts-department-service';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 @Component({
   selector: 'app-add-new-report',
   templateUrl: './add-new-report.component.html',
@@ -30,10 +33,11 @@ export class AddNewReportComponent {
   fileName: string = '';
   isNewForm: boolean = true; // Flag to determine if it's a new form or edit form
   showFileInputField: boolean = false; 
+  backendMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService) { }
 
-  // ngOnInit
+  //ngOnInit
   ngOnInit(): void {
     this.initializationNewReportForm();
     this.getAllCountry();
@@ -51,9 +55,33 @@ export class AddNewReportComponent {
         this.getByIdCrashReport();
       }
     });
+
+    //Report number field
+    this.addNewReportForm.get('report_number')?.valueChanges
+      .pipe(
+        debounceTime(500),
+        switchMap(value => {
+          if (value) {
+            const valueData = {"report_number": value, "report_id": this.report_id ? this.report_id : ""}
+            console.log('va',valueData)
+            return this.occupantsService.checkReportNumber(valueData)
+          } 
+          else {
+            return of(null); 
+          }
+        })
+      )
+      .subscribe(response => {
+        if (response?.isExist) {
+          this.addNewReportForm.get('report_number')?.setErrors({ reportExists: true });
+          this.backendMessage = response.message || "Report Number already exists.";
+        } else {
+          this.addNewReportForm.get('report_number')?.setErrors(null);
+        }
+      });
   }
 
-  // Initialization new report form
+  //Initialization new report form
   initializationNewReportForm() {
     this.addNewReportForm = this.fb.group({
       file_name: ['', Validators.required],
@@ -66,7 +94,7 @@ export class AddNewReportComponent {
     })
   }
 
-  // Get all country name
+  //Get all country name
   getAllCountry() {
     this.countryService.getAllCounty({ page: 1, itemPerPage: "" }).subscribe((res) => {
       if (res.status) {
@@ -78,7 +106,7 @@ export class AddNewReportComponent {
     })
   }
 
-  // Navigate back to reports list
+  //Navigate back to reports list
   backToReportList() {
     this.router.navigate(['reports/', this.police_name])
   }
@@ -87,7 +115,7 @@ export class AddNewReportComponent {
     return this.addNewReportForm.get('occupants') as FormArray;
   }
 
-  // New occupant creation
+  //New occupant creation
   createOccupant(): FormGroup {
     return this.fb.group({
       first_name: ['', Validators.required],
@@ -97,19 +125,19 @@ export class AddNewReportComponent {
     });
   }
 
-  // Adding one more occupant
+  //Adding one more occupant
   addOneMoreOccupant(): void {
     this.occupants.push(this.createOccupant());
   }
 
-  // Remove added occupant
+  //Remove added occupant
   removeOccupant(index: number): void {
     if (this.occupants.length > 1) {
       this.occupants.removeAt(index);
     }
   }
 
-  // Get image
+  //Get image
   getByNamePoliceDepartment() {
     this.policeDepartmentService.getByNamePoliceDepartmentDetails(this.police_name).subscribe(res => {
       if (res.status) {
@@ -118,7 +146,7 @@ export class AddNewReportComponent {
     })
   }
 
-  // Get by id
+  //Get by id
   getByIdAccounts() {
     const acc_id = localStorage.getItem('account_id');
     this.accountsdepartment.getByIdAccountsDetails(acc_id).subscribe(res => {
@@ -129,56 +157,57 @@ export class AddNewReportComponent {
     })
   }
 
-  // On submit
+  //On submit
   onSubmit() {
-    const data = this.addNewReportForm.value;
-    const formData = new FormData();
-    formData.append('account_id', this.account_id)
-    formData.append('police_department_id', this.police_department_id)
-    formData.append('report_number', data.report_number)
-    formData.append('crash_date', data.crash_date)
-    formData.append('location', data.location)
-    formData.append('county_id', data.county_id)
-    formData.append('crash_severity', data.crash_severity)
-    formData.append('no_of_occupants', data.occupants.length)
-    this.occupants.controls.forEach((control, index) => {
-      const group = control as FormGroup;
-      const formValues = group.value;
-      Object.keys(formValues).forEach(key => {
-        formData.append(`occupantsForms[${index}][${key}]`, formValues[key]);
-      });
-      formData.append(`occupantsForms[${index}][status]`, '1');
-      formData.append(`occupantsForms[${index}][sequence_no]`, '1');
-    });
-    formData.append('crashReportFile', this.selectedFile ? this.selectedFile : null)
-
     this.isAddFormSubmitted = true;
     if (this.addNewReportForm.valid) {
+      const data = this.addNewReportForm.value;
+      const formData = new FormData();      
+      formData.append('account_id', this.account_id);
+      formData.append('police_department_id', this.police_department_id);
+      formData.append('report_number', data.report_number);
+      formData.append('crash_date', data.crash_date);
+      formData.append('location', data.location);
+      formData.append('county_id', data.county_id);
+      formData.append('crash_severity', data.crash_severity);
+      formData.append('no_of_occupants', data.occupants.length.toString());
+  
+      this.occupants.controls.forEach((control, index) => {
+        const group = control as FormGroup;
+        const formValues = group.value;
+        Object.keys(formValues).forEach(key => {
+          formData.append(`occupantsForms[${index}][${key}]`, formValues[key]);
+        });
+        formData.append(`occupantsForms[${index}][status]`, '1');
+        formData.append(`occupantsForms[${index}][sequence_no]`, '1');
+      });
+  
+      if (this.selectedFile) {
+        formData.append('crashReportFile', this.selectedFile);
+      }
+  
       if (this.report_id) {
         this.crashReportService.updateCrashReport(formData, this.report_id).subscribe(res => {
           if (res.status) {
-            this.flashMessageService.successMessage(res.msg, 2)
-            this.router.navigate(['reports/', this.police_name])
+            this.flashMessageService.successMessage(res.msg, 2);
+            this.router.navigate(['reports/', this.police_name]);
+          } else {
+            this.flashMessageService.errorMessage(res.msg, 2);
           }
-          else {
-            this.flashMessageService.errorMessage(res.msg, 2)
-          }
-        })
-      }
-      else {
+        });
+      } else {
         this.crashReportService.saveCrashReport(formData).subscribe(res => {
           if (res.status) {
-            this.flashMessageService.successMessage(res.msg, 2)
-            this.router.navigate(['reports/', this.police_name])
+            this.flashMessageService.successMessage(res.msg, 2);
+            this.router.navigate(['reports/', this.police_name]);
+          } else {
+            this.flashMessageService.errorMessage(res.msg, 2);
           }
-          else {
-            this.flashMessageService.errorMessage(res.msg, 2)
-          }
-        })
+        });
       }
     }
   }
-
+  
   //get by id crash report
   getByIdCrashReport() {
     this.occupantsService.getByIdCrashReport(this.report_id).subscribe((res) => {
@@ -205,7 +234,7 @@ export class AddNewReportComponent {
     });
   }
 
-  // Convert date format
+  //Convert date format
   convertToDateFormat(dateString: string): string {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -214,7 +243,7 @@ export class AddNewReportComponent {
     return `${year}-${month}-${day}`;
   }
 
-  // Report file change
+  //Report file change
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -238,7 +267,7 @@ export class AddNewReportComponent {
     return parts[parts.length - 1];
   }
 
-  // On Cancel
+  //On Cancel
   onCancel() {
     this.router.navigate(['reports/', this.police_name])
   }
