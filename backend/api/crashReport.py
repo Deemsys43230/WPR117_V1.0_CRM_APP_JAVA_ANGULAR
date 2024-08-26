@@ -9,7 +9,7 @@ from db import db
 from config import AWSCredentials
 from datetime import datetime
 from test import role_required
-
+from sqlalchemy import or_
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -209,20 +209,30 @@ class SearchCrashReportAllUser(Resource):
         firstName = requestDetails.get('firstName')
         lastName = requestDetails.get('lastName')
         location = requestDetails.get('location')
-       
+        
         query = CrashReports.query
+        
+        # Create a list to store the conditions
+        or_conditions = []
+
         if reportNumber:
-            query = query.filter(CrashReports.report_number == reportNumber)
+            or_conditions.append(CrashReports.report_number == reportNumber)
         if crashDate:
-            query = query.filter(CrashReports.crash_date == crashDate)
+            or_conditions.append(CrashReports.crash_date == crashDate)
         if firstName:
-            query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
+            or_conditions.append(CrashReports.occupants.any(Occupants.first_name.ilike(f'%{firstName}%')))
         if lastName:
-            query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
+            or_conditions.append(CrashReports.occupants.any(Occupants.last_name.ilike(f'%{lastName}%')))
         if location:
-            query = query.filter(CrashReports.location.ilike(f'%{location}%'))
+            or_conditions.append(CrashReports.location.ilike(f'%{location}%'))
+
+        # If there are any conditions, apply them using the `or_` function
+        if or_conditions:
+            query = query.filter(or_(*or_conditions))
+
         query = query.distinct()
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
+        
         report_list = []
         for crash in data.items:
             occupants_forms = [{
@@ -256,7 +266,6 @@ class SearchCrashReportAllUser(Resource):
             report_list.append(report_data)
 
         return jsonify({'data': report_list, 'status': True, 'total': data.total, 'pages': data.pages})
-
 # Get Crash Report By Id
 class GetCrashReportById(Resource):
     def get(self,id):
