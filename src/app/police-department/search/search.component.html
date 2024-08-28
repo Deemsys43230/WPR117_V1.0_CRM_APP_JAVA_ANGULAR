@@ -99,7 +99,60 @@
                   </td>
                   <td class="report-header"><br />{{data.occupantsForms.last_name}}
                   </td>
-                  <td class="report-header"><br />{{data.location}}</td>
+                  <td class="report-header"><br />{{data.location}}
+                  </td>
+                  <td>
+                  <a class="view-btn" title="View Report Details" data-toggle="modal"
+                  data-target="#viewReportModalUpload">
+                  <i class="fa fa-eye fa-sm"></i>
+              </a>
+              <!-- Modal Structure -->
+              <div class="modal fade" id="viewReportModalUpload" tabindex="-1" role="dialog"
+                  aria-labelledby="viewReportModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="viewReportModalLabel">Confirmation
+                              </h5>
+                          </div>
+                          <div class="modal-body">
+                              <!-- Read-Only Fields -->
+                               <div class="row">
+                              <div class="col-md-6 form-group">
+                                  <label>Report Number:</label>
+                                  <input type="text" class="form-control"
+                                      readonly />
+                              </div>
+                              <div class="col-md-6 form-group">
+                                  <label>First Name:</label>
+                                  <input type="text" class="form-control" 
+                                      readonly />
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6 form-group">
+                                  <label>Last Name:</label>
+                                  <input type="text" class="form-control"
+                                      readonly />
+                              </div>
+                              <div class="col-md-6 form-group">
+                                  <label>Location:</label>
+                                  <input type="text" class="form-control"
+                                      readonly />
+                              </div>
+                          </div>
+                          <h5>Do you want to view or download reports?</h5>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger"
+                                  data-dismiss="modal">No</button>
+                              <button type="button" class="btn btn-success"
+                                 >Yes</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>              
+            </td>
                 </tr>
               </ng-container>
             </tbody>
