@@ -9,7 +9,7 @@ from db import db
 from config import AWSCredentials
 from datetime import datetime
 from test import role_required
-from sqlalchemy import or_
+from sqlalchemy import and_
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -213,22 +213,22 @@ class SearchCrashReportAllUser(Resource):
         query = CrashReports.query
         
         # Create a list to store the conditions
-        or_conditions = []
+        conditions = []
 
         if reportNumber:
-            or_conditions.append(CrashReports.report_number == reportNumber)
+            conditions.append(CrashReports.report_number == reportNumber)
         if crashDate:
-            or_conditions.append(CrashReports.crash_date == crashDate)
+            conditions.append(CrashReports.crash_date == crashDate)
         if firstName:
-            or_conditions.append(CrashReports.occupants.any(Occupants.first_name.ilike(f'%{firstName}%')))
+            conditions.append(CrashReports.occupants.any(Occupants.first_name == firstName))
         if lastName:
-            or_conditions.append(CrashReports.occupants.any(Occupants.last_name.ilike(f'%{lastName}%')))
+            conditions.append(CrashReports.occupants.any(Occupants.last_name == lastName))
         if location:
-            or_conditions.append(CrashReports.location.ilike(f'%{location}%'))
+            conditions.append(CrashReports.location == location)
 
-        # If there are any conditions, apply them using the `or_` function
-        if or_conditions:
-            query = query.filter(or_(*or_conditions))
+        # Apply all conditions using `and_` to ensure all must be satisfied
+        if conditions:
+            query = query.filter(and_(*conditions))
 
         query = query.distinct()
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
