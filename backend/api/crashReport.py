@@ -9,7 +9,7 @@ from db import db
 from config import AWSCredentials
 from datetime import datetime
 from test import role_required
-from sqlalchemy import and_
+from sqlalchemy import and_,or_
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -212,17 +212,13 @@ class SearchCrashReportAllUser(Resource):
         
         query = CrashReports.query
         
-        # Create a list to store the conditions
+        # Create a list to store the conditions for the CrashReports
         conditions = []
 
         if reportNumber:
             conditions.append(CrashReports.report_number == reportNumber)
         if crashDate:
             conditions.append(CrashReports.crash_date == crashDate)
-        if firstName:
-            conditions.append(CrashReports.occupants.any(Occupants.first_name == firstName))
-        if lastName:
-            conditions.append(CrashReports.occupants.any(Occupants.last_name == lastName))
         if location:
             conditions.append(CrashReports.location == location)
 
@@ -230,11 +226,28 @@ class SearchCrashReportAllUser(Resource):
         if conditions:
             query = query.filter(and_(*conditions))
 
-        query = query.distinct()
+        # Join with Occupants and filter based on both firstName and lastName
+        if firstName and lastName:
+            query = query.join(CrashReports.occupants).filter(
+                and_(
+                    Occupants.first_name == firstName,
+                    Occupants.last_name == lastName
+                )
+            )
+
         data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
         
         report_list = []
         for crash in data.items:
+            # Ensure occupants match both firstName and lastName
+            occupants = [occupant for occupant in crash.occupants if
+                         occupant.first_name == firstName and
+                         occupant.last_name == lastName]
+
+            # Skip reports that have no matching occupants
+            if not occupants:
+                continue
+
             occupants_forms = [{
                 "occupants_id": occupant.occupants_id,
                 "report_id": occupant.report_id,
@@ -244,7 +257,7 @@ class SearchCrashReportAllUser(Resource):
                 "seating_position": occupant.seating_position,
                 "sequence_no": occupant.sequence_no,
                 "status": occupant.status
-            } for occupant in crash.occupants]
+            } for occupant in occupants]
 
             report_data = {
                 "report_id": crash.report_id,
@@ -266,7 +279,9 @@ class SearchCrashReportAllUser(Resource):
             report_list.append(report_data)
 
         return jsonify({'data': report_list, 'status': True, 'total': data.total, 'pages': data.pages})
-# Get Crash Report By Id
+    
+
+
 class GetCrashReportById(Resource):
     def get(self,id):
         data=CrashReports.query.filter_by(report_id=id).first()
