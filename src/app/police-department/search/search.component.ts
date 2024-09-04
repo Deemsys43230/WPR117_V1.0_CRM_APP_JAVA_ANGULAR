@@ -59,7 +59,6 @@ export class SearchComponent {
     this.isSearchPerformed = true;
     this.occupantsService.getAllSearchCrashReports(this.searchData).subscribe(res => {
       if (res.status) {
-        console.log('res', res)
         this.occupantDetail = res.data
         this.count = res.total;
         this.calculateTotalPages();
@@ -67,11 +66,13 @@ export class SearchComponent {
         this.togglePagination();
         this.occupantsData = [];
         this.occupantDetail.forEach(data => {
-          this.occupantsData.push({
-            report_number: data.report_number,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            location: data.location,
+          data.occupantsForms.forEach(occupant => {
+            this.occupantsData.push({
+              report_number: data.report_number,
+              first_name: occupant.first_name,
+              last_name: occupant.last_name,
+              location: data.location,
+            });
           });
         });
         if (this.occupantDetail.length == 0) {

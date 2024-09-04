@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="col-lg-9 col-md-8 col-sm-12 mt-4">
-        <h2 style="font-size: x-large;">Search Results</h2>
+        <h2 class="search-results-header">Search Results</h2>
         <div *ngIf="!isSearchPerformed" class="search-results">
           <i class="fa fa-search fa-10x" aria-hidden="true"></i>
         </div>
@@ -93,13 +93,13 @@
             <tbody *ngIf="!error">
               <ng-container *ngFor="let data of occupantsData">
                 <tr>
-                  <td class="report-header"><br />{{data.report_number}}
+                  <td class="report-header" style="line-height: 0.5;"><br />{{data.report_number}}
                   </td>
-                  <td class="report-header"><br />{{data.occupantsForms.first_name}}
+                  <td class="report-header" style="line-height: 0.5;"><br />{{data.first_name}}
                   </td>
-                  <td class="report-header"><br />{{data.occupantsForms.last_name}}
+                  <td class="report-header" style="line-height: 0.5;"><br />{{data.last_name}}
                   </td>
-                  <td class="report-header"><br />{{data.location}}
+                  <td class="report-header" style="line-height: 0.5;"><br />{{data.location}}
                   </td>
                   <td>
                   <a class="view-btn" title="View Report Details" data-toggle="modal"
@@ -120,24 +120,24 @@
                                <div class="row">
                               <div class="col-md-6 form-group">
                                   <label>Report Number:</label>
-                                  <input type="text" class="form-control"
+                                  <input type="text" class="form-control" value={{data.report_number}}
                                       readonly />
                               </div>
                               <div class="col-md-6 form-group">
                                   <label>First Name:</label>
-                                  <input type="text" class="form-control" 
+                                  <input type="text" class="form-control" value={{data.first_name}}
                                       readonly />
                               </div>
                           </div>
                           <div class="row">
                               <div class="col-md-6 form-group">
                                   <label>Last Name:</label>
-                                  <input type="text" class="form-control"
+                                  <input type="text" class="form-control" value={{data.last_name}}
                                       readonly />
                               </div>
                               <div class="col-md-6 form-group">
                                   <label>Location:</label>
-                                  <input type="text" class="form-control"
+                                  <input type="text" class="form-control" value={{data.location}}
                                       readonly />
                               </div>
                           </div>
