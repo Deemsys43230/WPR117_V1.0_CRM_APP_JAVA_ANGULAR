@@ -21,6 +21,11 @@ class County(db.Model):
     county_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=False)
     status = db.Column(db.Integer, unique=False)
+    def save_to_county(self):
+        db.create_all()
+        db.session.add(self)
+        db.session()
+
     
 class PoliceDepartmentModel(db.Model):
     __tablename__ = 'police_department'
@@ -77,13 +82,7 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
-
-
-    def save_to_county(self):
-        db.create_all()
-        db.session.add(self)
-        db.session()
-
+   
 # models for occupants
 class Occupants(db.Model):
     
@@ -125,6 +124,16 @@ class CrashReports(db.Model):
     police=db.relationship('PoliceDepartmentModel',backref='crash_reports',lazy=True)
 
     def save_to_crash_reports(self):
+        db.create_all()
+        db.session.add(self)
+        db.session.commit()
+
+class CrashReportRestriction(db.Model):
+    __tablename__='crash_report_restriction'
+    client_ip=db.Column(db.String(32),primary_key=True)
+    last_access_time=db.Column(DateTime, default=datetime.now)
+    status = db.Column(db.String(32),default=1)
+    def save_to_crash_reports_restriction(self):
         db.create_all()
         db.session.add(self)
         db.session.commit()
