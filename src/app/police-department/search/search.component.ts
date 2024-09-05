@@ -27,6 +27,7 @@ export class SearchComponent {
   public occupantDetail: any = [];
   public error: boolean = false;
   isSearchPerformed: boolean = false;
+  selectedData: any = null; 
 
   constructor(private fb: FormBuilder, private occupantsService: OccupantsService) { this.ItemsPerPage = ItemsPerPage }
 
@@ -37,7 +38,7 @@ export class SearchComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       location: "",
-      reportNumber: ""
+      reportNumber: "",
     })
   }
 
@@ -72,6 +73,8 @@ export class SearchComponent {
               first_name: occupant.first_name,
               last_name: occupant.last_name,
               location: data.location,
+              file_name: data.file_name,
+              report_id: data.report_id
             });
           });
         });
@@ -131,6 +134,23 @@ export class SearchComponent {
       };
       this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
       this.getAllOccupants();
+    }
+  }
+
+   // Method to handle view report click
+   openModal(data: any) {
+    this.selectedData = data;  // Store the selected row's data
+  }
+  
+  //View report
+  viewReport(fileName: string, report_id: any) {
+    if(fileName) {
+      this.occupantsService.saveClientIP({report_id: report_id}).subscribe(res => {
+        // console.log(res)
+      })
+      window.open(fileName, '_blank');
+    } else {
+      console.log('No file available');
     }
   }
 

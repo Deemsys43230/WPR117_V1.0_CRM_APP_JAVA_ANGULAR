@@ -32,4 +32,9 @@ export class OccupantsService {
     public getAllSearchCrashReports(data) {
         return this.occupantsDataService.getAllSearchCrashReports(data);
     }
+
+    //save client IP in crash report restriction
+    public saveClientIP(data) {
+        return this.occupantsDataService.saveClientIP(data);
+    }
 }

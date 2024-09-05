@@ -103,7 +103,7 @@
                   </td>
                   <td>
                   <a class="view-btn" title="View Report Details" data-toggle="modal"
-                  data-target="#viewReportModalUpload">
+                  data-target="#viewReportModalUpload" (click)="openModal(data)">
                   <i class="fa fa-eye fa-sm"></i>
               </a>
               <!-- Modal Structure -->
@@ -120,24 +120,24 @@
                                <div class="row">
                               <div class="col-md-6 form-group">
                                   <label>Report Number:</label>
-                                  <input type="text" class="form-control" value={{data.report_number}}
+                                  <input type="text" class="form-control" [value]="selectedData?.report_number"
                                       readonly />
                               </div>
                               <div class="col-md-6 form-group">
                                   <label>First Name:</label>
-                                  <input type="text" class="form-control" value={{data.first_name}}
+                                  <input type="text" class="form-control" [value]="selectedData?.first_name"
                                       readonly />
                               </div>
                           </div>
                           <div class="row">
                               <div class="col-md-6 form-group">
                                   <label>Last Name:</label>
-                                  <input type="text" class="form-control" value={{data.last_name}}
+                                  <input type="text" class="form-control" [value]="selectedData?.last_name"
                                       readonly />
                               </div>
                               <div class="col-md-6 form-group">
                                   <label>Location:</label>
-                                  <input type="text" class="form-control" value={{data.location}}
+                                  <input type="text" class="form-control" [value]="selectedData?.location"
                                       readonly />
                               </div>
                           </div>
@@ -146,7 +146,7 @@
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger"
                                   data-dismiss="modal">No</button>
-                              <button type="button" class="btn btn-success"
+                              <button type="button" class="btn btn-success" (click)="viewReport(selectedData?.file_name, selectedData?.report_id)" data-dismiss="modal"
                                  >Yes</button>
                           </div>
                       </div>

@@ -44,4 +44,11 @@ export class OccupantsDataService {
             return res;
         }), catchError(error => throwError(() => error)));
     }
+
+    //save client IP in crash report restriction
+    public saveClientIP(data): Observable<any> {
+        return this.httpClient.post('crash_reports/saveClientIPInCrashReportRestriction', data).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
 }
