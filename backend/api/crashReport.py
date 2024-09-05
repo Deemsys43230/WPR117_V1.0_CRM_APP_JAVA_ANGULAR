@@ -426,24 +426,41 @@ class checkReportNumberExist(Resource):
          else:
              return jsonify({'status':True,'isExist':0,'message':'Report Number not Exist'})
 
-class saveClientIPInCrashReportRestriction(Resource):
+# to save client Ip in crash report restriction table
+class SaveClientIPInCrashReportRestriction(Resource):
     def post(self):
+        # Get the client IP address
         client_ip = request.remote_addr
-        # You can use client_ip as needed
         print(f"Client IP address: {client_ip}")
-        # Your other logic here
-        requestDetails = request.get_json()
-        report_id=requestDetails.get('report_id')
-        query=CrashReports.query
-        if report_id!="":
-            query = query.filter(CrashReports.report_id == report_id)
-            crash_report = query.filter_by(report_id=report_id).first()
+        
+        # Parse the request JSON
+        request_details = request.get_json()
+        report_id = request_details.get('report_id')
+
+        # Ensure the report_id is not empty
+        if report_id:
+            # Query the CrashReports table
+            crash_report = CrashReports.query.filter_by(report_id=report_id).first()
+
             if crash_report:
-                crash_report_restriction=CrashReportRestriction(client_ip=client_ip)
-                crash_report_restriction.save_to_crash_reports_restriction()
-                return jsonify({"reportStatus": 1,"requestSuccess": True})
+                # Check if the client IP already exists in CrashReportRestriction
+                existing_client = CrashReportRestriction.query.get(client_ip)
+                
+                if existing_client:
+                    # Update the last access time if the client IP exists
+                    existing_client.last_access_time = datetime.now()
+                    db.session.commit()
+                else:
+                    # Create a new CrashReportRestriction entry if the client IP doesn't exist
+                    crash_report_restriction = CrashReportRestriction(client_ip=client_ip, last_access_time=datetime.now())
+                    db.session.add(crash_report_restriction)
+                    db.session.commit()
+
+                return jsonify({"reportStatus": 1, "requestSuccess": True})
             else:
-                return jsonify({"reportStatus": 0,"requestSuccess": False})
+                return jsonify({"reportStatus": 0, "requestSuccess": False, "message": "Report ID not found"})
+        else:
+            return jsonify({"reportStatus": 0, "requestSuccess": False, "message": "Invalid or missing report ID"})
 
 
 CrashReport_Blueprint = Blueprint('crash_reports', __name__)
@@ -455,4 +472,4 @@ api.add_resource(UpdateCrashReport,'/updateCrashReport/<id>')
 api.add_resource(DeleteCrashReport,'/deleteCrashReport/<id>')
 api.add_resource(checkReportNumberExist,'/checkReportNumberExist')
 api.add_resource(SearchCrashReportAllUser,'/searchCrashReportAllUser')
-api.add_resource(saveClientIPInCrashReportRestriction,'/saveClientIPInCrashReportRestriction')
+api.add_resource(SaveClientIPInCrashReportRestriction,'/saveClientIPInCrashReportRestriction')
