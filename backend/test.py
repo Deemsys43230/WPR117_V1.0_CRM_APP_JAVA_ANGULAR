@@ -9,10 +9,8 @@ from flask import make_response,jsonify
 from models import Users,Roles
 from flask_jwt_extended import jwt_required,get_jwt_identity  # type: ignore
 import jwt
-from config import CROCredentials, mail_password
 import boto3
-from config import AWSCredentials,folderName,innerFolderName,bannerFolderName,bucketName
-
+from config import AWSCredentials,folderName,innerFolderName,bannerFolderName,bucketName,CROCredentials, mail_password
 
 s3 = boto3.client(
     's3',

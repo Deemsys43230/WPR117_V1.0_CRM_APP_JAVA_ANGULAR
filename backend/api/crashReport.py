@@ -1,14 +1,15 @@
 import uuid
 import boto3
 from flask import request, jsonify, Blueprint
+import requests
 from models import CrashReports, Occupants, PoliceDepartmentModel, Users,Accounts,CrashReportRestriction
 from flask_restful import Api, Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import create_refresh_token, create_access_token, get_jwt_identity
 from db import db
-from config import AWSCredentials
+from config import AWSCredentials,CROCredentials
 from datetime import datetime
-from test import role_required
+from test import role_required,get_property
 from sqlalchemy import and_,or_
 s3 = boto3.client(
     's3',
@@ -98,7 +99,47 @@ class CreateCrashReport(Resource):
                 status=occupant['status']
                 )
                 occupants_data.save_to_users()
-            return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':value})
+            data = {
+                "report_number": crash_report.report_number,
+                "crash_date": crash_report.crash_date,
+                "county_id":crash_report.county_id,
+                "no_of_occupants": crash_report.no_of_occupants,
+                "file_path":file_url,
+                "is_runner_report":1,
+                "police_department_id": crash_report.police_department_id,
+                "report_id": crash_report.report_id,
+                "status": 1,
+                "account_id": crash_report.account_id,
+                "location": crash_report.location,
+                "crash_severity": crash_report.crash_severity,
+                "occupants":[
+                   {
+                    "report_number": crash_report.report_number,
+                    "county_id":crash_report.county_id,   
+                    "crash_date": crash_report.crash_date,
+                    "name":occupant.first_name + occupant.last_name if occupant.first_name else None,
+                    "injuries":occupant.injuries,
+                    "seating_position":occupant.seating_position,
+                    "is_owner":0,
+                    "patient_status": 1,
+                    "is_runner_report":1,
+                    'status':occupant.status,
+                    "crash_severity": crash_report.crash_severity,
+                    } for occupant in occupants_list
+                ] 
+            }
+        
+            # Prepare headers
+            headers = {
+                    'Content-Type': 'application/json'
+            }
+            # URL to which the GET request is sent
+            url = get_property("CROCredentials") + get_property("saveCrashReportsAndPatients")
+            # Make POST request using requests module
+            response = requests.post(url, json=data, headers=headers)
+            # Check response status and return result
+            if response:
+                return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':value})
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
