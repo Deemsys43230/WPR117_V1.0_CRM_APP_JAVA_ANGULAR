@@ -28,8 +28,11 @@ export class ReportsComponent implements OnInit {
   public searchReportsForm: FormGroup;
   public departmentList: any;
   public countyList: any;
+  maxDate: Date;
 
-  constructor(private router: Router, private fb: FormBuilder, private spinner: NgxSpinnerService, private reportsService: ReportsService, private policeDepartmentService: PoliceDepartmentService, private countyService: CountyService,) { }
+  constructor(private router: Router, private fb: FormBuilder, private spinner: NgxSpinnerService, private reportsService: ReportsService, private policeDepartmentService: PoliceDepartmentService, private countyService: CountyService,) { 
+    this.maxDate = new Date();
+  }
 
   ngOnInit(): void {
     this.initializeSearchReportsForm();

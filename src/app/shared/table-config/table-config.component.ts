@@ -59,6 +59,14 @@ export class TableConfigComponent implements OnInit {
   onChangeItem(event: any) {
     this.pageItem = event.target.value;
     var setCurrentPage = Math.ceil(this.tableData.totalCount / this.pageItem);
+    // Reset error messages
+    this.isValid = false;
+    this.isSearchValidation = false;
+    // Clear the search field
+    const searchPageInput: HTMLInputElement | null = document.querySelector('.searchPage');
+    if (searchPageInput) {
+      searchPageInput.value = '';
+    }
     if (this.currentPage > setCurrentPage) {
       this.currentPage = setCurrentPage;
     } else {

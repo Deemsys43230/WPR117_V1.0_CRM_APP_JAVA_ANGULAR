@@ -23,12 +23,12 @@
 
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Report Number</label>
-            <input type="text" class="form-control" placeholder="Search Name" formControlName="reportNumber" />
+            <input type="text" class="form-control" placeholder="Search Report Number" formControlName="reportNumber" />
         </div>
 
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Location</label>
-            <input type="text" class="form-control" placeholder="Search Name" formControlName="location" />
+            <input type="text" class="form-control" placeholder="Search Location" formControlName="location" />
         </div>
 
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
@@ -55,7 +55,7 @@
         <div> 
             <label for="addedOnFromDate" class="form-label">Added On From Date</label></div>
             <!-- <input id="addedOnFromDate" type="date" class="form-control" formControlName="addedOnFromDate" /> -->
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic">
+            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic" [maxDate]="maxDate">
             </p-calendar>
         </div>
 
@@ -63,7 +63,7 @@
             <div> 
             <label for="addedOnToDate" class="form-label">Added On To Date</label></div>
             <!-- <input id="addedOnToDate" type="date" class="form-control" formControlName="addedOnToDate" /> -->
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnToDate"  formControlName="addedOnToDate" inputId="basic">
+            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnToDate"  formControlName="addedOnToDate" inputId="basic" [maxDate]="maxDate">
             </p-calendar>
         </div>
 
@@ -71,11 +71,11 @@
             <div class="btn-box">
                 <button
                     class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"
-                    type="submit" (click)="onSearch()"><i class="fa-solid fa-magnifying-glass"
+                    type="submit" (click)="onSearch()" title="Search"><i class="fa-solid fa-magnifying-glass"
                         aria-hidden="true"></i></button>
                 <button
                     class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn  border-0 text-white"
-                    type="submit" (click)="resetSearch()"><i class="fa-solid fa-arrows-rotate"
+                    type="submit" (click)="resetSearch()" title="Reset"><i class="fa-solid fa-arrows-rotate"
                         aria-hidden="true"></i></button>
             </div>
         </div>

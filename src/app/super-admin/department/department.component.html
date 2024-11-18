@@ -34,9 +34,9 @@
     <div class="col-lg-3 col-md-4 col-sm-12">
       <div class="btn-box">
         <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"
-          type="submit" (click)="onSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+          type="submit" (click)="onSearch()" title="Search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
         <button class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn  border-0 text-white"
-          type="submit" (click)="resetSearch()"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+          type="submit" (click)="resetSearch()" title="Reset"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
       </div>
     </div>
   </form>
@@ -60,7 +60,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body fs-5">
+      <div class="modal-body">
         <div *ngIf="policeDepartment" class="modal-body detail-table">
           <div *ngIf="isImage" class="col-14">
             <img class="w-100" [src]="supportingImage ? supportingImage : ''" />

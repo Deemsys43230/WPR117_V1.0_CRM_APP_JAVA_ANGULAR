@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <div class="col-lg-4 col-md-4 col-sm-12">
+      <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 20px;">
         <label for="middleName" class="form-label"
           >Middle Name</label
         >
@@ -146,7 +146,7 @@
 
       <div class="col-lg-4 col-md-4 col-sm-12">
         <label for="emailId" class="form-label"
-          >Email Id <span class="text-danger">*</span></label
+          >Email ID <span class="text-danger">*</span></label
         >
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
@@ -156,7 +156,7 @@
           id="emailId"
           type="text"
           class="form-control"
-          placeholder="Email Id"
+          placeholder="Email ID"
           formControlName="email_id" />
         </div>
         <div class="error-msg-area">
@@ -166,7 +166,7 @@
                 isAddFormSubmitted)
             " class="error-msg">
             <div [hidden]="!accountForm.controls['email_id'].errors?.['required']" class="text-danger">
-              Please Enter Email Id
+              Please Enter Email ID
             </div>
             <div
             [hidden]="!accountForm.controls['email_id'].errors?.['email']"
@@ -237,7 +237,7 @@
                 isAddFormSubmitted)
             " class="error-msg">
             <div [hidden]="!accountForm.controls['role_id'].errors?.['required']" class="text-danger">
-              Please Select Role Id
+              Please Select Role
             </div>
           </div>
         </div>
@@ -264,7 +264,7 @@
                 isAddFormSubmitted)
             " class="error-msg">
             <div [hidden]="!accountForm.controls['police_department_id'].errors?.['required']" class="text-danger">
-              Please Select Department Id
+              Please Select Department
             </div>
           </div>
         </div>

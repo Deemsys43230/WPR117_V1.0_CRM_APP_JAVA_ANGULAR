@@ -31,8 +31,8 @@
       <input type="text" class="form-control" placeholder="Search User Name" formControlName="username" />
     </div>
     <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-      <label for="" class="form-label">Email Id</label>
-      <input type="text" class="form-control" placeholder="Search Email Id" formControlName="email_id" />
+      <label for="" class="form-label">Email ID</label>
+      <input type="text" class="form-control" placeholder="Search Email ID" formControlName="email_id" />
     </div>
   </div>
   <div class="row">
@@ -57,11 +57,11 @@
     <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
       <div class="btn-box">
         <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
-          type="button" (click)="onSearch()">
+          type="button" (click)="onSearch()" title="Search">
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         </button>
         <button class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
-          type="button" (click)="resetSearch()">
+          type="button" (click)="resetSearch()" title="Reset">
           <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
         </button>
       </div>

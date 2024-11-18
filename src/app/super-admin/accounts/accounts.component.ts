@@ -8,6 +8,7 @@ import { PoliceDepartmentService } from 'src/app/shared/services/police-departme
 import { RoleService } from 'src/app/shared/services/role.service';
 import { AuthService } from 'src/app/shared/services/auth-service';
 import { NgxSpinnerService } from "ngx-spinner";
+import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
 @Component({
   selector: 'app-accounts-component',
   templateUrl: './accounts.component.html',
@@ -37,7 +38,8 @@ export class AccountsComponent implements OnInit {
     private roleService: RoleService,
     private enableDisableAccountsDepartment: AccountsDepartmentService,
     private resetPassword: AuthService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private flashMessageService: FlashMessageService
   ) { }
 
   ngOnInit(): void {
@@ -125,7 +127,7 @@ export class AccountsComponent implements OnInit {
             'First Name',
             'Last Name',
             'User Name',
-            'Email Id',
+            'Email ID',
             'Police Department',
             'Actions',
           ],
@@ -176,7 +178,6 @@ export class AccountsComponent implements OnInit {
   // Call Function based on action click's in table
   actionOutput(event: any) {
     if (event.action == 'Edit') {
-      console.log(event.data)
       this.handleEdit(event.data);
     } else if (event.action == 'Enable' || event.action == 'Disable') {
       this.handleEnableOrDisable(event.data);
@@ -198,6 +199,7 @@ export class AccountsComponent implements OnInit {
       (response) => {
         if (response.status) {
           this.getAccountsDepartmentByPagination();
+          this.flashMessageService.successMessage(response.msg, 2);
         }
       },
     );
