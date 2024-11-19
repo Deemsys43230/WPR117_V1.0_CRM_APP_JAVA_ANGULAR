@@ -25,10 +25,10 @@ export class navItems {
       url: 'occupants',
       icon: 'fa fa-user'
     },
-    {
-      name: 'Settings',
-      url: 'settings',
-      icon: 'fa fa-male'
-    },
+    // {
+    //   name: 'Settings',
+    //   url: 'settings',
+    //   icon: 'fa fa-male'
+    // },
   ];
 }

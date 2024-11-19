@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ElementRef, ViewChild } from '@angular/core';
 import { CountyService } from 'src/app/shared/services/county.service';
 import { FormBuilder } from '@angular/forms';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
@@ -32,10 +32,18 @@ export class OccupantsComponent implements OnInit {
   public pages: any[] = [];
   public occupantDetail: any = [];
   public error: boolean = false;
+  maxDate: Date;
+
+  @ViewChild('searchPageNumber') searchPageNumberInput!: ElementRef<HTMLInputElement>;
+
+  @Input() search: any;
+
+  @Output() pageNew = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService
   ) {
-    this.ItemsPerPage = ItemsPerPage
+    this.ItemsPerPage = ItemsPerPage,
+      this.maxDate = new Date();
   }
   ngOnInit() {
     this.initializationSearchOccupantsForm();
@@ -230,18 +238,9 @@ export class OccupantsComponent implements OnInit {
     }
   }
 
-  // Search  Page Number  function For Pagination 
-  goToPage(page: number) {
-    this.currentPage = page;
-    this.searchData["page"] = this.currentPage
-    this.getAllOccupants();
-    this.calculateTotalPages();
-    this.searchPage = null;
-    this.setPaginatedData();
-  }
-
   //  Route For  Next  Page   Number Function
   nextPage() {
+    this.isPageAvailable = false;
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.setPaginatedData();
@@ -253,6 +252,7 @@ export class OccupantsComponent implements OnInit {
 
   // Route For  Previous  Page   Number Function
   previousPage() {
+    this.isPageAvailable = false;
     if (this.currentPage > 1) {
       this.currentPage--;
       this.setPaginatedData();
@@ -262,19 +262,38 @@ export class OccupantsComponent implements OnInit {
     }
   }
 
+  // Selected Page
+  selectedPage(pageNum: any) {
+    this.currentPage = pageNum;
+    this.pageNew.emit({ page: this.currentPage, item: this.pageValue });
+    this.search = null;
+    this.searchPageNumberInput.nativeElement.value = ''
+    this.isPageAvailable = false;
+  }
+
   // To Change The Item Per Page Number For  Pagination
   onChangePagination(event) {
     this.pageValue = parseInt(event.target.value)
-    this.currentPage = 1;
+    const totalPages = Math.ceil(this.count / this.pageValue); // Recalculate total pages
+    this.currentPage = Math.min(this.currentPage, totalPages); // Adjust current page if it's beyond total pages
     this.searchData["itemsPerPage"] = this.pageValue
     this.getAllOccupants();
-    if (this.pageValue > this.count) {
-      this.pagebutton = true
-      this.searchPage = null;
-      this.isPageAvailable = false;
-    } else {
-      this.pagebutton = false;
+    // Reset error messages
+    this.isPageAvailable = false;
+    // Clear the search field
+    const searchPageInput: HTMLInputElement | null = document.querySelector('.searchPage');
+    if (searchPageInput) {
+      searchPageInput.value = '';
     }
+    // // Adjust the pagebutton state
+    // this.pagebutton = this.currentPage > totalPages;
+
+    // // If the last page becomes invalid after the change, reset the search page input
+    // if (this.pagebutton) {
+    //   this.searchPage = null;
+    // }
+    // Ensure the page button state is reset
+    this.pagebutton = false;
   }
 
   // To Get Array Of Page Numbers Based On Number Of Items Per Page And Pagination Range
