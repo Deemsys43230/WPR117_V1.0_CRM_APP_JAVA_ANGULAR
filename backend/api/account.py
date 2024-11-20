@@ -42,24 +42,27 @@ class createAccount(Resource):
             return jsonify({'status':False,'error':str(e),'msg':'Accounts Creation Failed'})
 
 # TO GET ALL ACCOUNTS WITH SEARCH AND PAGINATION 
+from sqlalchemy import func
+
 class GetAllAccounts(Resource):
     def post(self):
-        data = request.get_json()
-        items_per_page = data.get('items_per_page', '')
-        query_count = Accounts.query.filter_by().count()
-        if items_per_page == "":
-            items_per_page = query_count
         try:
-            page = data['page']
-            username = data.get('username',None)
-            first_name = data.get('first_name',None)
-            last_name = data.get('last_name',None)
-            police_department_id = data.get('police_department_id',None)
-            role_id = data.get('role_id',None)
-            email_id = data.get('email_id',None)
-            offset = (page - 1) * items_per_page
-            # Query accounts
+            # Parse input data
+            data = request.get_json()
+            items_per_page = data.get('items_per_page', None)
+            page = data.get('page', 1)
+            username = data.get('username', None)
+            first_name = data.get('first_name', None)
+            last_name = data.get('last_name', None)
+            police_department_id = data.get('police_department_id', None)
+            role_id = data.get('role_id', None)
+            email_id = data.get('email_id', None)
+            offset = (page - 1) * items_per_page if items_per_page else 0
+
+            # Start building the base query for accounts
             query = Accounts.query
+
+            # Apply filters for Accounts
             if first_name:
                 query = query.filter(Accounts.first_name.ilike(f"%{first_name}%"))
             if last_name:
@@ -68,26 +71,39 @@ class GetAllAccounts(Resource):
                 query = query.filter(Accounts.email_id.ilike(f"%{email_id}%"))
             if police_department_id:
                 query = query.filter(Accounts.police_department_id.ilike(f"%{police_department_id}%"))
-            count = query.count()
-            accounts = query.limit(items_per_page).offset(offset).all()
+
+            # Join with Users and apply filters
+            if username or role_id:
+                query = query.join(Users, Users.account_id == Accounts.account_id)
+                if username:
+                    # Use func.lower() for case-insensitive username search
+                    query = query.filter(func.lower(Users.username).contains(username.lower()))
+                if role_id:
+                    query = query.filter(Users.role_id == role_id)
+
+            # Fetch accounts with pagination
+            accounts = query.offset(offset).limit(items_per_page).all() if items_per_page else query.all()
+
+            # Build results
             result = []
             for account in accounts:
-                users = Users.query.filter_by(account_id=account.account_id).all()  
+                users = Users.query.filter_by(account_id=account.account_id).all()
                 users_info = []
                 for user in users:
-                    if username and username not in user.username:
+                    if username and username.lower() not in user.username.lower():
                         continue
                     if role_id and role_id != user.role_id:
                         continue
                     users_info.append({
                         'username': user.username,
                         'role_id': user.role_id,
-                        'is_enable':user.is_enable
+                        'is_enable': user.is_enable
                     })
                 if not users_info and (username or role_id):
-                    continue 
+                    continue  # Skip accounts with no matching users
+
                 payload = {
-                    'account_id':account.account_id,
+                    'account_id': account.account_id,
                     'first_name': account.first_name,
                     'last_name': account.last_name,
                     'middle_name': account.middle_name,
@@ -97,12 +113,19 @@ class GetAllAccounts(Resource):
                     'username': users_info[0]['username'] if users_info else None,
                     'role_id': users_info[0]['role_id'] if users_info else None,
                     'is_enable': users_info[0]['is_enable'] if users_info else None,
-                    'status':account.status
-                    }
+                    'status': account.status
+                }
                 result.append(payload)
-            return {'data': result, 'status':True,'count': count}, 200
+
+            # Calculate total count of filtered accounts
+            count = query.count()
+
+            return {'data': result, 'status': True, 'count': count}
+
         except Exception as e:
-            return {'message': 'An error occurred', 'error': str(e)}, 500
+            return {'message': 'An error occurred', 'error': str(e)}
+
+
 
 # GET ACCOUNTS BY ID 
 class getAccountsById(Resource):
@@ -172,7 +195,6 @@ class enableDisableAccountById(Resource):
                     return jsonify({'status':True,'msg':'Account Enabled Successfully','is_enable':account.status})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})
-               
 
 account_blueprint = Blueprint('account',__name__)
 api = Api(account_blueprint)

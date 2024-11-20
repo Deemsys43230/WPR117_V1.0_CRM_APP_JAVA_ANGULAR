@@ -143,7 +143,7 @@ class getByIdPoliceDepartment(Resource):
                     'login_link':data.login_link,
                     'search_link':data.search_link,
                     'status':data.status,
-                     'is_enabled':data.is_enabled,
+                    'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     'url':f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{folderName}{id}{bannerLocation}"
@@ -170,7 +170,7 @@ class getByNamePoliceDepartment(Resource):
                     'login_link':data.login_link,
                     'search_link':data.search_link,
                     'status':data.status,
-                     'is_enabled':data.is_enabled,
+                    'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     'url':bucketURL+""+str(data.police_department_id)+""+bannerLocation
@@ -188,11 +188,13 @@ class updatePoliceDepartment(Resource):
         try:
             police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if police:
+                file_url = None
                 data = request.form
                 police.county_id=data.get('county_id')
                 police.name = data.get('name')
                 police.code = data.get('code')
                 image = request.files.get('image')
+                db.session.commit()
                 if image:
                     path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
                     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -206,7 +208,6 @@ class updatePoliceDepartment(Resource):
                             folder_path = os.path.dirname(saved_file_path)
                             if not os.listdir(folder_path):
                                 os.rmdir(folder_path)
-                           
                 return jsonify({'status':True,'image':file_url,'msg':'Updated Police Department Details','data':{**data}})
         except Exception as e:
             return jsonify({'status':False,'error':str(e)})

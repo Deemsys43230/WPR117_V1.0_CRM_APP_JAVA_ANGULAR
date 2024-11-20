@@ -44,7 +44,7 @@ def role_required(*roles):
 
 # To send mail for reset password
 def sendMailToResetPassword(to,body):
-    email_sender = 'benhiveamsdev@gmail.com'
+    email_sender = 'benhive39@gmail.com'
     email_password = mail_password
     email_receiver = to
     subject = "Dear user"
