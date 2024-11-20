@@ -271,6 +271,15 @@ export class OccupantsComponent implements OnInit {
     this.isPageAvailable = false;
   }
 
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.searchData["page"] = this.currentPage
+    this.getAllOccupants();
+    this.calculateTotalPages();
+    this.searchPage = null;
+    this.setPaginatedData();
+  }
+
   // To Change The Item Per Page Number For  Pagination
   onChangePagination(event) {
     this.pageValue = parseInt(event.target.value)
