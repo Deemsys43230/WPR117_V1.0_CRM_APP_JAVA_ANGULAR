@@ -110,7 +110,7 @@ export class AddNewAccountComponent implements OnInit {
       .subscribe((res) => {
         if (res.status) {
           this.departmentList = [];
-          let departments = res.data;
+          let departments = res.data.filter(item => item.is_enabled === 1);
           departments.forEach(
             (element) => {
               let data = {

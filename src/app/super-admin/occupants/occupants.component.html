@@ -35,7 +35,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label"> Added On From Date:</label>
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic">
+            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic" [maxDate]="maxDate">
             </p-calendar>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
@@ -65,11 +65,11 @@
             <div class="btn-box">
                 <button
                     class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
-                    type="submit" (click)="onSearch()">
+                    type="submit" (click)="onSearch()" title="Search">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 </button>
                 <button class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
-                    type="submit" (click)="resetSearch()">
+                    type="submit" (click)="resetSearch()" title="Reset">
                     <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
                 </button>
             </div>
@@ -119,12 +119,14 @@
 <!-- Pagination Starts -->
 <div class="row mt-4" *ngIf="!error">
     <div class="col-lg-4" *ngIf="pagebutton"></div>
-    <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
-        <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search By page no" />
-        <button class="button goBtn" (change)="searchPageno()">
+    <div class=" col-lg-4 d-flex flex-column" *ngIf="!pagebutton">
+        <div class="d-flex align-items-center">
+        <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search Page" />
+        <button class="button goBtn" (click)="searchPageno()">
             GO
         </button>
-        <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
+    </div>
+    <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
     </div>
     <div class="col-lg-4 pageStatus">
         <div class="data-list">
@@ -150,10 +152,8 @@
                     <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1"
                         (click)="previousPage()"></i>
                 </li>
-                <li class="numberList" *ngFor="let page of pages" [ngClass]="{ active: currentPage === page }"
-                    (click)="goToPage(page)">
-                    {{ page }}
-                </li>
+                <li class="numberList" *ngFor="let row of pages" [ngClass]="{'active': currentPage == row}"
+                (click)="(row !='...')?selectedPage(row):''">{{row}}</li>
                 <li [ngClass]="{ numberList: currentPage !== totalPages }">
                     <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
                         (click)="nextPage()"></i>
@@ -163,3 +163,58 @@
     </div>
 </div>
 <!-- Pagination Close -->
+
+<!-- Modal Open -->
+<!-- <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabeled"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content detailModalSize">
+      <div class="modal-header fs-5">
+        <h5 class="modal-title" id="viewModalLabel">Report Details</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="policeDepartment" class="modal-body detail-table">
+          <table class="table-detail table-bordered w-100">
+            <tr class="p-2">
+              <th class="p-2">Police Department ID</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.police_department_id }}
+              </td>
+              <th class="p-2">County</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.county_name}}
+              </td>
+            </tr>
+
+            <tr class="p-2">
+              <th class="p-2">Name</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.name }}
+              </td>
+              <th class="p-2">Code</th>
+              <td class="p-2" colspan="3">
+                {{ policeDepartment?.code}}
+              </td>
+            </tr>
+
+            <tr class="p-2">
+              <th class="p-2">Login Link</th>
+              <td class="p-2" colspan="3">{{ policeDepartment?.loginLink }}</td>
+              <th class="p-2">Search Link</th>
+              <td class="p-2" colspan="3">{{ policeDepartment?.searchLink }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger fs-6 button-close" type="button" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- Modal Close -->
