@@ -58,19 +58,14 @@ class CreateCrashReport(Resource):
             "location": request.form.get('location'),
             "county_id": request.form.get('county_id'),
             "crash_severity": request.form.get('crash_severity'),
-            "no_of_occupants": request.form.get('no_of_occupants'),
+            "no_of_occupants": int(request.form.get('no_of_occupants')),
             "status": 1
         }
         occupants_list = []
-        
-        # Determine how many occupants forms are provided
-        i = 0
-        while True:
-            first_name = request.form.get(f'occupantsForms[{i}][first_name]')
-            if not first_name:
-                break
+        print("value.no_of_occupants",value["no_of_occupants"])
+        for i in range(value["no_of_occupants"]):
             occupant = {
-                "first_name": first_name,
+                "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
                 "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
                 "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
                 "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
@@ -78,7 +73,9 @@ class CreateCrashReport(Resource):
                 "status": request.form.get(f'occupantsForms[{i}][status]')
             }
             occupants_list.append(occupant)
-            i += 1
+
+# Now `occupants_list` contains data for all occupants
+
         
         if 'crashReportFile' not in request.files:
             return jsonify({'msg': 'crashReportFile not provided'})
@@ -102,44 +99,46 @@ class CreateCrashReport(Resource):
             data = {
                 "report_number": crash_report.report_number,
                 "crash_date": crash_report.crash_date,
-                "county_id":crash_report.county_id,
+                "county_id": crash_report.county_id,
                 "no_of_occupants": crash_report.no_of_occupants,
-                "file_path":file_url,
-                "is_runner_report":1,
+                "file_path": file_url,
+                "is_runner_report": 1,
                 "police_department_id": crash_report.police_department_id,
                 "report_id": crash_report.report_id,
                 "status": 1,
                 "account_id": crash_report.account_id,
                 "location": crash_report.location,
                 "crash_severity": crash_report.crash_severity,
-                "occupants":[
-                   {
-                    "report_number": crash_report.report_number,
-                    "county_id":crash_report.county_id,   
-                    "crash_date": crash_report.crash_date,
-                    "name":occupant.first_name + occupant.last_name if occupant.first_name else None,
-                    "injuries":occupant.injuries,
-                    "seating_position":occupant.seating_position,
-                    "is_owner":0,
-                    "patient_status": 1,
-                    "is_runner_report":1,
-                    'status':occupant.status,
-                    "crash_severity": crash_report.crash_severity,
-                    } for occupant in occupants_list
-                ] 
+                "occupants": [
+                    {
+                        "report_number": crash_report.report_number,
+                        "county_id": crash_report.county_id,
+                        "crash_date": crash_report.crash_date,
+                        "name": f"{occupant['first_name']} {occupant['last_name']}" if occupant['first_name'] else None,
+                        "injuries": occupant['injuries'],
+                        "seating_position": occupant['seating_position'],
+                        "is_owner": 0,
+                        "patient_status": 1,
+                        "is_runner_report": 1,
+                        "status": occupant['status'],
+                        "crash_severity": crash_report.crash_severity,
+                    }
+                    for occupant in occupants_list
+                ]
             }
+
         
-            # Prepare headers
-            headers = {
-                    'Content-Type': 'application/json'
-            }
-            # URL to which the GET request is sent
-            url = get_property("CROCredentials") + get_property("saveCrashReportsAndPatients")
-            # Make POST request using requests module
-            response = requests.post(url, json=data, headers=headers)
-            # Check response status and return result
-            if response:
-                return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':value})
+            # # Prepare headers
+            # headers = {
+            #         'Content-Type': 'application/json'
+            # }
+            # # URL to which the GET request is sent
+            # url = get_property("CROCredentials") + get_property("saveCrashReportsAndPatients")
+            # # Make POST request using requests module
+            # response = requests.post(url, json=data, headers=headers)
+            # # Check response status and return result
+            # if response:
+            return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':data})
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
@@ -326,9 +325,10 @@ class SearchCrashReportAllUser(Resource):
 class GetCrashReportById(Resource):
     def get(self,id):
         data=CrashReports.query.filter_by(report_id=id).first()
+        occupant_data = Occupants.query.filter_by(report_id =data.report_id).all()
         occupants_list=[]
-        for occupant in data.occupants:
-                occupants_data = {
+        for occupant in occupant_data:
+                occupants_data = [{
                 "report_id":occupant.report_id,
                 "first_name":occupant.first_name,
                 "last_name":occupant.last_name,
@@ -336,7 +336,7 @@ class GetCrashReportById(Resource):
                 "seating_position":occupant.seating_position,
                 "sequence_no":occupant.sequence_no,
                 "status":occupant.status
-                }
+                }]
                 occupants_list.append(occupants_data)
         crashReport={
             "report_id":data.report_id,
