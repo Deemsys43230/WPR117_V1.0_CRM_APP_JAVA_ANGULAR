@@ -43,7 +43,7 @@ export class PoliceDepartmentLoginComponent implements OnInit {
     const departmentId = this.policeDepartmentForm.controls['police_department_id'].value;
     const department = this.departmentList.find(dep => dep.department_id.toString() === departmentId.toString());
     if (department) {
-      this.router.navigate(['ohio', department.name]);
+      this.router.navigate(['admin', department.name]);
     } else {
       console.error('Department not found for ID:', departmentId);
     }

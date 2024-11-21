@@ -26,7 +26,7 @@ const routes: Routes = [
     component: SearchComponent, // Route for '/' 
   },
   {
-    path: "ohio/:departmentName",
+    path: "admin/:departmentName",
     component: PoliceLoginComponent
   },
   {
