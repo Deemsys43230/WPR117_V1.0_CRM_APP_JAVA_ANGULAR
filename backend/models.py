@@ -119,6 +119,10 @@ class CrashReports(db.Model):
     added_date=db.Column(DateTime, default=datetime.now)
     added_date_time= db.Column(DateTime,default=datetime.now) 
     status=db.Column(db.Integer)
+    # occupant=db.Column(db.String(32),ForeignKey('occupants.occupants_id'))
+    # occupants = db.relationship('Occupants', backref='crash_reports', lazy=True)
+    
+    police=db.relationship('PoliceDepartmentModel',backref='crash_reports',lazy=True)
 
     def save_to_crash_reports(self):
         db.create_all()

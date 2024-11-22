@@ -147,96 +147,92 @@ class CreateCrashReport(Resource):
 class GetAllCrashReports(Resource):
     @role_required('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_USER')
     def post(self):
-        requestDetails = request.get_json()
-        page = requestDetails.get('page', 1)
-        itemsPerPage = requestDetails.get('itemsPerPage', 10)
-        accountId = requestDetails.get('accountId')
-        reportNumber = requestDetails.get('reportNumber')
-        crashDate = requestDetails.get('crashDate')
-        firstName = requestDetails.get('firstName')
-        lastName = requestDetails.get('lastName')
-        location = requestDetails.get('location')
-        addedOnFromDate = requestDetails.get('addedOnFromDate')
-        addedOnToDate = requestDetails.get('addedOnToDate')
-        searchType = requestDetails.get('searchType')
-        reportType = requestDetails.get('reportType')
-        countyId = requestDetails.get('countyId')
-        policeDepartmentId = requestDetails.get('policeDepartmentId')
+        try:
+            requestDetails = request.get_json()
+            page = requestDetails.get('page', 1)
+            itemsPerPage = requestDetails.get('itemsPerPage', 10)
+            accountId = requestDetails.get('accountId')
+            reportNumber = requestDetails.get('reportNumber')
+            crashDate = requestDetails.get('crashDate')
+            firstName = requestDetails.get('firstName')
+            lastName = requestDetails.get('lastName')
+            location = requestDetails.get('location')
+            addedOnFromDate = requestDetails.get('addedOnFromDate')
+            addedOnToDate = requestDetails.get('addedOnToDate')
+            searchType = requestDetails.get('searchType')
+            reportType = requestDetails.get('reportType')
+            countyId = requestDetails.get('countyId')
+            policeDepartmentId = requestDetails.get('policeDepartmentId')
 
-        query = CrashReports.query
-        user = Users.query.filter_by(username=get_jwt_identity()).first()
-        if reportType == 1 and policeDepartmentId=="" and user:
-            accountId = user.account_id
-        elif reportType == 2 and user.role_id==2:
-            accountDetail = Accounts.query.filter_by(account_id=user.account_id).first()
-            if accountDetail:
-                policeDepartmentId = accountDetail.police_department_id
+            query = CrashReports.query
+            user = Users.query.filter_by(username=get_jwt_identity()).first()
+            if reportType == 1 and policeDepartmentId=="" and user:
+                accountId = user.account_id
+            elif reportType == 2 and user.role_id==2:
+                accountDetail = Accounts.query.filter_by(account_id=user.account_id).first()
+                if accountDetail:
+                    policeDepartmentId = accountDetail.police_department_id
+            if accountId and accountId != "0":
+                query = query.filter(CrashReports.account_id == accountId)
+            if reportNumber:
+                query = query.filter(CrashReports.report_number == reportNumber)
+            if crashDate:
+                query = query.filter(CrashReports.crash_date == crashDate)
+            if firstName:
+                query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
+            if lastName:
+                query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
+            if location:
+                query = query.filter(CrashReports.location.ilike(f'%{location}%'))
+            if countyId:
+                query = query.filter(CrashReports.county_id == countyId)
+            if policeDepartmentId and policeDepartmentId is not None:
+                query = query.join(CrashReports.police).filter(PoliceDepartmentModel.police_department_id == policeDepartmentId)
+            if addedOnFromDate:
+                from_date = datetime.strptime(addedOnFromDate, '%Y-%m-%d')
+                query = query.filter(CrashReports.added_date >= from_date)
+            if addedOnToDate:
+                to_date = datetime.strptime(addedOnToDate, '%Y-%m-%d')
+                query = query.filter(CrashReports.added_date <= to_date) 
+            # Apply pagination
+            offset = (page - 1) * itemsPerPage
+            crash_report_details = query.limit(itemsPerPage).offset(offset).all()
+            report_list = []
+            for crash in crash_report_details:
+                occupants = Occupants.query.filter_by(report_id =crash.report_id).all()
+                occupants_forms = [{
+                    "occupants_id": occupant.occupants_id,
+                    "report_id": occupant.report_id,
+                    "first_name": occupant.first_name,
+                    "last_name": occupant.last_name,
+                    "injuries": occupant.injuries,
+                    "seating_position": occupant.seating_position,
+                    "sequence_no": occupant.sequence_no,
+                    "status": occupant.status
+                } for occupant in occupants]
 
-        if accountId != "0":
-            query = query.filter(CrashReports.account_id == accountId)
-        if reportNumber:
-            query = query.filter(CrashReports.report_number == reportNumber)
+                report_data = {
+                    "report_id": crash.report_id,
+                    "account_id": crash.account_id,
+                    "police_department": crash.police.name,
+                    "report_number": crash.report_number,
+                    "crash_date": crash.crash_date,
+                    "location": crash.location,
+                    "county_id": crash.county_id,
+                    "crash_severity": crash.crash_severity,
+                    "no_of_occupants": crash.no_of_occupants,
+                    "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                    "added_date": crash.added_date,
+                    "added_date_time": crash.added_date_time,
+                    "status": crash.status,
+                    "occupantsForms": occupants_forms
+                }
 
-        if crashDate:
-            query = query.filter(CrashReports.crash_date == crashDate)
+                report_list.append(report_data)
 
-        if firstName:
-            query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
-
-        if lastName:
-            query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
-        if location:
-            query = query.filter(CrashReports.location.ilike(f'%{location}%'))
-        if countyId:
-            query = query.filter(CrashReports.county_id == countyId)
-
-        if policeDepartmentId and policeDepartmentId is not None:
-            query = query.join(CrashReports.police).filter(PoliceDepartmentModel.police_department_id == policeDepartmentId)
-
-        if addedOnFromDate:
-            from_date = datetime.strptime(addedOnFromDate, '%Y-%m-%d')
-            query = query.filter(CrashReports.added_date >= from_date)
-
-        if addedOnToDate:
-            to_date = datetime.strptime(addedOnToDate, '%Y-%m-%d')
-            query = query.filter(CrashReports.added_date <= to_date)
-
-        query = query.distinct()
-        data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
-
-        report_list = []
-        for crash in data.items:
-            occupants_forms = [{
-                "occupants_id": occupant.occupants_id,
-                "report_id": occupant.report_id,
-                "first_name": occupant.first_name,
-                "last_name": occupant.last_name,
-                "injuries": occupant.injuries,
-                "seating_position": occupant.seating_position,
-                "sequence_no": occupant.sequence_no,
-                "status": occupant.status
-            } for occupant in crash.occupants]
-
-            report_data = {
-                "report_id": crash.report_id,
-                "account_id": crash.account_id,
-                "police_department": crash.police.name,
-                "report_number": crash.report_number,
-                "crash_date": crash.crash_date,
-                "location": crash.location,
-                "county_id": crash.county_id,
-                "crash_severity": crash.crash_severity,
-                "no_of_occupants": crash.no_of_occupants,
-                "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
-                "added_date": crash.added_date,
-                "added_date_time": crash.added_date_time,
-                "status": crash.status,
-                "occupantsForms": occupants_forms
-            }
-
-            report_list.append(report_data)
-
-        return jsonify({'data': report_list, 'status': True, 'total': data.total, 'pages': data.pages})
+            return jsonify({'data': report_list, 'status': True})
+        except Exception as e:
+            return jsonify({'status': False, 'message': str(e)})
 
 # Search Crash Report for All User
 class SearchCrashReportAllUser(Resource):
