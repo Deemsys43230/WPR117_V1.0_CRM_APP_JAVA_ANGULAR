@@ -13,14 +13,21 @@ export class CrashReportDataService {
 
     //Save crash report
     public saveCrashReport(data): Observable<any> {
-        return this.httpClient.post('crash_reports/createCrashReport',data).pipe(tap(res => {
+        return this.httpClient.post('crash_reports/createCrashReport', data).pipe(tap(res => {
             return res;
         }), catchError(error => throwError(() => error)));
     }
 
     //Update crash report
     public updateCrashReport(data, id: any): Observable<any> {
-        return this.httpClient.put(`crash_reports/updateCrashReport/${id}`,data).pipe(tap(res => {
+        return this.httpClient.put(`crash_reports/updateCrashReport/${id}`, data).pipe(tap(res => {
+            return res;
+        }), catchError(error => throwError(() => error)));
+    }
+
+    //Get by id crash report
+    public getByIdCrashReport(id: number): Observable<any> {
+        return this.httpClient.get(`crash_reports/getCrashReportById/${id}`).pipe(tap(res => {
             return res;
         }), catchError(error => throwError(() => error)));
     }

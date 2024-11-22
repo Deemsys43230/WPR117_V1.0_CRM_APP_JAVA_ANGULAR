@@ -17,12 +17,12 @@ $third-color: #9fc1c1;
   margin-right: 8px;
   color: $secondary-color;
   font-weight: 600;
-  font-size: xx-large;
+  font-size: x-large;
 }
 
 .custom-row .headerStyle {
   font-weight: 600;
-  font-size: xx-large;
+  font-size: x-large;
   color: $secondary-color;
 }
 /* Header styles ends */
@@ -423,3 +423,25 @@ $third-color: #9fc1c1;
 
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+
+//Custom dropdown arrow for select field
+.custom-select-wrapper {
+  position: relative;
+}
+
+.custom-select-wrapper select {
+  padding-right: 2.5rem; /* Space for the arrow */
+  appearance: none; /* Remove default browser styles */
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24" height="24"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right center;
+  background-size: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.custom-select-wrapper select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

@@ -8,13 +8,18 @@ import { CrashReportDataService } from '../api/crash-report-data.service';
 export class CrashReportService {
     constructor(private crashReportDataService: CrashReportDataService) { }
 
-     //Save crash report
-     public saveCrashReport(data) {
+    //Save crash report
+    public saveCrashReport(data) {
         return this.crashReportDataService.saveCrashReport(data);
     }
 
     //Update crash report
     public updateCrashReport(data, id) {
         return this.crashReportDataService.updateCrashReport(data, id);
+    }
+
+    //get by id police department
+    public getByIdCrashReport(id) {
+        return this.crashReportDataService.getByIdCrashReport(id);
     }
 }
