@@ -135,3 +135,67 @@
     font-size: 20px;
   }
 }
+
+/* Date Picker Design Starts */
+::ng-deep .p-button {
+  color: #ffffff;
+  background: #1d8d97;
+  border: 1px solid #1c8d96;
+  padding: 0.75rem 1.25rem;
+  height: 40px;
+  width: 40px;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  outline-color: transparent;
+}
+
+::ng-deep .p-datepicker-header {
+  background: #1c8d96;
+  color: white;
+}
+
+::ng-deep .p-element:focus {
+  box-shadow: 0 0 0 .25rem rgb(158 193 193 / 43%);
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year,
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+  color: white;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+  color: white;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-prev,
+.p-datepicker .p-datepicker-header .p-datepicker-next {
+  color: white;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-next {
+  color: white;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-next:hover {
+  background-color: #243449;
+}
+
+::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-prev:hover {
+  background-color: #243449;
+}
+
+::ng-deep .p-datepicker table td.p-datepicker-today>span {
+  background: #9fc1c1;
+}
+
+::ng-deep .p-datepicker table td>span.p-highlight {
+  color: white;
+  background: #243449;
+}
+
+::ng-deep .p-datepicker {
+  top: 100%; /* Ensures it positions below the input field */
+  left: 0;
+  transform: translateY(5px); /* Optional spacing */
+}
+/* Date Picker Design Ends */

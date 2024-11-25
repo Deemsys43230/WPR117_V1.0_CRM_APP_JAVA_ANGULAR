@@ -24,6 +24,7 @@ import { ViewDepartmentComponent } from './police-department/view-department/vie
 import { PoliceDepartmentHeaderComponent } from './police-department/police-department-header/police-department-header.component';
 import { ChangePasswordComponent } from './police-department/change-password/change-password.component';
 import { SearchComponent } from './police-department/search/search.component';
+import {CalendarModule} from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { SearchComponent } from './police-department/search/search.component';
     FormsModule,
     SharedModule,
     CommonModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    CalendarModule
   ],
   providers: [
     {

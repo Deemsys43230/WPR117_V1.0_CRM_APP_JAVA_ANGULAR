@@ -5,6 +5,7 @@ import { OccupantsService } from 'src/app/shared/services/occupants-service';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 import { ItemsPerPage } from 'src/app/constants';
 import { NgxSpinnerService } from "ngx-spinner";
+import { CrashReportService } from 'src/app/shared/services/crash-report-service';
 
 @Component({
   selector: 'app-occupants',
@@ -33,6 +34,7 @@ export class OccupantsComponent implements OnInit {
   public occupantDetail: any = [];
   public error: boolean = false;
   maxDate: Date;
+  public crashReport: any = null;
 
   @ViewChild('searchPageNumber') searchPageNumberInput!: ElementRef<HTMLInputElement>;
 
@@ -40,7 +42,7 @@ export class OccupantsComponent implements OnInit {
 
   @Output() pageNew = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService
+  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService, private crashReportService: CrashReportService
   ) {
     this.ItemsPerPage = ItemsPerPage,
       this.maxDate = new Date();
@@ -51,6 +53,7 @@ export class OccupantsComponent implements OnInit {
     this.getAccountsDepartmentByPagination();
     this.setupSearchData();
     this.getAllOccupants();
+    // this.getCrashReportById();
   }
 
   // Initialization Search Occupants Form
@@ -204,7 +207,6 @@ export class OccupantsComponent implements OnInit {
     })
   }
 
-
   //  Pagination Starts
   // Calculate total pages for pagination
   calculateTotalPages() {
@@ -294,13 +296,6 @@ export class OccupantsComponent implements OnInit {
     if (searchPageInput) {
       searchPageInput.value = '';
     }
-    // // Adjust the pagebutton state
-    // this.pagebutton = this.currentPage > totalPages;
-
-    // // If the last page becomes invalid after the change, reset the search page input
-    // if (this.pagebutton) {
-    //   this.searchPage = null;
-    // }
     // Ensure the page button state is reset
     this.pagebutton = false;
   }
@@ -413,4 +408,19 @@ export class OccupantsComponent implements OnInit {
     this.getAllOccupants();
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
   }
+
+    //Get Police Department details by id
+    getCrashReportById(id) {
+      this.crashReportService.getByIdCrashReport(id).subscribe(res => {
+        if (res.status) {
+          this.crashReport = {
+            countyName: res.data.countyName,
+            crash_date: res.data.crash_date,
+            report_number: res.data.report_number,
+            location: res.data.location,
+            crash_severity: res.data.crash_severity,
+          }
+        }
+      })
+    }
 }

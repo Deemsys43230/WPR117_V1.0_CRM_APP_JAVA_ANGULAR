@@ -48,8 +48,8 @@
               </div>
               <div class="form-group">
                 <label for="crashDate" style="display: inline;">Crash Date</label>
-                <input style="border: 2px solid #464444;" id="crashDate" type="text" formControlName="crashDate"
-                  placeholder="MM/DD/YYYY" class="form-control" bsDatepicker>
+                  <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="crashDate"  formControlName="crashDate" inputId="basic" appendTo="body">
+                  </p-calendar>
               </div>
               <div class="form-group">
                 <label for="reportNumber" style="display: inline;">Report Number</label>

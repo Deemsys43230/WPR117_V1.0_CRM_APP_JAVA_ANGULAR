@@ -43,7 +43,7 @@
             <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnToDate"  formControlName="addedOnToDate" inputId="basic">
             </p-calendar>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
             <label for="" class="form-label">Department:</label>
             <select class="form-control" formControlName="policeDepartmentId">
                 <option value="">Department</option>
@@ -52,7 +52,7 @@
                 </option>
             </select>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin ">
+        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
             <label for="" class="form-label">County:</label>
             <select class="form-control" formControlName="countyId">
                 <option value="">All Counties</option>
@@ -98,7 +98,8 @@
                 <td class="report-header"><label class="label-color">No. of
                         Occupants:</label><br />{{data.no_of_occupants}}</td>
                 <td class="report-header">{{data.police_department}}</td>
-                <td class="report-header"><a class="view-btn" title="View"><i
+                <td class="report-header">
+                    <a class="view-btn" title="View" data-bs-toggle="modal" data-bs-target="#ViewModal"><i
                             class="fa fa-eye fa-sm"></i></a>
                     <a href="{{data.file_name}}" target="_blank" class="info-btn" title="View Report File"><i
                             class="fas fa-file"></i></a>
@@ -165,7 +166,7 @@
 <!-- Pagination Close -->
 
 <!-- Modal Open -->
-<!-- <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabeled"
+<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabeled"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content detailModalSize">
@@ -176,35 +177,33 @@
         </button>
       </div>
       <div class="modal-body">
-        <div *ngIf="policeDepartment" class="modal-body detail-table">
+        <div *ngIf="crashReport" class="modal-body detail-table">
           <table class="table-detail table-bordered w-100">
             <tr class="p-2">
-              <th class="p-2">Police Department ID</th>
-              <td class="p-2" colspan="3">
-                {{ policeDepartment?.police_department_id }}
-              </td>
               <th class="p-2">County</th>
               <td class="p-2" colspan="3">
-                {{ policeDepartment?.county_name}}
+                {{ crashReport?.countyName }}
+              </td>
+              <th class="p-2">Crash Date</th>
+              <td class="p-2" colspan="3">
+                {{ crashReport?.crash_date}}
               </td>
             </tr>
 
             <tr class="p-2">
-              <th class="p-2">Name</th>
+              <th class="p-2">Report Number</th>
               <td class="p-2" colspan="3">
-                {{ policeDepartment?.name }}
+                {{ crashReport?.report_number }}
               </td>
-              <th class="p-2">Code</th>
+              <th class="p-2">Location</th>
               <td class="p-2" colspan="3">
-                {{ policeDepartment?.code}}
+                {{ crashReport?.location}}
               </td>
             </tr>
 
             <tr class="p-2">
-              <th class="p-2">Login Link</th>
-              <td class="p-2" colspan="3">{{ policeDepartment?.loginLink }}</td>
-              <th class="p-2">Search Link</th>
-              <td class="p-2" colspan="3">{{ policeDepartment?.searchLink }}</td>
+              <th class="p-2">Crash Severity</th>
+              <td class="p-2" colspan="3">{{ crashReport?.crash_severity }}</td>
             </tr>
           </table>
         </div>
@@ -216,5 +215,5 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
 <!-- Modal Close -->
