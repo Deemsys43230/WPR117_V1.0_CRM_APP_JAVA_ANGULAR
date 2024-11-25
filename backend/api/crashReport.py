@@ -277,8 +277,14 @@ class SearchCrashReportAllUser(Resource):
         # Prepare the response data
         report_list = []
         for crash in result.items:  # Use `result.items` for paginated results
-            # Get occupants for this report
-            occupants = Occupants.query.filter(Occupants.report_id == crash.report_id).all()
+            occupants = Occupants.query.filter(
+                and_(
+                    Occupants.report_id == crash.report_id,
+                    func.lower(Occupants.first_name) == firstName.lower(),
+                    func.lower(Occupants.last_name) == lastName.lower()
+                )
+            ).all()
+            
             occupants_forms = [{
                 "occupants_id": occupant.occupants_id,
                 "report_id": occupant.report_id,
