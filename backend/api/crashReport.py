@@ -245,12 +245,12 @@ class SearchCrashReportAllUser(Resource):
         firstName = requestDetails.get('firstName')
         lastName = requestDetails.get('lastName')
         location = requestDetails.get('location')
-        
-        query = CrashReports.query
-        
-        # Create a list to store the conditions for the CrashReports
-        conditions = []
 
+        # Base query joining CrashReports and Occupants
+        query = CrashReports.query
+
+        # Filtering conditions for CrashReports
+        conditions = []
         if reportNumber:
             conditions.append(CrashReports.report_number == reportNumber)
         if crashDate:
@@ -258,31 +258,35 @@ class SearchCrashReportAllUser(Resource):
         if location:
             conditions.append(CrashReports.location == location)
 
-        # Apply all conditions using `and_` to ensure all must be satisfied
+        # Apply CrashReports filters
         if conditions:
             query = query.filter(and_(*conditions))
 
-        # Join with Occupants and filter based on both firstName and lastName
+        # Join with Occupants and filter only if both firstName and lastName are provided
         if firstName and lastName:
-            query = query.join(CrashReports.occupants).filter(
+            query = query.join(Occupants, Occupants.report_id == CrashReports.report_id)
+            query = query.filter(
                 and_(
-                    Occupants.first_name == firstName,
-                    Occupants.last_name == lastName
+                    Occupants.first_name.ilike(f"%{firstName}%"),
+                    Occupants.last_name.ilike(f"%{lastName}%")
                 )
             )
+        elif firstName or lastName:
+            # Skip search entirely if only one of the fields is provided
+            return jsonify({
+                'data': [],
+                'status': True,
+                'message': "Both first name and last name must be provided for occupant search."
+            })
 
-        data = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
-        
+        # Paginate the results
+        result = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
+
+        # Prepare the response data
         report_list = []
-        for crash in data.items:
-            # Ensure occupants match both firstName and lastName
-            occupants = [occupant for occupant in crash.occupants if
-                         occupant.first_name == firstName and
-                         occupant.last_name == lastName]
-
-            # Skip reports that have no matching occupants
-            if not occupants:
-                continue
+        for crash in result.items:  # Use `result.items` for paginated results
+            # Get occupants for this report
+            occupants = Occupants.query.filter(Occupants.report_id == crash.report_id).all()
 
             occupants_forms = [{
                 "occupants_id": occupant.occupants_id,
@@ -298,7 +302,7 @@ class SearchCrashReportAllUser(Resource):
             report_data = {
                 "report_id": crash.report_id,
                 "account_id": crash.account_id,
-                "police_department": crash.police.name,
+                "police_department": crash.police.name if crash.police else None,
                 "report_number": crash.report_number,
                 "crash_date": crash.crash_date,
                 "location": crash.location,
@@ -314,9 +318,12 @@ class SearchCrashReportAllUser(Resource):
 
             report_list.append(report_data)
 
-        return jsonify({'data': report_list, 'status': True, 'total': data.total, 'pages': data.pages})
-    
-
+        return jsonify({
+            'data': report_list,
+            'status': True,
+            'total': result.total,  # Total records in the query
+            'pages': result.pages  # Total pages
+        })
 
 class GetCrashReportById(Resource):
     def get(self,id):
