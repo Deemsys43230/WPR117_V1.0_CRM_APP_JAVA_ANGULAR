@@ -10,7 +10,7 @@ from db import db
 from config import AWSCredentials,CROCredentials
 from datetime import datetime
 from test import role_required,get_property
-from sqlalchemy import and_,or_
+from sqlalchemy import and_, func,or_
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -246,7 +246,7 @@ class SearchCrashReportAllUser(Resource):
         lastName = requestDetails.get('lastName')
         location = requestDetails.get('location')
 
-        # Base query joining CrashReports and Occupants
+            # Base query joining CrashReports and Occupants
         query = CrashReports.query
 
         # Filtering conditions for CrashReports
@@ -256,7 +256,8 @@ class SearchCrashReportAllUser(Resource):
         if crashDate:
             conditions.append(CrashReports.crash_date == crashDate)
         if location:
-            conditions.append(CrashReports.location == location)
+            # Use func.lower() for case-insensitive matching
+            conditions.append(func.lower(CrashReports.location) == location.lower())
 
         # Apply CrashReports filters
         if conditions:
@@ -267,27 +268,17 @@ class SearchCrashReportAllUser(Resource):
             query = query.join(Occupants, Occupants.report_id == CrashReports.report_id)
             query = query.filter(
                 and_(
-                    Occupants.first_name.ilike(f"%{firstName}%"),
-                    Occupants.last_name.ilike(f"%{lastName}%")
+                    func.lower(Occupants.first_name) == firstName.lower(),
+                    func.lower(Occupants.last_name) == lastName.lower()
                 )
             )
-        elif firstName or lastName:
-            # Skip search entirely if only one of the fields is provided
-            return jsonify({
-                'data': [],
-                'status': True,
-                'message': "Both first name and last name must be provided for occupant search."
-            })
-
         # Paginate the results
         result = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
-
         # Prepare the response data
         report_list = []
         for crash in result.items:  # Use `result.items` for paginated results
             # Get occupants for this report
             occupants = Occupants.query.filter(Occupants.report_id == crash.report_id).all()
-
             occupants_forms = [{
                 "occupants_id": occupant.occupants_id,
                 "report_id": occupant.report_id,
@@ -298,7 +289,6 @@ class SearchCrashReportAllUser(Resource):
                 "sequence_no": occupant.sequence_no,
                 "status": occupant.status
             } for occupant in occupants]
-
             report_data = {
                 "report_id": crash.report_id,
                 "account_id": crash.account_id,
