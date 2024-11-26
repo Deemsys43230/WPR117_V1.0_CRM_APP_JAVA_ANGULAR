@@ -265,7 +265,7 @@ class policeDepartmentDetailsByUsername(Resource):
                     'login_link':account.police_dep_id.login_link,
                     'search_link':account.police_dep_id.search_link,
                     'status':account.police_dep_id.status,
-                     'is_enabled':account.police_dep_id.is_enabled,
+                    'is_enabled':account.police_dep_id.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+account.police_dep_id.login_link,
                     'viewSearchLink':CRMAppDomain+""+account.police_dep_id.search_link,
                     'url':bucketURL+""+str(account.police_dep_id.police_department_id)+""+bannerLocation

@@ -1,6 +1,8 @@
+from io import BytesIO
+import os
 import uuid
 import boto3
-from flask import request, jsonify, Blueprint
+from flask import app, request, jsonify, Blueprint
 import requests
 from models import CrashReports, Occupants, PoliceDepartmentModel, Users,Accounts,CrashReportRestriction
 from flask_restful import Api, Resource
@@ -46,6 +48,17 @@ def upload_file_to_s3(file, police_department_id, report_id):
 
     return f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{object_key}'
 
+def download_pdf(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            pdf_data = BytesIO(response.content)
+            return pdf_data
+        else:
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to download the PDF: {e}")
+        return None
 
 class CreateCrashReport(Resource):
     def post(self):
@@ -81,7 +94,14 @@ class CreateCrashReport(Resource):
             return jsonify({'msg': 'crashReportFile not provided'})
         crash_report_file = request.files.get('crashReportFile')
         try:
-            file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
+            # file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
+            pdf_data = download_pdf(crash_report_file)
+            temp_pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], ' .pdf')
+            os.makedirs(os.path.dirname(temp_pdf_path), exist_ok=True)  # Create directory if it doesn't exist
+            with open(temp_pdf_path, 'wb') as f:
+                f.write(pdf_data.getvalue())
+            if temp_pdf_path is None:
+                return jsonify({'error': 'Failed to download PDF file from URL'})
             value['file_name'] = f'{value["report_id"]}.pdf'
             crash_report = CrashReports(**value)
             crash_report.save_to_crash_reports()
@@ -101,7 +121,7 @@ class CreateCrashReport(Resource):
                 "crash_date": crash_report.crash_date,
                 "county_id": crash_report.county_id,
                 "no_of_occupants": crash_report.no_of_occupants,
-                "file_path": file_url,
+                "file_path": f'{crash_report.report_id}.pdf',
                 "is_runner_report": 1,
                 "police_department_id": crash_report.police_department_id,
                 "report_id": crash_report.report_id,
@@ -197,6 +217,7 @@ class GetAllCrashReports(Resource):
             # Apply pagination
             offset = (page - 1) * itemsPerPage
             crash_report_details = query.limit(itemsPerPage).offset(offset).all()
+            count = query.count()
             report_list = []
             for crash in crash_report_details:
                 occupants = Occupants.query.filter_by(report_id =crash.report_id).all()
@@ -230,7 +251,7 @@ class GetAllCrashReports(Resource):
 
                 report_list.append(report_data)
 
-            return jsonify({'data': report_list, 'status': True})
+            return jsonify({'data': report_list, 'status': True, 'total': count,})
         except Exception as e:
             return jsonify({'status': False, 'message': str(e)})
 
