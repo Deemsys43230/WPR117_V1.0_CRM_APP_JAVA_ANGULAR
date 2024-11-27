@@ -16,7 +16,7 @@ export class TableConfigComponent implements OnInit {
 
   @Output() actionOutput = new EventEmitter<any>();
   @Output() page = new EventEmitter<any>();
-
+  pageSize = 5;
   public items = ItemsPerPage;
   public selectedIcons: any[] = [];
   public count: any[] = [];
@@ -48,6 +48,7 @@ export class TableConfigComponent implements OnInit {
   initialFunction(count: any) {
     this.currentPage = (this.search) ? this.search.currentPage : this.currentPage;
     this.pageItem = (this.search) ? this.search.itemsPerPage : this.pageItem;
+    this.pageSize = this.pageItem;
     var length = Math.ceil(count / this.pageItem);
 
     this.count = Array.from({ length }, (_, i) => i + 1);

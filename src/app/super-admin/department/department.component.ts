@@ -222,10 +222,15 @@ export class DepartmentComponent implements OnInit {
 
   //On reset Police Department Search
   resetSearch() {
+    this.searchValue = {
+      currentPage: 1,
+      itemsPerPage: 5,
+    };
     this.currentPage = 1;
     this.items_per_page = 5;
     this.searchPoliceDepartmentForm.reset({ county: '' });
     this.setupSearchData();
     this.getPoliceDepartmentByPagination();
+    this.TableConfigComponent?.initialFunction(this.table_data?.totalCount);
   }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableConfigComponent } from './table-config/table-config.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -8,11 +9,12 @@ import { TableConfigComponent } from './table-config/table-config.component';
   ],
 
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
   ],
 
   exports: [
-    TableConfigComponent, 
+    TableConfigComponent,
   ],
 
   providers: []

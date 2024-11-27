@@ -62,7 +62,7 @@ export class AccountsComponent implements OnInit {
     });
   }
 
-   // setup Search Data
+  // setup Search Data
   setupSearchData() {
     this.searchData = {
       page: this.currentPage,
@@ -229,7 +229,7 @@ export class AccountsComponent implements OnInit {
       first_name: this.searchAccountsDepartmentForm.value.first_name ? this.searchAccountsDepartmentForm.value.first_name : '',
       last_name: this.searchAccountsDepartmentForm.value.last_name ? this.searchAccountsDepartmentForm.value.last_name : '',
       username: this.searchAccountsDepartmentForm.value.username ? this.searchAccountsDepartmentForm.value.username : '',
-      email_id: this.searchAccountsDepartmentForm.value.email_id? this.searchAccountsDepartmentForm.value.email_id : '',
+      email_id: this.searchAccountsDepartmentForm.value.email_id ? this.searchAccountsDepartmentForm.value.email_id : '',
       role_id: this.searchAccountsDepartmentForm.value.role_id ? this.searchAccountsDepartmentForm.value.role_id : '',
       police_department_id: this.searchAccountsDepartmentForm.value.police_department_id ? this.searchAccountsDepartmentForm.value.police_department_id : '',
     };
@@ -238,13 +238,18 @@ export class AccountsComponent implements OnInit {
 
   //On reset Police Department Search
   resetSearch() {
+    this.searchValue = {
+      currentPage: 1,
+      itemsPerPage: 5,
+    };
     this.currentPage = 1;
     this.itemsPerPage = 5;
     this.searchAccountsDepartmentForm.reset({
       role_id: '',
       police_department_id: '',
     });
-    this.setupSearchData()
+    this.setupSearchData();
     this.getAccountsDepartmentByPagination();
+    this.TableConfigComponent?.initialFunction(this.table_data?.totalCount);
   }
 }
