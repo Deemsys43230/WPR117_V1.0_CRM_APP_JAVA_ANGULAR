@@ -63,7 +63,6 @@ export class AddNewReportComponent {
         switchMap(value => {
           if (value) {
             const valueData = {"report_number": value, "report_id": this.report_id ? this.report_id : ""}
-            console.log('va',valueData)
             return this.occupantsService.checkReportNumber(valueData)
           } 
           else {

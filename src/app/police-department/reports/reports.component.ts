@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { CrashSeverity, Injuries, ItemsPerPage, SeatingPosition } from 'src/app/constants';
 import { PoliceDepartmentDataService } from 'src/app/shared/api/police-department-data.service';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
@@ -11,6 +12,8 @@ import { OccupantsService } from 'src/app/shared/services/occupants-service';
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent {
+  @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
+
   policeImageUrl: string = '';
   police_name: any;
   public error: boolean = false;
@@ -34,15 +37,42 @@ export class ReportsComponent {
   crashSeverityOptions = CrashSeverity;
   injuries = Injuries;
   seatingPosition = SeatingPosition;
-  occupants = []; 
+  occupants = [];
   reportData: any = {};
   public reportType: number = 1;
   ItemsPerPage = ItemsPerPage;
+  today: string;
+  toDateMin: string;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService) { }
 
   //ngOnInit
   ngOnInit(): void {
+    const currentDate = new Date();
+    this.today = currentDate.toISOString().split('T')[0];
+
+    this.policeDepartmentForm = this.fb.group({
+      addedOnFromDate: [''],
+      addedOnToDate: [''],
+    });
+
+    // Listen to changes in "From Date"
+    this.policeDepartmentForm.get('addedOnFromDate')?.valueChanges.subscribe((fromDate) => {
+      if (fromDate) {
+        const nextDay = new Date(fromDate);
+        nextDay.setDate(nextDay.getDate() + 1); // Add 1 day
+        this.toDateMin = nextDay.toISOString().split('T')[0]; // Format 'yyyy-MM-dd'
+
+        // Reset "To Date" if it is before the updated minimum date
+        const toDateControl = this.policeDepartmentForm.get('addedOnToDate');
+        if (toDateControl?.value && new Date(toDateControl.value) < nextDay) {
+          toDateControl.setValue('');
+        }
+      } else {
+        this.toDateMin = ''; // Clear the minimum if "From Date" is cleared
+      }
+    });
+
     this.initializationSearchOccupantsForm();
     this.searchData = {
       page: this.currentPage,
@@ -304,12 +334,12 @@ export class ReportsComponent {
   convertGMTDateToMMDDYYYYFormat(gmtDate: string): string {
     let date = new Date(gmtDate);
     let day = date.getUTCDate().toString();
-    let month = (date.getUTCMonth() + 1).toString(); 
+    let month = (date.getUTCMonth() + 1).toString();
     let year = date.getUTCFullYear();
     day = day.padStart(2, '0');
     month = month.padStart(2, '0');
     return `${month}-${day}-${year}`;
-}
+  }
 
   // To Calculate Page Number  Based On Current Page Number
   calculatePageNumber(
@@ -428,7 +458,7 @@ export class ReportsComponent {
     this.currentTab = tab;
     this.reportType = tab === 'uploadReports' ? 1 : 2;
     let reportType = tab === 'uploadReports' ? 1 : 2;
-    this.currentPage=1;
+    this.currentPage = 1;
     this.searchData = this.setupSearchData(reportType);
     this.occupantsService?.getAllOccupants(this.searchData).subscribe(res => {
       this.processApiResponse(res);
@@ -466,7 +496,7 @@ export class ReportsComponent {
 
   // Get by id
   getById(report_id) {
-    console.log('report id',report_id)
+    console.log('report id', report_id)
     this.occupantsService.getByIdCrashReport(report_id).subscribe(res => {
       this.occupants = res.data.occupants;
       this.reportData = res.data;
@@ -489,5 +519,18 @@ export class ReportsComponent {
   getSeverityLabel(severityValue: any): any {
     const severity = this.crashSeverityOptions.find(s => s.value === severityValue);
     return severity ? severity.label : 'Unknown';
+  }
+
+  // Function to trigger datepicker
+  openDatePicker() {
+    if (this.datepicker) {
+      this.datepicker.show();  // Open the date picker programmatically
+    }
+  }
+
+  // Method to restrict alphabetic characters in the input
+  onDateInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9\/]/g, ''); // Allow only numbers and slashes
   }
 }

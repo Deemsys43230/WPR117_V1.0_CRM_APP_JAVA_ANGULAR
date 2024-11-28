@@ -1,3 +1,5 @@
+@import "~ngx-bootstrap/datepicker/bs-datepicker.css";
+
 // Define primary and secondary colors
 $primary-color: #243449;
 $secondary-color: #1d8d97;
@@ -444,4 +446,16 @@ $third-color: #9fc1c1;
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.theme-green .bs-datepicker-head {
+  background-color: $secondary-color;
+}
+
+.theme-green .bs-datepicker-body table td.week span {
+  color: $secondary-color;
+}
+
+.theme-green .bs-datepicker-body table td span.selected, .theme-green .bs-datepicker-body table td.selected span, .theme-green .bs-datepicker-body table td span[class*=select-]:after, .theme-green .bs-datepicker-body table td[class*=select-] span:after {
+  background-color: $secondary-color;
 }

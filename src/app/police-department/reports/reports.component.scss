@@ -193,3 +193,19 @@ li.numberList:hover {
   .modal-header {
     background-color: #9fc1c1;
   }
+
+  .error-message {
+    color: #d9534f; /* Bootstrap danger color */
+    font-size: 0.875rem; /* Smaller font size for clarity */
+    min-height: 20px; /* Reserve space for the error message */
+    margin-top: 4px; /* Add some spacing from the input */
+  }
+
+  .input-group-text {
+    display: flex;
+    align-items: center;  /* Center the icon vertically */
+  }
+  
+  input.form-control {
+    border-right: none;  /* Optional: remove right border to make it look cleaner */
+  }

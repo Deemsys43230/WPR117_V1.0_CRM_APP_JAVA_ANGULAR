@@ -49,7 +49,7 @@ const routes: Routes = [
     path: "reports/:departmentName/:id",
     component: AddNewReportComponent
   },
-  { path: "ohio",
+  { path: "admin",
     component: PoliceDepartmentLoginComponent 
   },
   {

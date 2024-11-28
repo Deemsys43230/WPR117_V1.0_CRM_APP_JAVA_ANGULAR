@@ -221,7 +221,10 @@ export class AccountsComponent implements OnInit {
   }
 
   //On search Police Department
-  onSearch() {
+  onSearch(event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
     this.currentPage = 1;
     this.searchData = {
       page: this.currentPage,

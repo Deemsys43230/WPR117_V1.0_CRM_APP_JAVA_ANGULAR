@@ -227,10 +227,15 @@ export class ReportsComponent implements OnInit {
 
   //On Reset
   resetSearch() {
+    this.searchValue = {
+      currentPage: 1,
+      itemsPerPage: 5,
+    };
     this.currentPage = 1;
     this.items_per_page = 5;
     this.searchReportsForm.reset({ county: '', department: '' });
     this.setupSearchData()
     this.getReportsByPagination()
+    this.TableConfigComponent?.initialFunction(this.table_data?.totalCount);
   }
 }
