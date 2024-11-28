@@ -2,7 +2,7 @@ from io import BytesIO
 import os
 import uuid
 import boto3
-from flask import app, request, jsonify, Blueprint
+from flask import Flask, app, request, jsonify, Blueprint
 import requests
 from models import CrashReports, Occupants, PoliceDepartmentModel, Users,Accounts,CrashReportRestriction
 from flask_restful import Api, Resource
@@ -48,18 +48,14 @@ def upload_file_to_s3(file, police_department_id, report_id):
 
     return f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{object_key}'
 
-def download_pdf(url):
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            pdf_data = BytesIO(response.content)
-            return pdf_data
-        else:
-            return None
-    except requests.exceptions.RequestException as e:
-        print(f"Failed to download the PDF: {e}")
-        return None
-
+app = Flask(__name__)
+# Configure upload folder
+app.config['UPLOAD_FOLDER'] = 'C:/wamp64/www/SaveCrashReports'  # Change to your WAMP server path
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload size (optional)
+# Allowed file extensions for validation (optional)
+ALLOWED_EXTENSIONS = {'pdf'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 class CreateCrashReport(Resource):
     def post(self):
         value = {
@@ -75,7 +71,6 @@ class CreateCrashReport(Resource):
             "status": 1
         }
         occupants_list = []
-        print("value.no_of_occupants",value["no_of_occupants"])
         for i in range(value["no_of_occupants"]):
             occupant = {
                 "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
@@ -86,22 +81,18 @@ class CreateCrashReport(Resource):
                 "status": request.form.get(f'occupantsForms[{i}][status]')
             }
             occupants_list.append(occupant)
-
-# Now `occupants_list` contains data for all occupants
-
-        
-        if 'crashReportFile' not in request.files:
-            return jsonify({'msg': 'crashReportFile not provided'})
-        crash_report_file = request.files.get('crashReportFile')
         try:
+            # file upload for production
             # file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
-            pdf_data = download_pdf(crash_report_file)
-            temp_pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], ' .pdf')
-            os.makedirs(os.path.dirname(temp_pdf_path), exist_ok=True)  # Create directory if it doesn't exist
-            with open(temp_pdf_path, 'wb') as f:
-                f.write(pdf_data.getvalue())
-            if temp_pdf_path is None:
-                return jsonify({'error': 'Failed to download PDF file from URL'})
+            if 'crashReportFile' not in request.files:
+                return jsonify({'error': 'No file part in the request'})
+            crash_report_file = request.files['crashReportFile']
+            if not allowed_file(crash_report_file.filename):
+                return jsonify({'error': 'Invalid file type. Only PDF files are allowed.'})
+            filename = f"{value['report_id']}.pdf" 
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            crash_report_file.save(save_path)
             value['file_name'] = f'{value["report_id"]}.pdf'
             crash_report = CrashReports(**value)
             crash_report.save_to_crash_reports()
@@ -122,6 +113,7 @@ class CreateCrashReport(Resource):
                 "county_id": crash_report.county_id,
                 "no_of_occupants": crash_report.no_of_occupants,
                 "file_path": f'{crash_report.report_id}.pdf',
+                "save_path":save_path,
                 "is_runner_report": 1,
                 "police_department_id": crash_report.police_department_id,
                 "report_id": crash_report.report_id,
@@ -242,7 +234,8 @@ class GetAllCrashReports(Resource):
                     "county_id": crash.county_id,
                     "crash_severity": crash.crash_severity,
                     "no_of_occupants": crash.no_of_occupants,
-                    "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                    # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                    'file_name':f"{app.config['UPLOAD_FOLDER']}/{crash.report_id}.pdf",
                     "added_date": crash.added_date,
                     "added_date_time": crash.added_date_time,
                     "status": crash.status,
@@ -326,7 +319,8 @@ class SearchCrashReportAllUser(Resource):
                 "county_id": crash.county_id,
                 "crash_severity": crash.crash_severity,
                 "no_of_occupants": crash.no_of_occupants,
-                "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                'file_name':f"{app.config['UPLOAD_FOLDER']}/{crash.report_id}.pdf",
                 "added_date": crash.added_date,
                 "added_date_time": crash.added_date_time,
                 "status": crash.status,
@@ -369,7 +363,8 @@ class GetCrashReportById(Resource):
             "countyName":data.county.name,
             "crash_severity": data.crash_severity,
             "no_of_occupants": data.no_of_occupants,
-            "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{data.police_department_id}/reports/{data.report_id}.pdf',
+            # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{data.police_department_id}/reports/{data.report_id}.pdf',
+            'file_name':f"{app.config['UPLOAD_FOLDER']}/{data.report_id}.pdf",
             "added_date": data.added_date,
             "added_date_time": data.added_date_time,
             "status": data.status,
@@ -380,73 +375,84 @@ class GetCrashReportById(Resource):
 # Update crash report by id
 class UpdateCrashReport(Resource):
     def put(self, id):
-        crash_report = CrashReports.query.filter_by(report_id=id).first()
-        if not crash_report:
-            return jsonify({'msg': 'Crash Report not found', 'status': False}), 404
-        crash_report.account_id = request.form.get('account_id')
-        crash_report.police_department_id = request.form.get('police_department_id')
-        crash_report.report_number = request.form.get('report_number')
-        crash_report.crash_date = request.form.get('crash_date')
-        crash_report.location = request.form.get('location')
-        crash_report.county_id = request.form.get('county_id')
-        crash_report.crash_severity = request.form.get('crash_severity')
-        crash_report.no_of_occupants = request.form.get('no_of_occupants')
-        occupants_list = []
-        
-        # Determine how many occupants forms are provided
-        i = 0
-        while True:
-            first_name = request.form.get(f'occupantsForms[{i}][first_name]')
-            if not first_name:
-                break
-            occupant = {
-                "first_name": first_name,
-                "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
-                "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
-                "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
-                "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
-                "status": request.form.get(f'occupantsForms[{i}][status]')
-            }
-            occupants_list.append(occupant)
-            i += 1 
-        if 'crashReportFile' in request.files:
-            crash_report_file = request.files['crashReportFile']
-            file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, crash_report.report_id)
         try:
-            crash_report.file_name = f'{crash_report.report_id}.pdf'
-            occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
-            for occupant in occupants_to_delete:
-                db.session.delete(occupant)           
-                db.session.commit()
-            for occupant in occupants_list:
-                occupants_data = Occupants(
-                report_id=crash_report.report_id,
-                first_name=occupant['first_name'],
-                last_name=occupant['last_name'],
-                injuries=occupant['injuries'],
-                seating_position=occupant['seating_position'],
-                sequence_no=occupant['sequence_no'],
-                status=occupant['status']
-                )
-                occupants_data.save_to_users()
-            value={
-                "report_id": crash_report.report_id,
-                "account_id": crash_report.account_id,
-                "police_department_id": crash_report.police_department_id,
-                "report_number": crash_report.report_number,
-                "crash_date": crash_report.crash_date,
-                "location": crash_report.location,
-                "county_id": crash_report.county_id,
-                "crash_severity": crash_report.crash_severity,
-                "no_of_occupants": crash_report.no_of_occupants,
-                "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
-                "added_date": crash_report.added_date,
-                "added_date_time": crash_report.added_date_time,
-                "status": crash_report.status,}
-            return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
+            crash_report = CrashReports.query.filter_by(report_id=id).first()
+            if not crash_report:
+                return jsonify({'msg': 'Crash Report not found', 'status': False})
+            occupant = int(request.form.get('no_of_occupants'))
+            crash_report.account_id = request.form.get('account_id')
+            crash_report.police_department_id = request.form.get('police_department_id')
+            crash_report.report_number = request.form.get('report_number')
+            crash_report.crash_date = request.form.get('crash_date')
+            crash_report.location = request.form.get('location')
+            crash_report.county_id = request.form.get('county_id')
+            crash_report.crash_severity = request.form.get('crash_severity')
+            crash_report.no_of_occupants = occupant
+            occupants_list = []
+            for i in range(occupant):
+                first_name = request.form.get(f'occupantsForms[{i}][first_name]')
+                if not first_name:
+                    break
+                occupant = {
+                    "first_name": first_name,
+                    "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
+                    "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
+                    "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
+                    "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
+                    "status": request.form.get(f'occupantsForms[{i}][status]')
+                }
+                occupants_list.append(occupant)
+            if 'crashReportFile' in request.files:
+                crash_report_file = request.files['crashReportFile']
+                # file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, crash_report.report_id)
+                if not allowed_file(crash_report_file.filename):
+                    return jsonify({'error': 'Invalid file type. Only PDF files are allowed.'})
+                # Example: Extract report_id from the request or form data
+                report_id = crash_report.report_id
+                if not report_id:
+                    return jsonify({'error': 'Missing report ID'})
+                filename = f"{report_id}.pdf"
+                save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                print("save_path",save_path)
+                # Ensure the directory exists
+                os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                # Save or replace the file
+                crash_report_file.save(save_path)
+                crash_report.file_name = f'{crash_report.report_id}.pdf'
+                occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
+                for occupant in occupants_to_delete:
+                    db.session.delete(occupant)           
+                    db.session.commit()
+                for occupant in occupants_list:
+                    occupants_data = Occupants(
+                    report_id=crash_report.report_id,
+                    first_name=occupant['first_name'],
+                    last_name=occupant['last_name'],
+                    injuries=occupant['injuries'],
+                    seating_position=occupant['seating_position'],
+                    sequence_no=occupant['sequence_no'],
+                    status=occupant['status']
+                    )
+                    occupants_data.save_to_users()
+                value={
+                    "report_id": crash_report.report_id,
+                    "account_id": crash_report.account_id,
+                    "police_department_id": crash_report.police_department_id,
+                    "report_number": crash_report.report_number,
+                    "crash_date": crash_report.crash_date,
+                    "location": crash_report.location,
+                    "county_id": crash_report.county_id,
+                    "crash_severity": crash_report.crash_severity,
+                    "no_of_occupants": crash_report.no_of_occupants,
+                    # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
+                    'file_name':f"{app.config['UPLOAD_FOLDER']}/{crash_report.report_id}.pdf",
+                    "added_date": crash_report.added_date,
+                    "added_date_time": crash_report.added_date_time,
+                    "status": crash_report.status,}
+                return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
         except SQLAlchemyError as e:
             db.session.rollback()
-            return jsonify({'msg': 'Error updating data to database', 'error': str(e)}), 500
+            return jsonify({'msg': 'Error updating data to database', 'error': str(e)})
 
 # Delete Crash Report by id
 class DeleteCrashReport(Resource):
