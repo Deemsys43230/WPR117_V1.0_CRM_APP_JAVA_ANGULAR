@@ -17,7 +17,7 @@ class CreateRoles(Resource):
 class getRoles(Resource):
     # @role_required('ROLE_SUPER_ADMIN')
     def get(self):
-        roles123=Roles.query.all()
+        roles123=Roles.query.filter(Roles.role_id!=3).all()
         role_list=[{
             'role_id':roles.role_id,
             'role':roles.role,

@@ -48,7 +48,6 @@ class userLogin(Resource):
             data = request.form
             username = data.get('username')
             password = data.get('password')
-            print("password",password)
             user = Users.query.filter_by(username=username,status=1).first()
             if not check_md5_hash(user.password,password):  # Compare using MD5 hash
                 return jsonify({'message': 'Password Wrong','status':False})

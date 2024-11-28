@@ -413,7 +413,6 @@ class UpdateCrashReport(Resource):
                     return jsonify({'error': 'Missing report ID'})
                 filename = f"{report_id}.pdf"
                 save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                print("save_path",save_path)
                 # Ensure the directory exists
                 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
                 # Save or replace the file
