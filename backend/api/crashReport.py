@@ -187,7 +187,7 @@ class GetAllCrashReports(Resource):
             if accountId and accountId != "0":
                 query = query.filter(CrashReports.account_id == accountId)
             if reportNumber:
-                query = query.filter(CrashReports.report_number == reportNumber)
+                query = query.filter(CrashReports.report_number.ilike(f'%{reportNumber}%'))
             if crashDate:
                 query = query.filter(CrashReports.crash_date == crashDate)
             if firstName:

@@ -71,7 +71,6 @@ class GetAllAccounts(Resource):
                 query = query.filter(Accounts.email_id.ilike(f"%{email_id}%"))
             if police_department_id:
                 query = query.filter(Accounts.police_department_id.ilike(f"%{police_department_id}%"))
-
             # Join with Users and apply filters
             if username or role_id:
                 query = query.join(Users, Users.account_id == Accounts.account_id)
@@ -80,28 +79,25 @@ class GetAllAccounts(Resource):
                     query = query.filter(func.lower(Users.username).contains(username.lower()))
                 if role_id:
                     query = query.filter(Users.role_id == role_id)
-
             # Fetch accounts with pagination
             accounts = query.offset(offset).limit(items_per_page).all() if items_per_page else query.all()
-
-            # Build results
             result = []
             for account in accounts:
-                users = Users.query.filter_by(account_id=account.account_id).all()
-                users_info = []
-                for user in users:
-                    if username and username.lower() not in user.username.lower():
-                        continue
-                    if role_id and role_id != user.role_id:
-                        continue
-                    users_info.append({
+                # Query users based on the same filters applied earlier
+                users_info = Users.query.filter(Users.account_id == account.account_id)
+                if username:
+                    users_info = users_info.filter(func.lower(Users.username).contains(username.lower()))
+                if role_id:
+                    users_info = users_info.filter(Users.role_id == role_id)
+                users_info = users_info.all()
+                user_details = [
+                    {
                         'username': user.username,
                         'role_id': user.role_id,
-                        'is_enable': user.is_enable
-                    })
-                if not users_info and (username or role_id):
-                    continue  # Skip accounts with no matching users
-
+                        'is_enable': user.is_enable,
+                    }
+                    for user in users_info
+                ]
                 payload = {
                     'account_id': account.account_id,
                     'first_name': account.first_name,
@@ -110,22 +106,17 @@ class GetAllAccounts(Resource):
                     'email_id': account.email_id,
                     'phone_number': account.phone_number,
                     'police_department_id': account.police_department_id,
-                    'username': users_info[0]['username'] if users_info else None,
-                    'role_id': users_info[0]['role_id'] if users_info else None,
-                    'is_enable': users_info[0]['is_enable'] if users_info else None,
-                    'status': account.status
+                    'username': user_details[0]['username'] if user_details else None,
+                    'role_id': user_details[0]['role_id'] if user_details else None,
+                    'is_enable': user_details[0]['is_enable'] if user_details else None,
+                    'status': account.status,
                 }
                 result.append(payload)
-
             # Calculate total count of filtered accounts
             count = query.count()
-
             return {'data': result, 'status': True, 'count': count}
-
         except Exception as e:
             return {'message': 'An error occurred', 'error': str(e)}
-
-
 
 # GET ACCOUNTS BY ID 
 class getAccountsById(Resource):

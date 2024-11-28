@@ -317,3 +317,4 @@ api.add_resource(updatePoliceDepartment,'/updatePoliceDepartment/<int:id>')
 api.add_resource(enableDisablePoliceDepartment,'/enableDisablePoliceDepartment/<int:id>')
 api.add_resource(getByNamePoliceDepartment,'/getByNamePoliceDepartment/<string:name>')
 api.add_resource(policeDepartmentDetailsByUsername,'/policeDepartmentDetailsByUsername')
+
