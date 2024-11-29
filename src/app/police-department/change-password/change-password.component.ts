@@ -17,7 +17,7 @@ export class ChangePasswordComponent {
   public changePasswordData: any;
   public isPasswordChanged: any = false;
 
-  constructor(private router: Router, private fb: FormBuilder, private changePasswordService: AuthService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentDataService, private activatedRoute: ActivatedRoute) {}
+  constructor(private router: Router, private fb: FormBuilder, private changePasswordService: AuthService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentDataService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.initializationForm();
@@ -31,40 +31,40 @@ export class ChangePasswordComponent {
 
   initializationForm() {
     this.changePasswordForm = this.fb.group({
-    current_password: ["", Validators.required], 
-    new_password: ["", Validators.required], 
-    confirm_new_password: ["", Validators.required], 
+      current_password: ["", Validators.required],
+      new_password: ["", Validators.required],
+      confirm_new_password: ["", Validators.required],
     })
   }
 
   changePassword() {
     this.isPasswordChanged = true;
-    if(this.changePasswordForm.valid) {
-    this.changePasswordData = {
-    "old_password": (this.changePasswordForm.value.current_password != undefined) ? this.changePasswordForm.value.current_password : "",
-    "new_password": (this.changePasswordForm.value.new_password != undefined) ? this.changePasswordForm.value.new_password : "",
-    "confirm_password": (this.changePasswordForm.value.confirm_new_password != undefined) ? this.changePasswordForm.value.confirm_new_password : "",
-    "account_id": (localStorage["account_id"] != undefined) ? localStorage["account_id"] : ""
-    }
-    this.changePasswordService.changePassword(this.changePasswordData).subscribe(res => {
-      if(res.status) {
-        this.flashMessageService.successMessage(res.msg, 2);
-        this.router.navigate(['ohio/',this.police_name])
-      } else {
-        this.flashMessageService.successMessage(res.msg, 2);
+    if (this.changePasswordForm.valid) {
+      this.changePasswordData = {
+        "old_password": (this.changePasswordForm.value.current_password != undefined) ? this.changePasswordForm.value.current_password : "",
+        "new_password": (this.changePasswordForm.value.new_password != undefined) ? this.changePasswordForm.value.new_password : "",
+        "confirm_password": (this.changePasswordForm.value.confirm_new_password != undefined) ? this.changePasswordForm.value.confirm_new_password : "",
+        "account_id": (localStorage["account_id"] != undefined) ? localStorage["account_id"] : ""
       }
-    })    
-  }
-  }
-
-    //get by name
-    getByNamePoliceDepartment() {
-      this.policeDepartmentService?.getByNamePoliceDepartmentDetails(this.police_name).subscribe(res => {
+      this.changePasswordService.changePassword(this.changePasswordData).subscribe(res => {
         if (res.status) {
-          this.policeImageUrl = res.data.url;
+          this.flashMessageService.successMessage(res.msg, 2);
+          this.router.navigate(['ohio/', this.police_name])
+        } else {
+          this.flashMessageService.successMessage(res.msg, 2);
         }
       })
     }
+  }
+
+  //get by name
+  getByNamePoliceDepartment() {
+    this.policeDepartmentService?.getByNamePoliceDepartmentDetails(this.police_name).subscribe(res => {
+      if (res.status) {
+        this.policeImageUrl = res.data.url;
+      }
+    })
+  }
 
   // Navigate back to reports list
   backToReportList() {

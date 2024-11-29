@@ -13,6 +13,8 @@ import { OccupantsService } from 'src/app/shared/services/occupants-service';
 })
 export class ReportsComponent {
   @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
+  @ViewChild(BsDatepickerDirective, { static: false }) datepickerForFrom: BsDatepickerDirective;
+  @ViewChild(BsDatepickerDirective, { static: false }) datepickerForTo: BsDatepickerDirective;
 
   policeImageUrl: string = '';
   police_name: any;
@@ -496,7 +498,6 @@ export class ReportsComponent {
 
   // Get by id
   getById(report_id) {
-    console.log('report id', report_id)
     this.occupantsService.getByIdCrashReport(report_id).subscribe(res => {
       this.occupants = res.data.occupants;
       this.reportData = res.data;
@@ -522,9 +523,21 @@ export class ReportsComponent {
   }
 
   // Function to trigger datepicker
-  openDatePicker() {
+  openDatePickerForCrash() {
     if (this.datepicker) {
       this.datepicker.show();  // Open the date picker programmatically
+    }
+  }
+
+  openDatePickerForFrom() {
+    if (this.datepickerForFrom) {
+      this.datepickerForFrom.show();  // Open the date picker programmatically
+    }
+  }
+
+  openDatePickerForTo() {
+    if (this.datepickerForTo) {
+      this.datepickerForTo.show();  // Open the date picker programmatically
     }
   }
 

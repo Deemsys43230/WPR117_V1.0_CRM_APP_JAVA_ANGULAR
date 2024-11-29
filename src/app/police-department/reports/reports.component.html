@@ -19,11 +19,13 @@
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="crashDate" class="form-label">Crash Date:</label>
                     <div class="input-group">
-                    <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepicker="bsDatepicker"/>
-                    <span class="input-group-text" (click)="openDatePicker()">
-                        <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
-                      </span>
-                      </div>
+                        <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
+                            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
+                            (input)="onDateInput($event)" #datepicker="bsDatepicker" />
+                        <span class="input-group-text" (click)="openDatePickerForCrash()">
+                            <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                        </span>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="reportNumber" class="form-label">Report Number:</label>
@@ -48,27 +50,29 @@
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="addedOnFromDate" class="form-label">Added On From Date:</label>
                     <div class="input-group">
-                    <input type="text" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate" 
-                        [max]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepicker="bsDatepicker"/>
-                        <span class="input-group-text" (click)="openDatePicker()">
+                        <input type="text" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate"
+                            [max]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+                            placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepickerForFrom="bsDatepicker" />
+                        <span class="input-group-text" (click)="openDatePickerForFrom()">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
-                          </span>
-                          </div>
+                        </span>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="addedOnToDate" class="form-label">Added On To Date:</label>
                     <div class="input-group">
-                    <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
-                        [min]="toDateMin" [max]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepicker="bsDatepicker"/>
-                        <span class="input-group-text" (click)="openDatePicker()">
+                        <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
+                            [min]="toDateMin" [max]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+                            placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepickerForTo="bsDatepicker" />
+                        <span class="input-group-text" (click)="openDatePickerForTo()">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
-                          </span>
-                    <!-- Error message -->
-                    <div *ngIf="policeDepartmentForm.get('addedOnToDate')?.errors?.invalidDate && policeDepartmentForm.get('addedOnToDate')?.touched"
-                        class="error-message">
-                        Past date is not allowed than From Date.
+                        </span>
+                        <!-- Error message -->
+                        <div *ngIf="policeDepartmentForm.get('addedOnToDate')?.errors?.invalidDate && policeDepartmentForm.get('addedOnToDate')?.touched"
+                            class="error-message">
+                            Past date is not allowed than From Date.
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <div class="d-flex gap-3">

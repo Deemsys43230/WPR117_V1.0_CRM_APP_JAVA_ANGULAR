@@ -1,138 +1,131 @@
 <div style="background-color: #f0f0f0">
-  <app-police-department-header/>
+  <app-police-department-header />
   <div class="container">
     <!-- Add New Report Form -->
     <div class="row">
-        <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
-            <h1 class="highlighted-header">Add Report</h1>
-            <button (click)="backToReportList()" class='outer-div'><i class="fa fa-reply"></i> Back to Reports list</button>
-        </div>
+      <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
+        <h1 class="highlighted-header">Add Report</h1>
+        <button (click)="backToReportList()" class='outer-div'><i class="fa fa-reply"></i> Back to Reports list</button>
+      </div>
     </div>
-    
+
     <div class="container">
-        <form class="row" [formGroup]="addNewReportForm">
-          <div class="row mb-2">
-            <div class="col-lg-1 col-md-1"></div>
-            <div class="col-lg-5 col-md-5 col-sm-12">
-              <label class="form-label">Upload Report:</label><span class="span"> *</span>
-               <div *ngIf="!isNewForm">
-                <div *ngIf="fileName">
-                  <small>{{ fileName }}</small>
-                  <button type="button" class="btn btn-link ml-2" (click)="showFileInputField = true">Change File</button>
-                </div>
-                <input 
-                  *ngIf="showFileInputField" 
-                  class="form-control" 
-                  type="file" 
-                  formControlName="file_name" 
-                  accept=".pdf" 
-                  (change)="onFileChange($event)" />
+      <form class="row" [formGroup]="addNewReportForm">
+        <div class="row mb-2">
+          <div class="col-lg-1 col-md-1"></div>
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <label class="form-label">Upload Report:</label><span class="span"> *</span>
+            <div *ngIf="!isNewForm">
+              <div *ngIf="fileName && !showFileInputField">
+                <small>{{ fileName }}</small>
+                <button type="button" class="btn btn-link ml-2" (click)="showFileInputField = true">Change File</button>
               </div>
-              <input 
-                *ngIf="isNewForm" 
-                class="form-control" 
-                type="file" 
-                formControlName="file_name" 
-                accept=".pdf" 
-                (change)="onFileChange($event)" />
-                <!-- Validation Error Message -->
-                <div class="error-msg-area">
-                  <div *ngIf="
+              <input *ngIf="showFileInputField" class="form-control" type="file" formControlName="file_name"
+                accept=".pdf" (change)="onFileChange($event)" />
+            </div>
+            <input *ngIf="isNewForm" class="form-control" type="file" formControlName="file_name" accept=".pdf"
+              (change)="onFileChange($event)" />
+            <!-- Validation Error Message -->
+            <div class="error-msg-area">
+              <div *ngIf="
                       addNewReportForm.controls['file_name'].errors &&
                       (!addNewReportForm.controls['file_name'].pristine ||
                         isAddFormSubmitted)
                     " class="error-msg">
-                    <div [hidden]="!addNewReportForm.controls['file_name'].errors?.['required']" class="text-danger">
-                     Upload Report is required.
-                    </div>
-                  </div>
+                <div [hidden]="!addNewReportForm.controls['file_name'].errors?.['required']" class="text-danger">
+                  Upload Report is required.
                 </div>
-            </div>         
-            <div class="col-lg-1 col-md-1"></div>      
-            <div class="col-lg-5 col-md-5 col-sm-12 mb-4">
-              <label class="form-label">County:</label>
-              <select class="form-control" formControlName="county_id">
-                <option value="" disabled selected>Select</option>
-                <option *ngFor="let country of countries" [value]="country.value">
-                  {{ country.value }} - {{ country.label }}
-                </option>
-              </select>
+              </div>
             </div>
-            <div class="col-lg-1 col-md-1"></div>
-            <div class="col-lg-5 col-md-5 col-sm-12">
-              <label class="form-label">Crash Date:</label><span class="span"> *</span>
-              <input type="date" class="form-control" placeholder="Enter Crash Date" formControlName="crash_date" />
-              <!-- Validation Error Message -->
-              <div class="error-msg-area">
-                <div *ngIf="
+          </div>
+          <div class="col-lg-1 col-md-1"></div>
+          <div class="col-lg-5 col-md-5 col-sm-12 mb-4">
+            <label class="form-label">County:</label>
+            <select class="form-control" formControlName="county_id">
+              <option value="" disabled selected>Select</option>
+              <option *ngFor="let country of countries" [value]="country.value">
+                {{ country.value }} - {{ country.label }}
+              </option>
+            </select>
+          </div>
+          <div class="col-lg-1 col-md-1"></div>
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <label class="form-label">Crash Date:</label><span class="span"> *</span>
+            <input type="date" class="form-control" placeholder="Enter Crash Date" formControlName="crash_date" />
+            <!-- Validation Error Message -->
+            <div class="error-msg-area">
+              <div *ngIf="
                     addNewReportForm.controls['crash_date'].errors &&
                     (!addNewReportForm.controls['crash_date'].pristine ||
                       isAddFormSubmitted)
                   " class="error-msg">
-                  <div [hidden]="!addNewReportForm.controls['crash_date'].errors?.['required']" class="text-danger">
-                   Crash Date is required.
-                  </div>
+                <div [hidden]="!addNewReportForm.controls['crash_date'].errors?.['required']" class="text-danger">
+                  Crash Date is required.
                 </div>
               </div>
             </div>
-            <div class="col-lg-1 col-md-1"></div>
-            <div class="col-lg-5 col-md-5 col-sm-12">
-              <label class="form-label">Report Number:</label><span class="span"> *</span>
-              <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />            
-              <!-- Validation and Backend Error Messages -->
-              <div class="error-msg-area">
-                <div *ngIf="addNewReportForm.controls['report_number'].errors && (!addNewReportForm.controls['report_number'].pristine || isAddFormSubmitted)" class="error-msg">                  
-                  <div [hidden]="!addNewReportForm.controls['report_number'].errors?.['required']" class="text-danger">
-                    Report Number is required.
-                  </div>         
-                  <div [hidden]="!addNewReportForm.controls['report_number'].errors?.['reportExists']" class="text-danger">
-                    {{ backendMessage }}
-                  </div>
+          </div>
+          <div class="col-lg-1 col-md-1"></div>
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <label class="form-label">Report Number:</label><span class="span"> *</span>
+            <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />
+            <!-- Validation and Backend Error Messages -->
+            <div class="error-msg-area">
+              <div
+                *ngIf="addNewReportForm.controls['report_number'].errors && (!addNewReportForm.controls['report_number'].pristine || isAddFormSubmitted)"
+                class="error-msg">
+                <div [hidden]="!addNewReportForm.controls['report_number'].errors?.['required']" class="text-danger">
+                  Report Number is required.
+                </div>
+                <div [hidden]="!addNewReportForm.controls['report_number'].errors?.['reportExists']"
+                  class="text-danger">
+                  {{ backendMessage }}
                 </div>
               </div>
             </div>
-            
-            <div class="col-lg-1 col-md-1"></div>
-            <div class="col-lg-5 col-md-5 col-sm-12">
-              <label class="form-label">Location:</label><span class="span"> *</span>
-              <input type="text" class="form-control" placeholder="Enter Location" formControlName="location" />
-                <!-- Validation Error Message -->
-                <div class="error-msg-area">
-                  <div *ngIf="
+          </div>
+
+          <div class="col-lg-1 col-md-1"></div>
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <label class="form-label">Location:</label><span class="span"> *</span>
+            <input type="text" class="form-control" placeholder="Enter Location" formControlName="location" />
+            <!-- Validation Error Message -->
+            <div class="error-msg-area">
+              <div *ngIf="
                       addNewReportForm.controls['location'].errors &&
                       (!addNewReportForm.controls['location'].pristine ||
                         isAddFormSubmitted)
                     " class="error-msg">
-                    <div [hidden]="!addNewReportForm.controls['location'].errors?.['required']" class="text-danger">
-                      Location is required.
-                    </div>
-                  </div>
+                <div [hidden]="!addNewReportForm.controls['location'].errors?.['required']" class="text-danger">
+                  Location is required.
                 </div>
+              </div>
             </div>
-            <div class="col-lg-1 col-md-1"></div>
-            <div class="col-lg-5 col-md-5 col-sm-12">
-              <label class="form-label">Crash Severity:</label><span class="span"> *</span>
-              <select class="form-control" formControlName="crash_severity">
-                <option value="" disabled selected>Select</option>
-                <option *ngFor="let severity of crashSeverityOptions" [value]="severity.value">
-                  {{ severity.label }}
-                </option>
-              </select>
-                <!-- Validation Error Message -->
-                <div class="error-msg-area">
-                  <div *ngIf="
+          </div>
+          <div class="col-lg-1 col-md-1"></div>
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <label class="form-label">Crash Severity:</label><span class="span"> *</span>
+            <select class="form-control" formControlName="crash_severity">
+              <option value="" disabled selected>Select</option>
+              <option *ngFor="let severity of crashSeverityOptions" [value]="severity.value">
+                {{ severity.label }}
+              </option>
+            </select>
+            <!-- Validation Error Message -->
+            <div class="error-msg-area">
+              <div *ngIf="
                       addNewReportForm.controls['crash_severity'].errors &&
                       (!addNewReportForm.controls['crash_severity'].pristine ||
                         isAddFormSubmitted)
                     " class="error-msg">
-                    <div [hidden]="!addNewReportForm.controls['crash_severity'].errors?.['required']" class="text-danger">
-                      Crash Severity is required.
-                    </div>
-                  </div>
+                <div [hidden]="!addNewReportForm.controls['crash_severity'].errors?.['required']" class="text-danger">
+                  Crash Severity is required.
                 </div>
-            </div>   
-            <div class="col-lg-1 col-md-12"></div>
-            <div class="col-lg-11 col-md-12 occupants mb-2">
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-1 col-md-12"></div>
+          <div class="col-lg-11 col-md-12 occupants mb-2">
             <h2 style="text-decoration: underline;">Occupants</h2>
             <div formArrayName="occupants">
               <div *ngFor="let occupant of occupants.controls; let i = index" [formGroupName]="i">
@@ -140,16 +133,14 @@
                   <div class="col-lg-1 col-md-1"></div>
                   <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                     <label class="form-label">First Name:</label><span class="span"> *</span>
-                    <input type="text" class="form-control" placeholder="Enter First Name" formControlName="first_name" />
-                     <!-- Validation Error Message -->
-                     <div class="error-msg-area">
-                      <div
-                        *ngIf="
+                    <input type="text" class="form-control" placeholder="Enter First Name"
+                      formControlName="first_name" />
+                    <!-- Validation Error Message -->
+                    <div class="error-msg-area">
+                      <div *ngIf="
                           occupant.get('first_name')?.errors &&
                           (!occupant.get('first_name')?.pristine || isAddFormSubmitted)
-                        "
-                        class="error-msg"
-                      >
+                        " class="error-msg">
                         <div [hidden]="!occupant.get('first_name')?.errors?.['required']" class="text-danger">
                           First Name is required.
                         </div>
@@ -160,15 +151,12 @@
                   <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                     <label class="form-label">Last Name:</label><span class="span"> *</span>
                     <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="last_name" />
-                     <!-- Validation Error Message -->
-                     <div class="error-msg-area">
-                      <div
-                        *ngIf="
+                    <!-- Validation Error Message -->
+                    <div class="error-msg-area">
+                      <div *ngIf="
                           occupant.get('last_name')?.errors &&
                           (!occupant.get('last_name')?.pristine || isAddFormSubmitted)
-                        "
-                        class="error-msg"
-                      >
+                        " class="error-msg">
                         <div [hidden]="!occupant.get('last_name')?.errors?.['required']" class="text-danger">
                           Last Name is required.
                         </div>
@@ -188,7 +176,8 @@
                     <label class="form-label">Seating Position:</label>
                     <select class="form-control" formControlName="seating_position">
                       <option value="" disabled>Select</option>
-                      <option *ngFor="let position of seatingPosition" [value]="position.value">{{ position.label }}</option>
+                      <option *ngFor="let position of seatingPosition" [value]="position.value">{{ position.label }}
+                      </option>
                     </select>
                   </div>
                   <div class="col-lg-10"></div>
@@ -202,25 +191,23 @@
             </div>
           </div>
           <div class="col-lg-1"></div>
-            <div class="col-lg-11 margin-custom">
-              <button style="font-size: 14px; cursor: pointer;" type="button" class="btn" (click)="addOneMoreOccupant()">
-                <i class="fa fa-plus"></i> Add One More Occupant
+          <div class="col-lg-11 margin-custom">
+            <button style="font-size: 14px; cursor: pointer;" type="button" class="btn" (click)="addOneMoreOccupant()">
+              <i class="fa fa-plus"></i> Add One More Occupant
+            </button>
+          </div>
+          <div class="row mt-2">
+            <div class="col-lg-5 col-md-5 col-12"></div>
+            <div class="col-lg-6 col-md-6 col-12">
+              <button (click)="onCancel()" class="btn" type="button">
+                Cancel
+              </button>
+              <button (click)="onSubmit()" class="btn btn-change ml-2" type="submit">
+                {{ report_id ? 'Update' : 'Submit' }}
               </button>
             </div>
-            <div class="row mt-2">
-              <div class="col-lg-5 col-md-5 col-12"></div>
-                <div class="col-lg-6 col-md-6 col-12">
-                <button (click)="onCancel()" class="btn" type="button">
-                  Cancel
-                </button>
-                <button (click)="onSubmit()" class="btn btn-change ml-2" type="submit">
-                  {{ report_id ? 'Update' : 'Submit' }}
-                </button>
-              </div>
-            </div>              
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
-      
-      
+  </div>

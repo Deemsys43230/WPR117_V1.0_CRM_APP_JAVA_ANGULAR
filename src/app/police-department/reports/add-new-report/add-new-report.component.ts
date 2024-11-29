@@ -32,7 +32,7 @@ export class AddNewReportComponent {
   public report_id: any;
   fileName: string = '';
   isNewForm: boolean = true; // Flag to determine if it's a new form or edit form
-  showFileInputField: boolean = false; 
+  showFileInputField: boolean = false;
   backendMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService) { }
@@ -62,11 +62,11 @@ export class AddNewReportComponent {
         debounceTime(500),
         switchMap(value => {
           if (value) {
-            const valueData = {"report_number": value, "report_id": this.report_id ? this.report_id : ""}
+            const valueData = { "report_number": value, "report_id": this.report_id ? this.report_id : "" }
             return this.occupantsService.checkReportNumber(valueData)
-          } 
+          }
           else {
-            return of(null); 
+            return of(null);
           }
         })
       )
@@ -83,7 +83,7 @@ export class AddNewReportComponent {
   //Initialization new report form
   initializationNewReportForm() {
     this.addNewReportForm = this.fb.group({
-      file_name: ['', Validators.required],
+      file_name: [this.isNewForm ? null : this.fileName, Validators.required],
       county_id: [''],
       crash_date: ['', Validators.required],
       report_number: ['', Validators.required],
@@ -159,9 +159,20 @@ export class AddNewReportComponent {
   //On submit
   onSubmit() {
     this.isAddFormSubmitted = true;
+    // Handle missing file_name for edit mode
+    if (!this.addNewReportForm.get('file_name')?.value && !this.isNewForm && this.fileName) {
+      this.addNewReportForm.get('file_name')?.setValue(this.fileName);
+      this.addNewReportForm.get('file_name')?.updateValueAndValidity();
+    }
+
+    // Check form validity
+    if (!this.addNewReportForm.valid) {
+      return;
+    }
+
     if (this.addNewReportForm.valid) {
       const data = this.addNewReportForm.value;
-      const formData = new FormData();      
+      const formData = new FormData();
       formData.append('account_id', this.account_id);
       formData.append('police_department_id', this.police_department_id);
       formData.append('report_number', data.report_number);
@@ -170,7 +181,7 @@ export class AddNewReportComponent {
       formData.append('county_id', data.county_id);
       formData.append('crash_severity', data.crash_severity);
       formData.append('no_of_occupants', data.occupants.length.toString());
-  
+
       this.occupants.controls.forEach((control, index) => {
         const group = control as FormGroup;
         const formValues = group.value;
@@ -180,18 +191,21 @@ export class AddNewReportComponent {
         formData.append(`occupantsForms[${index}][status]`, '1');
         formData.append(`occupantsForms[${index}][sequence_no]`, '1');
       });
-  
+
       if (this.selectedFile) {
         formData.append('crashReportFile', this.selectedFile);
+      } else if (this.fileName) {
+        // Handle the case when editing without uploading a new file
+        formData.append('crashReportFile', this.fileName);
       }
-  
+
       if (this.report_id) {
         this.crashReportService.updateCrashReport(formData, this.report_id).subscribe(res => {
-          if (res.status) {
+          if (res?.status) {
             this.flashMessageService.successMessage(res.msg, 2);
             this.router.navigate(['reports/', this.police_name]);
           } else {
-            this.flashMessageService.errorMessage(res.msg, 2);
+            this.flashMessageService.errorMessage(res?.msg, 2);
           }
         });
       } else {
@@ -206,7 +220,7 @@ export class AddNewReportComponent {
       }
     }
   }
-  
+
   //get by id crash report
   getByIdCrashReport() {
     this.occupantsService.getByIdCrashReport(this.report_id).subscribe((res) => {
@@ -245,14 +259,27 @@ export class AddNewReportComponent {
   //Report file change
   onFileChange(event: any) {
     const file = event.target.files[0];
+    // if (file) {
+    //   if (file.type !== 'application/pdf') {
+    //     alert('Please upload a PDF file.');
+    //     this.addNewReportForm.get('file_name')?.reset();
+    //   } else {
+    //     this.selectedFile = file;
+    //     this.fileName = file.name;
+    //     this.addNewReportForm.get('file_name')?.setValue(file);
+    //   }
+    // }
     if (file) {
       if (file.type !== 'application/pdf') {
         alert('Please upload a PDF file.');
         this.addNewReportForm.get('file_name')?.reset();
+        this.selectedFile = null;
+        this.fileName = null;
       } else {
-        this.selectedFile = file;
-        this.fileName = file.name;
-        this.addNewReportForm.get('file_name')?.setValue(file);
+        this.selectedFile = file; // Store the file
+        this.fileName = file.name; // Store the file name
+        this.addNewReportForm.patchValue({ file_name: file.name }); // Update the form control
+        this.addNewReportForm.get('file_name')?.updateValueAndValidity();
       }
     }
   }
