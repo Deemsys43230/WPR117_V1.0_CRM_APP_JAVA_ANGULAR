@@ -342,7 +342,7 @@ class GetCrashReportById(Resource):
         occupant_data = Occupants.query.filter_by(report_id =data.report_id).all()
         occupants_list=[]
         for occupant in occupant_data:
-                occupants_data = [{
+                occupants_data = {
                 "report_id":occupant.report_id,
                 "first_name":occupant.first_name,
                 "last_name":occupant.last_name,
@@ -350,7 +350,7 @@ class GetCrashReportById(Resource):
                 "seating_position":occupant.seating_position,
                 "sequence_no":occupant.sequence_no,
                 "status":occupant.status
-                }]
+                }
                 occupants_list.append(occupants_data)
         crashReport={
             "report_id":data.report_id,
@@ -418,21 +418,23 @@ class UpdateCrashReport(Resource):
                 # Save or replace the file
                 crash_report_file.save(save_path)
                 crash_report.file_name = f'{crash_report.report_id}.pdf'
-                occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
-                for occupant in occupants_to_delete:
-                    db.session.delete(occupant)           
-                    db.session.commit()
-                for occupant in occupants_list:
-                    occupants_data = Occupants(
-                    report_id=crash_report.report_id,
-                    first_name=occupant['first_name'],
-                    last_name=occupant['last_name'],
-                    injuries=occupant['injuries'],
-                    seating_position=occupant['seating_position'],
-                    sequence_no=occupant['sequence_no'],
-                    status=occupant['status']
-                    )
-                    occupants_data.save_to_users()
+            else:
+                crash_report.file_name = f'{crash_report.report_id}.pdf'
+            occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
+            for occupant in occupants_to_delete:
+                db.session.delete(occupant)           
+                db.session.commit()
+            for occupant in occupants_list:
+                occupants_data = Occupants(
+                report_id=crash_report.report_id,
+                first_name=occupant['first_name'],
+                last_name=occupant['last_name'],
+                injuries=occupant['injuries'],
+                seating_position=occupant['seating_position'],
+                sequence_no=occupant['sequence_no'],
+                status=occupant['status']
+                )
+                occupants_data.save_to_users()
                 value={
                     "report_id": crash_report.report_id,
                     "account_id": crash_report.account_id,
