@@ -11,7 +11,7 @@ import requests
 
 app = Flask(__name__)
 # Configure upload folder
-app.config['UPLOAD_FOLDER'] = 'C:/wamp64/www/SavePoliceDepartmentImage'  # Change to your WAMP server path
+app.config['UPLOAD_FOLDER'] = 'file:///C:/wamp64/www/SavePoliceDepartmentImage'  # Change to your WAMP server path
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload size (optional)
 # Allowed file extensions for validation (optional)
 ALLOWED_EXTENSIONS = {'jpg'}
@@ -222,10 +222,12 @@ class updatePoliceDepartment(Resource):
                     image.save(save_path)
                     police.image = filename
                     db.session.commit()
-                elif image is not None:
-                    return jsonify({'error': 'Invalid file type. Only allowed file types are supported.'})
+                # elif image is not None:
+                #     return jsonify({'error': 'Invalid file type. Only allowed file types are supported.'})
                 else:
-                    db.session.commit()  # Commit other updates
+                    police.image = f"{police.police_department_id}_banner.jpg"
+                    db.session.commit()
+
                 # if image:
                 #     path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
                 #     os.makedirs(os.path.dirname(path), exist_ok=True)

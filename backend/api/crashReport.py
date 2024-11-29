@@ -50,7 +50,7 @@ def upload_file_to_s3(file, police_department_id, report_id):
 
 app = Flask(__name__)
 # Configure upload folder
-app.config['UPLOAD_FOLDER'] = 'C:/wamp64/www/SaveCrashReports'  # Change to your WAMP server path
+app.config['UPLOAD_FOLDER'] = 'file:///C:/wamp64/www/SaveCrashReports'  # Change to your WAMP server path
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload size (optional)
 # Allowed file extensions for validation (optional)
 ALLOWED_EXTENSIONS = {'pdf'}
