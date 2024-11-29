@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { CrashSeverity, Injuries, ItemsPerPage, SeatingPosition } from 'src/app/constants';
@@ -43,37 +43,26 @@ export class ReportsComponent {
   reportData: any = {};
   public reportType: number = 1;
   ItemsPerPage = ItemsPerPage;
-  today: string;
-  toDateMin: string;
+  today: Date;
+  toDateMin: Date;
+  minimumDate: Date;
+  bsToDate: Date;
+  isFromDateError: boolean = false;
+  isToDateError: boolean = false;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService) { }
 
   //ngOnInit
   ngOnInit(): void {
     const currentDate = new Date();
-    this.today = currentDate.toISOString().split('T')[0];
+    this.today = new Date();
 
     this.policeDepartmentForm = this.fb.group({
       addedOnFromDate: [''],
       addedOnToDate: [''],
-    });
-
-    // Listen to changes in "From Date"
-    this.policeDepartmentForm.get('addedOnFromDate')?.valueChanges.subscribe((fromDate) => {
-      if (fromDate) {
-        const nextDay = new Date(fromDate);
-        nextDay.setDate(nextDay.getDate() + 1); // Add 1 day
-        this.toDateMin = nextDay.toISOString().split('T')[0]; // Format 'yyyy-MM-dd'
-
-        // Reset "To Date" if it is before the updated minimum date
-        const toDateControl = this.policeDepartmentForm.get('addedOnToDate');
-        if (toDateControl?.value && new Date(toDateControl.value) < nextDay) {
-          toDateControl.setValue('');
-        }
-      } else {
-        this.toDateMin = ''; // Clear the minimum if "From Date" is cleared
-      }
-    });
+    },
+      { validators: this.dateRangeValidator }
+    );
 
     this.initializationSearchOccupantsForm();
     this.searchData = {
@@ -99,6 +88,16 @@ export class ReportsComponent {
       }
     });
     this.getAllOccupants();
+  }
+
+  dateRangeValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
+    const fromDate = formGroup.get('addedOnFromDate')?.value;
+    const toDate = formGroup.get('addedOnToDate')?.value;
+
+    if (fromDate && !toDate) {
+      return { toDateRequired: true }; // Validation error
+    }
+    return null; // Validation passes
   }
 
   // Initialization Search Occupants Form
@@ -129,6 +128,18 @@ export class ReportsComponent {
 
   // Search Function  For  Account
   onSearch() {
+    this.isFromDateError = false; // Reset validation flags
+    this.isToDateError = false;
+    const fromDate = this.policeDepartmentForm.value.addedOnFromDate;
+    const toDate = this.policeDepartmentForm.value.addedOnToDate;
+    if (fromDate && !toDate) {
+      this.isToDateError = true;
+      return;
+    }
+    if (!fromDate && toDate) {
+      this.isFromDateError = true;
+      return;
+    }
     this.currentPage = 1
     this.searchData = {
       page: this.currentPage,
@@ -148,10 +159,14 @@ export class ReportsComponent {
     };
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
     this.getAllOccupants();
+
+    return undefined;
   }
 
   // Reset  Search
   resetSearch() {
+    this.isFromDateError = null;
+    this.isToDateError = null;
     this.currentPage = 1;
     this.policeDepartmentForm.reset();
     this.searchData = {
@@ -522,28 +537,18 @@ export class ReportsComponent {
     return severity ? severity.label : 'Unknown';
   }
 
-  // Function to trigger datepicker
-  openDatePickerForCrash() {
-    if (this.datepicker) {
-      this.datepicker.show();  // Open the date picker programmatically
+  openDatePicker(obj) {
+    if (obj) {
+      obj.show();  // Open the date picker programmatically
     }
   }
 
-  openDatePickerForFrom() {
-    if (this.datepickerForFrom) {
-      this.datepickerForFrom.show();  // Open the date picker programmatically
-    }
-  }
-
-  openDatePickerForTo() {
-    if (this.datepickerForTo) {
-      this.datepickerForTo.show();  // Open the date picker programmatically
-    }
-  }
-
-  // Method to restrict alphabetic characters in the input
-  onDateInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9\/]/g, ''); // Allow only numbers and slashes
+  onDateInput(event) {
+    this.isFromDateError = false; // Reset validation flags
+    this.isToDateError = false;
+    this.minimumDate = event;
+    this.policeDepartmentForm.patchValue({
+      addedOnToDate: ''
+    });
   }
 }

@@ -21,8 +21,9 @@
                     <div class="input-group">
                         <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
                             [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
-                            (input)="onDateInput($event)" #datepicker="bsDatepicker" />
-                        <span class="input-group-text" (click)="openDatePickerForCrash()">
+                            (input)="onDateInput($event)" #datepicker="bsDatepicker" readonly
+                            (keydown)="$event.preventDefault()" />
+                        <span class="input-group-text" (click)="openDatePicker(datepicker)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                         </span>
                     </div>
@@ -51,28 +52,30 @@
                     <label for="addedOnFromDate" class="form-label">Added On From Date:</label>
                     <div class="input-group">
                         <input type="text" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate"
-                            [max]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
-                            placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepickerForFrom="bsDatepicker" />
-                        <span class="input-group-text" (click)="openDatePickerForFrom()">
+                            [maxDate]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+                            placeholder="MM/DD/YYYY" #datepickerForFrom="bsDatepicker"
+                            (bsValueChange)="onDateInput($event)" readonly (keydown)="$event.preventDefault()" />
+                        <span class="input-group-text" (click)="openDatePicker(datepickerForFrom)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                         </span>
                     </div>
+                    <!-- Error message for From Date -->
+                    <div *ngIf="isFromDateError" class="text-danger mt-1">Please select From date</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="addedOnToDate" class="form-label">Added On To Date:</label>
                     <div class="input-group">
                         <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
-                            [min]="toDateMin" [max]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
-                            placeholder="MM/DD/YYYY" (input)="onDateInput($event)" #datepickerForTo="bsDatepicker" />
-                        <span class="input-group-text" (click)="openDatePickerForTo()">
+                            [maxDate]="today" [minDate]="minimumDate" bsDatepicker
+                            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
+                            (bsValueChange)="onDateInput($event)" #datepickerForTo="bsDatepicker" [bsValue]="bsToDate"
+                            readonly (keydown)="$event.preventDefault()" />
+                        <span class=" input-group-text" (click)="openDatePicker(datepickerForTo)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                         </span>
-                        <!-- Error message -->
-                        <div *ngIf="policeDepartmentForm.get('addedOnToDate')?.errors?.invalidDate && policeDepartmentForm.get('addedOnToDate')?.touched"
-                            class="error-message">
-                            Past date is not allowed than From Date.
-                        </div>
                     </div>
+                    <!-- Error message for To Date -->
+                    <div *ngIf="isToDateError" class="text-danger mt-1">Please select To date</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <div class="d-flex gap-3">
