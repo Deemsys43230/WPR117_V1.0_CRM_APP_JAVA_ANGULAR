@@ -167,45 +167,64 @@ li.numberList:hover {
 }
 
 .highlighted-header {
-    padding: 5px; 
-    font-size: 2rem; 
+    padding: 5px;
+    font-size: 2rem;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1px; 
+    letter-spacing: 1px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  }
-  
-  .outer-div {
-    background-color: #d4e3e3; 
+}
+
+.outer-div {
+    background-color: #d4e3e3;
     padding: 15px;
     border-radius: 15px;
     padding-bottom: 30px;
-  }
+}
 
-  .occupants {
+.occupants {
     text-decoration: underline;
-  }
+}
 
-  .modal-content {
+.modal-content {
     width: 150% !important;
-  }
+}
 
-  .modal-header {
+.modal-header {
     background-color: #9fc1c1;
-  }
+}
 
-  .error-message {
-    color: #d9534f; /* Bootstrap danger color */
-    font-size: 0.875rem; /* Smaller font size for clarity */
-    min-height: 20px; /* Reserve space for the error message */
-    margin-top: 4px; /* Add some spacing from the input */
-  }
+.error-message {
+    color: #d9534f;
+    /* Bootstrap danger color */
+    font-size: 0.875rem;
+    /* Smaller font size for clarity */
+    min-height: 20px;
+    /* Reserve space for the error message */
+    margin-top: 4px;
+    /* Add some spacing from the input */
+}
 
-  .input-group-text {
+.input-group-text {
     display: flex;
-    align-items: center;  /* Center the icon vertically */
-  }
-  
-  input.form-control {
-    border-right: none;  /* Optional: remove right border to make it look cleaner */
-  }
+    align-items: center;
+    /* Center the icon vertically */
+}
+
+input.form-control {
+    border-right: none;
+    /* Optional: remove right border to make it look cleaner */
+}
+
+.input-group {
+    position: relative;
+}
+
+.text-danger {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0;
+}

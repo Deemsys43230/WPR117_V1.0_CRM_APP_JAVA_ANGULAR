@@ -58,9 +58,9 @@
                         <span class="input-group-text" (click)="openDatePicker(datepickerForFrom)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                         </span>
+                        <!-- Error message for From Date -->
+                        <div *ngIf="isFromDateError" class="text-danger">Please select From date</div>
                     </div>
-                    <!-- Error message for From Date -->
-                    <div *ngIf="isFromDateError" class="text-danger mt-1">Please select From date</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="addedOnToDate" class="form-label">Added On To Date:</label>
@@ -73,9 +73,9 @@
                         <span class=" input-group-text" (click)="openDatePicker(datepickerForTo)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                         </span>
+                        <!-- Error message for To Date -->
+                        <div *ngIf="isToDateError" class="text-danger">Please select To date</div>
                     </div>
-                    <!-- Error message for To Date -->
-                    <div *ngIf="isToDateError" class="text-danger mt-1">Please select To date</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <div class="d-flex gap-3">
