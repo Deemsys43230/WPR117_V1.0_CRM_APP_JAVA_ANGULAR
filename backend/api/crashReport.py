@@ -50,7 +50,7 @@ def upload_file_to_s3(file, police_department_id, report_id):
 
 app = Flask(__name__)
 # Configure upload folder
-app.config['UPLOAD_FOLDER'] = 'file:///C:/wamp64/www/SaveCrashReports'  # Change to your WAMP server path
+app.config['UPLOAD_FOLDER'] = 'C:/wamp64/www/SaveCrashReports'  # Change to your WAMP server path
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload size (optional)
 # Allowed file extensions for validation (optional)
 ALLOWED_EXTENSIONS = {'pdf'}
@@ -109,7 +109,7 @@ class CreateCrashReport(Resource):
                 occupants_data.save_to_users()
             data = {
                 "report_number": crash_report.report_number,
-                "crash_date": crash_report.crash_date,
+                "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
                 "county_id": crash_report.county_id,
                 "no_of_occupants": crash_report.no_of_occupants,
                 "file_path": f'{crash_report.report_id}.pdf',
@@ -125,7 +125,7 @@ class CreateCrashReport(Resource):
                     {
                         "report_number": crash_report.report_number,
                         "county_id": crash_report.county_id,
-                        "crash_date": crash_report.crash_date,
+                        "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
                         "name": f"{occupant['first_name']} {occupant['last_name']}" if occupant['first_name'] else None,
                         "injuries": occupant['injuries'],
                         "seating_position": occupant['seating_position'],
@@ -229,14 +229,14 @@ class GetAllCrashReports(Resource):
                     "account_id": crash.account_id,
                     "police_department": crash.police.name,
                     "report_number": crash.report_number,
-                    "crash_date": crash.crash_date,
+                    "crash_date": crash.crash_date.strftime('%m-%d-%Y'),
                     "location": crash.location,
                     "county_id": crash.county_id,
                     "crash_severity": crash.crash_severity,
                     "no_of_occupants": crash.no_of_occupants,
                     # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
                     'file_name':f"{app.config['UPLOAD_FOLDER']}/{crash.report_id}.pdf",
-                    "added_date": crash.added_date,
+                    "added_date": crash.added_date.strftime('%m-%d-%Y'),
                     "added_date_time": crash.added_date_time,
                     "status": crash.status,
                     "occupantsForms": occupants_forms
@@ -314,14 +314,14 @@ class SearchCrashReportAllUser(Resource):
                 "account_id": crash.account_id,
                 "police_department": crash.police.name if crash.police else None,
                 "report_number": crash.report_number,
-                "crash_date": crash.crash_date,
+                "crash_date": crash.crash_date.strftime('%m-%d-%Y'),
                 "location": crash.location,
                 "county_id": crash.county_id,
                 "crash_severity": crash.crash_severity,
                 "no_of_occupants": crash.no_of_occupants,
                 # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
                 'file_name':f"{app.config['UPLOAD_FOLDER']}/{crash.report_id}.pdf",
-                "added_date": crash.added_date,
+                "added_date": crash.added_date.strftime('%m-%d-%Y'),
                 "added_date_time": crash.added_date_time,
                 "status": crash.status,
                 "occupantsForms": occupants_forms
@@ -357,7 +357,7 @@ class GetCrashReportById(Resource):
             "account_id": data.account_id,
             "police_department_id": data.police_department_id,
             "report_number": data.report_number,
-            "crash_date": data.crash_date,
+            "crash_date": data.crash_date.strftime('%m-%d-%Y'),
             "location": data.location,
             "county_id": data.county_id,
             "countyName":data.county.name,
@@ -365,7 +365,7 @@ class GetCrashReportById(Resource):
             "no_of_occupants": data.no_of_occupants,
             # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{data.police_department_id}/reports/{data.report_id}.pdf',
             'file_name':f"{app.config['UPLOAD_FOLDER']}/{data.report_id}.pdf",
-            "added_date": data.added_date,
+            "added_date": data.added_date.strftime('%m-%d-%Y'),
             "added_date_time": data.added_date_time,
             "status": data.status,
             "occupants":occupants_list
@@ -440,14 +440,14 @@ class UpdateCrashReport(Resource):
                     "account_id": crash_report.account_id,
                     "police_department_id": crash_report.police_department_id,
                     "report_number": crash_report.report_number,
-                    "crash_date": crash_report.crash_date,
+                    "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
                     "location": crash_report.location,
                     "county_id": crash_report.county_id,
                     "crash_severity": crash_report.crash_severity,
                     "no_of_occupants": crash_report.no_of_occupants,
                     # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
                     'file_name':f"{app.config['UPLOAD_FOLDER']}/{crash_report.report_id}.pdf",
-                    "added_date": crash_report.added_date,
+                    "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
                     "added_date_time": crash_report.added_date_time,
                     "status": crash_report.status,}
                 return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
