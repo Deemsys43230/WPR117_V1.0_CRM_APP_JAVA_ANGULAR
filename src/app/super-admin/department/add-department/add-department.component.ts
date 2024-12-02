@@ -104,7 +104,7 @@ export class AddDepartmentComponent implements OnInit {
   //Auto Data Patching while entering Name
   onChangeName(value){
     if (value) {
-      const lowercaseValue = value?.toLowerCase();
+      const lowercaseValue = value?.split(' ')[0].toLowerCase(); // Take only the first word and convert it to lowercase
       const searchLinkValue = `${lowercaseValue}_search`;
   
       this.addPoliceDepartmentForm.patchValue({

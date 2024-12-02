@@ -10,11 +10,13 @@ import { AccountsDepartmentService } from 'src/app/shared/services/accounts-depa
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-new-report',
   templateUrl: './add-new-report.component.html',
-  styleUrls: ['./add-new-report.component.scss']
+  styleUrls: ['./add-new-report.component.scss'],
+  providers: [DatePipe],
 })
 export class AddNewReportComponent {
   addNewReportForm: FormGroup;
@@ -34,11 +36,17 @@ export class AddNewReportComponent {
   isNewForm: boolean = true; // Flag to determine if it's a new form or edit form
   showFileInputField: boolean = false;
   backendMessage: string | null = null;
+  today: Date;
 
-  constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService) { }
+  constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService, private datePipe: DatePipe) {
+    this.addNewReportForm = this.fb.group({
+      crash_date: [null],
+    });
+   }
 
   //ngOnInit
   ngOnInit(): void {
+    this.today = new Date();
     this.initializationNewReportForm();
     this.getAllCountry();
     this.activatedRoute.paramMap.subscribe(params => {
@@ -158,6 +166,8 @@ export class AddNewReportComponent {
 
   //On submit
   onSubmit() {
+    const rawDate = this.addNewReportForm.value.crash_date;
+    const formattedDate = this.datePipe.transform(rawDate, 'yyyy-MM-dd');
     this.isAddFormSubmitted = true;
     // Handle missing file_name for edit mode
     if (!this.addNewReportForm.get('file_name')?.value && !this.isNewForm && this.fileName) {
@@ -176,7 +186,7 @@ export class AddNewReportComponent {
       formData.append('account_id', this.account_id);
       formData.append('police_department_id', this.police_department_id);
       formData.append('report_number', data.report_number);
-      formData.append('crash_date', data.crash_date);
+      formData.append('crash_date', formattedDate);
       formData.append('location', data.location);
       formData.append('county_id', data.county_id);
       formData.append('crash_severity', data.crash_severity);
@@ -296,5 +306,11 @@ export class AddNewReportComponent {
   //On Cancel
   onCancel() {
     this.router.navigate(['reports/', this.police_name])
+  }
+
+  openDatePicker(obj) {
+    if (obj) {
+      obj.show(); 
+    }
   }
 }

@@ -20,8 +20,8 @@
                     <label for="crashDate" class="form-label">Crash Date:</label>
                     <div class="input-group">
                         <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
-                            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
-                            (input)="onDateInput($event)" #datepicker="bsDatepicker" readonly
+                            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
+                            #datepicker="bsDatepicker" readonly
                             (keydown)="$event.preventDefault()" />
                         <span class="input-group-text" (click)="openDatePicker(datepicker)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
@@ -68,7 +68,7 @@
                         <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
                             [maxDate]="today" [minDate]="minimumDate" bsDatepicker
                             [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
-                            (bsValueChange)="onDateInput($event)" #datepickerForTo="bsDatepicker" [bsValue]="bsToDate"
+                            #datepickerForTo="bsDatepicker" [bsValue]="bsToDate"
                             readonly (keydown)="$event.preventDefault()" />
                         <span class=" input-group-text" (click)="openDatePicker(datepickerForTo)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
@@ -81,12 +81,12 @@
                     <div class="d-flex gap-3">
                         <button
                             class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
-                            type="submit" (click)="onSearch()">
+                            type="submit" (click)="onSearch()" title="Search">
                             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                         </button>
                         <button
                             class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
-                            type="submit" (click)="resetSearch()">
+                            type="submit" (click)="resetSearch()" title="Reset">
                             <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -118,7 +118,7 @@
                         <tr>
                             <th class="report-table-header" colspan="2">First Name</th>
                             <th class="report-table-header" colspan="2">Last Name</th>
-                            <th class="report-table-header">Action</th>
+                            <th class="report-table-header">Actions</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="!error">
@@ -252,7 +252,7 @@
                         <tr>
                             <th class="report-table-header" colspan="2">First Name</th>
                             <th class="report-table-header" colspan="2">Last Name</th>
-                            <th class="report-table-header">Action</th>
+                            <th class="report-table-header">Actions</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="!error">

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +10,8 @@ import { OccupantsService } from 'src/app/shared/services/occupants-service';
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss']
+  styleUrls: ['./reports.component.scss'],
+  providers: [DatePipe],
 })
 export class ReportsComponent {
   @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
@@ -50,7 +52,7 @@ export class ReportsComponent {
   isFromDateError: boolean = false;
   isToDateError: boolean = false;
 
-  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService) { }
+  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService, private datePipe: DatePipe) { }
 
   //ngOnInit
   ngOnInit(): void {
@@ -141,13 +143,19 @@ export class ReportsComponent {
       return;
     }
     this.currentPage = 1
+    const rawDate = this.policeDepartmentForm.value.crashDate;
+    let formattedDate = "";
+    if (rawDate) {
+      const crashDate = new Date(rawDate); // Ensure it's a Date object
+      formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
+    }
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
       addedOnFromDate: (this.policeDepartmentForm?.value.addedOnFromDate) ? this.policeDepartmentForm.value.addedOnFromDate : "",
       addedOnToDate: (this.policeDepartmentForm?.value.addedOnToDate) ? this.policeDepartmentForm.value.addedOnToDate : "",
       countyId: (this.policeDepartmentForm?.value.countyId) ? this.policeDepartmentForm.value.countyId : "",
-      crashDate: (this.policeDepartmentForm?.value.crashDate) ? this.policeDepartmentForm.value.crashDate : "",
+      crashDate: formattedDate,
       firstName: (this.policeDepartmentForm?.value.firstName) ? this.policeDepartmentForm.value.firstName : "",
       lastName: (this.policeDepartmentForm?.value.lastName) ? this.policeDepartmentForm.value.lastName : "",
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
@@ -385,6 +393,8 @@ export class ReportsComponent {
 
   // To Change The Item Per Page Number For  Pagination
   onChangePagination(event) {
+    this.isPageAvailable = false;
+    this.searchPage= null;
     this.pageValue = parseInt(event.target.value)
     this.currentPage = 1;
     this.searchData["itemsPerPage"] = this.pageValue
@@ -539,7 +549,7 @@ export class ReportsComponent {
 
   openDatePicker(obj) {
     if (obj) {
-      obj.show();  // Open the date picker programmatically
+      obj.show(); 
     }
   }
 

@@ -4,7 +4,7 @@
     <!-- Add New Report Form -->
     <div class="row">
       <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
-        <h1 class="highlighted-header">Add Report</h1>
+        <h1 class="highlighted-header">{{ report_id ? "Edit Report" : "Add Report"}}</h1>
         <button (click)="backToReportList()" class='outer-div'><i class="fa fa-reply"></i> Back to Reports list</button>
       </div>
     </div>
@@ -51,7 +51,14 @@
           <div class="col-lg-1 col-md-1"></div>
           <div class="col-lg-5 col-md-5 col-sm-12">
             <label class="form-label">Crash Date:</label><span class="span"> *</span>
-            <input type="date" class="form-control" placeholder="Enter Crash Date" formControlName="crash_date" />
+            <div class="input-group">
+              <input type="text" id="crashDate" class="form-control" formControlName="crash_date" bsDatepicker
+                [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
+                #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
+              <span class="input-group-text" (click)="openDatePicker(datepicker)">
+                <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+              </span>
+            </div>
             <!-- Validation Error Message -->
             <div class="error-msg-area">
               <div *ngIf="
