@@ -189,7 +189,8 @@ class GetAllCrashReports(Resource):
             if reportNumber:
                 query = query.filter(CrashReports.report_number.ilike(f'%{reportNumber}%'))
             if crashDate:
-                query = query.filter(CrashReports.crash_date == crashDate)
+                formattedDate = datetime.strptime(crashDate, '%m-%d-%Y').strftime('%Y-%m-%d')
+                query = query.filter(CrashReports.crash_date == formattedDate)
             if firstName:
                 query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
             if lastName:
