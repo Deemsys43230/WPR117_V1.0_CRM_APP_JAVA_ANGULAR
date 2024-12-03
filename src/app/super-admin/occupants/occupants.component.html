@@ -138,7 +138,7 @@
     </div>
     <div class="col-lg-4">
         <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown" type="text"
-            (change)="onChangePagination($event)">
+            (change)="onChangePagination($event)" [(ngModel)]="selectedItemsPerPage">
             <option *ngFor="let data of ItemsPerPage" [value]="data.value">
                 {{ data.data }}
             </option>

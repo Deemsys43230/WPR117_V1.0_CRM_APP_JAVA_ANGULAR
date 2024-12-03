@@ -6,11 +6,13 @@ import { PoliceDepartmentService } from 'src/app/shared/services/police-departme
 import { ItemsPerPage } from 'src/app/constants';
 import { NgxSpinnerService } from "ngx-spinner";
 import { CrashReportService } from 'src/app/shared/services/crash-report-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-occupants',
   templateUrl: './occupants.component.html',
-  styleUrls: ['./occupants.component.scss']
+  styleUrls: ['./occupants.component.scss'],
+  providers: [DatePipe],
 })
 export class OccupantsComponent implements OnInit {
   public searchData: any;
@@ -35,6 +37,8 @@ export class OccupantsComponent implements OnInit {
   public error: boolean = false;
   maxDate: Date;
   public crashReport: any = null;
+  selectedItemsPerPage = 5;
+  public reportType: number = 2;
 
   @ViewChild('searchPageNumber') searchPageNumberInput!: ElementRef<HTMLInputElement>;
 
@@ -42,7 +46,7 @@ export class OccupantsComponent implements OnInit {
 
   @Output() pageNew = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService, private crashReportService: CrashReportService
+  constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService, private crashReportService: CrashReportService, private datePipe: DatePipe
   ) {
     this.ItemsPerPage = ItemsPerPage,
       this.maxDate = new Date();
@@ -53,7 +57,6 @@ export class OccupantsComponent implements OnInit {
     this.getAccountsDepartmentByPagination();
     this.setupSearchData();
     this.getAllOccupants();
-    // this.getCrashReportById();
   }
 
   // Initialization Search Occupants Form
@@ -68,7 +71,7 @@ export class OccupantsComponent implements OnInit {
       policeDepartmentId: "",
       location: "",
       reportNumber: "",
-      reportType: 2,
+      reportType: this.reportType,
       searchType: 1
     })
   }
@@ -87,7 +90,7 @@ export class OccupantsComponent implements OnInit {
       policeDepartmentId: "",
       location: "",
       reportNumber: "",
-      reportType: 2,
+      reportType: this.reportType,
       searchType: 1,
       accountId: "0",
     };
@@ -126,6 +129,42 @@ export class OccupantsComponent implements OnInit {
 
   //Get All Occupants 
   getAllOccupants() {
+    const rawDate = this.searchOccupantsForm.value.crashDate;
+    let formattedDate = "";
+    if (rawDate) {
+      const crashDate = new Date(rawDate); // Ensure it's a Date object
+      formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+    
+    const rawFromDate = this.searchOccupantsForm.value.addedOnFromDate;
+    let formattedFromDate = "";
+    if (rawFromDate) {
+      const addedOnFromDate = new Date(rawFromDate); // Ensure it's a Date object
+      formattedFromDate = this.datePipe.transform(addedOnFromDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawToDate = this.searchOccupantsForm.value.addedOnToDate;
+    let formattedToDate = "";
+    if (rawToDate) {
+      const addedOnToDate = new Date(rawToDate); // Ensure it's a Date object
+      formattedToDate = this.datePipe.transform(addedOnToDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+    this.searchData = {
+      page: this.currentPage,
+      itemsPerPage: this.pageValue ? this.pageValue : 5,
+      addedOnFromDate: formattedFromDate ? formattedFromDate : "",
+      addedOnToDate: formattedToDate ? formattedToDate : "",
+      countyId: (this.searchOccupantsForm?.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
+      crashDate: formattedDate ? formattedDate : "",
+      firstName: (this.searchOccupantsForm?.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
+      lastName: (this.searchOccupantsForm?.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
+      policeDepartmentId: (this.searchOccupantsForm?.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
+      location: (this.searchOccupantsForm?.value.location) ? this.searchOccupantsForm.value.location : "",
+      reportNumber: (this.searchOccupantsForm?.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
+      reportType: this.reportType,
+      searchType: 1,
+      accountId: "0",
+    };
     this.occupantsService.getAllOccupants(this.searchData).subscribe(res => {
       if (res.status) {
         this.occupantDetail = res.data
@@ -274,6 +313,7 @@ export class OccupantsComponent implements OnInit {
   }
 
   goToPage(page: number) {
+    this.isPageAvailable = false;
     this.currentPage = page;
     this.searchData["page"] = this.currentPage
     this.getAllOccupants();
@@ -368,6 +408,7 @@ export class OccupantsComponent implements OnInit {
   searchPageno() {
     const value = this.searchPage;
     if (value > 0 && this.totalPages >= value) {
+      console.log('val', value)
       this.isPageAvailable = false;
       this.currentPage = value;
       this.getAllOccupants();
@@ -391,7 +432,7 @@ export class OccupantsComponent implements OnInit {
       policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
       location: (this.searchOccupantsForm.value.location) ? this.searchOccupantsForm.value.location : "",
       reportNumber: (this.searchOccupantsForm.value.reportNumber) ? this.searchOccupantsForm.value.reportNumber : "",
-      reportType: 2,
+      reportType: this.reportType,
       searchType: 1,
       accountId: "0",
     };
@@ -401,10 +442,13 @@ export class OccupantsComponent implements OnInit {
 
   // Reset  Search
   resetSearch() {
-    this.currentPage = 1;
+    this.selectedItemsPerPage = 5; // Reset dropdown value to 5
     this.searchOccupantsForm.reset(
       { countyId: "", policeDepartmentId: "" });
     this.setupSearchData();
+    this.pageValue = 5;
+    this.currentPage = 1;
+    this.searchData["itemsPerPage"] = this.pageValue
     this.getAllOccupants();
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
   }

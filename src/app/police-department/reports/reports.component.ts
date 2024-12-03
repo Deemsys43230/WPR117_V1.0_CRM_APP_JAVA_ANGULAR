@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
@@ -17,7 +17,7 @@ export class ReportsComponent {
   @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
   @ViewChild(BsDatepickerDirective, { static: false }) datepickerForFrom: BsDatepickerDirective;
   @ViewChild(BsDatepickerDirective, { static: false }) datepickerForTo: BsDatepickerDirective;
-
+  
   policeImageUrl: string = '';
   police_name: any;
   public error: boolean = false;
@@ -51,6 +51,7 @@ export class ReportsComponent {
   bsToDate: Date;
   isFromDateError: boolean = false;
   isToDateError: boolean = false;
+  selectedItemsPerPage = 5;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService, private datePipe: DatePipe) { }
 
@@ -149,13 +150,28 @@ export class ReportsComponent {
       const crashDate = new Date(rawDate); // Ensure it's a Date object
       formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
     }
+
+    const rawFromDate = this.policeDepartmentForm.value.addedOnFromDate;
+    let formattedFromDate = "";
+    if (rawFromDate) {
+      const addedOnFromDate = new Date(rawFromDate); // Ensure it's a Date object
+      formattedFromDate = this.datePipe.transform(addedOnFromDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawToDate = this.policeDepartmentForm.value.addedOnToDate;
+    let formattedToDate = "";
+    if (rawToDate) {
+      const addedOnToDate = new Date(rawToDate); // Ensure it's a Date object
+      formattedToDate = this.datePipe.transform(addedOnToDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.policeDepartmentForm?.value.addedOnFromDate) ? this.policeDepartmentForm.value.addedOnFromDate : "",
-      addedOnToDate: (this.policeDepartmentForm?.value.addedOnToDate) ? this.policeDepartmentForm.value.addedOnToDate : "",
+      addedOnFromDate: formattedFromDate ? formattedFromDate : "",
+      addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.policeDepartmentForm?.value.countyId) ? this.policeDepartmentForm.value.countyId : "",
-      crashDate: formattedDate,
+      crashDate: formattedDate ? formattedDate : "",
       firstName: (this.policeDepartmentForm?.value.firstName) ? this.policeDepartmentForm.value.firstName : "",
       lastName: (this.policeDepartmentForm?.value.lastName) ? this.policeDepartmentForm.value.lastName : "",
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
@@ -176,7 +192,10 @@ export class ReportsComponent {
     this.isFromDateError = null;
     this.isToDateError = null;
     this.currentPage = 1;
+    this.selectedItemsPerPage = 5; // Reset dropdown value to 5
+    this.isPageAvailable=false;
     this.policeDepartmentForm.reset();
+    this.searchPage=null;
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
@@ -193,6 +212,9 @@ export class ReportsComponent {
       searchType: 1,
       accountId: "0",
     };
+    this.pageValue = 5;
+    this.currentPage = 1;
+    this.searchData["itemsPerPage"] = this.pageValue
     this.getAllOccupants();
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
   }
@@ -211,13 +233,33 @@ export class ReportsComponent {
 
   //Get All Occupants 
   getAllOccupants() {
+    const rawDate = this.policeDepartmentForm.value.crashDate;
+    let formattedDate = "";
+    if (rawDate) {
+      const crashDate = new Date(rawDate); // Ensure it's a Date object
+      formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+    
+    const rawFromDate = this.policeDepartmentForm.value.addedOnFromDate;
+    let formattedFromDate = "";
+    if (rawFromDate) {
+      const addedOnFromDate = new Date(rawFromDate); // Ensure it's a Date object
+      formattedFromDate = this.datePipe.transform(addedOnFromDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawToDate = this.policeDepartmentForm.value.addedOnToDate;
+    let formattedToDate = "";
+    if (rawToDate) {
+      const addedOnToDate = new Date(rawToDate); // Ensure it's a Date object
+      formattedToDate = this.datePipe.transform(addedOnToDate, 'MM-dd-yyyy') || ""; // Format date
+    }
     this.searchData = {
       page: this.currentPage,
-      itemsPerPage: this.pageValue,
-      addedOnFromDate: (this.policeDepartmentForm?.value.addedOnFromDate) ? this.policeDepartmentForm.value.addedOnFromDate : "",
-      addedOnToDate: (this.policeDepartmentForm?.value.addedOnToDate) ? this.policeDepartmentForm.value.addedOnToDate : "",
+      itemsPerPage: this.pageValue ? this.pageValue : 5,
+      addedOnFromDate: formattedFromDate ? formattedFromDate : "",
+      addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.policeDepartmentForm?.value.countyId) ? this.policeDepartmentForm.value.countyId : "",
-      crashDate: (this.policeDepartmentForm?.value.crashDate) ? this.policeDepartmentForm.value.crashDate : "",
+      crashDate: formattedDate ? formattedDate : "",
       firstName: (this.policeDepartmentForm?.value.firstName) ? this.policeDepartmentForm.value.firstName : "",
       lastName: (this.policeDepartmentForm?.value.lastName) ? this.policeDepartmentForm.value.lastName : "",
       policeDepartmentId: (this.policeDepartmentForm?.value.policeDepartmentId) ? this.policeDepartmentForm.value.policeDepartmentId : "",
@@ -238,7 +280,7 @@ export class ReportsComponent {
         this.reportsData = [];
         this.occupantDetail.forEach(data => {
           this.reportsData.push({
-            crashDate: this.convertGMTDateToMMDDYYYY(data.crash_date),
+            crashDate: data.crash_date,
             report_number: data.report_number,
             location: data.location,
             no_of_occupants: data.no_of_occupants,
@@ -268,7 +310,7 @@ export class ReportsComponent {
     this.endIndex = Math.min(this.startIndex + this.pageValue, this.count);
     this.occupantDetail.forEach(data => {
       this.reportsData.push({
-        crashDate: this.convertGMTDateToMMDDYYYY(data.crash_date),
+        crashDate: data.crash_date,
         report_number: data.report_number,
         location: data.location,
         no_of_occupants: data.no_of_occupants,
@@ -329,43 +371,6 @@ export class ReportsComponent {
     this.pages = pages;
   }
 
-  // Convert GMT Date into MM/DD/YYYY Format For Date And Time 
-  convertGMTDateToMMDDYYYY(gmtDate) {
-    // Create a new Date object with the provided GMT date
-    let date = new Date(gmtDate);
-    // Extract the month, day, and year from the Date object
-    let month = (date.getUTCMonth() + 1).toString(); // Convert to string after adding 1 to month
-    let day = date.getUTCDate().toString(); // Convert day to string
-    let year = date.getUTCFullYear();
-    // Pad month and day with leading zeros if necessary using padStart
-    month = month.padStart(2, '0');
-    day = day.padStart(2, '0');
-    // Extract hours, minutes, and seconds from the Date object
-    let hours = date.getUTCHours();
-    let minutes = date.getUTCMinutes().toString();
-    let seconds = date.getUTCSeconds().toString();
-    // Determine AM/PM and convert to 12-hour format
-    let period = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // The hour '0' should be '12'
-    // Convert hours to string and pad if necessary
-    let hoursStr = hours.toString().padStart(2, '0');
-    minutes = minutes.padStart(2, '0');
-    seconds = seconds.padStart(2, '0');
-    // Construct the formatted date string in mm/dd/yyyy hh:mm:ss AM/PM format
-    return { date: `${month}/${day}/${year}`, time: ` ${hoursStr}:${minutes} ${period}` }
-  }
-
-  convertGMTDateToMMDDYYYYFormat(gmtDate: string): string {
-    let date = new Date(gmtDate);
-    let day = date.getUTCDate().toString();
-    let month = (date.getUTCMonth() + 1).toString();
-    let year = date.getUTCFullYear();
-    day = day.padStart(2, '0');
-    month = month.padStart(2, '0');
-    return `${month}-${day}-${year}`;
-  }
-
   // To Calculate Page Number  Based On Current Page Number
   calculatePageNumber(
     i: number,
@@ -410,6 +415,7 @@ export class ReportsComponent {
 
   // Search  Page Number  function For Pagination 
   goToPage(page: number) {
+    this.isPageAvailable = false;
     this.currentPage = page;
     this.searchData["page"] = this.currentPage
     this.getAllOccupants();
@@ -420,6 +426,7 @@ export class ReportsComponent {
 
   //  Route For  Next  Page   Number Function
   nextPage() {
+    this.isPageAvailable = false;
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.setPaginatedData();
@@ -431,6 +438,7 @@ export class ReportsComponent {
 
   // Route For  Previous  Page   Number Function
   previousPage() {
+    this.isPageAvailable = false;
     if (this.currentPage > 1) {
       this.currentPage--;
       this.setPaginatedData();
@@ -468,7 +476,7 @@ export class ReportsComponent {
       this.togglePagination();
       this.pagesArray(this.currentPage, this.count, this.pageValue, 5);
       this.reportsData = this.occupantDetail.map(data => ({
-        crashDate: this.convertGMTDateToMMDDYYYY(data.crash_date),
+        crashDate: data.crash_date,
         report_number: data.report_number,
         location: data.location,
         no_of_occupants: data.no_of_occupants,
@@ -547,12 +555,14 @@ export class ReportsComponent {
     return severity ? severity.label : 'Unknown';
   }
 
+  //To open date picker
   openDatePicker(obj) {
     if (obj) {
       obj.show(); 
     }
   }
 
+  //To handle added on from date and to date fields
   onDateInput(event) {
     this.isFromDateError = false; // Reset validation flags
     this.isToDateError = false;

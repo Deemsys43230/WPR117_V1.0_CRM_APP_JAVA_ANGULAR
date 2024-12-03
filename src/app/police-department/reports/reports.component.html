@@ -125,7 +125,7 @@
                         <ng-container *ngFor="let data of reportsData">
                             <tr>
                                 <td class="report-header">
-                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate}}
                                 </td>
                                 <td class="report-header">
                                     <label class="label-color">Report Number:</label><br />{{data.report_number}}
@@ -166,7 +166,7 @@
                                                         <div class="col-md-6 form-group">
                                                             <label>Crash Date:</label>
                                                             <input type="text" class="form-control"
-                                                                [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)"
+                                                                [value]="reportData.crash_date"
                                                                 readonly />
                                                         </div>
                                                     </div>
@@ -259,7 +259,7 @@
                         <ng-container *ngFor="let data of reportsData">
                             <tr>
                                 <td class="report-header">
-                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate}}
                                 </td>
                                 <td class="report-header">
                                     <label class="label-color">Report Number:</label><br />{{data.report_number}}
@@ -297,7 +297,7 @@
                                                         <div class="col-md-6 form-group">
                                                             <label>Crash Date:</label>
                                                             <input type="text" class="form-control"
-                                                                [value]="convertGMTDateToMMDDYYYYFormat(reportData.crash_date)"
+                                                                [value]="reportData.crash_date"
                                                                 readonly />
                                                         </div>
                                                     </div>
@@ -395,7 +395,7 @@
                 </div>
                 <div class="col-lg-4">
                     <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown"
-                        type="text" (change)="onChangePagination($event)">
+                        type="text" (change)="onChangePagination($event)" [(ngModel)]="selectedItemsPerPage">
                         <option *ngFor="let data of ItemsPerPage" [value]="data.value">
                             {{ data.data }}
                         </option>
@@ -411,7 +411,7 @@
                                     (click)="previousPage()"></i>
                             </li>
                             <li class="numberList" *ngFor="let page of pages"
-                                [ngClass]="{ active: currentPage === page }" (click)="goToPage(page)">
+                                [ngClass]="{ active: currentPage === page }" (click)="(page != '...') ? goToPage(page) : ''">
                                 {{ page }}
                             </li>
                             <li [ngClass]="{ numberList: currentPage !== totalPages }">

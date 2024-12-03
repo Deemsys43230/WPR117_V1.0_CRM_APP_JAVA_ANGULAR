@@ -42,7 +42,7 @@ export class AddNewReportComponent {
     this.addNewReportForm = this.fb.group({
       crash_date: [null],
     });
-   }
+  }
 
   //ngOnInit
   ngOnInit(): void {
@@ -234,8 +234,8 @@ export class AddNewReportComponent {
   //get by id crash report
   getByIdCrashReport() {
     this.occupantsService.getByIdCrashReport(this.report_id).subscribe((res) => {
-      this.fileName = this.extractFileName(res.data.file_name);
-      const crashDate = this.convertToDateFormat(res.data.crash_date);
+      this.fileName = res.data.file_name;
+      const crashDate = res.data.crash_date;
       this.addNewReportForm.patchValue({
         county_id: res.data.county_id,
         crash_date: crashDate,
@@ -269,16 +269,6 @@ export class AddNewReportComponent {
   //Report file change
   onFileChange(event: any) {
     const file = event.target.files[0];
-    // if (file) {
-    //   if (file.type !== 'application/pdf') {
-    //     alert('Please upload a PDF file.');
-    //     this.addNewReportForm.get('file_name')?.reset();
-    //   } else {
-    //     this.selectedFile = file;
-    //     this.fileName = file.name;
-    //     this.addNewReportForm.get('file_name')?.setValue(file);
-    //   }
-    // }
     if (file) {
       if (file.type !== 'application/pdf') {
         alert('Please upload a PDF file.');
@@ -298,11 +288,6 @@ export class AddNewReportComponent {
     this.showFileInputField = true;
   }
 
-  extractFileName(url: string): string {
-    const parts = url.split('/');
-    return parts[parts.length - 1];
-  }
-
   //On Cancel
   onCancel() {
     this.router.navigate(['reports/', this.police_name])
@@ -310,7 +295,17 @@ export class AddNewReportComponent {
 
   openDatePicker(obj) {
     if (obj) {
-      obj.show(); 
+      obj.show();
     }
+  }
+
+  // Extracts the file name from the URL
+  getFileName(fileUrl: string): string {
+    return fileUrl.split('/').pop() || fileUrl;
+  }
+
+  // Resets to the original state when cancel is clicked
+  cancelChange(): void {
+    this.showFileInputField = false;
   }
 }

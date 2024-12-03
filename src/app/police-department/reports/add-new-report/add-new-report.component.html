@@ -17,11 +17,17 @@
             <label class="form-label">Upload Report:</label><span class="span"> *</span>
             <div *ngIf="!isNewForm">
               <div *ngIf="fileName && !showFileInputField">
-                <small>{{ fileName }}</small>
+                <small>
+                  <a [href]="fileName" target="_blank" rel="noopener noreferrer">{{ getFileName(fileName) }}</a>
+                </small>
                 <button type="button" class="btn btn-link ml-2" (click)="showFileInputField = true">Change File</button>
               </div>
-              <input *ngIf="showFileInputField" class="form-control" type="file" formControlName="file_name"
-                accept=".pdf" (change)="onFileChange($event)" />
+              <!-- Input field with cancel button -->
+              <div *ngIf="showFileInputField" class="d-flex align-items-center">
+                <input class="form-control file-change" type="file" formControlName="file_name" accept=".pdf"
+                  (change)="onFileChange($event)" />
+                <button type="button" class="btn btn-secondary mt-2" (click)="cancelChange()">Cancel</button>
+              </div>
             </div>
             <input *ngIf="isNewForm" class="form-control" type="file" formControlName="file_name" accept=".pdf"
               (change)="onFileChange($event)" />
