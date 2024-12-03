@@ -202,10 +202,10 @@ class GetAllCrashReports(Resource):
             if policeDepartmentId and policeDepartmentId is not None:
                 query = query.join(CrashReports.police).filter(PoliceDepartmentModel.police_department_id == policeDepartmentId)
             if addedOnFromDate:
-                from_date = datetime.strptime(addedOnFromDate, '%Y-%m-%d')
+                from_date = datetime.strptime(addedOnFromDate,'%m-%d-%Y').strftime('%Y-%m-%d')
                 query = query.filter(CrashReports.added_date >= from_date)
             if addedOnToDate:
-                to_date = datetime.strptime(addedOnToDate, '%Y-%m-%d')
+                to_date = datetime.strptime(addedOnToDate,'%m-%d-%Y').strftime('%Y-%m-%d')
                 query = query.filter(CrashReports.added_date <= to_date) 
             # Apply pagination
             offset = (page - 1) * itemsPerPage
@@ -236,7 +236,7 @@ class GetAllCrashReports(Resource):
                     "crash_severity": crash.crash_severity,
                     "no_of_occupants": crash.no_of_occupants,
                     # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
-                    'file_name':f"http://14.195.114.174/SavePoliceDepartmentImage/{crash.report_id}.pdf",
+                    'file_name':f"http://14.195.114.174/SaveCrashReports/{crash.report_id}.pdf",
                     "added_date": crash.added_date.strftime('%m-%d-%Y'),
                     "added_date_time": crash.added_date_time,
                     "status": crash.status,
@@ -321,7 +321,7 @@ class SearchCrashReportAllUser(Resource):
                 "crash_severity": crash.crash_severity,
                 "no_of_occupants": crash.no_of_occupants,
                 # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
-                'file_name':f"http://14.195.114.174/SavePoliceDepartmentImage/{crash.report_id}.pdf",
+                'file_name':f"http://14.195.114.174/SaveCrashReports/{crash.report_id}.pdf",
                 "added_date": crash.added_date.strftime('%m-%d-%Y'),
                 "added_date_time": crash.added_date_time,
                 "status": crash.status,
@@ -365,7 +365,7 @@ class GetCrashReportById(Resource):
             "crash_severity": data.crash_severity,
             "no_of_occupants": data.no_of_occupants,
             # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{data.police_department_id}/reports/{data.report_id}.pdf',
-            'file_name':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.report_id}.pdf",
+            'file_name':f"http://14.195.114.174/SaveCrashReports/{data.report_id}.pdf",
             "added_date": data.added_date.strftime('%m-%d-%Y'),
             "added_date_time": data.added_date_time,
             "status": data.status,
@@ -447,7 +447,7 @@ class UpdateCrashReport(Resource):
                     "crash_severity": crash_report.crash_severity,
                     "no_of_occupants": crash_report.no_of_occupants,
                     # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
-                    'file_name':f"http://14.195.114.174/SavePoliceDepartmentImage/{crash_report.report_id}.pdf",
+                    'file_name':f"http://14.195.114.174/SaveCrashReports/{crash_report.report_id}.pdf",
                     "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
                     "added_date_time": crash_report.added_date_time,
                     "status": crash_report.status,}
