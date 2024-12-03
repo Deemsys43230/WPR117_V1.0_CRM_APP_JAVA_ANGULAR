@@ -134,7 +134,7 @@ class getAllPoliceDepartment(Resource):
                     'login_link':data.login_link,
                     'search_link':data.search_link,
                     'status':data.status,
-                    'url':f"{app.config['UPLOAD_FOLDER']}/{data.police_department_id}_banner.jpg",
+                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
                     'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
@@ -165,7 +165,7 @@ class getByIdPoliceDepartment(Resource):
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     # 'url':f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{folderName}{id}{bannerLocation}"
-                    'url':f"{app.config['UPLOAD_FOLDER']}/{data.police_department_id}_banner.jpg"
+                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
                 }
                 return jsonify({'status':True,'data':police_data})
             return jsonify({'status':False,'msg':'No Such Details Found'})
@@ -302,7 +302,7 @@ class policeDepartmentDetailsByUsername(Resource):
                     'viewLoginLink':CRMAppDomain+""+account.police_dep_id.login_link,
                     'viewSearchLink':CRMAppDomain+""+account.police_dep_id.search_link,
                     # 'url':bucketURL+""+str(account.police_dep_id.police_department_id)+""+bannerLocation
-                    'url':f"{app.config['UPLOAD_FOLDER']}/{account.police_department_id}_banner.jpg"
+                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
                 }
                 }
             return jsonify({'msg':'Police Department Details','data':police_data,'status':True})
