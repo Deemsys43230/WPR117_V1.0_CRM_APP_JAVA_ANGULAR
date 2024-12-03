@@ -193,7 +193,7 @@ class getByNamePoliceDepartment(Resource):
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     # 'url':bucketURL+""+str(data.police_department_id)+""+bannerLocation
-                    'url':f"{app.config['UPLOAD_FOLDER']}/{data.police_department_id}_banner.jpg"
+                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
                 }
                 return jsonify({'status':True,'data':police_data})
             return jsonify({'status':False,'msg':'No Such Details Found'})
