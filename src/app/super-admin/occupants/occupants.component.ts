@@ -3,10 +3,11 @@ import { CountyService } from 'src/app/shared/services/county.service';
 import { FormBuilder } from '@angular/forms';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
-import { ItemsPerPage } from 'src/app/constants';
+import { CrashSeverity, Injuries, ItemsPerPage, SeatingPosition } from 'src/app/constants';
 import { NgxSpinnerService } from "ngx-spinner";
 import { CrashReportService } from 'src/app/shared/services/crash-report-service';
 import { DatePipe } from '@angular/common';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-occupants',
@@ -15,6 +16,10 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe],
 })
 export class OccupantsComponent implements OnInit {
+  @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
+  @ViewChild(BsDatepickerDirective, { static: false }) datepickerForFrom: BsDatepickerDirective;
+  @ViewChild(BsDatepickerDirective, { static: false }) datepickerForTo: BsDatepickerDirective;
+
   public searchData: any;
   public searchOccupantsForm: any;
   public currentPage: any = 1;
@@ -35,10 +40,19 @@ export class OccupantsComponent implements OnInit {
   public pages: any[] = [];
   public occupantDetail: any = [];
   public error: boolean = false;
-  maxDate: Date;
   public crashReport: any = null;
   selectedItemsPerPage = 5;
   public reportType: number = 2;
+  today: Date;
+  minimumDate: Date;
+  bsToDate: Date;
+  isFromDateError: boolean = false;
+  isToDateError: boolean = false;
+  occupants = [];
+  reportData: any = {};
+  crashSeverityOptions = CrashSeverity;
+  injuries = Injuries;
+  seatingPosition = SeatingPosition;
 
   @ViewChild('searchPageNumber') searchPageNumberInput!: ElementRef<HTMLInputElement>;
 
@@ -48,10 +62,10 @@ export class OccupantsComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private countyService: CountyService, private policeDepartmentService: PoliceDepartmentService, private occupantsService: OccupantsService, private spinner: NgxSpinnerService, private crashReportService: CrashReportService, private datePipe: DatePipe
   ) {
-    this.ItemsPerPage = ItemsPerPage,
-      this.maxDate = new Date();
+    this.ItemsPerPage = ItemsPerPage
   }
   ngOnInit() {
+    this.today = new Date();
     this.initializationSearchOccupantsForm();
     this.getAllCounty();
     this.getAccountsDepartmentByPagination();
@@ -135,7 +149,7 @@ export class OccupantsComponent implements OnInit {
       const crashDate = new Date(rawDate); // Ensure it's a Date object
       formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
     }
-    
+
     const rawFromDate = this.searchOccupantsForm.value.addedOnFromDate;
     let formattedFromDate = "";
     if (rawFromDate) {
@@ -176,13 +190,14 @@ export class OccupantsComponent implements OnInit {
         this.occupantsData = [];
         this.occupantDetail.forEach(data => {
           this.occupantsData.push({
-            crashDate: this.convertGMTDateToMMDDYYYY(data.crash_date),
+            crashDate: data.crash_date,
             report_number: data.report_number,
             location: data.location,
             no_of_occupants: data.no_of_occupants,
             file_name: data.file_name,
             occupantsForms: data.occupantsForms,
-            police_department: data.police_department
+            police_department: data.police_department,
+            report_id: data.report_id
           });
         });
         if (this.occupantDetail.length == 0) {
@@ -257,7 +272,7 @@ export class OccupantsComponent implements OnInit {
     this.endIndex = Math.min(this.startIndex + this.pageValue, this.count);
     this.occupantDetail.forEach(data => {
       this.occupantsData.push({
-        crashDate: this.convertGMTDateToMMDDYYYY(data.crash_date),
+        crashDate: data.crash_date,
         report_number: data.report_number,
         location: data.location,
         no_of_occupants: data.no_of_occupants,
@@ -306,10 +321,12 @@ export class OccupantsComponent implements OnInit {
   // Selected Page
   selectedPage(pageNum: any) {
     this.currentPage = pageNum;
-    this.pageNew.emit({ page: this.currentPage, item: this.pageValue });
-    this.search = null;
-    this.searchPageNumberInput.nativeElement.value = ''
     this.isPageAvailable = false;
+    this.searchData["page"] = this.currentPage
+    this.getAllOccupants();
+    this.calculateTotalPages();
+    this.searchPage = null;
+    this.setPaginatedData();
   }
 
   goToPage(page: number) {
@@ -408,7 +425,6 @@ export class OccupantsComponent implements OnInit {
   searchPageno() {
     const value = this.searchPage;
     if (value > 0 && this.totalPages >= value) {
-      console.log('val', value)
       this.isPageAvailable = false;
       this.currentPage = value;
       this.getAllOccupants();
@@ -419,14 +435,47 @@ export class OccupantsComponent implements OnInit {
   // Pagination End
   // Search Function  For  Account
   onSearch() {
+    this.isFromDateError = false; // Reset validation flags
+    this.isToDateError = false;
+    const fromDate = this.searchOccupantsForm.value.addedOnFromDate;
+    const toDate = this.searchOccupantsForm.value.addedOnToDate;
+    if (fromDate && !toDate) {
+      this.isToDateError = true;
+      return;
+    }
+    if (!fromDate && toDate) {
+      this.isFromDateError = true;
+      return;
+    }
     this.currentPage = 1
+    const rawDate = this.searchOccupantsForm.value.crashDate;
+    let formattedDate = "";
+    if (rawDate) {
+      const crashDate = new Date(rawDate); // Ensure it's a Date object
+      formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawFromDate = this.searchOccupantsForm.value.addedOnFromDate;
+    let formattedFromDate = "";
+    if (rawFromDate) {
+      const addedOnFromDate = new Date(rawFromDate); // Ensure it's a Date object
+      formattedFromDate = this.datePipe.transform(addedOnFromDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawToDate = this.searchOccupantsForm.value.addedOnToDate;
+    let formattedToDate = "";
+    if (rawToDate) {
+      const addedOnToDate = new Date(rawToDate); // Ensure it's a Date object
+      formattedToDate = this.datePipe.transform(addedOnToDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
-      addedOnFromDate: this.searchOccupantsForm.value.addedOnFromDate ? this.adjustDateToLocal(this.searchOccupantsForm.value.addedOnFromDate) : "",
-      addedOnToDate: this.searchOccupantsForm.value.addedOnToDate ? this.adjustDateToLocal(this.searchOccupantsForm.value.addedOnToDate) : "",
+      addedOnFromDate: formattedFromDate ? formattedFromDate : "",
+      addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.searchOccupantsForm.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
-      crashDate: this.searchOccupantsForm.value.crashDate ? this.adjustDateToLocal(this.searchOccupantsForm.value.crashDate) : "",
+      crashDate: formattedDate ? formattedDate : "",
       firstName: (this.searchOccupantsForm.value.firstName) ? this.searchOccupantsForm.value.firstName : "",
       lastName: (this.searchOccupantsForm.value.lastName) ? this.searchOccupantsForm.value.lastName : "",
       policeDepartmentId: (this.searchOccupantsForm.value.policeDepartmentId) ? this.searchOccupantsForm.value.policeDepartmentId : "",
@@ -442,6 +491,10 @@ export class OccupantsComponent implements OnInit {
 
   // Reset  Search
   resetSearch() {
+    this.isFromDateError = null;
+    this.isToDateError = null;
+    this.searchPage = null;
+    this.isPageAvailable = false;
     this.selectedItemsPerPage = 5; // Reset dropdown value to 5
     this.searchOccupantsForm.reset(
       { countyId: "", policeDepartmentId: "" });
@@ -453,18 +506,65 @@ export class OccupantsComponent implements OnInit {
     this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
   }
 
-    //Get Police Department details by id
-    getCrashReportById(id) {
-      this.crashReportService.getByIdCrashReport(id).subscribe(res => {
-        if (res.status) {
-          this.crashReport = {
-            countyName: res.data.countyName,
-            crash_date: res.data.crash_date,
-            report_number: res.data.report_number,
-            location: res.data.location,
-            crash_severity: res.data.crash_severity,
-          }
+  //Get Police Department details by id
+  getCrashReportById(id) {
+    this.crashReportService.getByIdCrashReport(id).subscribe(res => {
+      if (res.status) {
+        this.crashReport = {
+          countyName: res.data.countyName,
+          crash_date: res.data.crash_date,
+          report_number: res.data.report_number,
+          location: res.data.location,
+          crash_severity: res.data.crash_severity,
         }
-      })
+      }
+    })
+  }
+
+  //To open date picker
+  openDatePicker(obj) {
+    if (obj) {
+      obj.show();
     }
+  }
+
+  //To handle added on from date and to date fields
+  onDateInput(event) {
+    this.isFromDateError = false; // Reset validation flags
+    this.isToDateError = false;
+    this.minimumDate = event;
+    this.searchOccupantsForm.patchValue({
+      addedOnToDate: ''
+    });
+  }
+
+  onDateInputTo(event) {
+    this.isToDateError = false;
+  }
+
+  // Get by id
+  getById(report_id) {
+    this.occupantsService.getByIdCrashReport(report_id).subscribe(res => {
+      this.occupants = res.data.occupants;
+      this.reportData = res.data;
+    })
+  }
+
+  // Get injury name
+  getInjuryLabel(injuryValue: string): string {
+    const injury = this.injuries.find(inj => inj.value === injuryValue);
+    return injury ? injury.label : 'Unknown';
+  }
+
+  // Get seating position name
+  getSeatingPositionLabel(seatingPositionValue: string): string {
+    const seatingPosition = this.seatingPosition.find(sp => sp.value === seatingPositionValue);
+    return seatingPosition ? seatingPosition.label : 'Unknown';
+  }
+
+  // Get severity name
+  getSeverityLabel(severityValue: any): any {
+    const severity = this.crashSeverityOptions.find(s => s.value === severityValue);
+    return severity ? severity.label : 'Unknown';
+  }
 }

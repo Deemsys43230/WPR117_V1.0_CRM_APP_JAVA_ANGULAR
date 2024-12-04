@@ -21,8 +21,7 @@
                     <div class="input-group">
                         <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
                             [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
-                            #datepicker="bsDatepicker" readonly
-                            (keydown)="$event.preventDefault()" />
+                            #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
                         <span class="input-group-text" (click)="openDatePicker(datepicker)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                         </span>
@@ -68,7 +67,7 @@
                         <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
                             [maxDate]="today" [minDate]="minimumDate" bsDatepicker
                             [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
-                            #datepickerForTo="bsDatepicker" [bsValue]="bsToDate"
+                            #datepickerForTo="bsDatepicker" [bsValue]="bsToDate" (bsValueChange)="onDateInputTo($event)"
                             readonly (keydown)="$event.preventDefault()" />
                         <span class=" input-group-text" (click)="openDatePicker(datepickerForTo)">
                             <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
@@ -166,8 +165,7 @@
                                                         <div class="col-md-6 form-group">
                                                             <label>Crash Date:</label>
                                                             <input type="text" class="form-control"
-                                                                [value]="reportData.crash_date"
-                                                                readonly />
+                                                                [value]="reportData.crash_date" readonly />
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -297,8 +295,7 @@
                                                         <div class="col-md-6 form-group">
                                                             <label>Crash Date:</label>
                                                             <input type="text" class="form-control"
-                                                                [value]="reportData.crash_date"
-                                                                readonly />
+                                                                [value]="reportData.crash_date" readonly />
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -411,7 +408,8 @@
                                     (click)="previousPage()"></i>
                             </li>
                             <li class="numberList" *ngFor="let page of pages"
-                                [ngClass]="{ active: currentPage === page }" (click)="(page != '...') ? goToPage(page) : ''">
+                                [ngClass]="{ active: currentPage === page }"
+                                (click)="(page != '...') ? goToPage(page) : ''">
                                 {{ page }}
                             </li>
                             <li [ngClass]="{ numberList: currentPage !== totalPages }">

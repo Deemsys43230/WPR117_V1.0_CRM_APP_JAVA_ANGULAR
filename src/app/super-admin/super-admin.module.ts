@@ -12,7 +12,8 @@ import { SharedModule } from '../shared/shared.module';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ReportsComponent } from './reports/reports.component';
-import {CalendarModule} from 'primeng/calendar';
+import { CalendarModule } from 'primeng/calendar';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {CalendarModule} from 'primeng/calendar';
     FormsModule,
     SharedModule,
     NgxSpinnerModule,
-    CalendarModule
+    CalendarModule,
+    BsDatepickerModule
   ],
   exports: [
     DashboardComponent,

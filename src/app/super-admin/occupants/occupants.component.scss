@@ -107,3 +107,16 @@ li.numberList:hover {
 }
 
 //Button CSS Ends
+
+.input-group {
+    position: relative;
+}
+
+.text-danger {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0;
+}

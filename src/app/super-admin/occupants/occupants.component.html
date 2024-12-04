@@ -14,8 +14,14 @@
     <form class="row" [formGroup]="searchOccupantsForm">
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Crash Date:</label>
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="crashDate"  formControlName="crashDate" inputId="basic">
-            </p-calendar>
+            <div class="input-group">
+                <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
+                    [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
+                    #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
+                <span class="input-group-text" (click)="openDatePicker(datepicker)">
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                </span>
+            </div>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Report Number:</label>
@@ -35,13 +41,32 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label"> Added On From Date:</label>
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic" [maxDate]="maxDate">
-            </p-calendar>
+            <div class="input-group">
+                <input type="text" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate"
+                    [maxDate]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+                    placeholder="MM/DD/YYYY" #datepickerForFrom="bsDatepicker" (bsValueChange)="onDateInput($event)"
+                    readonly (keydown)="$event.preventDefault()" />
+                <span class="input-group-text" (click)="openDatePicker(datepickerForFrom)">
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                </span>
+                <!-- Error message for From Date -->
+                <div *ngIf="isFromDateError" class="text-danger">Please select From date</div>
+            </div>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Added On To Date:</label>
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnToDate"  formControlName="addedOnToDate" inputId="basic">
-            </p-calendar>
+            <div class="input-group">
+                <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
+                    [maxDate]="today" [minDate]="minimumDate" bsDatepicker
+                    [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
+                    (bsValueChange)="onDateInputTo($event)" #datepickerForTo="bsDatepicker" [bsValue]="bsToDate"
+                    readonly (keydown)="$event.preventDefault()" />
+                <span class=" input-group-text" (click)="openDatePicker(datepickerForTo)">
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                </span>
+                <!-- Error message for To Date -->
+                <div *ngIf="isToDateError" class="text-danger">Please select To date</div>
+            </div>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
             <label for="" class="form-label">Department:</label>
@@ -90,7 +115,7 @@
     <tbody *ngIf="!error">
         <ng-container *ngFor="let data of occupantsData">
             <tr>
-                <td class="report-header"><label class="label-color">Crash Date:</label><br />{{data.crashDate.date}}
+                <td class="report-header"><label class="label-color">Crash Date:</label><br />{{data.crashDate}}
                 </td>
                 <td class="report-header"><label class="label-color">Report Number:</label><br />{{data.report_number}}
                 </td>
@@ -99,10 +124,92 @@
                         Occupants:</label><br />{{data.no_of_occupants}}</td>
                 <td class="report-header">{{data.police_department}}</td>
                 <td class="report-header">
-                    <a class="view-btn" title="View" data-bs-toggle="modal" data-bs-target="#ViewModal"><i
-                            class="fa fa-eye fa-sm"></i></a>
+                    <a class="view-btn" title="View" data-bs-toggle="modal" data-bs-target="#ViewModal"
+                        (click)="getById(data.report_id)"><i class="fa fa-eye fa-sm"></i></a>
                     <a href="{{data.file_name}}" target="_blank" class="info-btn" title="View Report File"><i
                             class="fas fa-file"></i></a>
+                    <!-- Modal Open -->
+                    <div class="modal fade" id="ViewModal" tabindex="-1" role="dialog"
+                        aria-labelledby="viewModalLabeled" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content detailModalSize">
+                                <div class="modal-header fs-5">
+                                    <h5 class="modal-title" id="viewModalLabel">Report Details</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Read-Only Fields -->
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label>County:</label>
+                                            <input type="text" class="form-control" [value]="reportData.countyName"
+                                                readonly />
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Crash Date:</label>
+                                            <input type="text" class="form-control" [value]="reportData.crash_date"
+                                                readonly />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label>Report Number:</label>
+                                            <input type="text" class="form-control" [value]="reportData.report_number"
+                                                readonly />
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Location:</label>
+                                            <input type="text" class="form-control" [value]="reportData.location"
+                                                readonly />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label>Crash Severity:</label>
+                                            <input type="text" class="form-control"
+                                                [value]="getSeverityLabel(reportData.crash_severity)" readonly />
+                                        </div>
+                                    </div>
+                                    <!-- Table -->
+                                    <h4 class="occupants">Occupants</h4>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Injuries</th>
+                                                <th>Seating Position</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngIf="occupants.length > 0; else noDataTemplate">
+                                            <tr *ngFor="let occupant of occupants">
+                                                <td>{{ occupant.first_name }}</td>
+                                                <td>{{ occupant.last_name }}</td>
+                                                <td>{{ getInjuryLabel(occupant.injuries) }}</td>
+                                                <td>{{
+                                                    getSeatingPositionLabel(occupant.seating_position)
+                                                    }}</td>
+                                            </tr>
+                                        </tbody>
+                                        <ng-template #noDataTemplate>
+                                            <tr>
+                                                <td colspan="4" class="text-center">No occupants</td>
+                                            </tr>
+                                        </ng-template>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger fs-6 button-close" type="button"
+                                        data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Close -->
                 </td>
             </tr>
             <tr *ngFor="let item of data.occupantsForms">
@@ -122,12 +229,12 @@
     <div class="col-lg-4" *ngIf="pagebutton"></div>
     <div class=" col-lg-4 d-flex flex-column" *ngIf="!pagebutton">
         <div class="d-flex align-items-center">
-        <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search Page" />
-        <button class="button goBtn" (click)="searchPageno()">
-            GO
-        </button>
-    </div>
-    <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
+            <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search Page" />
+            <button class="button goBtn" (click)="searchPageno()">
+                GO
+            </button>
+        </div>
+        <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
     </div>
     <div class="col-lg-4 pageStatus">
         <div class="data-list">
@@ -154,7 +261,7 @@
                         (click)="previousPage()"></i>
                 </li>
                 <li class="numberList" *ngFor="let row of pages" [ngClass]="{'active': currentPage == row}"
-                (click)="(row !='...')?selectedPage(row):''">{{row}}</li>
+                    (click)="(row !='...')?selectedPage(row):''">{{row}}</li>
                 <li [ngClass]="{ numberList: currentPage !== totalPages }">
                     <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
                         (click)="nextPage()"></i>
@@ -164,56 +271,3 @@
     </div>
 </div>
 <!-- Pagination Close -->
-
-<!-- Modal Open -->
-<div class="modal fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabeled"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content detailModalSize">
-      <div class="modal-header fs-5">
-        <h5 class="modal-title" id="viewModalLabel">Report Details</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div *ngIf="crashReport" class="modal-body detail-table">
-          <table class="table-detail table-bordered w-100">
-            <tr class="p-2">
-              <th class="p-2">County</th>
-              <td class="p-2" colspan="3">
-                {{ crashReport?.countyName }}
-              </td>
-              <th class="p-2">Crash Date</th>
-              <td class="p-2" colspan="3">
-                {{ crashReport?.crash_date}}
-              </td>
-            </tr>
-
-            <tr class="p-2">
-              <th class="p-2">Report Number</th>
-              <td class="p-2" colspan="3">
-                {{ crashReport?.report_number }}
-              </td>
-              <th class="p-2">Location</th>
-              <td class="p-2" colspan="3">
-                {{ crashReport?.location}}
-              </td>
-            </tr>
-
-            <tr class="p-2">
-              <th class="p-2">Crash Severity</th>
-              <td class="p-2" colspan="3">{{ crashReport?.crash_severity }}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-danger fs-6 button-close" type="button" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal Close -->

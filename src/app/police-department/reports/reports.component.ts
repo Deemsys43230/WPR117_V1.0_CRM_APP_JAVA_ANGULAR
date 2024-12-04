@@ -17,7 +17,7 @@ export class ReportsComponent {
   @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
   @ViewChild(BsDatepickerDirective, { static: false }) datepickerForFrom: BsDatepickerDirective;
   @ViewChild(BsDatepickerDirective, { static: false }) datepickerForTo: BsDatepickerDirective;
-  
+
   policeImageUrl: string = '';
   police_name: any;
   public error: boolean = false;
@@ -46,7 +46,6 @@ export class ReportsComponent {
   public reportType: number = 1;
   ItemsPerPage = ItemsPerPage;
   today: Date;
-  toDateMin: Date;
   minimumDate: Date;
   bsToDate: Date;
   isFromDateError: boolean = false;
@@ -193,9 +192,9 @@ export class ReportsComponent {
     this.isToDateError = null;
     this.currentPage = 1;
     this.selectedItemsPerPage = 5; // Reset dropdown value to 5
-    this.isPageAvailable=false;
+    this.isPageAvailable = false;
     this.policeDepartmentForm.reset();
-    this.searchPage=null;
+    this.searchPage = null;
     this.searchData = {
       page: this.currentPage,
       itemsPerPage: this.pageValue,
@@ -239,7 +238,7 @@ export class ReportsComponent {
       const crashDate = new Date(rawDate); // Ensure it's a Date object
       formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
     }
-    
+
     const rawFromDate = this.policeDepartmentForm.value.addedOnFromDate;
     let formattedFromDate = "";
     if (rawFromDate) {
@@ -399,7 +398,7 @@ export class ReportsComponent {
   // To Change The Item Per Page Number For  Pagination
   onChangePagination(event) {
     this.isPageAvailable = false;
-    this.searchPage= null;
+    this.searchPage = null;
     this.pageValue = parseInt(event.target.value)
     this.currentPage = 1;
     this.searchData["itemsPerPage"] = this.pageValue
@@ -558,7 +557,7 @@ export class ReportsComponent {
   //To open date picker
   openDatePicker(obj) {
     if (obj) {
-      obj.show(); 
+      obj.show();
     }
   }
 
@@ -570,5 +569,9 @@ export class ReportsComponent {
     this.policeDepartmentForm.patchValue({
       addedOnToDate: ''
     });
+  }
+
+  onDateInputTo(event) {
+    this.isToDateError = false;
   }
 }
