@@ -340,7 +340,7 @@ class SearchCrashReportAllUser(Resource):
 class GetCrashReportById(Resource):
     def get(self,id):
         data=CrashReports.query.filter_by(report_id=id).first()
-        occupant_data = Occupants.query.filter_by(report_id =data.report_id).all()
+        occupant_data = Occupants.query.filter_by(report_id =id).all()
         occupants_list=[]
         for occupant in occupant_data:
                 occupants_data = {
@@ -354,7 +354,7 @@ class GetCrashReportById(Resource):
                 }
                 occupants_list.append(occupants_data)
         crashReport={
-            "report_id":data.report_id,
+            "report_id":id,
             "account_id": data.account_id,
             "police_department_id": data.police_department_id,
             "report_number": data.report_number,
