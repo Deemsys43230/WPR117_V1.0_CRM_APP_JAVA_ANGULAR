@@ -13,27 +13,32 @@
 <div class="row">
     <form class="row" [formGroup]="searchReportsForm">
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
             <div> 
             <label for="crashDate" class="form-label">Crash Date</label></div>
-            <!-- <input id="crashDate" type="date" class="form-control" formControlName="crashDate" /> -->
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="crashDate"  formControlName="crashDate" inputId="basic">
-            </p-calendar>
+            <div class="input-group">
+                <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
+                    [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
+                    #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
+                <span class="input-group-text" (click)="openDatePicker(datepicker)">
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                </span>
+            </div>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Report Number</label>
             <input type="text" class="form-control" placeholder="Search Report Number" formControlName="reportNumber" />
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
             <label for="" class="form-label">Location</label>
             <input type="text" class="form-control" placeholder="Search Location" formControlName="location" />
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
             <label for="" class="form-label">Police Department</label>
-            <select class="form-control" formControlName="department">
+            <select class="form-control" formControlName="policeDepartmentId">
                 <option value="">-Select-</option>
                 <option *ngFor="let police of departmentList" value="{{police?.department_id}}">
                     {{police?.name}}
@@ -41,9 +46,9 @@
             </select>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
             <label for="" class="form-label">County</label>
-            <select class="form-control" formControlName="county">
+            <select class="form-control" formControlName="countyId">
                 <option value="">-Select-</option>
                 <option *ngFor="let county of countyList" value="{{county?.county_id}}">
                     {{county?.county_name}}
@@ -51,23 +56,40 @@
             </select>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
         <div> 
             <label for="addedOnFromDate" class="form-label">Added On From Date</label></div>
-            <!-- <input id="addedOnFromDate" type="date" class="form-control" formControlName="addedOnFromDate" /> -->
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnFromDate"  formControlName="addedOnFromDate" inputId="basic" [maxDate]="maxDate">
-            </p-calendar>
+            <div class="input-group">
+                <input type="text" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate"
+                    [maxDate]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+                    placeholder="MM/DD/YYYY" #datepickerForFrom="bsDatepicker" (bsValueChange)="onDateInput($event)"
+                    readonly (keydown)="$event.preventDefault()" />
+                <span class="input-group-text" (click)="openDatePicker(datepickerForFrom)">
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                </span>
+                <!-- Error message for From Date -->
+                <div *ngIf="isFromDateError" class="text-danger">Please select From date</div>
+            </div>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-4 col-md-4 col-sm-12 custom-margin">
             <div> 
             <label for="addedOnToDate" class="form-label">Added On To Date</label></div>
-            <!-- <input id="addedOnToDate" type="date" class="form-control" formControlName="addedOnToDate" /> -->
-            <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="addedOnToDate"  formControlName="addedOnToDate" inputId="basic" [maxDate]="maxDate">
-            </p-calendar>
+            <div class="input-group">
+                <input type="text" id="addedOnToDate" class="form-control" formControlName="addedOnToDate"
+                    [maxDate]="today" [minDate]="minimumDate" bsDatepicker
+                    [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY"
+                    (bsValueChange)="onDateInputTo($event)" #datepickerForTo="bsDatepicker" [bsValue]="bsToDate"
+                    readonly (keydown)="$event.preventDefault()" />
+                <span class=" input-group-text" (click)="openDatePicker(datepickerForTo)">
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                </span>
+                <!-- Error message for To Date -->
+                <div *ngIf="isToDateError" class="text-danger">Please select To date</div>
+            </div>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="btn-box">
                 <button
                     class="px-3 py-2 d-flex justify-content-center align-items-center search-btn  border-0 text-white"

@@ -59,3 +59,15 @@
   font-weight: bold;
   color: white; 
 }
+
+@media (max-width: 320px) {
+  .total-background {
+    font-size: 12px;
+  }
+}
+
+@media (width: 1024px) {
+  .card {
+    width: 65%;
+  }
+}

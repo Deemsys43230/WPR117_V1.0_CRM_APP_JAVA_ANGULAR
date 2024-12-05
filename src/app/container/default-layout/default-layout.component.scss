@@ -325,3 +325,12 @@ body {
     font-size: 16px;
   }
   // Sidebar CSS Ends
+
+  @media (max-width: 320px) {
+    .header {
+     font-size: 17px;
+    }
+    .dropdown {
+      margin-bottom: 10px;
+    }
+  }

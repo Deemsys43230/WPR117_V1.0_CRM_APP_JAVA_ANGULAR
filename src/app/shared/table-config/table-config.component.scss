@@ -102,3 +102,13 @@ li.numberList:hover {
 }
 
 //Button CSS Ends
+
+@media screen and (min-width: 320px) and (max-width: 425px) {
+  .responsive-table {
+    width: 190%;
+  }
+
+  .row-responsive {
+    flex-wrap: nowrap !important;
+  }
+}

@@ -1,2 +1,10 @@
 @import 'src/styles.scss';
 
+@media screen and (min-width: 320px) and (max-width: 425px) {
+    .custom-row {
+        width: 200%;
+    }
+    .row {
+        width: 200%;
+    }    
+}

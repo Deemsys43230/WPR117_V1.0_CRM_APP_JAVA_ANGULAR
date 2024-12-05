@@ -1,7 +1,8 @@
-import { formatDate } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TableData } from 'src/app/constants';
 import { CountyService } from 'src/app/shared/services/county.service';
@@ -12,12 +13,17 @@ import { TableConfigComponent } from 'src/app/shared/table-config/table-config.c
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss']
+  styleUrls: ['./reports.component.scss'],
+  providers: [DatePipe]
 })
 export class ReportsComponent implements OnInit {
   @ViewChild(TableConfigComponent) TableConfigComponent:
     | TableConfigComponent
     | undefined;
+
+  @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
+  @ViewChild(BsDatepickerDirective, { static: false }) datepickerForFrom: BsDatepickerDirective;
+  @ViewChild(BsDatepickerDirective, { static: false }) datepickerForTo: BsDatepickerDirective;
 
   public table_data: TableData;
   public searchData: any;
@@ -28,10 +34,15 @@ export class ReportsComponent implements OnInit {
   public searchReportsForm: FormGroup;
   public departmentList: any;
   public countyList: any;
-  maxDate: Date;
+  today: Date;
+  minimumDate: Date;
+  bsToDate: Date;
+  isFromDateError: boolean = false;
+  isToDateError: boolean = false;
+  public reportType: number = 2;
 
-  constructor(private router: Router, private fb: FormBuilder, private spinner: NgxSpinnerService, private reportsService: ReportsService, private policeDepartmentService: PoliceDepartmentService, private countyService: CountyService,) { 
-    this.maxDate = new Date();
+  constructor(private router: Router, private fb: FormBuilder, private spinner: NgxSpinnerService, private reportsService: ReportsService, private policeDepartmentService: PoliceDepartmentService, private countyService: CountyService, private datePipe: DatePipe) {
+    this.today = new Date();
   }
 
   ngOnInit(): void {
@@ -48,8 +59,8 @@ export class ReportsComponent implements OnInit {
       crashDate: [''],
       reportNumber: [''],
       location: [''],
-      department: [''],
-      county: [''],
+      policeDepartmentId: [''],
+      countyId: [''],
       addedOnFromDate: [''],
       addedOnToDate: ['']
     });
@@ -61,10 +72,8 @@ export class ReportsComponent implements OnInit {
       page: this.currentPage,
       itemsPerPage: this.items_per_page,
       accountId: "0",
-      firstName: "",
-      lastName: "",
       searchType: 1,
-      reportType: 2,
+      reportType: this.reportType,
       crashDate: "",
       reportNumber: "",
       location: "",
@@ -77,6 +86,40 @@ export class ReportsComponent implements OnInit {
 
   //To Get all Police department details
   getReportsByPagination() {
+    const rawDate = this.searchReportsForm.value.crashDate;
+    let formattedDate = "";
+    if (rawDate) {
+      const crashDate = new Date(rawDate); // Ensure it's a Date object
+      formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawFromDate = this.searchReportsForm.value.addedOnFromDate;
+    let formattedFromDate = "";
+    if (rawFromDate) {
+      const addedOnFromDate = new Date(rawFromDate); // Ensure it's a Date object
+      formattedFromDate = this.datePipe.transform(addedOnFromDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+
+    const rawToDate = this.searchReportsForm.value.addedOnToDate;
+    let formattedToDate = "";
+    if (rawToDate) {
+      const addedOnToDate = new Date(rawToDate); // Ensure it's a Date object
+      formattedToDate = this.datePipe.transform(addedOnToDate, 'MM-dd-yyyy') || ""; // Format date
+    }
+    this.searchData = {
+      page: this.currentPage,
+      itemsPerPage: this.items_per_page ? this.items_per_page : 5,
+      addedOnFromDate: formattedFromDate ? formattedFromDate : "",
+      addedOnToDate: formattedToDate ? formattedToDate : "",
+      countyId: (this.searchReportsForm?.value.countyId) ? this.searchReportsForm.value.countyId : "",
+      crashDate: formattedDate ? formattedDate : "",
+      policeDepartmentId: (this.searchReportsForm?.value.policeDepartmentId) ? this.searchReportsForm.value.policeDepartmentId : "",
+      location: (this.searchReportsForm?.value.location) ? this.searchReportsForm.value.location : "",
+      reportNumber: (this.searchReportsForm?.value.reportNumber) ? this.searchReportsForm.value.reportNumber : "",
+      reportType: this.reportType,
+      searchType: 1,
+      accountId: "0",
+    };
     this.spinner.show();
     var reportsData: any[] = [];
     this.reportsService.getReportsByPagination(this.searchData).subscribe((res) => {
@@ -85,7 +128,7 @@ export class ReportsComponent implements OnInit {
         this.callChildComponent = true;
         res.data.forEach((ele: any) => {
           reportsData.push({
-            crash_date: this.convertGMTDateToMMDDYYYY(ele.crash_date).date,
+            crash_date: ele.crash_date,
             report_number: ele.report_number,
             location: ele.location,
             no_of_occupants: ele.no_of_occupants,
@@ -210,15 +253,13 @@ export class ReportsComponent implements OnInit {
       page: this.currentPage,
       itemsPerPage: this.items_per_page,
       accountId: "0",
-      firstName: "",
-      lastName: "",
       searchType: 1,
       reportType: this.searchReportsForm.value.department !== "" || this.searchReportsForm.value.county !== "" ? 1 : 2,
       crashDate: this.searchReportsForm.value.crashDate ? this.adjustDateToLocal(this.searchReportsForm.value.crashDate) : "",
       reportNumber: this.searchReportsForm.value.reportNumber || "",
       location: this.searchReportsForm.value.location || "",
-      policeDepartmentId: Number(this.searchReportsForm.value.department) || "",
-      countyId: Number(this.searchReportsForm.value.county) || "",
+      policeDepartmentId: (this.searchReportsForm.value.policeDepartmentId) ? this.searchReportsForm.value.policeDepartmentId : "",
+      countyId: (this.searchReportsForm.value.countyId) ? this.searchReportsForm.value.countyId : "",
       addedOnFromDate: this.searchReportsForm.value.addedOnFromDate ? this.adjustDateToLocal(this.searchReportsForm.value.addedOnFromDate) : "",
       addedOnToDate: this.searchReportsForm.value.addedOnToDate ? this.adjustDateToLocal(this.searchReportsForm.value.addedOnToDate) : "",
     };
@@ -233,9 +274,31 @@ export class ReportsComponent implements OnInit {
     };
     this.currentPage = 1;
     this.items_per_page = 5;
-    this.searchReportsForm.reset({ county: '', department: '' });
     this.setupSearchData()
     this.getReportsByPagination()
+    this.searchReportsForm.reset(
+      { countyId: "", policeDepartmentId: "" });
     this.TableConfigComponent?.initialFunction(this.table_data?.totalCount);
+  }
+
+  //To open date picker
+  openDatePicker(obj) {
+    if (obj) {
+      obj.show();
+    }
+  }
+
+  //To handle added on from date and to date fields
+  onDateInput(event) {
+    this.isFromDateError = false; // Reset validation flags
+    this.isToDateError = false;
+    this.minimumDate = event;
+    this.searchReportsForm.patchValue({
+      addedOnToDate: ''
+    });
+  }
+
+  onDateInputTo(event) {
+    this.isToDateError = false;
   }
 }

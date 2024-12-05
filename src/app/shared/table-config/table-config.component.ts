@@ -54,6 +54,9 @@ export class TableConfigComponent implements OnInit {
     this.count = Array.from({ length }, (_, i) => i + 1);
     this.itemCalculation();
     this.paginationFunction(this.count);
+    this.searchPageNumberInput.nativeElement.value = ''
+    this.isSearchValidation = false;
+    this.isValid = false;
   }
 
   // Function Calls when change Items per page 
