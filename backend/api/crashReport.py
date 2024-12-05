@@ -192,9 +192,9 @@ class GetAllCrashReports(Resource):
                 formattedDate = datetime.strptime(crashDate, '%m-%d-%Y').strftime('%Y-%m-%d')
                 query = query.filter(CrashReports.crash_date == formattedDate)
             if firstName:
-                query = query.join(CrashReports.occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
+                query = query.join(Occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
             if lastName:
-                query = query.join(CrashReports.occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
+                query = query.join(Occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
             if location:
                 query = query.filter(CrashReports.location.ilike(f'%{location}%'))
             if countyId:
