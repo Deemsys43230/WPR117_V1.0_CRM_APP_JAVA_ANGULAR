@@ -13,6 +13,8 @@ from config import AWSCredentials,CROCredentials
 from datetime import datetime
 from test import role_required,get_property
 from sqlalchemy import and_, func,or_
+from sqlalchemy.orm import aliased
+
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
@@ -176,7 +178,7 @@ class GetAllCrashReports(Resource):
             countyId = requestDetails.get('countyId')
             policeDepartmentId = requestDetails.get('policeDepartmentId')
 
-            query = CrashReports.query
+            query = CrashReports.query.join(Occupants, CrashReports.report_id == Occupants.report_id)
             user = Users.query.filter_by(username=get_jwt_identity()).first()
             if reportType == 1 and policeDepartmentId=="" and user:
                 accountId = user.account_id
@@ -192,9 +194,9 @@ class GetAllCrashReports(Resource):
                 formattedDate = datetime.strptime(crashDate, '%m-%d-%Y').strftime('%Y-%m-%d')
                 query = query.filter(CrashReports.crash_date == formattedDate)
             if firstName:
-                query = query.join(Occupants).filter(Occupants.first_name.ilike(f'%{firstName}%'))
+                query = query.filter(Occupants.first_name.ilike(f'%{firstName}%'))
             if lastName:
-                query = query.join(Occupants).filter(Occupants.last_name.ilike(f'%{lastName}%'))
+                query = query.filter(Occupants.last_name.ilike(f'%{lastName}%'))
             if location:
                 query = query.filter(CrashReports.location.ilike(f'%{location}%'))
             if countyId:
@@ -212,18 +214,31 @@ class GetAllCrashReports(Resource):
             crash_report_details = query.limit(itemsPerPage).offset(offset).all()
             count = query.count()
             report_list = []
+            OccupantsAlias = aliased(Occupants)
             for crash in crash_report_details:
-                occupants = Occupants.query.filter_by(report_id =crash.report_id).all()
-                occupants_forms = [{
-                    "occupants_id": occupant.occupants_id,
-                    "report_id": occupant.report_id,
-                    "first_name": occupant.first_name,
-                    "last_name": occupant.last_name,
-                    "injuries": occupant.injuries,
-                    "seating_position": occupant.seating_position,
-                    "sequence_no": occupant.sequence_no,
-                    "status": occupant.status
-                } for occupant in occupants]
+                occupants = (
+                    db.session.query(OccupantsAlias)
+                    .filter(
+                        OccupantsAlias.report_id == crash.report_id,  # Match report ID
+                        OccupantsAlias.first_name.ilike(f'%{firstName}%'),  # Match first name
+                        OccupantsAlias.last_name.ilike(f'%{lastName}%')  # Match last name
+                    )
+                    .all()
+                )
+
+                occupants_forms = [
+                    {
+                        "occupants_id": occupant.occupants_id,
+                        "report_id": occupant.report_id,
+                        "first_name": occupant.first_name,
+                        "last_name": occupant.last_name,
+                        "injuries": occupant.injuries,
+                        "seating_position": occupant.seating_position,
+                        "sequence_no": occupant.sequence_no,
+                        "status": occupant.status,
+                    }
+                    for occupant in occupants
+                ]
 
                 report_data = {
                     "report_id": crash.report_id,
@@ -436,22 +451,39 @@ class UpdateCrashReport(Resource):
                 status=occupant['status']
                 )
                 occupants_data.save_to_users()
-                value={
-                    "report_id": crash_report.report_id,
-                    "account_id": crash_report.account_id,
-                    "police_department_id": crash_report.police_department_id,
-                    "report_number": crash_report.report_number,
-                    "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
-                    "location": crash_report.location,
-                    "county_id": crash_report.county_id,
-                    "crash_severity": crash_report.crash_severity,
-                    "no_of_occupants": crash_report.no_of_occupants,
-                    # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
-                    'file_name':f"http://14.195.114.174/SaveCrashReports/{crash_report.report_id}.pdf",
-                    "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
-                    "added_date_time": crash_report.added_date_time,
-                    "status": crash_report.status,}
-                return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
+            value={
+                "report_id": crash_report.report_id,
+                "account_id": crash_report.account_id,
+                "police_department_id": crash_report.police_department_id,
+                "report_number": crash_report.report_number,
+                "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
+                "location": crash_report.location,
+                "county_id": crash_report.county_id,
+                "crash_severity": crash_report.crash_severity,
+                "no_of_occupants": crash_report.no_of_occupants,
+                # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
+                'file_name':f"http://14.195.114.174/SaveCrashReports/{crash_report.report_id}.pdf",
+                "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
+                "added_date_time": crash_report.added_date_time,
+                "status": crash_report.status,
+                "occupants": [
+                    {
+                        "report_number": crash_report.report_number,
+                        "county_id": crash_report.county_id,
+                        "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
+                        "name": f"{occupant['first_name']} {occupant['last_name']}" if occupant['first_name'] else None,
+                        "injuries": occupant['injuries'],
+                        "seating_position": occupant['seating_position'],
+                        "is_owner": 0,
+                        "patient_status": 1,
+                        "is_runner_report": 1,
+                        "status": occupant['status'],
+                        "crash_severity": crash_report.crash_severity,
+                    }
+                    for occupant in occupants_list
+                    ]
+                    }
+            return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error updating data to database', 'error': str(e)})
