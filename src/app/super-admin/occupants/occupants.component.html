@@ -40,7 +40,7 @@
             <input type="text" class="form-control" placeholder="Search Location" formControlName="location" />
         </div>
         <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-            <label for="" class="form-label"> Added On From Date:</label>
+            <label for="" class="form-label" style="text-wrap: nowrap;"> Added On From Date:</label>
             <div class="input-group">
                 <input type="text" id="addedOnFromDate" class="form-control" formControlName="addedOnFromDate"
                     [maxDate]="today" bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
@@ -86,7 +86,7 @@
                 </option>
             </select>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <div class="col-lg-3 col-md-12 col-sm-12 disp-responsive">
             <div class="btn-box">
                 <button
                     class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
@@ -103,13 +103,13 @@
 </div>
 <!-- Search form ends -->
 <!-- table start -->
-<table class="table table-bordered mt-5">
+<table class="table table-bordered mt-5 responsive-table">
     <thead>
         <tr>
             <th class="report-table-header" colspan="2">First Name</th>
             <th class="report-table-header" colspan="2">Last Name</th>
             <th class="report-table-header">Department</th>
-            <th class="report-table-header">Action</th>
+            <th class="report-table-header">Actions</th>
         </tr>
     </thead>
     <tbody *ngIf="!error">
@@ -123,7 +123,7 @@
                 <td class="report-header"><label class="label-color">No. of
                         Occupants:</label><br />{{data.no_of_occupants}}</td>
                 <td class="report-header">{{data.police_department}}</td>
-                <td class="report-header">
+                <td class="report-header responsive-icon">
                     <a class="view-btn" title="View" data-bs-toggle="modal" data-bs-target="#ViewModal"
                         (click)="getById(data.report_id)"><i class="fa fa-eye fa-sm"></i></a>
                     <a href="{{data.file_name}}" target="_blank" class="info-btn" title="View Report File"><i
@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- Read-Only Fields -->
-                                    <div class="row">
+                                    <div class="row-width">
                                         <div class="col-md-6 form-group">
                                             <label>County:</label>
                                             <input type="text" class="form-control" [value]="reportData.countyName"
@@ -153,7 +153,7 @@
                                                 readonly />
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row-width">
                                         <div class="col-md-6 form-group">
                                             <label>Report Number:</label>
                                             <input type="text" class="form-control" [value]="reportData.report_number"
@@ -165,7 +165,7 @@
                                                 readonly />
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row-width">
                                         <div class="col-md-6 form-group">
                                             <label>Crash Severity:</label>
                                             <input type="text" class="form-control"
@@ -225,9 +225,9 @@
     </tbody>
 </table>
 <!-- Pagination Starts -->
-<div class="row mt-4" *ngIf="!error">
+<div class="row mt-4 row-responsive col-8 col-md-12" *ngIf="!error">
     <div class="col-lg-4" *ngIf="pagebutton"></div>
-    <div class=" col-lg-4 d-flex flex-column" *ngIf="!pagebutton">
+    <div class=" col-lg-4 col-md-4 d-flex flex-column" *ngIf="!pagebutton">
         <div class="d-flex align-items-center">
             <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search Page" />
             <button class="button goBtn" (click)="searchPageno()">
@@ -236,14 +236,14 @@
         </div>
         <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
     </div>
-    <div class="col-lg-4 pageStatus">
+    <div class="col-lg-4 pageStatus col-md-4">
         <div class="data-list">
             <p>
                 Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
             </p>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 col-md-4">
         <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown" type="text"
             (change)="onChangePagination($event)" [(ngModel)]="selectedItemsPerPage">
             <option *ngFor="let data of ItemsPerPage" [value]="data.value">
@@ -252,9 +252,9 @@
         </select>
     </div>
 </div>
-<div class="row justify-content-center" *ngIf="!error">
+<div class="row justify-content-center resp-row" *ngIf="!error">
     <div class="col-md-4">
-        <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
+        <div class="pagination-controls d-flex justify-content-center me-5 w-100 row-responsive" *ngIf="!pagebutton">
             <ul class="numberListContainer p-0">
                 <li [ngClass]="{ numberList: currentPage != 1 }">
                     <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1"

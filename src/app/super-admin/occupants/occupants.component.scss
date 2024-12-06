@@ -120,3 +120,78 @@ li.numberList:hover {
     color: #dc3545;
     margin-top: 0;
 }
+
+@media screen and (min-width: 320px) and (max-width: 425px) {
+    .custom-row {
+        width: 200%;
+    }
+
+    .row {
+        width: 200%;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 425px) {
+    .responsive-table {
+        width: 180%;
+    }
+
+    .row-responsive {
+        flex-wrap: nowrap !important;
+    }
+
+    .resp-row {
+        margin-left: -45px;
+    }
+
+    .responsive-icon {
+        display: flex;
+        padding-bottom: 104px;
+    }
+
+    .modal-content {
+        width: 180% !important;
+    }
+
+    .row-width {
+        width: 100% !important;
+    }
+}
+
+@media screen and (min-width: 375px) and (max-width: 425px) {
+    .responsive-table {
+        width: 185% !important;
+    }
+
+    .modal-content {
+        width: 153% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .disp-responsive {
+        display: flex;
+        justify-content: end;
+    }
+}
+
+@media screen and (min-width:768px) and (max-width: 1114px) {
+    .responsive-icon {
+        display: flex;
+        padding-bottom: 104px;
+    }
+
+    .modal-content {
+        width: 110% !important;
+    }
+}
+
+@media (width: 425px) {
+    .modal-content {
+        width: 135% !important;
+    }
+}
+
+.row-width {
+    width: 195%
+}
