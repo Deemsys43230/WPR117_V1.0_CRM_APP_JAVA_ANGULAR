@@ -1,13 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 import { ItemsPerPage } from 'src/app/constants';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
+  providers: [DatePipe],
 })
 export class SearchComponent {
+  @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
+  
   searchForm: FormGroup;
   isSubmitted = false;
   public occupantsData: any = [];
@@ -28,8 +33,11 @@ export class SearchComponent {
   public error: boolean = false;
   isSearchPerformed: boolean = false;
   selectedData: any = null; 
+  today: Date;
+  minimumDate: Date;
+  bsToDate: Date;
 
-  constructor(private fb: FormBuilder, private occupantsService: OccupantsService) { this.ItemsPerPage = ItemsPerPage }
+  constructor(private fb: FormBuilder, private occupantsService: OccupantsService, private datePipe: DatePipe) { this.ItemsPerPage = ItemsPerPage }
 
   //Initialization Search Occupants Form
   initializationSearchOccupantsForm() {
@@ -44,20 +52,26 @@ export class SearchComponent {
 
   //ngOnInit
   ngOnInit() {
+    this.today = new Date();
     this.initializationSearchOccupantsForm();
-  }
-
-  //Date adjust
-  adjustDateToLocal(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 
   //Get All Occupants 
   getAllOccupants() {
+    const rawDate = this.searchForm.value.crashDate;
+    let formattedDate = "";
+    if (rawDate) {
+      const crashDate = new Date(rawDate); // Ensure it's a Date object
+      formattedDate = this.datePipe.transform(crashDate, 'MM-dd-yyyy') || ""; // Format date
+    }
     this.isSearchPerformed = true;
+    this.searchData = {
+      firstName: this.searchForm.value.firstName ? this.searchForm.value.firstName : "",
+      lastName: this.searchForm.value.lastName ? this.searchForm.value.lastName : "",
+      crashDate: formattedDate ? formattedDate : "",
+      location: this.searchForm.value.location ? this.searchForm.value.location : "",
+      reportNumber: this.searchForm.value.reportNumber ? this.searchForm.value.reportNumber : ""
+    }
     this.occupantsService.getAllSearchCrashReports(this.searchData).subscribe(res => {
       if (res.status) {
         this.occupantDetail = res.data
@@ -126,7 +140,7 @@ export class SearchComponent {
       this.searchData = {
         page: this.currentPage,
         itemsPerPage: this.pageValue,
-        crashDate: this.searchForm.value.crashDate ? this.adjustDateToLocal(this.searchForm.value.crashDate) : "",
+        crashDate: this.searchForm.value.crashDate ? this.searchForm.value.crashDate : "",
         firstName: (this.searchForm.value.firstName) ? this.searchForm.value.firstName : "",
         lastName: (this.searchForm.value.lastName) ? this.searchForm.value.lastName : "",
         location: (this.searchForm.value.location) ? this.searchForm.value.location : "",
@@ -212,4 +226,11 @@ export class SearchComponent {
       this.getAllOccupants();
     }
   }
+
+    //To open date picker
+    openDatePicker(obj) {
+      if (obj) {
+        obj.show();
+      }
+    }  
 }

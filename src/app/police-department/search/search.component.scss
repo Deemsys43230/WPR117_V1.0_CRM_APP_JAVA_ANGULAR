@@ -199,3 +199,15 @@
   transform: translateY(5px); /* Optional spacing */
 }
 /* Date Picker Design Ends */
+
+.input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  border: 1px solid black;
+}
+
+.input-group-text {
+  background-color: #9fc1c1;
+  border-left: none;
+  cursor: pointer;
+}

@@ -13,8 +13,8 @@
               <div class="form-group">
                 <label for="firstName" style="display: inline;">First Name</label><span
                   style="color: red; display: inline;"> *</span>
-                <input style="border-radius: 5px;" id="firstName" formControlName="firstName"
-                  placeholder="Enter First Name">
+                <input id="firstName" formControlName="firstName"
+                  placeholder="Enter First Name" style=" border: 1px solid black;">
                 <div *ngIf="
                         searchForm.controls['firstName'].errors &&
                         (!searchForm.controls['firstName'].pristine ||
@@ -31,8 +31,8 @@
               <div class="form-group">
                 <label for="lastName" style="display: inline;">Last Name</label><span
                   style="color: red; display: inline;"> *</span>
-                <input style="border-radius: 5px;" id="lastName" formControlName="lastName"
-                  placeholder="Enter Last Name">
+                <input id="lastName" formControlName="lastName"
+                  placeholder="Enter Last Name" style=" border: 1px solid black;">
                 <div *ngIf="
                         searchForm.controls['lastName'].errors &&
                         (!searchForm.controls['lastName'].pristine ||
@@ -48,21 +48,27 @@
               </div>
               <div class="form-group">
                 <label for="crashDate" style="display: inline;">Crash Date</label>
-                  <p-calendar [showIcon]="true" [showTime]="false"  [inputStyle]="{ width: '400px' , height: '40px',color: 'black', borderColor: '#9ec1c1'}" placeholder="mm/dd/yyyy" class="datePicker" dateFormat="mm/dd/yy" id="crashDate"  formControlName="crashDate" inputId="basic" appendTo="body">
-                  </p-calendar>
+                <div class="input-group">
+                  <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
+                      [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
+                      #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
+                  <span class="input-group-text" (click)="openDatePicker(datepicker)">
+                      <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                  </span>
+              </div>
               </div>
               <div class="form-group">
                 <label for="reportNumber" style="display: inline;">Report Number</label>
-                <input style="border-radius: 5px;" id="reportNumber" formControlName="reportNumber"
-                  placeholder="Enter Report Number">
+                <input id="reportNumber" formControlName="reportNumber"
+                  placeholder="Enter Report Number" style=" border: 1px solid black;">
               </div>
               <div class="form-group">
                 <label for="location" style="display: inline;">Location</label>
-                <input style="border-radius: 5px;" id="location" formControlName="location"
-                  placeholder="Enter Location">
+                <input id="location" formControlName="location"
+                  placeholder="Enter Location" style=" border: 1px solid black;">
               </div>
               <div class="form-group mt-4">
-                <button type="submit" style=" border-radius: 10px;" (click)="onSearch()">Search Report</button>
+                <button type="submit" (click)="onSearch()">Search Report</button>
               </div>
             </form>
           </div>
