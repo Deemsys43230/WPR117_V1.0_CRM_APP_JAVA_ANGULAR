@@ -437,22 +437,39 @@ class UpdateCrashReport(Resource):
                 status=occupant['status']
                 )
                 occupants_data.save_to_users()
-                value={
-                    "report_id": crash_report.report_id,
-                    "account_id": crash_report.account_id,
-                    "police_department_id": crash_report.police_department_id,
-                    "report_number": crash_report.report_number,
-                    "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
-                    "location": crash_report.location,
-                    "county_id": crash_report.county_id,
-                    "crash_severity": crash_report.crash_severity,
-                    "no_of_occupants": crash_report.no_of_occupants,
-                    # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
-                    'file_name':f"http://14.195.114.174/SaveCrashReports/{crash_report.report_id}.pdf",
-                    "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
-                    "added_date_time": crash_report.added_date_time,
-                    "status": crash_report.status,}
-                return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
+            value={
+                "report_id": crash_report.report_id,
+                "account_id": crash_report.account_id,
+                "police_department_id": crash_report.police_department_id,
+                "report_number": crash_report.report_number,
+                "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
+                "location": crash_report.location,
+                "county_id": crash_report.county_id,
+                "crash_severity": crash_report.crash_severity,
+                "no_of_occupants": crash_report.no_of_occupants,
+                # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
+                'file_name':f"http://14.195.114.174/SaveCrashReports/{crash_report.report_id}.pdf",
+                "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
+                "added_date_time": crash_report.added_date_time,
+                "status": crash_report.status,
+                "occupants": [
+                    {
+                        "report_number": crash_report.report_number,
+                        "county_id": crash_report.county_id,
+                        "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
+                        "name": f"{occupant['first_name']} {occupant['last_name']}" if occupant['first_name'] else None,
+                        "injuries": occupant['injuries'],
+                        "seating_position": occupant['seating_position'],
+                        "is_owner": 0,
+                        "patient_status": 1,
+                        "is_runner_report": 1,
+                        "status": occupant['status'],
+                        "crash_severity": crash_report.crash_severity,
+                    }
+                    for occupant in occupants_list
+                    ]
+                    }
+            return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error updating data to database', 'error': str(e)})
