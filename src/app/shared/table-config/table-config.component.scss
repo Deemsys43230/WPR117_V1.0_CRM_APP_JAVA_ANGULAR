@@ -111,4 +111,14 @@ li.numberList:hover {
   .row-responsive {
     flex-wrap: nowrap !important;
   }
+
+  .responsive-row {
+    margin-left: 270px;
+  }
+}
+
+@media (width: 425px) {
+  .responsive-row {
+    margin-left: 360px;
+  }
 }

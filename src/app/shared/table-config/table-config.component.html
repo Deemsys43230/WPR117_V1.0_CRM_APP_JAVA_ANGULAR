@@ -41,15 +41,17 @@
             </select>
         </div>
     </div>
-    <div class="mt-4">
-        <ul class="numberListContainer p-0">
-            <li [ngClass]="{'numberList':currentPage != 1}"><i class="fa fa-arrow-left" aria-hidden="true"
-                    *ngIf="currentPage != 1" (click)="previousPage()"></i></li>
-            <li class="numberList" *ngFor="let row of pagination" [ngClass]="{'active': currentPage == row}"
-                (click)="(row !='...')?selectedPage(row):''">{{row}}</li>
-            <li [ngClass]="{'numberList':count.length != currentPage}"><i class="fa fa-arrow-right" aria-hidden="true"
-                    *ngIf="count.length != currentPage" (click)="nextPage()"></i></li>
-        </ul>
+    <div class="row mt-4 responsive-row">
+        <div class="row-responsive">
+            <ul class="numberListContainer p-0">
+                <li [ngClass]="{'numberList':currentPage != 1}"><i class="fa fa-arrow-left" aria-hidden="true"
+                        *ngIf="currentPage != 1" (click)="previousPage()"></i></li>
+                <li class="numberList" *ngFor="let row of pagination" [ngClass]="{'active': currentPage == row}"
+                    (click)="(row !='...')?selectedPage(row):''">{{row}}</li>
+                <li [ngClass]="{'numberList':count.length != currentPage}"><i class="fa fa-arrow-right"
+                        aria-hidden="true" *ngIf="count.length != currentPage" (click)="nextPage()"></i></li>
+            </ul>
+        </div>
     </div>
 </section>
 
