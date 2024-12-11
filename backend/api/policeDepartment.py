@@ -114,12 +114,13 @@ class getAllPoliceDepartment(Resource):
             page = data.get('page',1)
             name = data.get('name',None)
             county = data.get('county',None)
+            print("county",county)
             offset = (page - 1) * items_per_page
             query = PoliceDepartmentModel.query
             if name:
                 query = query.filter(PoliceDepartmentModel.name.ilike(f"%{name}%"))
             if county:
-                query = query.filter(PoliceDepartmentModel.county_id.ilike(f"%{county}%"))
+                query = query.filter(PoliceDepartmentModel.county_id == county)
             count = query.count()
             police = query.limit(items_per_page).offset(offset).all()
             result=[]
