@@ -45,14 +45,24 @@
             </div>
           </div>
           <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12 mb-4">
-            <label class="form-label">County:</label>
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <label class="form-label">County:</label><span class="span"> *</span>
             <select class="form-control" formControlName="county_id">
               <option value="" disabled selected>Select</option>
               <option *ngFor="let country of countries" [value]="country.value">
                 {{ country.value }} - {{ country.label }}
               </option>
             </select>
+            <!-- Validation and Backend Error Messages -->
+            <div class="error-msg-area">
+              <div
+                *ngIf="addNewReportForm.controls['county_id'].errors && (!addNewReportForm.controls['county_id'].pristine || isAddFormSubmitted)"
+                class="error-msg">
+                <div [hidden]="!addNewReportForm.controls['county_id'].errors?.['required']" class="text-danger">
+                  County is required.
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col-lg-1 col-md-1"></div>
           <div class="col-lg-5 col-md-5 col-sm-12">

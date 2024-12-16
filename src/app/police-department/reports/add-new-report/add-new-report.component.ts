@@ -92,7 +92,7 @@ export class AddNewReportComponent {
   initializationNewReportForm() {
     this.addNewReportForm = this.fb.group({
       file_name: [this.isNewForm ? null : this.fileName, Validators.required],
-      county_id: [''],
+      county_id: ['', Validators.required],
       crash_date: ['', Validators.required],
       report_number: ['', Validators.required],
       location: ['', Validators.required],
