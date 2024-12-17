@@ -31,7 +31,7 @@
     </div>
     <ul class="sidebar-nav">
       <li *ngFor="let menu of navItems" (click)="activeUrl(menu.url)" [ngClass]="{'active': menu.url == active}">
-        <a [routerLink]="[menu.url]"><i class="{{menu.icon}}"></i>{{menu.name}}</a>
+        <a [routerLink]="[menu.url]"><i class="{{menu.icon}}" [ngStyle]="menu.style"></i>{{menu.name}}</a>
       </li>
     </ul>
   </aside>

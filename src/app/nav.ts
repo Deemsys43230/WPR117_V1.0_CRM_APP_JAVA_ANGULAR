@@ -8,7 +8,8 @@ export class navItems {
     {
       name: 'Department',
       url: 'policeDepartment',
-      icon: 'fa fa-phone'
+      icon: 'fa-solid fa-phone',
+      style: {'margin-right': '22px'}
     },
     {
       name: 'Accounts',
@@ -24,11 +25,6 @@ export class navItems {
       name: 'Occupants',
       url: 'occupants',
       icon: 'fa fa-user'
-    },
-    // {
-    //   name: 'Settings',
-    //   url: 'settings',
-    //   icon: 'fa fa-male'
-    // },
+    }
   ];
 }
