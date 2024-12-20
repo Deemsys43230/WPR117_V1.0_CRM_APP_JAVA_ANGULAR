@@ -139,18 +139,32 @@ class CreateCrashReport(Resource):
                 ]
             }
 
-        
-            # # Prepare headers
-            # headers = {
-            #         'Content-Type': 'application/json'
-            # }
-            # # URL to which the GET request is sent
-            # url = get_property("CROCredentials") + get_property("saveCrashReportsAndPatients")
-            # # Make POST request using requests module
-            # response = requests.post(url, json=data, headers=headers)
-            # # Check response status and return result
-            # if response:
-            return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':data})
+            data = {
+                "local_report_number": crash_report.report_number,
+                "crash_url":save_path,
+                "is_runner_report": 1,
+                "account_id": crash_report.account_id,
+                "police_department_id": crash_report.police_department_id,
+                "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
+                "location": crash_report.location,
+                "county_id": crash_report.county_id,
+                "crash_severity": crash_report.crash_severity,
+                "number_of_patients": crash_report.no_of_occupants,
+            }
+            # Prepare headers
+            headers = {
+                'Content-Type': 'application/json'
+            }
+            # URL to which the GET request is sent
+            url = get_property("CRODomain") + get_property("saveCrashReport")
+            # Make POST request using requests module
+            response = requests.post(url, json=data, headers=headers)
+            # Check response status and return result
+            print("response",response)
+            if response:
+                return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':data})
+            else:
+                return jsonify({'status': False,'msg': 'Failed to get a valid response from the server.'})
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
