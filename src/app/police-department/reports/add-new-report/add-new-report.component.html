@@ -1,24 +1,35 @@
-<div style="background-color: #f0f0f0">
+<div class="page-bg">
   <app-police-department-header />
   <div class="container">
-    <!-- Add New Report Form -->
-    <div class="row">
-      <div class="col-lg-12 d-flex justify-content-between align-items-center mb-3">
-        <h1 class="highlighted-header">{{ report_id ? "Edit Report" : "Add Report"}}</h1>
-        <button (click)="backToReportList()" class='outer-div'><i class="fa fa-reply"></i> Back to Reports list</button>
+
+    <!-- ============ Page header ============ -->
+    <div class="page-header">
+      <div class="title-wrap">
+        <span class="title-icon"><i class="fa" [ngClass]="report_id ? 'fa-pencil' : 'fa-plus'"></i></span>
+        <div>
+          <h1 class="highlighted-header mb-0">{{ report_id ? "Edit Report" : "Add Report"}}</h1>
+          <p class="page-sub">Fields marked <span class="span">*</span> are required.</p>
+        </div>
       </div>
+      <button type="button" (click)="backToReportList()" class='back-btn'><i class="fa fa-reply"></i> Back to Reports
+        list</button>
     </div>
 
-    <div class="container">
-      <form class="row" [formGroup]="addNewReportForm">
-        <div class="row mb-2">
-          <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12">
+    <!-- ============ Form ============ -->
+    <form class="form-card" [formGroup]="addNewReportForm">
+
+      <!-- ---------- Report details ---------- -->
+      <section class="form-section">
+        <h2 class="section-title">Report details</h2>
+        <div class="row">
+
+          <div class="col-md-6 field">
             <label class="form-label">Upload Report:</label><span class="span"> *</span>
             <div *ngIf="!isNewForm">
-              <div *ngIf="fileName && !showFileInputField">
+              <div *ngIf="fileName && !showFileInputField" class="current-file">
                 <small>
-                  <a [href]="fileName" target="_blank" rel="noopener noreferrer">{{ getFileName(fileName) }}</a>
+                  <a [href]="fileName" target="_blank" rel="noopener noreferrer"><i class="fa fa-file"></i> {{
+                    getFileName(fileName) }}</a>
                 </small>
                 <button type="button" class="btn btn-link ml-2" (click)="showFileInputField = true">Change File</button>
               </div>
@@ -26,7 +37,7 @@
               <div *ngIf="showFileInputField" class="d-flex align-items-center">
                 <input class="form-control file-change" type="file" formControlName="file_name" accept=".pdf"
                   (change)="onFileChange($event)" />
-                <button type="button" class="btn btn-secondary mt-2" (click)="cancelChange()">Cancel</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelChange()">Cancel</button>
               </div>
             </div>
             <input *ngIf="isNewForm" class="form-control" type="file" formControlName="file_name" accept=".pdf"
@@ -44,8 +55,8 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12">
+
+          <div class="col-md-6 field">
             <label class="form-label">County:</label><span class="span"> *</span>
             <select class="form-control" formControlName="county_id">
               <option value="" disabled selected>Select</option>
@@ -64,8 +75,8 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12">
+
+          <div class="col-md-6 field">
             <label class="form-label">Crash Date:</label><span class="span"> *</span>
             <div class="input-group">
               <input type="text" id="crashDate" class="form-control" formControlName="crash_date" bsDatepicker
@@ -88,8 +99,8 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12">
+
+          <div class="col-md-6 field">
             <label class="form-label">Report Number:</label><span class="span"> *</span>
             <input type="text" class="form-control" placeholder="Enter Report Number" formControlName="report_number" />
             <!-- Validation and Backend Error Messages -->
@@ -108,8 +119,7 @@
             </div>
           </div>
 
-          <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12">
+          <div class="col-md-6 field">
             <label class="form-label">Location:</label><span class="span"> *</span>
             <input type="text" class="form-control" placeholder="Enter Location" formControlName="location" />
             <!-- Validation Error Message -->
@@ -125,8 +135,8 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-1 col-md-1"></div>
-          <div class="col-lg-5 col-md-5 col-sm-12">
+
+          <div class="col-md-6 field">
             <label class="form-label">Crash Severity:</label><span class="span"> *</span>
             <select class="form-control" formControlName="crash_severity">
               <option value="" disabled selected>Select</option>
@@ -147,90 +157,88 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-1 col-md-12"></div>
-          <div class="col-lg-11 col-md-12 occupants mb-2">
-            <h2 style="text-decoration: underline;">Occupants</h2>
-            <div formArrayName="occupants">
-              <div *ngFor="let occupant of occupants.controls; let i = index" [formGroupName]="i">
-                <div class="row mb-2">
-                  <div class="col-lg-1 col-md-1"></div>
-                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-                    <label class="form-label">First Name:</label><span class="span"> *</span>
-                    <input type="text" class="form-control" placeholder="Enter First Name"
-                      formControlName="first_name" />
-                    <!-- Validation Error Message -->
-                    <div class="error-msg-area">
-                      <div *ngIf="
+
+        </div>
+      </section>
+
+      <!-- ---------- Occupants ---------- -->
+      <section class="form-section occupants-section">
+        <h2 class="section-title">Occupants</h2>
+        <div formArrayName="occupants">
+          <div *ngFor="let occupant of occupants.controls; let i = index" [formGroupName]="i" class="occupant-card">
+            <div class="occupant-head">
+              <span class="occupant-badge">{{ i + 1 }}</span>
+              <span class="occupant-label">Occupant {{ i + 1 }}</span>
+              <button *ngIf="occupants.length > 1" type="button" class="btn btn-remove" (click)="removeOccupant(i)">
+                <i class="fa fa-minus"></i> Remove
+              </button>
+            </div>
+            <div class="row">
+              <div class="col-md-6 field">
+                <label class="form-label">First Name:</label><span class="span"> *</span>
+                <input type="text" class="form-control" placeholder="Enter First Name" formControlName="first_name" />
+                <!-- Validation Error Message -->
+                <div class="error-msg-area">
+                  <div *ngIf="
                           occupant.get('first_name')?.errors &&
                           (!occupant.get('first_name')?.pristine || isAddFormSubmitted)
                         " class="error-msg">
-                        <div [hidden]="!occupant.get('first_name')?.errors?.['required']" class="text-danger">
-                          First Name is required.
-                        </div>
-                      </div>
+                    <div [hidden]="!occupant.get('first_name')?.errors?.['required']" class="text-danger">
+                      First Name is required.
                     </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1"></div>
-                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-                    <label class="form-label">Last Name:</label><span class="span"> *</span>
-                    <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="last_name" />
-                    <!-- Validation Error Message -->
-                    <div class="error-msg-area">
-                      <div *ngIf="
-                          occupant.get('last_name')?.errors &&
-                          (!occupant.get('last_name')?.pristine || isAddFormSubmitted)
-                        " class="error-msg">
-                        <div [hidden]="!occupant.get('last_name')?.errors?.['required']" class="text-danger">
-                          Last Name is required.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1"></div>
-                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 margin-custom">
-                    <label class="form-label">Injuries:</label>
-                    <select class="form-control" formControlName="injuries">
-                      <option value="" disabled>Select</option>
-                      <option *ngFor="let injury of injuries" [value]="injury.value">{{ injury.label }}</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-1 col-md-1"></div>
-                  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 margin-custom">
-                    <label class="form-label">Seating Position:</label>
-                    <select class="form-control" formControlName="seating_position">
-                      <option value="" disabled>Select</option>
-                      <option *ngFor="let position of seatingPosition" [value]="position.value">{{ position.label }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="col-lg-10"></div>
-                  <div class="col-lg-2 mt-2">
-                    <button *ngIf="occupants.length > 1" type="button" class="btn" (click)="removeOccupant(i)">
-                      <i class="fa fa-minus"></i> Remove
-                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="col-lg-1"></div>
-          <div class="col-lg-11 margin-custom">
-            <button style="font-size: 14px; cursor: pointer;" type="button" class="btn" (click)="addOneMoreOccupant()">
-              <i class="fa fa-plus"></i> Add One More Occupant
-            </button>
-          </div>
-          <div class="row mt-2">
-            <div class="col-lg-5 col-md-5 col-12"></div>
-            <div class="col-lg-6 col-md-6 col-12">
-              <button (click)="onCancel()" class="btn" type="button">
-                Cancel
-              </button>
-              <button (click)="onSubmit()" class="btn btn-change ml-2" type="submit">
-                {{ report_id ? 'Update' : 'Submit' }}
-              </button>
+              <div class="col-md-6 field">
+                <label class="form-label">Last Name:</label><span class="span"> *</span>
+                <input type="text" class="form-control" placeholder="Enter Last Name" formControlName="last_name" />
+                <!-- Validation Error Message -->
+                <div class="error-msg-area">
+                  <div *ngIf="
+                          occupant.get('last_name')?.errors &&
+                          (!occupant.get('last_name')?.pristine || isAddFormSubmitted)
+                        " class="error-msg">
+                    <div [hidden]="!occupant.get('last_name')?.errors?.['required']" class="text-danger">
+                      Last Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 field margin-custom">
+                <label class="form-label">Injuries:</label>
+                <select class="form-control" formControlName="injuries">
+                  <option value="" disabled>Select</option>
+                  <option *ngFor="let injury of injuries" [value]="injury.value">{{ injury.label }}</option>
+                </select>
+              </div>
+              <div class="col-md-6 field margin-custom">
+                <label class="form-label">Seating Position:</label>
+                <select class="form-control" formControlName="seating_position">
+                  <option value="" disabled>Select</option>
+                  <option *ngFor="let position of seatingPosition" [value]="position.value">{{ position.label }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
-      </form>
-    </div>
+
+        <button style="font-size: 14px; cursor: pointer;" type="button" class="btn btn-add"
+          (click)="addOneMoreOccupant()">
+          <i class="fa fa-plus"></i> Add One More Occupant
+        </button>
+      </section>
+
+      <!-- ---------- Actions ---------- -->
+      <div class="form-actions">
+        <button (click)="onCancel()" class="btn btn-cancel" type="button">
+          Cancel
+        </button>
+        <button (click)="onSubmit()" class="btn btn-change ml-2" type="submit">
+          {{ report_id ? 'Update' : 'Submit' }}
+        </button>
+      </div>
+
+    </form>
   </div>
+</div>

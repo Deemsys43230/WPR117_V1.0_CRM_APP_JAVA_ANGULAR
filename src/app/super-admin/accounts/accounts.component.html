@@ -15,59 +15,59 @@
 <!-- Header Ends -->
 
 <!-- Search form Starts -->
- <div>
-<form class="row" [formGroup]="searchAccountsDepartmentForm">
-  <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-      <label for="" class="form-label">First Name</label>
-      <input type="text" class="form-control" placeholder="Search First Name" formControlName="first_name" />
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-      <label for="" class="form-label">Last Name</label>
-      <input type="text" class="form-control" placeholder="Search Last Name" formControlName="last_name" />
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-      <label for="" class="form-label">User Name</label>
-      <input type="text" class="form-control" placeholder="Search User Name" formControlName="username" />
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-      <label for="" class="form-label">Email ID</label>
-      <input type="text" class="form-control" placeholder="Search Email ID" formControlName="email_id" />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
-      <label for="" class="form-label">Role <span class="text-danger">*</span></label>
-      <select class="form-control" formControlName="role_id">
-        <option value="">Role</option>
-        <option *ngFor="let role of roleList" value="{{role?.role_id}}">
-          {{role?.role}}
-        </option>
-      </select>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
-      <label for="" class="form-label">Department <span class="text-danger">*</span></label>
-      <select class="form-control" formControlName="police_department_id">
-        <option value="">Department</option>
-        <option *ngFor="let department of departmentList" value="{{department?.department_id}}">
-          {{department?.name}}
-        </option>
-      </select>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
-      <div class="btn-box">
-        <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
-          type="submit" (click)="onSearch()" title="Search">
-          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-        </button>
-        <button class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
-          type="button" (click)="resetSearch()" title="Reset">
-          <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
-        </button>
+<div>
+  <form class="row" [formGroup]="searchAccountsDepartmentForm">
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <label for="" class="form-label">First Name</label>
+        <input type="text" class="form-control" placeholder="Search First Name" formControlName="first_name" />
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <label for="" class="form-label">Last Name</label>
+        <input type="text" class="form-control" placeholder="Search Last Name" formControlName="last_name" />
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <label for="" class="form-label">User Name</label>
+        <input type="text" class="form-control" placeholder="Search User Name" formControlName="username" />
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+        <label for="" class="form-label">Email ID</label>
+        <input type="text" class="form-control" placeholder="Search Email ID" formControlName="email_id" />
       </div>
     </div>
-  </div>
-</form>
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
+        <label for="" class="form-label">Role <span class="text-danger">*</span></label>
+        <select class="form-control" formControlName="role_id">
+          <option value="">Role</option>
+          <option *ngFor="let role of roleList" value="{{role?.role_id}}">
+            {{role?.role}}
+          </option>
+        </select>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin custom-select-wrapper">
+        <label for="" class="form-label">Department <span class="text-danger">*</span></label>
+        <select class="form-control" formControlName="police_department_id">
+          <option value="">Department</option>
+          <option *ngFor="let department of departmentList" value="{{department?.department_id}}">
+            {{department?.name}}
+          </option>
+        </select>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12 custom-margin align-content-end">
+        <div class="btn-box">
+          <button class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
+            type="submit" (click)="onSearch()" title="Search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          </button>
+          <button class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
+            type="button" (click)="resetSearch()" title="Reset">
+            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 <!-- Search form ends -->
 

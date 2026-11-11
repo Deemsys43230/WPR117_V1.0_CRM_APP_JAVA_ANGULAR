@@ -1,3 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+/* ---------- Design tokens ---------- */
+$navy: #1b2f4b;
+$teal: #1d8d97;
+$teal-dark: #167078;
+$teal-tint: #e6f2f3;
+$border: #c5d6d8;
+$text: #1f2a37;
+$muted: #5d6b7a;
+$page: #f1f4f6;
+
+:host {
+    display: block;
+}
+
+.page-bg {
+    background-color: $page;
+    font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+    color: $text;
+    min-height: 100vh;
+}
+
 .container {
     max-width: 1435px;
 }
@@ -7,44 +30,186 @@
     width: 100%;
 }
 
-.search-form {
-    background-color: white;
-    padding: 15px;
+/* ---------- Hero ---------- */
+.hero {
+    line-height: 0;
+    border-radius: 14px 14px 0 0;
+    overflow: hidden;
+    border-bottom: 4px solid $teal;
+    box-shadow: 0 8px 24px rgba(27, 47, 75, 0.12);
+
+    img {
+        display: block;
+        width: 100%;
+    }
 }
 
+/* ---------- Section / card ---------- */
 .section {
-    background-color: #f5f5f5;
-    padding: 50px;
+    background-color: transparent;
+    padding: 50px 50px 50px 50px;
+    margin-top: -26px;
+    position: relative;
+}
+
+.search-form {
+    background-color: #fff;
+    padding: 28px 30px;
+    border: 1px solid #dde5e8;
+    border-top: 4px solid $navy;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(27, 47, 75, 0.1);
 }
 
 .right {
     float: right;
 }
 
-.btn-default {
-    background-color: #f8f9fa;
-    color: #030303;
-    border: 1px solid gray;
-    padding: 0.5rem 1rem;
+/* ---------- Header ---------- */
+.header-row {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e3eaed;
 }
 
-.btn-default:hover {
-    background-color: #e2e6ea;
-    color: #050505;
+.title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.title-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, $teal 0%, $teal-dark 100%);
+    color: #fff;
+    font-size: 20px;
+    box-shadow: 0 6px 14px rgba(29, 141, 151, 0.3);
+}
+
+.h-default {
+    font-weight: 600;
+    font-size: 1.55rem;
+    color: $navy;
+}
+
+/* ---------- Select row ---------- */
+.select-card {
+    background-color: #f6fafa;
+    border: 1px solid $border;
+    border-radius: 12px;
+    padding: 22px 12px;
+    margin: 0;
+
+    label {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: $navy;
+    }
+}
+
+.form-control {
+    height: 48px;
+    border: 1px solid #9db3b6;
+    border-radius: 10px;
+    background-color: #fff;
+    color: $text;
+    font-size: 1rem;
+    padding: 0 40px 0 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231d8d97' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:focus {
+        outline: none;
+        border-color: $teal;
+        box-shadow: 0 0 0 3px rgba(29, 141, 151, 0.2);
+    }
+}
+
+/* ---------- Buttons ---------- */
+.btn-default {
+    background-color: #fff;
+    color: $navy;
+    border: 1px solid #9db3b6;
+    border-radius: 10px;
+    padding: 0.55rem 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+
+    &:hover {
+        background-color: $teal-tint;
+        color: $teal-dark;
+        border-color: $teal;
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(29, 141, 151, 0.25);
+    }
+}
+
+.back-btn i {
+    margin-right: 8px;
+}
+
+.go-btn {
+    min-width: 110px;
+    height: 48px;
+    background: linear-gradient(135deg, $teal 0%, $teal-dark 100%);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(29, 141, 151, 0.3);
+
+    &:hover {
+        background: linear-gradient(135deg, $teal 0%, $teal-dark 100%);
+        color: #fff;
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 22px rgba(29, 141, 151, 0.4);
+    }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991px) {
+    .section {
+        padding: 0 16px 36px;
+    }
+
+    .search-form {
+        padding: 20px 16px;
+    }
 }
 
 @media (max-width: 375px) {
     .btn-default {
         font-size: small;
-        padding: 2px;
+        padding: 6px 10px;
         margin-left: 8px;
         text-wrap: nowrap;
     }
+
     .h-default {
         font-size: large;
     }
-    .section {
-        padding: 20px;
+
+    .title-icon {
+        display: none;
     }
-  }
-  
+
+    .section {
+        padding: 0 10px 20px;
+    }
+
+    .go-btn {
+        width: 100%;
+        margin-left: 0;
+    }
+}

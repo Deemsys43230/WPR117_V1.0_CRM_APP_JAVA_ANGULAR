@@ -15,7 +15,7 @@
 <!-- Header Ends -->
 
 <!-- Form starts -->
-<div class="card-body">
+<div class="card-body form-card">
   <form class="d-flex flex-column gap-3" [formGroup]="addPoliceDepartmentForm">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
@@ -50,7 +50,8 @@
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-user"></i>
           </span>
-          <input type="text" class="form-control w-100" placeholder="Name" formControlName="name" (change)="onChangeName($event)" />
+          <input type="text" class="form-control w-100" placeholder="Name" formControlName="name"
+            (change)="onChangeName($event)" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -61,12 +62,9 @@
             <div [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['required']" class="text-danger">
               Please Enter Name
             </div>
-            <div
-            [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['pattern']"
-            class="text-danger"
-          >
-            Name can only contain alphabets and spaces
-          </div>
+            <div [hidden]="!addPoliceDepartmentForm.controls['name'].errors?.['pattern']" class="text-danger">
+              Name can only contain alphabets and spaces
+            </div>
           </div>
         </div>
       </div>
@@ -89,15 +87,15 @@
               Please Enter Code
             </div>
             <div
-            [hidden]="!addPoliceDepartmentForm.controls['code'].errors?.['invalidCodePattern'] || addPoliceDepartmentForm.controls['code'].errors?.['required']"
-            class="text-danger"
-          >
-            Code must start with 'RR_' and end with '_' (_ Eg: RR_AB_ )
-          </div>
+              [hidden]="!addPoliceDepartmentForm.controls['code'].errors?.['invalidCodePattern'] || addPoliceDepartmentForm.controls['code'].errors?.['required']"
+              class="text-danger">
+              Code must start with 'RR_' and end with '_' (_ Eg: RR_AB_ )
+            </div>
           </div>
         </div>
-        <div style="display: flex; justify-content: end; margin-top: 10px;">
-          <p class="code">code: RR_AB_</p></div>
+        <div class="code-hint-wrap">
+          <p class="code">code: RR_AB_</p>
+        </div>
       </div>
     </div>
 
@@ -143,27 +141,29 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 20px;">
+      <div class="col-lg-4 col-md-4 col-sm-12 upload-col">
         <label for="" class="form-label">Upload File</label>
         <div class="input-box" *ngIf="!isImageEdit || !isEdit">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </span>
-          <input class="w-100" type="file" accept="image/*" placeholder="Supporting" formControlName="image" (change)="onChangeNewImage($event)"  />
+          <input class="w-100" type="file" accept="image/*" placeholder="Supporting" formControlName="image"
+            (change)="onChangeNewImage($event)" />
         </div>
         <div class="form-error">
-          <div *ngIf="addPoliceDepartmentForm.controls['image'].errors && (!addPoliceDepartmentForm.controls['image'].pristine|| isAddFormSubmitted)"
-              class="error-msg">
-              <div [hidden]="!addPoliceDepartmentForm.controls['image'].errors['invalidType']">
-                  Please
-                  Choose
-                  A Valid File.(supported file types - Image (jpg,jpeg,png))
-              </div>
-              <div [hidden]="!addPoliceDepartmentForm.controls['image'].errors['invalidDimensions']">
-                Please Select Image With 1400*450 Dimension
+          <div
+            *ngIf="addPoliceDepartmentForm.controls['image'].errors && (!addPoliceDepartmentForm.controls['image'].pristine|| isAddFormSubmitted)"
+            class="error-msg">
+            <div [hidden]="!addPoliceDepartmentForm.controls['image'].errors['invalidType']">
+              Please
+              Choose
+              A Valid File.(supported file types - Image (jpg,jpeg,png))
+            </div>
+            <div [hidden]="!addPoliceDepartmentForm.controls['image'].errors['invalidDimensions']">
+              Please Select Image With 1400*450 Dimension
             </div>
           </div>
-      </div>
+        </div>
         <div class="col-12" *ngIf="isEdit && isImageEdit">
           <img class="w-100" [src]="supportingImage ? supportingImage : ''" />
         </div>

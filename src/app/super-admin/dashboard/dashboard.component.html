@@ -1,55 +1,63 @@
 <div class="custom-row">
-    <i class="fa fa-home custom-icon"></i>
-    <div class="headerStyle">
-      Dashboard
-    </div>
+  <i class="fa fa-home custom-icon"></i>
+  <div class="headerStyle">
+    Dashboard
+  </div>
 </div>
-<div class="container mt-5">
-    <div class="row mb-2">
-      <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
-        <div class="card">
-          <div class="card-body">
-            <i class="fa fa-bank icon-style"></i><br>
-            <div class="center-content"><a routerLink="/superAdmin/policeDepartment" class="btn" routerLinkActive="active" >Police Department<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
-            <div class="total-style">
-                <span class="total-background">Total Departments: {{allCount?.department}}</span>
-              </div>
+<div class="container mt-5 dashboard-grid">
+  <div class="row mb-2">
+    <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="icon-wrap"><i class="fa fa-bank icon-style" aria-hidden="true"></i></div>
+          <div class="center-content"><a routerLink="/superAdmin/policeDepartment" class="btn"
+              routerLinkActive="active">Police Department<i class="fa-solid fa-arrow-right icon-spacing"
+                aria-hidden="true"></i></a></div>
+          <div class="total-style">
+            <span class="total-background"><span class="total-label">Total Departments</span><span
+                class="total-count">{{allCount?.department}}</span></span>
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
-        <div class="card">
-          <div class="card-body">
-            <i class="fa-solid fa-users icon-style"></i><br>
-            <div class="center-content"><a routerLink="/superAdmin/accountsDepartment" class="btn">Accounts<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
-            <div class="total-style">
-                <span class="total-background">Total Accounts: {{allCount?.accounts}}</span>
-              </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="icon-wrap"><i class="fa-solid fa-users icon-style" aria-hidden="true"></i></div>
+          <div class="center-content"><a routerLink="/superAdmin/accountsDepartment" class="btn">Accounts<i
+                class="fa-solid fa-arrow-right icon-spacing" aria-hidden="true"></i></a></div>
+          <div class="total-style">
+            <span class="total-background"><span class="total-label">Total Accounts</span><span
+                class="total-count">{{allCount?.accounts}}</span></span>
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
-        <div class="card">
-          <div class="card-body">
-            <i class="fa-solid fa-file icon-style"></i><br>
-            <div class="center-content"><a routerLink="/superAdmin/reports" class="btn">Crash Reports<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
-            <div class="total-style">
-                <span class="total-background">Total Crash Reports: {{allCount?.reports}}</span>
-              </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="icon-wrap"><i class="fa-solid fa-file icon-style" aria-hidden="true"></i></div>
+          <div class="center-content"><a routerLink="/superAdmin/reports" class="btn">Crash Reports<i
+                class="fa-solid fa-arrow-right icon-spacing" aria-hidden="true"></i></a></div>
+          <div class="total-style">
+            <span class="total-background"><span class="total-label">Total Crash Reports</span><span
+                class="total-count">{{allCount?.reports}}</span></span>
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
-        <div class="card">
-          <div class="card-body">
-            <i class="fa-solid fa-user icon-style"></i><br>
-            <div class="center-content"><a routerLink="/superAdmin/occupants" class="btn">Occupants<i class="fa-solid fa-arrow-right icon-spacing"></i></a></div><br>
-            <div class="total-style">
-                <span class="total-background">Total Occupants: {{allCount?.occupants}}</span>
-              </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 d-flex justify-content-center resp-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="icon-wrap"><i class="fa-solid fa-user icon-style" aria-hidden="true"></i></div>
+          <div class="center-content"><a routerLink="/superAdmin/occupants" class="btn">Occupants<i
+                class="fa-solid fa-arrow-right icon-spacing" aria-hidden="true"></i></a></div>
+          <div class="total-style">
+            <span class="total-background"><span class="total-label">Total Occupants</span><span
+                class="total-count">{{allCount?.occupants}}</span></span>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

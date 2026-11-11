@@ -1,27 +1,133 @@
 @import 'src/styles.scss';
 
+$accent: #1d8d97;
+$accent-soft: #9fc1c1;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+@keyframes rowFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 // Table CSS Starts
+.table-wrapper {
+  width: 100%;
+  margin-top: 30px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e3e8ee;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px rgba(15, 23, 42, 0.05);
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $accent-soft;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
 table {
   width: 100%;
-  border-collapse: collapse;
-  margin-inline: auto;
-  margin-top: 30px;
+  min-width: 560px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto;
 }
 
 th,
 td {
-  border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;
+  padding: 13px 18px;
+  border-bottom: 1px solid #edf1f5;
 }
 
 th {
   background-color: $third-color;
   color: $primary-color;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 2px solid rgba($accent, 0.25);
+}
+
+td {
+  color: #2b3a4a;
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f9fbfc;
+}
+
+tbody tr {
+  transition: background-color 0.25s $ease, box-shadow 0.25s $ease;
+
+  td:first-child {
+    position: relative;
+    font-weight: 500;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: $accent;
+      transform: scaleY(0);
+      transition: transform 0.25s $ease;
+    }
+  }
+
+  &:hover {
+    background-color: rgba($accent, 0.07);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+
+    td:first-child::before {
+      transform: scaleY(1);
+    }
+  }
+}
+
+.no-records {
+  font-weight: 600;
+  padding: 24px 0;
 }
 
 // Table CSS Ends
@@ -30,46 +136,99 @@ tr:nth-child(even) {
 .numberListContainer {
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 4px;
 }
 
 li.numberList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
   padding: 0px 10px;
-  border: 1px solid #9fc1c1;
-  margin: 5px;
+  border: 1px solid $accent-soft;
+  margin: 5px 2px;
   color: #316c71;
   font-weight: 500;
-  border-radius: 4px;
+  border-radius: 8px;
+  background: #fff;
   cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s $ease, background-color 0.2s $ease,
+    color 0.2s $ease, box-shadow 0.2s $ease;
 }
 
 li.numberList:hover {
-  background: #9fc1c1;
+  background: $accent-soft;
   color: white;
-  border: 1px solid #9fc1c1;
+  border: 1px solid $accent-soft;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba($accent, 0.22);
+}
+
+li.numberList:active {
+  transform: translateY(0) scale(0.95);
+}
+
+li.numberList i {
+  cursor: pointer;
+  transition: transform 0.2s $ease;
+}
+
+li.numberList:hover i.fa-arrow-right {
+  transform: translateX(3px);
+}
+
+li.numberList:hover i.fa-arrow-left {
+  transform: translateX(-3px);
 }
 
 //Icon Styles
 .icons {
-  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 11px;
   color: white;
-  padding: 7px;
-  border-radius: 5px;
-  margin: 0px 5px;
+  padding: 0;
+  border-radius: 8px;
+  margin: 0px 4px;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.12);
+  transition: transform 0.22s $ease, box-shadow 0.22s $ease, filter 0.22s $ease;
+  will-change: transform;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.15);
+    filter: brightness(1.12);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.28);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.92);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.2);
+  }
 }
 
 .active {
-  background-color: #1d8d97 !important;
+  background: linear-gradient(135deg, $accent, #25a7b2) !important;
   color: white !important;
-  border: #1d8d97 !important;
+  border: 1px solid $accent !important;
+  box-shadow: 0 6px 14px rgba($accent, 0.35);
 }
 
 .searchPage {
   width: 100%;
   border: 1px solid #dddddd;
-  border-radius: 5px;
+  border-radius: 8px;
   height: 36px;
+  padding: 0 10px;
+  background: #fff;
+  transition: border-color 0.2s $ease, box-shadow 0.2s $ease;
 }
 
 .searchPage::placeholder {
@@ -77,48 +236,145 @@ li.numberList:hover {
 }
 
 .searchPage:focus-visible {
-  border: 1px solid #9fc1c1;
+  border: 1px solid $accent-soft;
   outline: none !important;
+  box-shadow: 0 0 0 3px rgba($accent, 0.15);
 }
 
 .pageStatus {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #5b6b7c;
+  font-weight: 500;
 }
 
 //Pagination CSS Ends
 
 //Button CSS Starts
 .goBtn {
-  background-color: #1d8d97;
+  background-color: $accent;
   color: white;
-  border-radius: 0px 5px 5px 0px;
-  border: #1d8d97;
+  border-radius: 0px 8px 8px 0px;
+  border: $accent;
+  font-weight: 600;
+  transition: filter 0.2s $ease, transform 0.2s $ease;
+
+  &:hover {
+    color: white;
+    filter: brightness(1.1);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
 }
 
-.goBtn:hover {
-  color: white;
+.d-flex .searchPage {
+  border-radius: 8px 0 0 8px;
 }
 
 //Button CSS Ends
 
-@media screen and (min-width: 320px) and (max-width: 425px) {
-  .responsive-table {
-    width: 190%;
+// Motion (only if user allows)
+@media (prefers-reduced-motion: no-preference) {
+  .table-wrapper {
+    animation: pageIn 0.4s $ease both;
   }
 
-  .row-responsive {
-    flex-wrap: nowrap !important;
-  }
+  tbody tr {
+    animation: rowFadeUp 0.45s $ease both;
 
-  .responsive-row {
-    margin-left: 270px;
+    &:nth-child(1) {
+      animation-delay: 0.03s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.06s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.09s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.12s;
+    }
+
+    &:nth-child(5) {
+      animation-delay: 0.15s;
+    }
+
+    &:nth-child(6) {
+      animation-delay: 0.18s;
+    }
+
+    &:nth-child(7) {
+      animation-delay: 0.21s;
+    }
+
+    &:nth-child(8) {
+      animation-delay: 0.24s;
+    }
+
+    &:nth-child(n+9) {
+      animation-delay: 0.27s;
+    }
   }
 }
 
-@media (width: 425px) {
-  .responsive-row {
-    margin-left: 360px;
+@media (prefers-reduced-motion: reduce) {
+
+  .icons,
+  li.numberList,
+  tbody tr,
+  .goBtn {
+    transition: none;
+  }
+}
+
+// Responsive
+.row-responsive {
+  justify-content: center;
+  row-gap: 12px;
+}
+
+.responsive-row {
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+
+  th,
+  td {
+    padding: 11px 12px;
+    font-size: 14px;
+  }
+
+  .pageStatus {
+    order: -1;
+  }
+
+  .icons {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 425px) {
+  .table-wrapper {
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+
+  table {
+    min-width: 520px;
+  }
+
+  li.numberList {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    margin: 3px 1px;
   }
 }

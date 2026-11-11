@@ -1,0 +1,178 @@
+// ==============================================================================
+// KEYFRAME ANIMATIONS & MOTION UTILITIES
+// 60fps GPU-accelerated (transform & opacity only)
+// ==============================================================================
+
+@keyframes crmFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes crmSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes crmSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes crmScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes crmShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes crmPulseSlow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes crmIconNudge {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .crm-animate-fade-in {
+    animation: crmFadeIn var(--crm-duration-smooth) var(--crm-ease-default) forwards;
+  }
+
+  .crm-animate-slide-up {
+    animation: crmSlideUp var(--crm-duration-smooth) var(--crm-ease-default) forwards;
+  }
+
+  .crm-animate-slide-down {
+    animation: crmSlideDown var(--crm-duration-smooth) var(--crm-ease-default) forwards;
+  }
+
+  .crm-animate-scale-in {
+    animation: crmScaleIn var(--crm-duration-smooth) var(--crm-ease-default) forwards;
+  }
+
+  // Stagger delays for list and card items
+  .crm-stagger-1 {
+    animation-delay: 40ms;
+  }
+
+  .crm-stagger-2 {
+    animation-delay: 80ms;
+  }
+
+  .crm-stagger-3 {
+    animation-delay: 120ms;
+  }
+
+  .crm-stagger-4 {
+    animation-delay: 160ms;
+  }
+
+  .crm-stagger-5 {
+    animation-delay: 200ms;
+  }
+
+  .crm-stagger-6 {
+    animation-delay: 240ms;
+  }
+
+  // Skeleton shimmer
+  .crm-skeleton {
+    background: linear-gradient(90deg,
+        rgba(226, 232, 240, 0.6) 25%,
+        rgba(241, 245, 249, 0.9) 50%,
+        rgba(226, 232, 240, 0.6) 75%);
+    background-size: 200% 100%;
+    animation: crmShimmer 1.8s infinite linear;
+    border-radius: var(--crm-radius-sm);
+  }
+
+  // Interactive micro-effects
+  .crm-pressable {
+    transition: transform var(--crm-duration-fast) var(--crm-ease-default),
+      box-shadow var(--crm-duration-fast) var(--crm-ease-default);
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .crm-hover-lift {
+    transition: transform var(--crm-duration-base) var(--crm-ease-default),
+      box-shadow var(--crm-duration-base) var(--crm-ease-default);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--crm-shadow-md);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .crm-hover-nudge:hover i {
+    animation: crmIconNudge 0.6s ease infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

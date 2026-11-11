@@ -6,9 +6,7 @@
       Add New Account
     </div>
     <div class="col-md-2 col-lg-2 text-end">
-      <button
-        (click)="back()"
-        class="btn-back btn add-back-btn text-white">
+      <button (click)="back()" class="btn-back btn add-back-btn text-white">
         <i class="fa fa-reply"></i>&nbsp;<b>Back</b>
       </button>
     </div>
@@ -17,23 +15,17 @@
 <!-- Header ends -->
 
 <!-- Form starts -->
-<div class="card-body">
+<div class="card-body form-card">
   <form [formGroup]="accountForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="firstName" class="form-label"
-          >First Name <span class="text-danger">*</span></label>
+        <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-user"></i>
           </span>
-          <input
-          id="firstName"
-          type="text"
-          class="form-control"
-          placeholder="First Name"
-          formControlName="first_name"
-          />
+          <input id="firstName" type="text" class="form-control" placeholder="First Name"
+            formControlName="first_name" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -44,49 +36,31 @@
             <div [hidden]="!accountForm.controls['first_name'].errors?.['required']" class="text-danger">
               Please Enter First Name
             </div>
-            <div
-            [hidden]="!accountForm.controls['first_name'].errors?.['pattern']"
-            class="text-danger"
-          >
-            Name can only contain alphabets and spaces
+            <div [hidden]="!accountForm.controls['first_name'].errors?.['pattern']" class="text-danger">
+              Name can only contain alphabets and spaces
+            </div>
           </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 20px;">
-        <label for="middleName" class="form-label"
-          >Middle Name</label
-        >
-        <div class="input-box">
-          <span class="input-group-text" id="basic-addon1">
-            <i class="fa fa-user"></i>
-          </span>
-          <input
-          id="middleName"
-          type="text"
-          class="form-control"
-          placeholder="Middle Name"
-          formControlName="middle_name"
-          />
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="lastName" class="form-label"
-          >Last Name <span class="text-danger">*</span></label
-        >
+        <label for="middleName" class="form-label">Middle Name</label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-user"></i>
           </span>
-          <input
-          id="lastName"
-          type="text"
-          class="form-control"
-          placeholder="Last Name"
-          formControlName="last_name"
-          />
+          <input id="middleName" type="text" class="form-control" placeholder="Middle Name"
+            formControlName="middle_name" />
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-4 col-sm-12">
+        <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+        <div class="input-box">
+          <span class="input-group-text" id="basic-addon1">
+            <i class="fa fa-user"></i>
+          </span>
+          <input id="lastName" type="text" class="form-control" placeholder="Last Name" formControlName="last_name" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -97,12 +71,9 @@
             <div [hidden]="!accountForm.controls['last_name'].errors?.['required']" class="text-danger">
               Please Enter Last Name
             </div>
-            <div
-            [hidden]="!accountForm.controls['last_name'].errors?.['pattern']"
-            class="text-danger"
-          >
-            Name can only contain alphabets and spaces
-          </div>
+            <div [hidden]="!accountForm.controls['last_name'].errors?.['pattern']" class="text-danger">
+              Name can only contain alphabets and spaces
+            </div>
           </div>
         </div>
       </div>
@@ -110,20 +81,12 @@
 
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="userName" class="form-label"
-          >User Name <span class="text-danger">*</span></label
-        >
+        <label for="userName" class="form-label">User Name <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-user"></i>
           </span>
-          <input
-          id="userName"
-            type="text"
-            class="form-control"
-            placeholder="User Name"
-            formControlName="username"
-          />
+          <input id="userName" type="text" class="form-control" placeholder="User Name" formControlName="username" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -134,30 +97,20 @@
             <div [hidden]="!accountForm.controls['username'].errors?.['required']" class="text-danger">
               Please Enter User Name
             </div>
-            <div
-            [hidden]="!accountForm.controls['username'].errors?.['pattern']"
-            class="text-danger"
-          >
-            Name can only contain alphabets and spaces
-          </div>
+            <div [hidden]="!accountForm.controls['username'].errors?.['pattern']" class="text-danger">
+              Name can only contain alphabets and spaces
+            </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="emailId" class="form-label"
-          >Email ID <span class="text-danger">*</span></label
-        >
+        <label for="emailId" class="form-label">Email ID <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-envelope"></i>
           </span>
-          <input  
-          id="emailId"
-          type="text"
-          class="form-control"
-          placeholder="Email ID"
-          formControlName="email_id" />
+          <input id="emailId" type="text" class="form-control" placeholder="Email ID" formControlName="email_id" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -168,31 +121,21 @@
             <div [hidden]="!accountForm.controls['email_id'].errors?.['required']" class="text-danger">
               Please Enter Email ID
             </div>
-            <div
-            [hidden]="!accountForm.controls['email_id'].errors?.['email']"
-            class="text-danger"
-          >
-          Enter a Valid Email (e.g., example&#64;domain.com)
-        </div>
+            <div [hidden]="!accountForm.controls['email_id'].errors?.['email']" class="text-danger">
+              Enter a Valid Email (e.g., example&#64;domain.com)
+            </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="phoneNumber" class="form-label"
-          >Phone Number <span class="text-danger">*</span></label
-        >
+        <label for="phoneNumber" class="form-label">Phone Number <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-phone"></i>
           </span>
-          <input
-          id="phoneNumber"
-          type="text"
-          class="form-control"
-          placeholder="Phone Number"
-          formControlName="phone_number"
-          />
+          <input id="phoneNumber" type="text" class="form-control" placeholder="Phone Number"
+            formControlName="phone_number" />
         </div>
         <div class="error-msg-area">
           <div *ngIf="
@@ -203,12 +146,9 @@
             <div [hidden]="!accountForm.controls['phone_number'].errors?.['required']" class="text-danger">
               Please Enter Phone Number
             </div>
-            <div
-            [hidden]="!accountForm.controls['phone_number'].errors?.['pattern']"
-            class="text-danger"
-          >
-          Enter a Valid 10-Digit Phone Number    
-              </div>
+            <div [hidden]="!accountForm.controls['phone_number'].errors?.['pattern']" class="text-danger">
+              Enter a Valid 10-Digit Phone Number
+            </div>
           </div>
         </div>
       </div>
@@ -216,9 +156,7 @@
 
     <div class="row">
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="role" class="form-label"
-          >Role <span class="text-danger">*</span></label
-        >
+        <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-user-secret"></i>
@@ -243,9 +181,7 @@
         </div>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-12">
-        <label for="department" class="form-label"
-          >Department <span class="text-danger">*</span></label
-        >
+        <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
         <div class="input-box">
           <span class="input-group-text" id="basic-addon1">
             <i class="fa fa-id-badge"></i>

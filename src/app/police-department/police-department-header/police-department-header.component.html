@@ -1,23 +1,132 @@
-    <!-- Image Section -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="mb-4">
-                <img [src]="policeImageUrl" alt="TrafficPoliceReport" class="custom-image">
-            </div>
-        </div>
-    </div>
+<!-- Police Department Top Navigation Bar (Identical to Super Admin) -->
+<div id="navbar-wrapper" class="crm-top-navbar" [class.toggled]="isToggled">
+  <nav class="navbar navbar-expand">
+    <div class="container-fluid px-3 px-md-4">
+      <div class="navbar-header d-flex align-items-center">
+        <button type="button" class="btn btn-icon sidebar-toggle-btn me-3" id="sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle Navigation">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h2 class="navbar-brand header mb-0 d-flex align-items-center">
+          <span class="brand-badge"><i class="fa fa-shield-alt"></i></span>
+          <span class="brand-title ms-2">CRASH REPORT</span>
+          <span class="badge bg-brand-subtle ms-2 d-none d-sm-inline-block">{{police_name | uppercase}}</span>
+        </h2>
+      </div>
 
-    <!-- Action Buttons -->
-    <div class="row mb-3">
-        <div class="col-md-12 col-12 text-right">
-            <button class="btn btn-secondary ml-2 mb-1" [routerLink]="['/reports',police_name,'view-department']">
-                <i class="fa fa-eye"></i> My Department
-            </button>
-            <button class="btn btn-secondary ml-2 mb-1" [routerLink]="['/reports',police_name,'change-password']">
-                <i class="fa fa-key"></i> Change Password
-            </button>
-            <button class="btn btn-secondary ml-2 mb-1" [routerLink]="['/ohio',police_name]">
-                <i class="fa fa-sign-out"></i> Logout
-            </button>
-        </div>
+      <div class="dropdown">
+        <a class="nav-link dropdown-toggle username user-profile-chip" href="#" id="policeNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="user-avatar">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <span class="user-name ms-2">{{police_name | titlecase}}</span>
+          <i class="fa fa-chevron-down ms-1 dropdown-arrow"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="policeNavbarDropdown">
+          <li class="dropdown-header text-muted text-uppercase px-3 py-1 font-size-xs">Police Department</li>
+          <li>
+            <a class="dropdown-item" [routerLink]="['/reports', police_name, 'view-department']">
+              <i class="fa fa-building me-2 text-brand"></i>My Department
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" [routerLink]="['/reports', police_name, 'change-password']">
+              <i class="fa fa-key me-2 text-brand"></i>Change Password
+            </a>
+          </li>
+          <li><hr class="dropdown-divider my-1"></li>
+          <li>
+            <a class="dropdown-item text-danger" [routerLink]="['/ohio', police_name]">
+              <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
+</div>
+
+<!-- Mobile Sidebar Backdrop -->
+<div class="sidebar-backdrop" [class.show]="isToggled" (click)="closeSidebar()"></div>
+
+<!-- Police Department Sidebar (Identical to Super Admin) -->
+<aside id="sidebar-wrapper" class="crm-sidebar" [class.toggled]="isToggled">
+  <div class="sidebar-brand">
+    <div class="brand-logo-container">
+      <div class="brand-symbol" *ngIf="!policeImageUrl">
+        <i class="fa fa-shield-alt"></i>
+      </div>
+      <div class="brand-symbol brand-image-wrap" *ngIf="policeImageUrl">
+        <img [src]="policeImageUrl" alt="Dept Logo" class="police-logo-img">
+      </div>
+      <!-- Department Name and Subtitle: completely removed from DOM when sidebar is toggled/closed -->
+      <div class="brand-meta" *ngIf="!isToggled">
+        <h2 class="brand-text" [title]="police_name">{{police_name | uppercase}}</h2>
+        <span class="brand-sub">Police Department</span>
+      </div>
+    </div>
+  </div>
+
+  <ul class="sidebar-nav">
+    <!-- Reports List -->
+    <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+      <a [routerLink]="['/reports', police_name]" class="nav-link-custom">
+        <span class="nav-icon-wrapper">
+          <i class="fa fa-file-text"></i>
+        </span>
+        <span class="nav-label" *ngIf="!isToggled">Reports</span>
+      </a>
+    </li>
+
+    <!-- Add New Report -->
+    <li class="nav-item" [routerLinkActive]="['active']">
+      <a [routerLink]="['/reports', police_name, 'add-new-report']" class="nav-link-custom">
+        <span class="nav-icon-wrapper">
+          <i class="fa fa-plus-circle"></i>
+        </span>
+        <span class="nav-label" *ngIf="!isToggled">Add Report</span>
+      </a>
+    </li>
+
+    <!-- My Department -->
+    <li class="nav-item" [routerLinkActive]="['active']">
+      <a [routerLink]="['/reports', police_name, 'view-department']" class="nav-link-custom">
+        <span class="nav-icon-wrapper">
+          <i class="fa fa-building"></i>
+        </span>
+        <span class="nav-label" *ngIf="!isToggled">My Department</span>
+      </a>
+    </li>
+
+    <!-- Change Password -->
+    <li class="nav-item" [routerLinkActive]="['active']">
+      <a [routerLink]="['/reports', police_name, 'change-password']" class="nav-link-custom">
+        <span class="nav-icon-wrapper">
+          <i class="fa fa-key"></i>
+        </span>
+        <span class="nav-label" *ngIf="!isToggled">Change Password</span>
+      </a>
+    </li>
+
+    <!-- Divider -->
+    <li class="sidebar-divider my-2"></li>
+
+    <!-- Logout -->
+    <li class="nav-item nav-item-logout">
+      <a [routerLink]="['/ohio', police_name]" class="nav-link-custom text-danger-soft">
+        <span class="nav-icon-wrapper">
+          <i class="fas fa-sign-out-alt"></i>
+        </span>
+        <span class="nav-label" *ngIf="!isToggled">Logout</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+
+<!-- Fixed Footer -->
+<section class="footer-wrapper" [class.toggled]="isToggled">
+  <footer class="d-flex justify-content-center align-items-center py-2 px-3">
+    <small class="p-0 mb-0 footerText">
+      © Deemsys INC {{currentYear}} · All Rights Reserved
+    </small>
+  </footer>
+</section>

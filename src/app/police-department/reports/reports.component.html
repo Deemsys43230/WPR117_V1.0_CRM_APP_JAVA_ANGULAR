@@ -1,20 +1,25 @@
-<div style="background-color: #f0f0f0">
+<div class="page-bg">
     <app-police-department-header />
-
     <div class="container">
-        <!-- Reports Form -->
-        <div class="row col-md-12 outer-div">
-            <div class="row">
-                <div class="col-md-9">
-                    <h3 class="mb-4 highlighted-header">Reports</h3>
-                </div>
-                <div class="col-md-3 text-md-right">
-                    <button class="btn" (click)="addNewReport()">
-                        <i class="fa fa-plus"></i> Add New Report
-                    </button>
+
+        <!-- ============ Page header ============ -->
+        <div class="page-header">
+            <div class="title-wrap">
+                <span class="title-icon"><i class="fa fa-file"></i></span>
+                <div>
+                    <h3 class="highlighted-header mb-0">Reports</h3>
+                    <p class="page-sub">Search, review and manage crash reports.</p>
                 </div>
             </div>
-            <form [formGroup]="policeDepartmentForm" class="row">
+            <button class="btn btn-add-new" (click)="addNewReport()">
+                <i class="fa fa-plus"></i> Add New Report
+            </button>
+        </div>
+
+        <!-- ============ Filters ============ -->
+        <div class="filter-card">
+            <div class="filter-title"><i class="fa fa-search"></i> Filter reports</div>
+            <form [formGroup]="policeDepartmentForm" class="row filter-form">
                 <!-- Form Controls -->
                 <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
                     <label for="crashDate" class="form-label">Crash Date:</label>
@@ -76,23 +81,26 @@
                         <div *ngIf="isToDateError" class="text-danger">Please select To date</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin">
+                <div class="col-lg-3 col-md-4 col-sm-12 custom-margin filter-actions">
                     <div class="d-flex gap-3">
                         <button
                             class="px-3 py-2 d-flex justify-content-center align-items-center search-btn border-0 text-white"
                             type="submit" (click)="onSearch()" title="Search">
-                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span
+                                class="btn-text">Search</span>
                         </button>
                         <button
                             class="px-3 py-2 d-flex justify-content-center align-items-center reset-btn border-0 text-white"
                             type="submit" (click)="resetSearch()" title="Reset">
-                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i><span
+                                class="btn-text">Reset</span>
                         </button>
                     </div>
                 </div>
             </form>
         </div>
 
+        <!-- ============ Tabs ============ -->
         <div class="mt-4">
             <!-- Navigation Tabs -->
             <ul class="nav nav-tabs">
@@ -111,32 +119,30 @@
         <div class="tab-content mt-3">
             <!-- Upload Reports Tab -->
             <div class="tab-pane fade show" [ngClass]="{'active': currentTab === 'uploadReports'}">
-                <!-- Table Starts -->
-                <table class="table table-bordered mt-5">
-                    <thead>
-                        <tr>
-                            <th class="report-table-header" colspan="2">First Name</th>
-                            <th class="report-table-header" colspan="2">Last Name</th>
-                            <th class="report-table-header">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="!error">
-                        <ng-container *ngFor="let data of reportsData">
-                            <tr>
-                                <td class="report-header">
-                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate}}
-                                </td>
-                                <td class="report-header">
-                                    <label class="label-color">Report Number:</label><br />{{data.report_number}}
-                                </td>
-                                <td class="report-header">
-                                    <label class="label-color">Location:</label><br />{{data.location}}
-                                </td>
-                                <td class="report-header">
-                                    <label class="label-color">No. of
-                                        Occupants:</label><br />{{data.no_of_occupants}}
-                                </td>
-                                <td class="report-header">
+                <!-- Cards Start -->
+                <div class="report-list" *ngIf="!error">
+                    <ng-container *ngFor="let data of reportsData">
+                        <div class="report-card">
+                            <div class="report-main">
+                                <div class="meta-grid">
+                                    <div class="meta">
+                                        <span class="meta-label label-color">Crash Date</span>
+                                        <span class="meta-value">{{data.crashDate}}</span>
+                                    </div>
+                                    <div class="meta">
+                                        <span class="meta-label label-color">Report Number</span>
+                                        <span class="meta-value">{{data.report_number}}</span>
+                                    </div>
+                                    <div class="meta">
+                                        <span class="meta-label label-color">Location</span>
+                                        <span class="meta-value">{{data.location}}</span>
+                                    </div>
+                                    <div class="meta">
+                                        <span class="meta-label label-color">No. of Occupants</span>
+                                        <span class="meta-value">{{data.no_of_occupants}}</span>
+                                    </div>
+                                </div>
+                                <div class="report-actions">
                                     <a class="edit-btn" title="Edit" (click)="edit(data.report_id)"><i
                                             class="fa fa-pencil fa-sm"></i></a>
                                     <a class="delete-btn" title="Delete" (click)="delete(data.report_id)"><i
@@ -190,31 +196,34 @@
                                                     </div>
                                                     <!-- Table -->
                                                     <h4 class="occupants">Occupants</h4>
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>First Name</th>
-                                                                <th>Last Name</th>
-                                                                <th>Injuries</th>
-                                                                <th>Seating Position</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody *ngIf="occupants.length > 0; else noDataTemplate">
-                                                            <tr *ngFor="let occupant of occupants">
-                                                                <td>{{ occupant.first_name }}</td>
-                                                                <td>{{ occupant.last_name }}</td>
-                                                                <td>{{ getInjuryLabel(occupant.injuries) }}</td>
-                                                                <td>{{
-                                                                    getSeatingPositionLabel(occupant.seating_position)
-                                                                    }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <ng-template #noDataTemplate>
-                                                            <tr>
-                                                                <td colspan="4" class="text-center">No occupants</td>
-                                                            </tr>
-                                                        </ng-template>
-                                                    </table>
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>First Name</th>
+                                                                    <th>Last Name</th>
+                                                                    <th>Injuries</th>
+                                                                    <th>Seating Position</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody *ngIf="occupants.length > 0; else noDataTemplate">
+                                                                <tr *ngFor="let occupant of occupants">
+                                                                    <td>{{ occupant.first_name }}</td>
+                                                                    <td>{{ occupant.last_name }}</td>
+                                                                    <td>{{ getInjuryLabel(occupant.injuries) }}</td>
+                                                                    <td>{{
+                                                                        getSeatingPositionLabel(occupant.seating_position)
+                                                                        }}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <ng-template #noDataTemplate>
+                                                                <tr>
+                                                                    <td colspan="4" class="text-center">No occupants
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -225,52 +234,54 @@
                                     </div>
                                     <a href="{{data.file_name}}" target="_blank" class="info-btn"
                                         title="View Report File"><i class="fas fa-file"></i></a>
-                                </td>
-                            </tr>
-                            <tr *ngFor="let item of data.occupantsForms">
-                                <td colspan="2">{{item.first_name}}</td>
-                                <td colspan="4">{{item.last_name}}</td>
-                            </tr>
-                        </ng-container>
-                    </tbody>
-                    <tbody *ngIf="error">
-                        <tr>
-                            <td class="warn" colspan="6">No Records Found!</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Table Ends -->
+                                </div>
+                            </div>
+                            <div class="occupant-row" *ngIf="data.occupantsForms?.length">
+                                <span class="occupant-title"><i class="fa fa-user"></i> Occupants</span>
+                                <div class="occupant-chips">
+                                    <span class="occupant-chip"
+                                        *ngFor="let item of data.occupantsForms">{{item.first_name}}
+                                        {{item.last_name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="no-records warn" *ngIf="error">
+                    <i class="fa fa-folder-open"></i>
+                    <span>No Records Found!</span>
+                </div>
+                <!-- Cards End -->
             </div>
 
+            <!-- View All Reports Tab -->
             <div class="tab-pane fade"
                 [ngClass]="{ 'show active': currentTab === 'viewAllReports', 'fade': currentTab !== 'viewAllReports' }">
-                <!-- Table Starts -->
-                <table class="table table-bordered mt-5">
-                    <thead>
-                        <tr>
-                            <th class="report-table-header" colspan="2">First Name</th>
-                            <th class="report-table-header" colspan="2">Last Name</th>
-                            <th class="report-table-header">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="!error">
-                        <ng-container *ngFor="let data of reportsData">
-                            <tr>
-                                <td class="report-header">
-                                    <label class="label-color">Crash Date:</label><br />{{data.crashDate}}
-                                </td>
-                                <td class="report-header">
-                                    <label class="label-color">Report Number:</label><br />{{data.report_number}}
-                                </td>
-                                <td class="report-header">
-                                    <label class="label-color">Location:</label><br />{{data.location}}
-                                </td>
-                                <td class="report-header">
-                                    <label class="label-color">No. of
-                                        Occupants:</label><br />{{data.no_of_occupants}}
-                                </td>
-                                <td class="report-header">
-                                    <!-- <a class="view-btn" title="View Report Details"><i class="fa fa-eye fa-sm"></i></a> -->
+                <!-- Cards Start -->
+                <div class="report-list" *ngIf="!error">
+                    <ng-container *ngFor="let data of reportsData">
+                        <div class="report-card">
+                            <div class="report-main">
+                                <div class="meta-grid">
+                                    <div class="meta">
+                                        <span class="meta-label label-color">Crash Date</span>
+                                        <span class="meta-value">{{data.crashDate}}</span>
+                                    </div>
+                                    <div class="meta">
+                                        <span class="meta-label label-color">Report Number</span>
+                                        <span class="meta-value">{{data.report_number}}</span>
+                                    </div>
+                                    <div class="meta">
+                                        <span class="meta-label label-color">Location</span>
+                                        <span class="meta-value">{{data.location}}</span>
+                                    </div>
+                                    <div class="meta">
+                                        <span class="meta-label label-color">No. of Occupants</span>
+                                        <span class="meta-value">{{data.no_of_occupants}}</span>
+                                    </div>
+                                </div>
+                                <div class="report-actions">
+
                                     <a class="view-btn" title="View Report Details" data-toggle="modal"
                                         data-target="#viewReportModalViewAll" (click)="getById(data.report_id)">
                                         <i class="fa fa-eye fa-sm"></i>
@@ -320,31 +331,34 @@
                                                     </div>
                                                     <!-- Table -->
                                                     <h4 class="occupants">Occupants</h4>
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>First Name</th>
-                                                                <th>Last Name</th>
-                                                                <th>Injuries</th>
-                                                                <th>Seating Position</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody *ngIf="occupants.length > 0; else noDataTemplate">
-                                                            <tr *ngFor="let occupant of occupants">
-                                                                <td>{{ occupant.first_name }}</td>
-                                                                <td>{{ occupant.last_name }}</td>
-                                                                <td>{{ getInjuryLabel(occupant.injuries) }}</td>
-                                                                <td>{{
-                                                                    getSeatingPositionLabel(occupant.seating_position)
-                                                                    }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <ng-template #noDataTemplate>
-                                                            <tr>
-                                                                <td colspan="4" class="text-center">No occupants</td>
-                                                            </tr>
-                                                        </ng-template>
-                                                    </table>
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>First Name</th>
+                                                                    <th>Last Name</th>
+                                                                    <th>Injuries</th>
+                                                                    <th>Seating Position</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody *ngIf="occupants.length > 0; else noDataTemplate">
+                                                                <tr *ngFor="let occupant of occupants">
+                                                                    <td>{{ occupant.first_name }}</td>
+                                                                    <td>{{ occupant.last_name }}</td>
+                                                                    <td>{{ getInjuryLabel(occupant.injuries) }}</td>
+                                                                    <td>{{
+                                                                        getSeatingPositionLabel(occupant.seating_position)
+                                                                        }}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <ng-template #noDataTemplate>
+                                                                <tr>
+                                                                    <td colspan="4" class="text-center">No occupants
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -355,25 +369,28 @@
                                     </div>
                                     <a href="{{data.file_name}}" target="_blank" class="info-btn"
                                         title="View Report File"><i class="fas fa-file"></i></a>
-                                </td>
-                            </tr>
-                            <tr *ngFor="let item of data.occupantsForms">
-                                <td colspan="2">{{item.first_name}}</td>
-                                <td colspan="4">{{item.last_name}}</td>
-                            </tr>
-                        </ng-container>
-                    </tbody>
-                    <tbody *ngIf="error">
-                        <tr>
-                            <td class="warn" colspan="6">No Records Found!</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Table Ends -->
+                                </div>
+                            </div>
+                            <div class="occupant-row" *ngIf="data.occupantsForms?.length">
+                                <span class="occupant-title"><i class="fa fa-user"></i> Occupants</span>
+                                <div class="occupant-chips">
+                                    <span class="occupant-chip"
+                                        *ngFor="let item of data.occupantsForms">{{item.first_name}}
+                                        {{item.last_name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="no-records warn" *ngIf="error">
+                    <i class="fa fa-folder-open"></i>
+                    <span>No Records Found!</span>
+                </div>
+                <!-- Cards End -->
             </div>
 
             <!-- Pagination starts -->
-            <div class="row mt-4" *ngIf="!error">
+            <div class="row mt-4 pagination-row" *ngIf="!error">
                 <div class="col-lg-4" *ngIf="pagebutton"></div>
                 <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
                     <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1"

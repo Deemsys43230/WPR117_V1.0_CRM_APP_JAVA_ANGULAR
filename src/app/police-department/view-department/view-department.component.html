@@ -1,36 +1,69 @@
-<div style="background-color: #f0f0f0">
-  <app-police-department-header/>
+<div class="page-bg police-layout-page">
+    <app-police-department-header />
+    <div class="page-body">
+        <div class="container police-content-container">
 
-        <!-- View Deparment -->
-        <div class="container">
-            <div class="header-section d-flex justify-content-between align-items-center mb-3">
-                <h3 class="highlighted-header">My Department</h3>
-                <button (click)="backToReportList()" class="btn">
-                    <i class="fa fa-reply"></i> Back to Reports list
-                </button>
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-10 col-12">
+
+                    <!-- View Department Header (neatly aligned with card) -->
+                    <div class="header-section page-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                        <div class="title-wrap d-flex align-items-center gap-3">
+                            <span class="title-icon"><i class="fa fa-building"></i></span>
+                            <div>
+                                <h3 class="highlighted-header mb-0">My Department</h3>
+                                <p class="page-sub mb-0 text-muted">Your department details and portal links.</p>
+                            </div>
+                        </div>
+                        <button (click)="backToReportList()" class="btn back-btn">
+                            <i class="fa fa-reply me-1"></i> Back to Reports list
+                        </button>
+                    </div>
+
+                    <!-- Detail Card -->
+                    <div class="table-wrapper box-style detail-card">
+
+                        <div class="detail-head">
+                            <span class="detail-avatar"><i class="fa fa-shield-alt"></i></span>
+                            <div class="detail-head-text">
+                                <span class="detail-eyebrow">Police Department</span>
+                                <span class="detail-title">{{ name }}</span>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <span class="row-icon"><i class="fa fa-map-marker-alt"></i></span>
+                                <strong>County:</strong>
+                            </div>
+                            <div class="table-cell-2">{{ county }}</div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <span class="row-icon"><i class="fa fa-building"></i></span>
+                                <strong>Name:</strong>
+                            </div>
+                            <div class="table-cell-2">{{ name }}</div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <span class="row-icon"><i class="fa fa-sign-in-alt"></i></span>
+                                <strong>Login Link:</strong>
+                            </div>
+                            <div class="table-cell-2"><a href="#" class="link-pill">{{ loginLink }}</a></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">
+                                <span class="row-icon"><i class="fa fa-search"></i></span>
+                                <strong>Search Link:</strong>
+                            </div>
+                            <div class="table-cell-2"><a href="#" class="link-pill">{{ searchLink }}</a></div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        <div class="row">
-            <div class="col-lg-3"></div>
-            <div class="table-wrapper box-style col-lg-7">
-                <div class="table-row">
-                    <div class="table-cell"><strong>County:</strong></div>
-                    <div class="table-cell-2">{{ county }}</div>
-                </div>
-                <div class="table-row">
-                    <div class="table-cell"><strong>Name:</strong></div>
-                    <div class="table-cell-2">{{ name }}</div>
-                </div>
-                <div class="table-row">
-                    <div class="table-cell"><strong>Login Link:</strong></div>
-                    <div class="table-cell-2"><a href="#">{{ loginLink }}</a></div>
-                </div>
-                <div class="table-row">
-                    <div class="table-cell"><strong>Search Link:</strong></div>
-                    <div class="table-cell-2"><a href="#">{{ searchLink }}</a></div>
-                </div>
-            </div>
+
         </div>
-        </div>        
-        <br><br>
-        </div>
-        
+    </div>
+</div>

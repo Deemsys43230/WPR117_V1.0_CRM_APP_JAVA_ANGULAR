@@ -1,0 +1,133 @@
+// ==============================================================================
+// DESIGN SYSTEM MIXINS & UTILITIES
+// ==============================================================================
+
+// Responsive Breakpoints
+$breakpoints: (
+  'xs': 360px,
+  'sm': 576px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+  '2xl': 1440px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media screen and (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+
+  @else {
+    @media screen and (min-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-below($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media screen and (max-width: (map-get($breakpoints, $breakpoint) - 1px)) {
+      @content;
+    }
+  }
+
+  @else {
+    @media screen and (max-width: ($breakpoint - 1px)) {
+      @content;
+    }
+  }
+}
+
+// Glassmorphism Surface
+@mixin glass-surface($bg: rgba(255, 255, 255, 0.85), $border: rgba(255, 255, 255, 0.6), $blur: 14px) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $border;
+}
+
+// Premium Card
+@mixin premium-card($radius: var(--crm-radius-lg), $padding: 1.5rem) {
+  background: var(--crm-bg-surface);
+  border-radius: $radius;
+  border: 1px solid var(--crm-border-color);
+  box-shadow: var(--crm-shadow-sm);
+  padding: $padding;
+  transition: transform var(--crm-duration-base) var(--crm-ease-default),
+    box-shadow var(--crm-duration-base) var(--crm-ease-default),
+    border-color var(--crm-duration-base) var(--crm-ease-default);
+
+  &:hover {
+    box-shadow: var(--crm-shadow-md);
+  }
+}
+
+// Focus Ring (WCAG AA Accessibility)
+@mixin focus-ring($color: rgba(13, 148, 136, 0.35), $offset: 2px) {
+  outline: none;
+
+  &:focus-visible,
+  &:focus {
+    box-shadow: 0 0 0 3px $color !important;
+    border-color: var(--crm-brand) !important;
+  }
+}
+
+// Interactive Hover Lift
+@mixin hover-lift($translateY: -3px, $shadow: var(--crm-shadow-hover)) {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform var(--crm-duration-base) var(--crm-ease-default),
+      box-shadow var(--crm-duration-base) var(--crm-ease-default);
+
+    &:hover {
+      transform: translateY($translateY);
+      box-shadow: $shadow;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Touch Target Size (Minimum 44px for WCAG)
+@mixin min-touch-target($min-size: 44px) {
+  min-height: $min-size;
+  min-width: $min-size;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Truncate Text
+@mixin text-truncate-single {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Custom Sleek Scrollbar
+@mixin sleek-scrollbar($width: 6px, $thumb-color: rgba(148, 163, 184, 0.5), $track-color: transparent) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: 9999px;
+
+    &:hover {
+      background: rgba(100, 116, 139, 0.7);
+    }
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: $thumb-color $track-color;
+}

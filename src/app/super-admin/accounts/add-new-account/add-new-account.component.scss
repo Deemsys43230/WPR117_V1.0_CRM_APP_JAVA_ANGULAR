@@ -1,8 +1,296 @@
 @import 'src/styles.scss';
 
-.btn-back{
-    background-color: $primary-color;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$field-border: #dbe3ea;
+$field-height: 46px;
+
+@keyframes formFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
+@keyframes errorSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
+/* ---------- Header ---------- */
+.card-header .custom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.card-header .col-md-2 {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+}
+
+.btn-back {
+    background-color: $primary-color;
+    border: 0;
+    border-radius: 10px;
+    padding: 8px 18px;
+    box-shadow: 0 4px 10px rgba($primary-color, 0.25);
+    transition: transform 0.25s $ease, box-shadow 0.25s $ease, filter 0.25s $ease;
+
+    .fa-reply {
+        display: inline-block;
+        transition: transform 0.25s $ease;
+    }
+
+    &:hover {
+        filter: brightness(1.15);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba($primary-color, 0.32);
+
+        .fa-reply {
+            transform: translateX(-3px);
+        }
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.97);
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgba($secondary-color, 0.45);
+        outline-offset: 2px;
+    }
+}
+
+/* ---------- Form card ---------- */
+.form-card {
+    margin-top: 18px;
+    padding: 28px 28px 24px;
+    background: #fff;
+    border: 1px solid rgba($secondary-color, 0.08);
+    border-radius: 16px;
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.04),
+        0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+form .row {
+    row-gap: 8px;
+}
+
+/* ---------- Labels ---------- */
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: #334155;
+
+    .text-danger {
+        margin-left: 2px;
+    }
+}
+
+/* ---------- Input box (icon + field) ---------- */
+.input-box {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    height: $field-height;
+    background: #fff;
+    border: 1px solid $field-border;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.25s $ease, box-shadow 0.25s $ease, background-color 0.25s $ease;
+
+    &:hover {
+        border-color: rgba($secondary-color, 0.45);
+    }
+
+    &:focus-within {
+        border-color: $secondary-color;
+        box-shadow: 0 0 0 4px rgba($secondary-color, 0.14);
+
+        .input-group-text {
+            background: $secondary-color;
+            color: #fff;
+        }
+    }
+
+    /* invalid state (uses Angular's ng-* classes, no TS change) */
+    &:has(.ng-invalid.ng-dirty),
+    &:has(.ng-invalid.ng-touched) {
+        border-color: #dc3545;
+
+        &:focus-within {
+            box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.14);
+        }
+
+        .input-group-text {
+            color: #dc3545;
+        }
+    }
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 48px;
+    width: 48px;
+    padding: 0;
+    font-size: 15px;
+    color: $secondary-color;
+    background: rgba($secondary-color, 0.08);
+    border: 0;
+    border-right: 1px solid $field-border;
+    border-radius: 0;
+    transition: background-color 0.25s $ease, color 0.25s $ease;
+}
+
+.input-box .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    padding: 0 14px;
+    font-size: 15px;
+    color: #1e293b;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    &::placeholder {
+        color: #94a3b8;
+    }
+}
+
+/* select with custom arrow */
+.input-box select.form-control {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 38px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5l5 5 5-5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px 8px;
+}
+
+/* ---------- Error messages (fixed area so rows never jump) ---------- */
+.error-msg-area {
+    min-height: 22px;
+    margin-top: 6px;
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.error-msg {
+    animation: errorSlide 0.25s $ease both;
+}
+
+/* ---------- Submit ---------- */
+form .text-end .btn[type='submit'] {
+    min-width: 140px;
+    padding: 10px 28px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: transform 0.25s $ease, box-shadow 0.25s $ease, filter 0.25s $ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.08);
+        box-shadow: 0 10px 20px rgba($secondary-color, 0.35);
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.97);
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgba($secondary-color, 0.45);
+        outline-offset: 3px;
+    }
+}
+
+/* ---------- Motion (only if user allows) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+    .form-card {
+        animation: formFadeUp 0.5s $ease both;
+    }
+
+    form .row>[class*='col-'] {
+        animation: formFadeUp 0.5s $ease both;
+
+        &:nth-child(1) {
+            animation-delay: 0.08s;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 0.14s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .input-box,
+    .input-group-text,
+    .btn-back,
+    form .text-end .btn[type='submit'] {
+        transition: none;
+    }
+
+    .error-msg {
+        animation: none;
+    }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991px) {
+    .form-card {
+        padding: 22px 20px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-card {
+        margin-top: 14px;
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+
+    .input-group-text {
+        flex-basis: 42px;
+        width: 42px;
+    }
+
+    form .text-end .btn[type='submit'] {
+        width: 100%;
+    }
+}

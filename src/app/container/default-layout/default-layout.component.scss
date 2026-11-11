@@ -1,336 +1,526 @@
-@import 'src/styles.scss';
-body {
-    padding-bottom: 30px;
-    position: relative;
-    min-height: 100%;
-  }
-  .header {
-    color: white !important;
-  }
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+@import 'src/styles/animations';
 
-  #navbar-wrapper .navbar {
-    display: flex;
-    justify-content: space-between; /* Adjusts spacing between the brand and the dropdown */
-    align-items: center; /* Vertically centers the content */
-    padding: 10px 20px; /* Optional: Adds some padding for better spacing */
-    background-color: $secondary-color; /* Keeps the background consistent */
-  }
-  
-  .navbar-header {
-    display: flex;
-    align-items: center; /* Vertically center the brand text and icon */
-  }
-  
-  .dropdown {
-    margin-left: auto; /* Pushes the dropdown to the far right */
-  }
-  
-  a {
-    transition: background 0.2s, color 0.2s;
-  }
-  a:hover,
-  a:focus {
-    text-decoration: none;
-  }
-  
-  #wrapper {
-    padding-left: 0;
-    transition: all 0.5s ease;
-    position: relative;
-  }
-  
-  #sidebar-wrapper {
-    z-index: 1000;
-    position: fixed;
-    left: 250px;
-    width: 0;
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--crm-bg-app);
+}
+
+// -----------------------------------------------------------------------------
+// Top Navigation Bar
+// -----------------------------------------------------------------------------
+#navbar-wrapper.crm-top-navbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 260px;
+  height: 68px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--crm-border-color);
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  transition: left var(--crm-duration-smooth) var(--crm-ease-default);
+
+  .navbar {
     height: 100%;
-    margin-left: -250px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #243449;
-    transition: all 0.5s ease;
-  }
-  
-  #wrapper.toggled #sidebar-wrapper {
-    width: 250px;
-  }
-  
-  .sidebar-brand {
-    position: absolute;
-    top: 0;
-    width: 250px;
-    text-align: center;
-    padding: 20px 0;
-  }
-  .sidebar-brand h2 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 24px;
-    color: #fff;
-  }
-  
-  .sidebar-nav {
-    position: absolute;
-    top: 75px;
-    width: 250px;
-    margin: 0;
     padding: 0;
-    list-style: none;
   }
-  .sidebar-nav > li {
-    text-indent: 10px;
-    line-height: 42px;
-  }
-  .sidebar-nav > li a {
-    display: block;
-    text-decoration: none;
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 16px;
-  }
-  .sidebar-nav > li > a:hover {
-    text-decoration: none;
-    color: $primary-color;
-    background: $third-color;
-  }
-  .sidebar-nav > li.active > a {
-    text-decoration: none;
-    color: #fff;
-    background: $secondary-color;
-  }
-  .sidebar-nav > li > a i.fa {
-    font-size: 24px;
-    width: 50px;
-  }
-  #navbar-wrapper {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000; 
-  }
-  
-  #wrapper.toggled #navbar-wrapper {
-      position: absolute;
-      margin-right: -250px;
-  }
-  #navbar-wrapper .navbar {
-    border-width: 0 0 0 0;
-    background-color: $secondary-color;
-    font-size: 24px;
-    margin-bottom: 0;
-    border-radius: 0;
-  }
-  .dropdown{
+
+  .sidebar-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--crm-radius-sm);
+    background: #f1f5f9;
+    color: var(--crm-text-primary);
+    border: 1px solid var(--crm-border-color);
     display: flex;
+    align-items: center;
     justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all var(--crm-duration-fast) var(--crm-ease-default);
+
+    &:hover {
+      background: var(--crm-brand-subtle);
+      color: var(--crm-brand-hover);
+      border-color: var(--crm-brand-light);
+    }
   }
-  .username{
-    font-size: large;
-    color: white !important;
+
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--crm-brand) 0%, #0f766e 100%);
+    color: #ffffff;
+    border-radius: var(--crm-radius-sm);
+    font-size: 0.95rem;
+    box-shadow: 0 2px 6px rgba(13, 148, 136, 0.28);
   }
-  .dropdown-item {
-    border-bottom: 1px solid #495057;
-    padding: 10px 20px;
+
+  .brand-title {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: var(--crm-primary);
   }
-  
-  .dropdown-item:hover {
-    background-color: $primary-color;
-    color: white !important;
+
+  .bg-brand-subtle {
+    background-color: var(--crm-brand-subtle);
+    color: var(--crm-brand-hover);
+    font-weight: 700;
+    font-size: 0.688rem;
+    padding: 0.35em 0.6em;
+    border-radius: var(--crm-radius-full);
+    letter-spacing: 0.05em;
   }
-  
-  .dropdown-item:last-child {
-    border-bottom: 1px solid #cccccc;
+}
+
+// User Profile Chip
+.user-profile-chip {
+  display: flex !important;
+  align-items: center;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: var(--crm-radius-full);
+  background: #f8fafc;
+  border: 1px solid var(--crm-border-color);
+  color: var(--crm-text-primary) !important;
+  font-weight: 600;
+  font-size: var(--crm-font-size-sm);
+  transition: all var(--crm-duration-fast) var(--crm-ease-default);
+  cursor: pointer;
+  text-decoration: none !important;
+
+  .user-avatar {
+    font-size: 1.35rem;
+    color: var(--crm-brand);
+    display: flex;
+    align-items: center;
   }
-  
-  .navbar-nav .dropdown-menu-end {
-    right: 0;
-    left: auto;
+
+  .user-name {
+    color: var(--crm-text-primary);
+    max-width: 140px;
+    @include text-truncate-single;
   }
-  
-  .navbar-toggler-icon {
-    color: white;
+
+  .dropdown-arrow {
+    font-size: 0.75rem;
+    color: var(--crm-text-muted);
+    transition: transform var(--crm-duration-fast) var(--crm-ease-default);
   }
-  #navbar-wrapper .navbar a {
-    color: #757575;
+
+  &:hover {
+    background: #ffffff;
+    border-color: var(--crm-brand-light);
+    box-shadow: var(--crm-shadow-sm);
   }
-  #navbar-wrapper .navbar a:hover {
-    color: #F8BE12;
+
+  &[aria-expanded="true"] {
+    background: #ffffff;
+    border-color: var(--crm-brand);
+
+    .dropdown-arrow {
+      transform: rotate(180deg);
+    }
   }
-  
-  #content-wrapper {
-    width: 99%;
-    position: absolute;
-    padding-top: 70px;
-    padding-bottom: 130px;
-    top: 100px;
+}
+
+.font-size-xs {
+  font-size: 0.688rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.text-brand {
+  color: var(--crm-brand) !important;
+}
+
+// -----------------------------------------------------------------------------
+// Sidebar Navigation
+// -----------------------------------------------------------------------------
+#sidebar-wrapper.crm-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  background: #0f172a; // Deep Slate
+  z-index: 1010;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  transition: width var(--crm-duration-smooth) var(--crm-ease-default),
+    transform var(--crm-duration-smooth) var(--crm-ease-default),
+    left var(--crm-duration-smooth) var(--crm-ease-default);
+  @include sleek-scrollbar(4px, rgba(255, 255, 255, 0.15), transparent);
+
+  .sidebar-brand {
+    height: 68px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    .brand-logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-symbol {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--crm-radius-md);
+      background: linear-gradient(135deg, var(--crm-brand) 0%, #0284c7 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.35);
+      flex-shrink: 0;
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+
+      .brand-text {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .brand-sub {
+        font-size: 0.688rem;
+        color: #94a3b8;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+    }
   }
-  #wrapper.toggled #content-wrapper {
-    position: absolute;
-    margin-right: -250px;
+
+  .sidebar-nav {
+    list-style: none;
+    padding: 1rem 0.75rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    .nav-item {
+      position: relative;
+      cursor: pointer;
+
+      .nav-link-custom {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.75rem 1rem;
+        border-radius: var(--crm-radius-md);
+        color: #94a3b8;
+        font-weight: 600;
+        font-size: var(--crm-font-size-sm);
+        text-decoration: none;
+        will-change: transform;
+        transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color var(--crm-duration-fast) var(--crm-ease-default),
+          color var(--crm-duration-fast) var(--crm-ease-default),
+          box-shadow 0.28s var(--crm-ease-default),
+          border-color var(--crm-duration-fast) var(--crm-ease-default);
+
+        // every icon sits in the same fixed, centered box
+        .nav-icon-wrapper {
+          width: 24px;
+          height: 24px;
+          flex: 0 0 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.15rem;
+          line-height: 1;
+          color: #94a3b8;
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+            color var(--crm-duration-fast) var(--crm-ease-default);
+
+          i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 1.25em;
+            height: 1.25em;
+            line-height: 1;
+            text-align: center;
+            transform: none;
+            // neutralise any per-icon offset coming from the icon class or [ngStyle]
+            position: static !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+        }
+
+        .nav-label {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          transition: letter-spacing 0.25s var(--crm-ease-default);
+        }
+
+        // ---- Hover: light "pop" ----
+        &:hover {
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.07);
+          transform: translateX(4px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+
+          .nav-icon-wrapper {
+            color: var(--crm-brand-light);
+            transform: scale(1.18);
+          }
+        }
+
+        // press feedback
+        &:active {
+          transform: translateX(2px) scale(0.98);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--crm-brand-light);
+          outline-offset: 2px;
+        }
+      }
+
+      &.active .nav-link-custom {
+        background: linear-gradient(135deg, rgba(13, 148, 136, 0.25) 0%, rgba(13, 148, 136, 0.1) 100%);
+        border: 1px solid rgba(13, 148, 136, 0.4);
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+        .nav-icon-wrapper {
+          color: var(--crm-brand-light);
+        }
+
+        // active item stays in place (accent bar is fixed), only the icon pops
+        &:hover {
+          transform: none;
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 15%;
+          bottom: 15%;
+          width: 4px;
+          border-radius: 0 var(--crm-radius-xs) var(--crm-radius-xs) 0;
+          background: var(--crm-brand-light);
+        }
+      }
+    }
   }
+}
+
+// -----------------------------------------------------------------------------
+// Main Content Wrapper
+// -----------------------------------------------------------------------------
+#content-wrapper.crm-main-content {
+  margin-top: 68px;
+  margin-left: 260px;
+  min-height: calc(100vh - 68px - 44px);
+  padding: 1.75rem 1.75rem 4rem 1.75rem;
+  transition: margin-left var(--crm-duration-smooth) var(--crm-ease-default);
+
+  .content-container {
+    padding: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: crmFadeIn var(--crm-duration-smooth) var(--crm-ease-default);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer
+// -----------------------------------------------------------------------------
+.footer-wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 260px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--crm-border-color);
+  z-index: 999;
+  transition: left var(--crm-duration-smooth) var(--crm-ease-default);
+
   footer {
-    position: fixed;
-    bottom: 0px;
-    background-color: #c4c7d1;
-    margin: auto;
-    width: -webkit-fill-available;
-    padding: 5px 10px;
-}
-  .footer-wrapper{
-    width: 100%;
-    position: fixed;
-    bottom: 0;
+    height: 100%;
   }
+
   .footerText {
-    color: black !important;
+    color: var(--crm-text-muted) !important;
+    font-size: 0.813rem;
+    font-weight: 500;
+  }
 }
-  @media (min-width: 992px) {
-    #wrapper {
-      padding-left: 250px;
+
+// -----------------------------------------------------------------------------
+// Toggled State for Desktop (Collapses to 72px icon bar)
+// -----------------------------------------------------------------------------
+@media (min-width: 1024px) {
+  #wrapper.toggled {
+    #sidebar-wrapper.crm-sidebar {
+      width: 72px;
+
+      .brand-meta {
+        display: none;
+      }
+
+      .sidebar-brand {
+        padding: 0;
+        justify-content: center;
+      }
+
+      .sidebar-nav .nav-item .nav-link-custom {
+        justify-content: center;
+        padding: 0.75rem 0;
+
+        .nav-label {
+          display: none;
+        }
+
+        .nav-icon-wrapper {
+          margin: 0;
+        }
+
+        // collapsed bar: no sideways shift (would clip), just a gentle scale
+        &:hover {
+          transform: scale(1.06);
+        }
+      }
+
+      .sidebar-nav .nav-item.active .nav-link-custom:hover {
+        transform: none;
+      }
     }
-    
-    #wrapper.toggled {
-      padding-left: 60px;
+
+    #navbar-wrapper.crm-top-navbar {
+      left: 72px;
     }
-  
-    #sidebar-wrapper {
-      width: 250px;
+
+    #content-wrapper.crm-main-content {
+      margin-left: 72px;
     }
-    
-    #wrapper.toggled #sidebar-wrapper {
-      width: 60px;
-    }
-    
-    #wrapper.toggled #navbar-wrapper {
-      position: absolute;
-      margin-right: -190px;
-  }
-    
-    #wrapper.toggled #content-wrapper {
-      position: absolute;
-      margin-right: -190px;
-    }
-  
-    #navbar-wrapper {
-      position: fixed;
-      top: 0;
-      z-index: 1001;
-      border-bottom: 1px solid #444; 
-    }
-  
-    #wrapper.toggled {
-      padding-left: 60px;
-    }
-  
-    #content-wrapper {
-      position: relative;
-      top: 0;
-    }
-  
-    #wrapper.toggled #navbar-wrapper,
-    #wrapper.toggled #content-wrapper {
-      position: relative;
-      margin-right: 60px;
-    }
-  }
-  
-  @media (min-width: 768px) and (max-width: 991px) {
-    #wrapper {
-      padding-left: 60px;
-    }
-  
-    #sidebar-wrapper {
-      width: 60px;
-    }
-    
-  #wrapper.toggled #navbar-wrapper {
-      position: absolute;
-      margin-right: -250px;
-  }
-    
-    #wrapper.toggled #content-wrapper {
-      position: absolute;
-      margin-right: -250px;
-    }
-  
-    #navbar-wrapper {
-      position: fixed;
-      z-index: 1001;
-    }
-  
-    #wrapper.toggled {
-      padding-left: 250px;
-    }
-  
-    #content-wrapper {
-      position: relative;
-      top: 0;
-    }
-  
-    #wrapper.toggled #navbar-wrapper,
-    #wrapper.toggled #content-wrapper {
-      position: relative;
-      margin-right: 250px;
+
+    .footer-wrapper {
+      left: 72px;
     }
   }
-  
-  @media (max-width: 767px) {
-    #wrapper {
-      padding-left: 0;
-    }
-  
-    #sidebar-wrapper {
-      width: 0;
-    }
-  
-    #wrapper.toggled #sidebar-wrapper {
-      width: 250px;
-    }
-    #wrapper.toggled #navbar-wrapper {
-      position: absolute;
-      margin-right: -250px;
-    }
-  
-    #wrapper.toggled #content-wrapper {
-      position: absolute;
-      margin-right: -250px;
-    }
-  
-    #navbar-wrapper {
-      position: fixed;
-      z-index: 1001;
-    }
-  
-    #wrapper.toggled {
-      padding-left: 250px;
-    }
-  
-    #content-wrapper {
-      position: relative;
-      top: 0;
-    }
-  
-    #wrapper.toggled #navbar-wrapper,
-    #wrapper.toggled #content-wrapper {
-      position: relative;
-      margin-right: 250px;
-    }
-  }
-  .fa-bars:before, .fa-navicon:before{
-    color: white;
+}
+
+// -----------------------------------------------------------------------------
+// Mobile & Tablet Responsive Layout (< 1024px)
+// -----------------------------------------------------------------------------
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1005;
+  opacity: 0;
+  transition: opacity var(--crm-duration-smooth) var(--crm-ease-default);
+}
+
+@media (max-width: 1023px) {
+  #navbar-wrapper.crm-top-navbar {
+    left: 0;
   }
 
-  i::before{
-    font-size: 16px;
+  #sidebar-wrapper.crm-sidebar {
+    left: -280px;
+    width: 280px;
+    z-index: 1020;
+    box-shadow: none;
   }
-  // Sidebar CSS Ends
 
-  @media (max-width: 320px) {
-    .header {
-     font-size: 17px;
+  #content-wrapper.crm-main-content {
+    margin-left: 0;
+    padding: 1.25rem 1rem 4rem 1rem;
+  }
+
+  .footer-wrapper {
+    left: 0;
+  }
+
+  #wrapper.toggled {
+    #sidebar-wrapper.crm-sidebar {
+      left: 0;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
     }
-    .dropdown {
-      margin-bottom: 10px;
+
+    .sidebar-backdrop {
+      display: block;
+      opacity: 1;
     }
   }
+}
+
+@media (max-width: 576px) {
+  #navbar-wrapper.crm-top-navbar {
+    height: 60px;
+
+    .brand-title {
+      font-size: 1rem;
+    }
+  }
+
+  #content-wrapper.crm-main-content {
+    margin-top: 60px;
+    padding: 0.85rem 0.6rem 3.5rem 0.6rem;
+  }
+
+  .user-profile-chip {
+    padding: 0.35rem 0.6rem !important;
+
+    .user-name {
+      max-width: 80px;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Reduced motion: keep colors, drop movement
+// -----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+
+  #sidebar-wrapper.crm-sidebar .sidebar-nav .nav-item .nav-link-custom,
+  #sidebar-wrapper.crm-sidebar .sidebar-nav .nav-item .nav-link-custom:hover,
+  #sidebar-wrapper.crm-sidebar .sidebar-nav .nav-item .nav-link-custom:active,
+  #sidebar-wrapper.crm-sidebar .sidebar-nav .nav-item .nav-link-custom .nav-icon-wrapper,
+  #wrapper.toggled #sidebar-wrapper.crm-sidebar .sidebar-nav .nav-item .nav-link-custom:hover {
+    transform: none !important;
+    transition: none;
+  }
+}

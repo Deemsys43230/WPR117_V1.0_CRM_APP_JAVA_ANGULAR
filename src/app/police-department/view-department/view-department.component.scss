@@ -1,9 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+/* ---------- Design tokens ---------- */
+$navy: #1b2f4b;
+$teal: #1d8d97;
+$teal-dark: #167078;
+$teal-tint: #e6f2f3;
+$panel: #f6fafa;
+$border: #c5d6d8;
+$field-border: #9db3b6;
+$text: #1f2a37;
+$muted: #5d6b7a;
+$page: #f1f4f6;
+
+:host {
+    display: block;
+}
+
+.page-bg {
+    background-color: $page;
+    font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+    color: $text;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.page-body {
+    flex: 1 0 auto;
+    padding: 0;
+}
+
 .container {
-    max-width: 1250px; 
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #d4e3e3;
-    border-radius: 10px;
+    max-width: 1400px;
+    background-color: transparent;
+    transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (min-width: 1024px) {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+        max-width: calc(100% - 260px);
+        padding: 1.5rem 2rem;
+    }
+}
+
+:host-context(body.police-sidebar-toggled) .container {
+    @media (min-width: 1024px) {
+        margin-left: 72px;
+        width: calc(100% - 72px);
+        max-width: calc(100% - 72px);
+    }
+}
+
+.page-footer {
+    text-align: center;
+    padding: 16px;
+    background: #fff;
+    border-top: 1px solid #e3eaed;
+    color: $muted;
+    font-size: 0.85rem;
+}
+
+/* ---------- Page header ---------- */
+.page-header {
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .header-section h1 {
@@ -11,73 +72,282 @@
     margin: 0;
 }
 
-.header-section button {
-    font-size: 16px;
-    padding: 5px 10px;
+.title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
+.title-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, $teal 0%, $teal-dark 100%);
+    color: #fff;
+    font-size: 20px;
+    box-shadow: 0 6px 14px rgba(29, 141, 151, 0.3);
+}
+
+.highlighted-header {
+    padding: 0;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: $navy;
+    letter-spacing: -0.3px;
+    text-transform: none;
+    text-shadow: none;
+}
+
+.page-sub {
+    margin: 2px 0 0;
+    color: $muted;
+    font-size: 0.95rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #{$teal};
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #{$teal-dark};
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #{$teal-dark};
+    --bs-btn-active-border-color: transparent;
+
+    background-color: $teal;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 600;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $teal-dark;
+        color: #fff;
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(29, 141, 151, 0.35);
+    }
+
+    i {
+        margin-right: 6px;
+    }
+}
+
+.header-section button {
+    font-size: 16px;
+}
+
+.btn.back-btn {
+    background-color: #fff;
+    color: $navy;
+    border: 1px solid $field-border;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: $teal-tint;
+        color: $teal-dark;
+        border: 1px solid $teal;
+    }
+}
+
+/* ---------- Detail card ---------- */
 .table-wrapper {
-    margin-top: 20px;
-    display: table;
+    margin-top: 8px;
+    display: block;
+}
+
+.box-style {
+    background: #fff;
+    border: 1px solid #dde5e8;
+    border-top: 4px solid $navy;
+    border-radius: 14px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(27, 47, 75, 0.09);
+}
+
+.detail-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 26px;
+    background: linear-gradient(135deg, $teal-tint 0%, #f6fafa 100%);
+    border-bottom: 1px solid $border;
+}
+
+.detail-avatar {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 auto;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, $teal 0%, $teal-dark 100%);
+    color: #fff;
+    font-size: 24px;
+    box-shadow: 0 8px 18px rgba(29, 141, 151, 0.32);
+}
+
+.detail-head-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.detail-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $muted;
+}
+
+.detail-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: $navy;
+    word-break: break-word;
 }
 
 .table-row {
     display: flex;
-    padding: 5px;
-    border-bottom: 1px solid #ccc;
+    align-items: flex-start;
+    padding: 6px 14px;
+    border-bottom: 1px solid #e8eef0;
+    transition: background-color 0.15s;
+
+    &:hover {
+        background-color: $panel;
+    }
 }
 
 .table-cell {
-    flex: 1;
-    padding: 10px;
-    vertical-align: middle;
-    border-right: 1px solid #ccc;
+    flex: 0 0 38%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 10px;
+    color: $navy;
+    border-right: 1px solid #e8eef0;
+
+    strong {
+        font-weight: 700;
+    }
 }
 
-.table-cell-2 {    
-    flex: 1;
-  overflow-wrap: break-word;
-  word-break: break-all;
-  padding: 10px;
-  vertical-align: middle;
+.row-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $teal-tint;
+    color: $teal-dark;
+    font-size: 15px;
 }
 
-.table-cell a {
+.table-cell-2 {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    padding: 14px 16px;
+    color: $text;
+    font-weight: 500;
+    align-self: center;
+}
+
+.table-cell a,
+.table-cell-2 a {
     text-decoration: none;
-    color: #13168d;
 }
 
-.table-cell a:hover {
-    text-decoration: underline;
-}
+.link-pill {
+    display: inline-block;
+    max-width: 100%;
+    padding: 6px 12px;
+    background: $teal-tint;
+    color: $teal-dark;
+    border: 1px solid #cfe3e5;
+    border-radius: 10px;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
 
-.btn {
-    background-color: #1d8d97;
-    color: white;
-}
-
-.box-style {
-    border: 1px solid #ccc;
-    border-radius: 5px; 
-    padding: 15px;
+    &:hover {
+        background: $teal;
+        color: #fff;
+        border-color: $teal;
+        text-decoration: none;
+    }
 }
 
 .table-row:last-child {
-    border-bottom: none; 
+    border-bottom: none;
 }
 
-.highlighted-header {
-    padding: 5px; 
-    font-size: 2rem; 
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px; 
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  }
-
-  @media (max-width: 320px) {
-    .header-section button {
-       font-size: 12px;
-       padding: 5px 10px;
+/* ---------- Responsive ---------- */
+@media (max-width: 767px) {
+    .page-body {
+        padding: 18px 0 36px;
     }
-  }
+
+    .detail-head {
+        padding: 18px;
+    }
+
+    .detail-title {
+        font-size: 1.3rem;
+    }
+
+    .table-row {
+        flex-direction: column;
+        padding: 10px 14px;
+    }
+
+    .table-cell {
+        flex: 1 1 auto;
+        width: 100%;
+        border-right: none;
+        padding: 6px 0;
+    }
+
+    .table-cell-2 {
+        width: 100%;
+        padding: 4px 0 8px 46px;
+    }
+}
+
+@media (max-width: 425px) {
+    .page-header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .header-section button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 320px) {
+    .header-section button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}

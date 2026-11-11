@@ -1,461 +1,163 @@
+// ==============================================================================
+// GLOBAL MAIN STYLESHEET
+// ==============================================================================
+
 @import "~ngx-bootstrap/datepicker/bs-datepicker.css";
-
-// Define primary and secondary colors
-$primary-color: #243449;
-$secondary-color: #1d8d97;
-$third-color: #9fc1c1;
-
-
-/* Header styles starts */
-.custom-row {
-  padding: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-style: outset;
-}
-
-.custom-row .custom-icon {
-  margin-right: 8px;
-  color: $secondary-color;
-  font-weight: 600;
-  font-size: x-large;
-}
-
-.custom-row .headerStyle {
-  font-weight: 600;
-  font-size: x-large;
-  color: $secondary-color;
-}
-/* Header styles ends */
-
-/*Card Body Styles starts */
-.card-body {
-  padding: 50px 0;
-}
-/*Card Body Styles ends */
-
-/*Common Button Styles Starts */
-.common-btn-color {
-  background-color: $secondary-color;
-  color: white;
-}
-
-.common-btn-color2{
-  background-color: $primary-color;
-  color: white;
-}
-
-.common-btn-color:active {
-  background-color: darken($secondary-color, 10%);
-  color: lighten(white, 10%);
-}
-
-.search-btn {
-  background-color: $secondary-color;
-  right: 135px;
-  margin-top: 7% !important;
-  width: 3%;
-  font-size: 12px;
-  border-radius: 4px;
-}
-.reset-btn {
-  background-color: $primary-color;
-  margin-top: 7% !important;
-  left: 90%;
-  width: 3%;
-  font-size: 12px;
-  border-radius: 4px;
-}
-/*Common Button Styles Ends */
-
-/* Form Styles starts*/
-.row{
-  display: flex !important;
-  align-items: center !important;
-  padding: 0px 15px;
-}
-.input-col{
-  width: max-content;
-}
-.custom-margin {
-  margin-bottom: 10px;
-}
-.form-control{
-  border-color: #9ec1c1;
-}
-.form-control:focus{
-  box-shadow: 0 0 0 .25rem rgb(158 193 193 / 43%);
-}
-.input-group-text{
-  background-color: $third-color;
-}
-.input-box{
-  display: flex;
-  width: 100%;
-}
-.form-label {
-  font-weight: 600;
-}
-.btn-box{
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.error-msg-area {
-  min-height: 20px;
-}
-.error-msg {
-  font-size: 15px;
-  color: red;
-  min-height: 12px;
-}
-
-/* Form Styles ends*/
-
-/* modal */
-.modal-header {
-  background-color: #2a8dae;
-  color: #fff !important;
-  justify-content: space-between !important;
-}
-
-.close {
-  background-color: #2a8dae;
-  font-weight: 900;
-  border: none !important;
-  font-size: 25px;
-  color: white;
-}
-/* modal end */
-
-/* Date Picker Design Starts */
-::ng-deep .p-button {
-  color: #ffffff;
-  background: $secondary-color;
-  border: 1px solid #1c8d96;
-  padding: 0.75rem 1.25rem;
-  height: 40px;
-  width: 40px;
-  font-size: 1rem;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  outline-color: transparent;
-}
-
-::ng-deep .p-datepicker-header {
-  background: #1c8d96;
-  color: white;
-}
-
-::ng-deep .p-element:focus {
-  box-shadow: 0 0 0 .25rem rgb(158 193 193 / 43%);
-}
-
-::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year,
-.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
-  color: white;
-}
-
-::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
-  color: white;
-}
-
-::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-prev,
-.p-datepicker .p-datepicker-header .p-datepicker-next {
-  color: white;
-}
-
-::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-next {
-  color: white;
-}
-
-::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-next:hover {
-  background-color: $primary-color;
-}
-
-::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-prev:hover {
-  background-color: $primary-color;
-}
-
-::ng-deep .p-datepicker table td.p-datepicker-today>span {
-  background: $third-color;
-}
-
-::ng-deep .p-datepicker table td>span.p-highlight {
-  color: white;
-  background: $primary-color;
-}
-/* Date Picker Design Ends */
-
-
-
-/* Media query for header starts */
-@media screen and (max-width: 425px) {
-  .custom-row .custom-icon,
-  .custom-row .headerStyle {
-    font-size: x-large;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 375px) {
-  .custom-row .custom-icon,
-  .custom-row .headerStyle {
-    font-size: 15px;
-  }
-  .btn {
-    font-size: 12px;
-  }
-  .add-new {
-    font-size: 15px;
-  }
-}
-/* Media query for header ends */
-
-/*!
- * Load Awesome v1.1.0 (http://github.danielcardoso.net/load-awesome/)
- * Copyright 2015 Daniel Cardoso <@DanielCardoso>
- * Licensed under MIT
- */
- .la-ball-newton-cradle,
- .la-ball-newton-cradle > div {
-     position: relative;
-     -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-             box-sizing: border-box;
- }
- .la-ball-newton-cradle {
-     display: block;
-     font-size: 0;
-     color: #fff;
- }
- .la-ball-newton-cradle.la-dark {
-     color: #333;
- }
- .la-ball-newton-cradle > div {
-     display: inline-block;
-     float: none;
-     background-color: currentColor;
-     border: 0 solid currentColor;
- }
- .la-ball-newton-cradle {
-     width: 40px;
-     height: 10px;
- }
- .la-ball-newton-cradle > div {
-     width: 10px;
-     height: 10px;
-     border-radius: 100%;
- }
- .la-ball-newton-cradle > div:first-child {
-     -webkit-transform: translateX(0%);
-        -moz-transform: translateX(0%);
-         -ms-transform: translateX(0%);
-          -o-transform: translateX(0%);
-             transform: translateX(0%);
-     -webkit-animation: ball-newton-cradle-left 1s 0s ease-out infinite;
-        -moz-animation: ball-newton-cradle-left 1s 0s ease-out infinite;
-          -o-animation: ball-newton-cradle-left 1s 0s ease-out infinite;
-             animation: ball-newton-cradle-left 1s 0s ease-out infinite;
- }
- .la-ball-newton-cradle > div:last-child {
-     -webkit-transform: translateX(0%);
-        -moz-transform: translateX(0%);
-         -ms-transform: translateX(0%);
-          -o-transform: translateX(0%);
-             transform: translateX(0%);
-     -webkit-animation: ball-newton-cradle-right 1s 0s ease-out infinite;
-        -moz-animation: ball-newton-cradle-right 1s 0s ease-out infinite;
-          -o-animation: ball-newton-cradle-right 1s 0s ease-out infinite;
-             animation: ball-newton-cradle-right 1s 0s ease-out infinite;
- }
- .la-ball-newton-cradle.la-sm {
-     width: 20px;
-     height: 4px;
- }
- .la-ball-newton-cradle.la-sm > div {
-     width: 4px;
-     height: 4px;
- }
- .la-ball-newton-cradle.la-2x {
-     width: 80px;
-     height: 20px;
- }
- .la-ball-newton-cradle.la-2x > div {
-     width: 20px;
-     height: 20px;
- }
- .la-ball-newton-cradle.la-3x {
-     width: 120px;
-     height: 30px;
- }
- .la-ball-newton-cradle.la-3x > div {
-     width: 30px;
-     height: 30px;
- }
- /*
-  * Animations
-  */
- @-webkit-keyframes ball-newton-cradle-left {
-     25% {
-         -webkit-transform: translateX(-100%);
-                 transform: translateX(-100%);
-         -webkit-animation-timing-function: ease-in;
-                 animation-timing-function: ease-in;
-     }
-     50% {
-         -webkit-transform: translateX(0%);
-                 transform: translateX(0%);
-     }
- }
- @-moz-keyframes ball-newton-cradle-left {
-     25% {
-         -moz-transform: translateX(-100%);
-              transform: translateX(-100%);
-         -moz-animation-timing-function: ease-in;
-              animation-timing-function: ease-in;
-     }
-     50% {
-         -moz-transform: translateX(0%);
-              transform: translateX(0%);
-     }
- }
- @-o-keyframes ball-newton-cradle-left {
-     25% {
-         -o-transform: translateX(-100%);
-            transform: translateX(-100%);
-         -o-animation-timing-function: ease-in;
-            animation-timing-function: ease-in;
-     }
-     50% {
-         -o-transform: translateX(0%);
-            transform: translateX(0%);
-     }
- }
- @keyframes ball-newton-cradle-left {
-     25% {
-         -webkit-transform: translateX(-100%);
-            -moz-transform: translateX(-100%);
-              -o-transform: translateX(-100%);
-                 transform: translateX(-100%);
-         -webkit-animation-timing-function: ease-in;
-            -moz-animation-timing-function: ease-in;
-              -o-animation-timing-function: ease-in;
-                 animation-timing-function: ease-in;
-     }
-     50% {
-         -webkit-transform: translateX(0%);
-            -moz-transform: translateX(0%);
-              -o-transform: translateX(0%);
-                 transform: translateX(0%);
-     }
- }
- @-webkit-keyframes ball-newton-cradle-right {
-     50% {
-         -webkit-transform: translateX(0%);
-                 transform: translateX(0%);
-     }
-     75% {
-         -webkit-transform: translateX(100%);
-                 transform: translateX(100%);
-         -webkit-animation-timing-function: ease-in;
-                 animation-timing-function: ease-in;
-     }
-     100% {
-         -webkit-transform: translateX(0%);
-                 transform: translateX(0%);
-     }
- }
- @-moz-keyframes ball-newton-cradle-right {
-     50% {
-         -moz-transform: translateX(0%);
-              transform: translateX(0%);
-     }
-     75% {
-         -moz-transform: translateX(100%);
-              transform: translateX(100%);
-         -moz-animation-timing-function: ease-in;
-              animation-timing-function: ease-in;
-     }
-     100% {
-         -moz-transform: translateX(0%);
-              transform: translateX(0%);
-     }
- }
- @-o-keyframes ball-newton-cradle-right {
-     50% {
-         -o-transform: translateX(0%);
-            transform: translateX(0%);
-     }
-     75% {
-         -o-transform: translateX(100%);
-            transform: translateX(100%);
-         -o-animation-timing-function: ease-in;
-            animation-timing-function: ease-in;
-     }
-     100% {
-         -o-transform: translateX(0%);
-            transform: translateX(0%);
-     }
- }
- @keyframes ball-newton-cradle-right {
-     50% {
-         -webkit-transform: translateX(0%);
-            -moz-transform: translateX(0%);
-              -o-transform: translateX(0%);
-                 transform: translateX(0%);
-     }
-     75% {
-         -webkit-transform: translateX(100%);
-            -moz-transform: translateX(100%);
-              -o-transform: translateX(100%);
-                 transform: translateX(100%);
-         -webkit-animation-timing-function: ease-in;
-            -moz-animation-timing-function: ease-in;
-              -o-animation-timing-function: ease-in;
-                 animation-timing-function: ease-in;
-     }
-     100% {
-         -webkit-transform: translateX(0%);
-            -moz-transform: translateX(0%);
-              -o-transform: translateX(0%);
-                 transform: translateX(0%);
-     }
- }
-
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 
-//Custom dropdown arrow for select field
+// Design System Core Modules
+@import "styles/variables";
+@import "styles/mixins";
+@import "styles/animations";
+@import "styles/elements";
+
+// -----------------------------------------------------------------------------
+// Legacy & Component-Specific Overrides
+// -----------------------------------------------------------------------------
+
+// Custom dropdown arrow for select field
 .custom-select-wrapper {
   position: relative;
+
+  select {
+    padding-right: 2.5rem;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23475569" width="20" height="20"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 0.75rem center;
+    background-size: 1.25rem;
+    border: 1px solid var(--crm-border-color);
+    border-radius: var(--crm-radius-sm);
+    min-height: 42px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--crm-brand);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.25);
+    }
+  }
 }
 
-.custom-select-wrapper select {
-  padding-right: 2.5rem; /* Space for the arrow */
-  appearance: none; /* Remove default browser styles */
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24" height="24"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right center;
-  background-size: 1.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
+// ngx-bootstrap Datepicker green theme
+.theme-green {
+  .bs-datepicker-head {
+    background: linear-gradient(135deg, var(--crm-brand) 0%, #0f766e 100%) !important;
+  }
+
+  .bs-datepicker-body table td.week span {
+    color: var(--crm-brand);
+  }
+
+  .bs-datepicker-body table td span.selected,
+  .bs-datepicker-body table td.selected span,
+  .bs-datepicker-body table td span[class*=select-]:after,
+  .bs-datepicker-body table td[class*=select-] span:after {
+    background-color: var(--crm-brand) !important;
+  }
 }
 
-.custom-select-wrapper select:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+// -----------------------------------------------------------------------------
+// Newton Cradle Loader (ngx-spinner)
+// -----------------------------------------------------------------------------
+.la-ball-newton-cradle,
+.la-ball-newton-cradle>div {
+  position: relative;
+  box-sizing: border-box;
 }
 
-.theme-green .bs-datepicker-head {
-  background-color: $secondary-color;
+.la-ball-newton-cradle {
+  display: block;
+  font-size: 0;
+  color: var(--crm-brand);
+  width: 40px;
+  height: 10px;
 }
 
-.theme-green .bs-datepicker-body table td.week span {
-  color: $secondary-color;
+.la-ball-newton-cradle.la-dark {
+  color: #333;
 }
 
-.theme-green .bs-datepicker-body table td span.selected, .theme-green .bs-datepicker-body table td.selected span, .theme-green .bs-datepicker-body table td span[class*=select-]:after, .theme-green .bs-datepicker-body table td[class*=select-] span:after {
-  background-color: $secondary-color;
+.la-ball-newton-cradle>div {
+  display: inline-block;
+  float: none;
+  background-color: currentColor;
+  border: 0 solid currentColor;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+}
+
+.la-ball-newton-cradle>div:first-child {
+  transform: translateX(0%);
+  animation: ball-newton-cradle-left 1s 0s ease-out infinite;
+}
+
+.la-ball-newton-cradle>div:last-child {
+  transform: translateX(0%);
+  animation: ball-newton-cradle-right 1s 0s ease-out infinite;
+}
+
+@keyframes ball-newton-cradle-left {
+  25% {
+    transform: translateX(-100%);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes ball-newton-cradle-right {
+  50% {
+    transform: translateX(0%);
+  }
+
+  75% {
+    transform: translateX(100%);
+    animation-timing-function: ease-in;
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Responsive Media Queries for Legacy Header & Shell Elements
+// -----------------------------------------------------------------------------
+@media screen and (max-width: 768px) {
+  .custom-row {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.75rem;
+
+    .d-flex,
+    .btn-box {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
+  .card-body {
+    padding: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 425px) {
+
+  .custom-row .custom-icon,
+  .custom-row .headerStyle {
+    font-size: 1.1rem !important;
+  }
+
+  .btn {
+    font-size: 0.813rem;
+    padding: 0.45rem 0.75rem;
+  }
+}
+
+input {
+  background: #f1f5f9 !important;
 }

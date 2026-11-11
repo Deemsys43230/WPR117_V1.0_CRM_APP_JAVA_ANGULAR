@@ -1,24 +1,26 @@
 <!-- Table Starts -->
-<table class="responsive-table">
-    <thead>
-        <tr>
-            <th *ngFor="let column of tableData?.tableHeading">{{ column }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let row of tableData?.data; let i = index">
-            <td *ngFor="let label of tableData.labelName">{{ row[label] }}</td>
-            <td>
-                <ng-container *ngFor="let icon of selectedIcons">
-                    <i [ngClass]="[icon.icon,'icons']" [ngStyle]="{backgroundColor:icon.bgColor}" title="{{icon.title}}"
-                        aria-hidden="true" (click)="action(row, icon.title)"
-                        *ngIf="row[icon.checkVariable] == icon.checkValue"></i>
-                </ng-container>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<p class="text-center text-danger mt-3" *ngIf="tableData?.totalCount == 0">No Records Found!</p>
+<div class="table-wrapper">
+    <table class="responsive-table">
+        <thead>
+            <tr>
+                <th *ngFor="let column of tableData?.tableHeading">{{ column }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of tableData?.data; let i = index">
+                <td *ngFor="let label of tableData.labelName">{{ row[label] }}</td>
+                <td>
+                    <ng-container *ngFor="let icon of selectedIcons">
+                        <i [ngClass]="[icon.icon,'icons']" [ngStyle]="{backgroundColor:icon.bgColor}"
+                            title="{{icon.title}}" aria-hidden="true" (click)="action(row, icon.title)"
+                            *ngIf="row[icon.checkVariable] == icon.checkValue"></i>
+                    </ng-container>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-center text-danger mt-3 no-records" *ngIf="tableData?.totalCount == 0">No Records Found!</p>
 <!-- Table Ends -->
 
 <!-- Pagination Starts -->

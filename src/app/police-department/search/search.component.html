@@ -1,20 +1,21 @@
-<div style="background-color: #f0f0f0">
-  <div>
+<div class="page-bg">
+  <div class="hero">
     <img src="assets/images/policeman.jpg" alt="TrafficPoliceReport" class="img-container">
   </div>
-  <br>
+
   <div class="custom-container">
     <div class="row content-wrapper">
+
+      <!-- ============ Search Form ============ -->
       <div class="col-lg-3 col-md-4 col-sm-12">
         <div class="search-form-wrapper">
           <div class="search-form">
-            <h2 class="mb-3" style="font-weight: 500; font-size: x-large;">Search Crash Reports</h2>
+            <h2 class="form-title">Search Crash Reports</h2>
             <form [formGroup]="searchForm">
+
               <div class="form-group">
-                <label for="firstName" style="display: inline;">First Name</label><span
-                  style="color: red; display: inline;"> *</span>
-                <input id="firstName" formControlName="firstName"
-                  placeholder="Enter First Name" style=" border: 1px solid black;">
+                <label for="firstName">First Name</label><span class="required-star"> *</span>
+                <input id="firstName" formControlName="firstName" placeholder="Enter First Name">
                 <div *ngIf="
                         searchForm.controls['firstName'].errors &&
                         (!searchForm.controls['firstName'].pristine ||
@@ -28,11 +29,10 @@
                   </div>
                 </div>
               </div>
+
               <div class="form-group">
-                <label for="lastName" style="display: inline;">Last Name</label><span
-                  style="color: red; display: inline;"> *</span>
-                <input id="lastName" formControlName="lastName"
-                  placeholder="Enter Last Name" style=" border: 1px solid black;">
+                <label for="lastName">Last Name</label><span class="required-star"> *</span>
+                <input id="lastName" formControlName="lastName" placeholder="Enter Last Name">
                 <div *ngIf="
                         searchForm.controls['lastName'].errors &&
                         (!searchForm.controls['lastName'].pristine ||
@@ -46,187 +46,199 @@
                   </div>
                 </div>
               </div>
+
               <div class="form-group">
-                <label for="crashDate" style="display: inline;">Crash Date</label>
+                <label for="crashDate">Crash Date</label>
                 <div class="input-group">
                   <input type="text" id="crashDate" class="form-control" formControlName="crashDate" bsDatepicker
-                      [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
-                      #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
+                    [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="MM/DD/YYYY" [maxDate]="today"
+                    #datepicker="bsDatepicker" readonly (keydown)="$event.preventDefault()" />
                   <span class="input-group-text" (click)="openDatePicker(datepicker)">
-                      <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
+                    <i class="fa fa-calendar"></i> <!-- Calendar Icon -->
                   </span>
+                </div>
               </div>
-              </div>
+
               <div class="form-group">
-                <label for="reportNumber" style="display: inline;">Report Number</label>
-                <input id="reportNumber" formControlName="reportNumber"
-                  placeholder="Enter Report Number" style=" border: 1px solid black;">
+                <label for="reportNumber">Report Number</label>
+                <input id="reportNumber" formControlName="reportNumber" placeholder="Enter Report Number">
               </div>
+
               <div class="form-group">
-                <label for="location" style="display: inline;">Location</label>
-                <input id="location" formControlName="location"
-                  placeholder="Enter Location" style=" border: 1px solid black;">
+                <label for="location">Location</label>
+                <input id="location" formControlName="location" placeholder="Enter Location">
               </div>
+
               <div class="form-group mt-4">
-                <button type="submit" (click)="onSearch()">Search Report</button>
+                <button type="submit" (click)="onSearch()">
+                  <i class="fa fa-search" aria-hidden="true"></i> Search Report
+                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="col-lg-9 col-md-8 col-sm-12 mt-4">
+
+      <!-- ============ Results ============ -->
+      <div class="col-lg-9 col-md-8 col-sm-12 mt-4 results-col">
         <h2 class="search-results-header">Search Results</h2>
-        <div *ngIf="!isSearchPerformed" class="search-results">
-          <i class="fa fa-search fa-10x" aria-hidden="true"></i>
+
+        <div *ngIf="!isSearchPerformed" class="empty-state">
+          <div class="search-results">
+            <i class="fa fa-search fa-10x" aria-hidden="true"></i>
+          </div>
+          <div class="search-message">
+            <h3>
+              <span>Please Use First and Last Name Only to Start and Make Sure Your Pop Up Blocker is Off.</span>
+            </h3>
+          </div>
         </div>
-        <div *ngIf="!isSearchPerformed" class="search-message">
-          <h3>
-            <span>Please Use First and Last Name Only to Start and Make Sure Your Pop Up Blocker is Off.</span>
-          </h3>
-        </div>
+
         <!-- Table Start -->
-        <div *ngIf="isSearchPerformed">
-          <table class="table table-bordered mt-1">
-            <thead>
-              <tr>
-                <th class="report-table-header">Report</th>
-                <th class="report-table-header">First Name</th>
-                <th class="report-table-header">Last Name</th>
-                <th class="report-table-header">Location</th>
-                <th class="report-table-header">Actions</th>
-              </tr>
-            </thead>
-            <tbody *ngIf="!error">
-              <ng-container *ngFor="let data of occupantsData">
+        <div *ngIf="isSearchPerformed" class="table-card">
+          <div class="table-responsive">
+            <table class="table table-bordered mt-1">
+              <thead>
                 <tr>
-                  <td class="report-header" style="line-height: 0.5;"><br />{{data.report_number}}
-                  </td>
-                  <td class="report-header" style="line-height: 0.5;"><br />{{data.first_name}}
-                  </td>
-                  <td class="report-header" style="line-height: 0.5;"><br />{{data.last_name}}
-                  </td>
-                  <td class="report-header" style="line-height: 0.5;"><br />{{data.location}}
-                  </td>
-                  <td>
-                  <a class="view-btn" title="View Report Details" data-toggle="modal"
-                  data-target="#viewReportModalUpload" (click)="openModal(data)">
-                  <i class="fa fa-eye fa-sm"></i>
-              </a>
-              <!-- Modal Structure -->
-              <div class="modal fade" id="viewReportModalUpload" tabindex="-1" role="dialog"
-                  aria-labelledby="viewReportModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="viewReportModalLabel">Confirmation
-                              </h5>
-                          </div>
-                          <div class="modal-body">
+                  <th class="report-table-header">Report</th>
+                  <th class="report-table-header">First Name</th>
+                  <th class="report-table-header">Last Name</th>
+                  <th class="report-table-header">Location</th>
+                  <th class="report-table-header">Actions</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="!error">
+                <ng-container *ngFor="let data of occupantsData">
+                  <tr>
+                    <td class="report-header">{{data.report_number}}</td>
+                    <td class="report-header">{{data.first_name}}</td>
+                    <td class="report-header">{{data.last_name}}</td>
+                    <td class="report-header">{{data.location}}</td>
+                    <td class="action-cell">
+                      <a class="view-btn" title="View Report Details" data-toggle="modal"
+                        data-target="#viewReportModalUpload" (click)="openModal(data)">
+                        <i class="fa fa-eye fa-sm"></i>
+                      </a>
+                      <!-- Modal Structure -->
+                      <div class="modal fade" id="viewReportModalUpload" tabindex="-1" role="dialog"
+                        aria-labelledby="viewReportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="viewReportModalLabel">Confirmation</h5>
+                            </div>
+                            <div class="modal-body">
                               <!-- Read-Only Fields -->
-                               <div class="row">
-                              <div class="col-md-6 form-group">
+                              <div class="row">
+                                <div class="col-md-6 form-group">
                                   <label>Report Number:</label>
                                   <input type="text" class="form-control" [value]="selectedData?.report_number"
-                                      readonly />
-                              </div>
-                              <div class="col-md-6 form-group">
+                                    readonly />
+                                </div>
+                                <div class="col-md-6 form-group">
                                   <label>First Name:</label>
-                                  <input type="text" class="form-control" [value]="selectedData?.first_name"
-                                      readonly />
+                                  <input type="text" class="form-control" [value]="selectedData?.first_name" readonly />
+                                </div>
                               </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6 form-group">
+                              <div class="row">
+                                <div class="col-md-6 form-group">
                                   <label>Last Name:</label>
-                                  <input type="text" class="form-control" [value]="selectedData?.last_name"
-                                      readonly />
-                              </div>
-                              <div class="col-md-6 form-group">
+                                  <input type="text" class="form-control" [value]="selectedData?.last_name" readonly />
+                                </div>
+                                <div class="col-md-6 form-group">
                                   <label>Location:</label>
-                                  <input type="text" class="form-control" [value]="selectedData?.location"
-                                      readonly />
+                                  <input type="text" class="form-control" [value]="selectedData?.location" readonly />
+                                </div>
                               </div>
+                              <h5 class="modal-question">Do you want to view or download reports?</h5>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                              <button type="button" class="btn btn-success"
+                                (click)="viewReport(selectedData?.file_name, selectedData?.report_id)"
+                                data-dismiss="modal">Yes</button>
+                            </div>
                           </div>
-                          <h5>Do you want to view or download reports?</h5>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-danger"
-                                  data-dismiss="modal">No</button>
-                              <button type="button" class="btn btn-success" (click)="viewReport(selectedData?.file_name, selectedData?.report_id)" data-dismiss="modal"
-                                 >Yes</button>
-                          </div>
+                        </div>
                       </div>
-                  </div>
-              </div>              
-            </td>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <tbody *ngIf="error">
+                <tr>
+                  <td class="warn text-center" colspan="12">No Records Found!</td>
                 </tr>
-              </ng-container>
-            </tbody>
-            <tbody *ngIf="error">
-              <tr>
-                <td class="warn text-center" colspan="12">No Records Found!</td>
-              </tr>
-            </tbody>
-          </table>
-        <!-- Table End -->
-      <!-- Pagination Starts -->
-      <div class="row mt-4" *ngIf="!error">
-        <div class="col-lg-4" *ngIf="pagebutton"></div>
-        <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
-          <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1" placeholder="Search By page no" />
-          <button class="button goBtn" (change)="searchPageno()">
-            GO
-          </button>
-          <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
-        </div>
-        <div class="col-lg-4 pageStatus">
-          <div class="data-list">
-            <p>
-              Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
-            </p>
+              </tbody>
+            </table>
           </div>
-        </div>
-        <div class="col-lg-4">
-          <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown"
-            type="text" (change)="onChangePagination($event)">
-            <option *ngFor="let data of ItemsPerPage" [value]="data.value">
-              {{ data.data }}
-            </option>
-          </select>
+          <!-- Table End -->
+
+          <!-- Pagination Starts -->
+          <div class="row mt-4 pagination-row" *ngIf="!error">
+            <div class="col-lg-4" *ngIf="pagebutton"></div>
+            <div class=" col-lg-4 d-flex" *ngIf="!pagebutton">
+              <input class="searchPage" type="number" [(ngModel)]="searchPage" min="1"
+                placeholder="Search By page no" />
+              <button class="button goBtn" (change)="searchPageno()">
+                GO
+              </button>
+              <p *ngIf="isPageAvailable" class="text-danger text-center fs-6">Page Not Found!</p>
+            </div>
+            <div class="col-lg-4 pageStatus">
+              <div class="data-list">
+                <p>
+                  Showing {{ startIndex + 1 }} - {{ endIndex }} of {{ count }} records
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <select *ngIf="!pagebutton" title="pagination" id="showPageType" class="form-control page-dropdown"
+                type="text" (change)="onChangePagination($event)">
+                <option *ngFor="let data of ItemsPerPage" [value]="data.value">
+                  {{ data.data }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row justify-content-center" *ngIf="!error">
+            <div class="col-md-4">
+              <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
+                <ul class="numberListContainer p-0">
+                  <li [ngClass]="{ numberList: currentPage != 1 }">
+                    <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1"
+                      (click)="previousPage()"></i>
+                  </li>
+                  <li class="numberList" *ngFor="let page of pages" [ngClass]="{ active: currentPage === page }"
+                    (click)="goToPage(page)">
+                    {{ page }}
+                  </li>
+                  <li [ngClass]="{ numberList: currentPage !== totalPages }">
+                    <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
+                      (click)="nextPage()"></i>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Pagination Close -->
         </div>
       </div>
-      <div class="row justify-content-center" *ngIf="!error">
-        <div class="col-md-4">
-          <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
-            <ul class="numberListContainer p-0">
-              <li [ngClass]="{ numberList: currentPage != 1 }">
-                <i class="fa fa-arrow-left" aria-hidden="true" *ngIf="currentPage != 1" (click)="previousPage()"></i>
-              </li>
-              <li class="numberList" *ngFor="let page of pages" [ngClass]="{ active: currentPage === page }"
-                (click)="goToPage(page)">
-                {{ page }}
-              </li>
-              <li [ngClass]="{ numberList: currentPage !== totalPages }">
-                <i class="fa fa-arrow-right" aria-hidden="true" *ngIf="currentPage !== totalPages"
-                  (click)="nextPage()"></i>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- Pagination Close -->
-    </div>
-  </div>
+
+      <!-- ============ Footer note ============ -->
       <div class="row">
         <div class="col-lg-3"></div>
         <div class="col-lg-9 mt-3">
-          <span>Please note that currently we provide service only for the Boardman & Fairborn Police Departments in
-            Ohio. We are in the process of integrating with more Departments.</span>
-          <h3>Could not find what you were looking for? Please
-            <a [routerLink]="['/ohio']">Contact Us.</a>
-          </h3>
+          <div class="info-note">
+            <span>Please note that currently we provide service only for the Boardman & Fairborn Police Departments in
+              Ohio. We are in the process of integrating with more Departments.</span>
+            <h3>Could not find what you were looking for? Please
+              <a [routerLink]="['/ohio']">Contact Us.</a>
+            </h3>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>

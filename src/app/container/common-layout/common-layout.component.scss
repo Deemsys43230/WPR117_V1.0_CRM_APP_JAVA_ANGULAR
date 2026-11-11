@@ -1,0 +1,12 @@
+@import 'src/styles/variables';
+@import 'src/styles/animations';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.crm-route-view {
+  animation: crmFadeIn var(--crm-duration-smooth) var(--crm-ease-default);
+  width: 100%;
+}
