@@ -51,8 +51,12 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('user_id',res.userDetails.user)
             localStorage.setItem('role', res.roleName);
             localStorage.setItem('role_id', res.role_id);
-            this.flashMessageService.successMessage("Successfully Login !", 2);
-            this.navigateBasedOnRole(res);
+            if (res.roleName == "ROLE_SUPER_ADMIN") {
+              this.flashMessageService.successMessage("Successfully Login !", 2);
+              this.router.navigate(['superAdmin/dashboard']);
+            } else {
+               this.flashMessageService.errorMessage("Please log in using the Police Department Login button.", 2);
+            }
           } else {
             this.loginForm.controls['password'].reset();
             this.isFormSubmitted = false
@@ -66,13 +70,4 @@ export class LoginComponent implements OnInit {
   togglePasswordVisibility() {
     this.passwordHidden = !this.passwordHidden;
   }
-
-      //navigation based on role
-  navigateBasedOnRole(LoginData: any) {
-    if (LoginData.roleName === "ROLE_SUPER_ADMIN") {
-      this.router.navigate(['superAdmin/dashboard']);
-    }   
-  }
-
-
 }

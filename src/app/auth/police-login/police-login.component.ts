@@ -72,21 +72,11 @@ export class PoliceLoginComponent implements OnInit {
           localStorage.setItem('role', res.roleName);
           localStorage.setItem('role_id', res.role_id);
           this.flashMessageService.successMessage("Successfully Login !", 2);
-          this.navigateBasedOnRole(res);
+          this.router.navigate(['reports/', this.police_name]);
         } else {
           this.flashMessageService.errorMessage(res.msg, 2);
         }
       });
-    }
-  }
-
-  // Navigation based on role
-  navigateBasedOnRole(LoginData: any) {
-    if (LoginData.roleName === "ROLE_SUPER_ADMIN") {
-      this.router.navigate(['superAdmin/dashboard']);
-    }
-    if (LoginData.roleName === "ROLE_USER") {
-      this.router.navigate(['reports/', this.police_name]);
     }
   }
 }
