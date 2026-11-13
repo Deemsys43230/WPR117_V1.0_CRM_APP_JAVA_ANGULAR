@@ -159,12 +159,21 @@ class CreateCrashReport(Resource):
             url = get_property("CRODomain") + get_property("saveCrashReport")
             # Make POST request using requests module
             response = requests.post(url, json=data, headers=headers)
+            
             # Check response status and return result
-            print("response",response)
-            if response:
-                return jsonify({'status': True,'msg': 'Crash Report Added Successfully','data':data})
+            if response.status_code == 200:
+                response_json = response.json()
+                return jsonify({
+                    'status': True,
+                    'msg': 'Crash Report Added Successfully',
+                    'data': response_json
+                })
             else:
-                return jsonify({'status': False,'msg': 'Failed to get a valid response from the server.'})
+                return jsonify({
+                    'status': False,
+                    'msg': 'Failed to get a valid response from the server.',
+                    'details': response.text
+                }), response.status_code
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
