@@ -1,0 +1,31 @@
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: flask-app
+
+    ports:
+      - "5000:5000"
+
+    restart: unless-stopped
+
+    init: true
+
+    stop_grace_period: 30s
+
+    environment:
+      # Database connection (points to host machine's MySQL by default)
+      - DATABASE_URL=mysql+pymysql://root:root@host.docker.internal:3306/crm
+      - UPLOAD_FOLDER=/app/uploads
+      - PYTHONUNBUFFERED=1
+
+    volumes:
+      # Persist uploaded crash reports & assets on the host
+      - ./uploads:/app/uploads
+
+    # Allows the container to access MySQL running on the host machine via host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+

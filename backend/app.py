@@ -36,6 +36,8 @@ app.register_blueprint(user_blueprint,url_prefix='/user')
 app.register_blueprint(CrashReport_Blueprint,url_prefix='/crash_reports')
 app.register_blueprint(Occupants_Blueprint,url_prefix='/occupants')
 
+def create_app():
+    return app
 
 if __name__ == '__main__':
     app.run(debug=True)
