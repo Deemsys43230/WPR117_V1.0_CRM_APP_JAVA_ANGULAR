@@ -24,7 +24,7 @@ export class SearchComponent {
   public endIndex: number;
   public page = 1;
   public ItemsPerPage: any = [];
-  public pageValue: number = 5;
+  public pageValue: number = 10;
   public pagebutton: boolean = false;
   public searchPage: number;
   public isPageAvailable: boolean;
@@ -146,7 +146,7 @@ export class SearchComponent {
         location: (this.searchForm.value.location) ? this.searchForm.value.location : "",
         reportNumber: (this.searchForm.value.reportNumber) ? this.searchForm.value.reportNumber : "",
       };
-      this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
+      this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
       this.getAllOccupants();
     }
   }

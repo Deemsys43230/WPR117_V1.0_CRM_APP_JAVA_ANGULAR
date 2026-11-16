@@ -23,7 +23,7 @@ export class DepartmentComponent implements OnInit {
   public searchData: any;
   public searchPoliceDepartmentForm: any;
   public currentPage: any = 1;
-  public items_per_page = 5;
+  public items_per_page = 10;
   public callChildComponent: boolean | undefined;
   public countyList: any[] = [];
   public searchValue: any;
@@ -224,10 +224,10 @@ export class DepartmentComponent implements OnInit {
   resetSearch() {
     this.searchValue = {
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
     };
     this.currentPage = 1;
-    this.items_per_page = 5;
+    this.items_per_page = 10;
     this.searchPoliceDepartmentForm.reset({ county: '' });
     this.setupSearchData();
     this.getPoliceDepartmentByPagination();

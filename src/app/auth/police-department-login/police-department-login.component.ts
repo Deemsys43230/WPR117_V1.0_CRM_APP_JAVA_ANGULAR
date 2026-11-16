@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PoliceDepartmentService } from 'src/app/shared/services/police-department-service';
 
@@ -11,13 +11,14 @@ import { PoliceDepartmentService } from 'src/app/shared/services/police-departme
 export class PoliceDepartmentLoginComponent implements OnInit {
   policeDepartmentForm: FormGroup;
   public departmentList: any[] = [];
+  public isFormSubmitted: boolean = false;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentService, private router: Router) { }
 
   // ngOnInit
   ngOnInit(): void {
     this.policeDepartmentForm = this.fb.group({
-      police_department_id: ['']
+      police_department_id: ['', Validators.required]
     });
     this.getAllDepartments();
   }
@@ -40,6 +41,7 @@ export class PoliceDepartmentLoginComponent implements OnInit {
 
   // On submit
   onSubmit() {
+    this.isFormSubmitted = true;
     const departmentId = this.policeDepartmentForm.controls['police_department_id'].value;
     const department = this.departmentList.find(dep => dep.department_id.toString() === departmentId.toString());
     if (department) {

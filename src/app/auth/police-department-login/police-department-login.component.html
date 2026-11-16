@@ -26,6 +26,13 @@
                     {{ department?.name }}
                   </option>
                 </select>
+                <div class="form-error">
+                  <div class="error-msg"
+                    *ngIf="policeDepartmentForm.controls['police_department_id'].errors && (!policeDepartmentForm.controls['police_department_id'].pristine || isFormSubmitted)">
+                    <div [hidden]="!policeDepartmentForm.controls['police_department_id'].errors['required']">Select
+                      Department</div>
+                  </div>
+                </div>
               </div>
               <div class="col-12 col-md-3 d-flex justify-content-center justify-content-md-end">
                 <button type="submit" class="btn btn-default">Go!</button>
