@@ -74,7 +74,7 @@ export class PoliceLoginComponent implements OnInit {
           this.flashMessageService.successMessage("Successfully Login !", 2);
           this.router.navigate(['reports/', this.police_name]);
         } else {
-          this.flashMessageService.errorMessage(res.msg, 2);
+          this.flashMessageService.errorMessage(res.data.msg, 2);
         }
       });
     }

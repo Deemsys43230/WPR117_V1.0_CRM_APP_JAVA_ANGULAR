@@ -16,14 +16,14 @@ export class TableConfigComponent implements OnInit {
 
   @Output() actionOutput = new EventEmitter<any>();
   @Output() page = new EventEmitter<any>();
-  pageSize = 5;
+  public pageSize = 10;
   public items = ItemsPerPage;
   public selectedIcons: any[] = [];
   public count: any[] = [];
   public currentPage: any = 1;
   public pagination: any[] = [];
   public paginationDesign: boolean | undefined;
-  public pageItem: any = 5;
+  public pageItem: any = 10;
   public endItem: Number | undefined;
   public startItem: Number | undefined;
   public totalItem: Number | undefined;
@@ -54,7 +54,7 @@ export class TableConfigComponent implements OnInit {
     this.count = Array.from({ length }, (_, i) => i + 1);
     this.itemCalculation();
     this.paginationFunction(this.count);
-    this.searchPageNumberInput.nativeElement.value = ''
+    // this.searchPageNumberInput.nativeElement.value = ''
     this.isSearchValidation = false;
     this.isValid = false;
   }
@@ -142,7 +142,7 @@ export class TableConfigComponent implements OnInit {
   paginationFunction(count: any[]) {
     this.pagination = []
     var dots = '...'
-    if (count.length <= 5) {
+    if (count.length <= 10) {
       this.pagination = count
     } else if (this.currentPage == 1 || this.currentPage == count.length) {
       this.pagination.push(1, 2, dots, count.length - 1, count.length)

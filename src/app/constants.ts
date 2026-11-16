@@ -41,20 +41,20 @@ export const icons = [
 // Items Per Page
 export const ItemsPerPage = [
     {
-        'data': 'Show 5 Per Page',
-        'value': 5
-    },
-    {
         'data': 'Show 10 Per Page',
         'value': 10
     },
     {
-        'data': 'Show 15 Per Page',
-        'value': 15
+        'data': 'Show 25 Per Page',
+        'value': 25
     },
     {
-        'data': 'Show 20 Per Page',
-        'value': 20
+        'data': 'Show 50 Per Page',
+        'value': 50
+    },
+    {
+        'data': 'Show 100 Per Page',
+        'value': 100
     }
 ]
 

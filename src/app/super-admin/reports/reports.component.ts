@@ -28,7 +28,7 @@ export class ReportsComponent implements OnInit {
   public table_data: TableData;
   public searchData: any;
   public currentPage: any = 1;
-  public items_per_page = 5;
+  public items_per_page = 10;
   public searchValue: any;
   public callChildComponent: boolean | undefined;
   public searchReportsForm: FormGroup;
@@ -108,7 +108,7 @@ export class ReportsComponent implements OnInit {
     }
     this.searchData = {
       page: this.currentPage,
-      itemsPerPage: this.items_per_page ? this.items_per_page : 5,
+      itemsPerPage: this.items_per_page ? this.items_per_page : 10,
       addedOnFromDate: formattedFromDate ? formattedFromDate : "",
       addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.searchReportsForm?.value.countyId) ? this.searchReportsForm.value.countyId : "",
@@ -202,7 +202,6 @@ export class ReportsComponent implements OnInit {
     this.getReportsByPagination();
   }
 
-
   // // Call Function based on action click's in table
   actionOutput(event: any) {
     const fileUrl = event.data.file_name
@@ -245,7 +244,6 @@ export class ReportsComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-
   //On Serach
   onSearch() {
     this.currentPage = 1;
@@ -270,14 +268,14 @@ export class ReportsComponent implements OnInit {
   resetSearch() {
     this.searchValue = {
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
     };
     this.currentPage = 1;
-    this.items_per_page = 5;
-    this.setupSearchData()
-    this.getReportsByPagination()
+    this.items_per_page = 10;
     this.searchReportsForm.reset(
       { countyId: "", policeDepartmentId: "" });
+    this.setupSearchData()
+    this.getReportsByPagination()
     this.TableConfigComponent?.initialFunction(this.table_data?.totalCount);
   }
 

@@ -28,7 +28,7 @@ export class ReportsComponent {
   public isPageAvailable: boolean;
   public currentPage: any = 1;
   public searchData: any;
-  public pageValue: number = 5;
+  public pageValue: number = 10;
   public policeDepartmentForm: any;
   public occupantDetail: any = [];
   public count: number;
@@ -50,7 +50,7 @@ export class ReportsComponent {
   bsToDate: Date;
   isFromDateError: boolean = false;
   isToDateError: boolean = false;
-  selectedItemsPerPage = 5;
+  selectedItemsPerPage = 10;
 
   constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService, private datePipe: DatePipe) { }
 
@@ -180,7 +180,7 @@ export class ReportsComponent {
       searchType: 1,
       accountId: "0",
     };
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
+    this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
     this.getAllOccupants();
 
     return undefined;
@@ -191,7 +191,7 @@ export class ReportsComponent {
     this.isFromDateError = null;
     this.isToDateError = null;
     this.currentPage = 1;
-    this.selectedItemsPerPage = 5; // Reset dropdown value to 5
+    this.selectedItemsPerPage = 10; // Reset dropdown value to 10
     this.isPageAvailable = false;
     this.policeDepartmentForm.reset();
     this.searchPage = null;
@@ -211,11 +211,11 @@ export class ReportsComponent {
       searchType: 1,
       accountId: "0",
     };
-    this.pageValue = 5;
+    this.pageValue = 10;
     this.currentPage = 1;
     this.searchData["itemsPerPage"] = this.pageValue
     this.getAllOccupants();
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
+    this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
   }
 
   // Search Page  Number Function
@@ -254,7 +254,7 @@ export class ReportsComponent {
     }
     this.searchData = {
       page: this.currentPage,
-      itemsPerPage: this.pageValue ? this.pageValue : 5,
+      itemsPerPage: this.pageValue ? this.pageValue : 10,
       addedOnFromDate: formattedFromDate ? formattedFromDate : "",
       addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.policeDepartmentForm?.value.countyId) ? this.policeDepartmentForm.value.countyId : "",
@@ -275,7 +275,7 @@ export class ReportsComponent {
         this.calculateTotalPages();
         this.setPaginatedData();
         this.togglePagination();
-        this.pagesArray(this.currentPage, this.count, this.pageValue, 5)
+        this.pagesArray(this.currentPage, this.count, this.pageValue, 10)
         this.reportsData = [];
         this.occupantDetail.forEach(data => {
           this.reportsData.push({
@@ -473,7 +473,7 @@ export class ReportsComponent {
       this.calculateTotalPages();
       this.setPaginatedData();
       this.togglePagination();
-      this.pagesArray(this.currentPage, this.count, this.pageValue, 5);
+      this.pagesArray(this.currentPage, this.count, this.pageValue, 10);
       this.reportsData = this.occupantDetail.map(data => ({
         crashDate: data.crash_date,
         report_number: data.report_number,

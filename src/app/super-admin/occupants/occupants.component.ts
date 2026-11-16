@@ -33,7 +33,7 @@ export class OccupantsComponent implements OnInit {
   public endIndex: number;
   public page = 1;
   public ItemsPerPage: any = [];
-  public pageValue: number = 5;
+  public pageValue: number = 10;
   public pagebutton: boolean = false;
   public searchPage: number;
   public isPageAvailable: boolean;
@@ -41,7 +41,7 @@ export class OccupantsComponent implements OnInit {
   public occupantDetail: any = [];
   public error: boolean = false;
   public crashReport: any = null;
-  selectedItemsPerPage = 5;
+  public selectedItemsPerPage = 10;
   public reportType: number = 2;
   today: Date;
   minimumDate: Date;
@@ -165,7 +165,7 @@ export class OccupantsComponent implements OnInit {
     }
     this.searchData = {
       page: this.currentPage,
-      itemsPerPage: this.pageValue ? this.pageValue : 5,
+      itemsPerPage: this.pageValue ? this.pageValue : 10,
       addedOnFromDate: formattedFromDate ? formattedFromDate : "",
       addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.searchOccupantsForm?.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
@@ -186,7 +186,7 @@ export class OccupantsComponent implements OnInit {
         this.calculateTotalPages();
         this.setPaginatedData();
         this.togglePagination();
-        this.pagesArray(this.currentPage, this.count, this.pageValue, 5)
+        this.pagesArray(this.currentPage, this.count, this.pageValue, 10)
         this.occupantsData = [];
         this.occupantDetail.forEach(data => {
           this.occupantsData.push({
@@ -485,7 +485,7 @@ export class OccupantsComponent implements OnInit {
       searchType: 1,
       accountId: "0",
     };
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
+    this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
     this.getAllOccupants();
   }
 
@@ -495,15 +495,15 @@ export class OccupantsComponent implements OnInit {
     this.isToDateError = null;
     this.searchPage = null;
     this.isPageAvailable = false;
-    this.selectedItemsPerPage = 5; // Reset dropdown value to 5
+    this.selectedItemsPerPage = 10; // Reset dropdown value to 10
     this.searchOccupantsForm.reset(
       { countyId: "", policeDepartmentId: "" });
     this.setupSearchData();
-    this.pageValue = 5;
+    this.pageValue = 10;
     this.currentPage = 1;
     this.searchData["itemsPerPage"] = this.pageValue
     this.getAllOccupants();
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 5 : '';
+    this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
   }
 
   //Get Police Department details by id
