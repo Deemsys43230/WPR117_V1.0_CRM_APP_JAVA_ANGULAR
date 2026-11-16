@@ -45,53 +45,62 @@ def check_md5_hash(hashed_password, password):
 class userLogin(Resource):
     def post(self):
         try:
-            data = request.form
+            data = request.get_json(silent=True) or request.form or {}
             username = data.get('username')
             password = data.get('password')
-            user = Users.query.filter_by(username=username,status=1).first()
-            if not check_md5_hash(user.password,password):  # Compare using MD5 hash
-                return jsonify({'message': 'Password Wrong','status':False})
+            if not username or not password:
+                return jsonify({'message': 'Username and password are required', 'status': False})
+
+            user = Users.query.filter_by(username=username, status=1).first()
             if user is None:
-                return jsonify({'message': 'failed no such user','status':False})
+                return jsonify({'message': 'failed no such user', 'status': False})
+            if not check_md5_hash(user.password, password):  # Compare using MD5 hash
+                return jsonify({'message': 'Password Wrong', 'status': False})
             if user.is_enable == 0:
-                    return jsonify({'data':{'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
+                return jsonify({'data': {'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
             rolename = Roles.query.filter_by(role_id=user.role_id).first()
-            refresh_token = create_refresh_token(identity=(user.username),expires_delta=timedelta(hours=24))
-            access_token = create_access_token(identity=(user.username),expires_delta=timedelta(hours=24))
-            return jsonify({'status':True,
-                            'refresh_token':refresh_token,
-                            'access_token':access_token,
-                            'role_id':user.role_id,
-                            'account_id':user.account_id,
-                            'roleName':rolename.role,
-                            'userDetails':{
-                                'user':user.user_id,
-                                'username':user.username
+            refresh_token = create_refresh_token(identity=(user.username), expires_delta=timedelta(hours=24))
+            access_token = create_access_token(identity=(user.username), expires_delta=timedelta(hours=24))
+            return jsonify({'status': True,
+                            'refresh_token': refresh_token,
+                            'access_token': access_token,
+                            'role_id': user.role_id,
+                            'account_id': user.account_id,
+                            'roleName': rolename.role if rolename else None,
+                            'userDetails': {
+                                'user': user.user_id,
+                                'username': user.username
                             }})
         except Exception as e:
-            return str(e)
+            return jsonify({'message': str(e), 'status': False}), 500
         
 # police department login 
 class policeDepartmentLogin(Resource):
     def post(self):
         try:
-            data = request.form
+            data = request.get_json(silent=True) or request.form or {}
             department_name = data.get('department_name')
             username = data.get('username')
             password = data.get('password')
             if not department_name:
                 return jsonify({'message': 'Department name is required', 'status': False})
+            if not username or not password:
+                return jsonify({'message': 'Username and password are required', 'status': False})
             police = PoliceDepartmentModel.query.filter_by(name=department_name).first()
             if not police:
                 return jsonify({'message': 'Department not found', 'status': False})
             if police.is_enabled == 0:
-                return jsonify({'data':{'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
+                return jsonify({'data': {'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
             account_data = Accounts.query.filter_by(police_department_id=police.police_department_id).all()
             for acc in account_data:
-                user_data = Users.query.filter_by(account_id=acc.account_id,username=username).first() 
+                user_data = Users.query.filter_by(account_id=acc.account_id, username=username).first() 
                 if user_data:
                     user = Users.query.filter_by(username=username, status=1).first()
-                    if not user or not check_md5_hash(user.password, password):  
+                    if not user:
+                        return jsonify({'message': 'User is inactive or not found', 'status': False})
+                    if user.is_enable == 0:
+                        return jsonify({'data': {'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
+                    if not check_md5_hash(user.password, password):  
                         return jsonify({'message': 'Incorrect username or password', 'status': False})
                     rolename = Roles.query.filter_by(role_id=user.role_id).first()
                     refresh_token = create_refresh_token(identity=user.username, expires_delta=timedelta(hours=24))
@@ -102,15 +111,15 @@ class policeDepartmentLogin(Resource):
                         'access_token': access_token,
                         'role_id': user.role_id,
                         'account_id': user.account_id,
-                        'roleName': rolename.role,
+                        'roleName': rolename.role if rolename else None,
                         'userDetails': {
                             'user': user.user_id,
                             'username': user.username
                         }
                     })
-                return jsonify({'msg':'No User Found For This Department','status':False})
+            return jsonify({'msg': 'No User Found For This Department', 'status': False})
         except Exception as e:
-            return str(e)
+            return jsonify({'message': str(e), 'status': False}), 500
     
  # Reset Password for caller admin
 class resetPassword(Resource):

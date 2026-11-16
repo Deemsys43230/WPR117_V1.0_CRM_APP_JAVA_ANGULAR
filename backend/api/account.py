@@ -35,7 +35,8 @@ class createAccount(Resource):
                             phone_number = data['phone_number'],
                             )
             account_data.saveAccounts()
-            user1 = Users(role_id=data['role_id'],account_id = _id,username= username,password =self.hash_password(username))
+            password_to_hash = data.get('password') or username
+            user1 = Users(role_id=data['role_id'],account_id = _id,username= username,password =self.hash_password(password_to_hash))
             user1.save_to_users()
             return jsonify({'status':True,'data':{**data},'msg':'Account Added Successfully'})
         except Exception as e:
