@@ -57,10 +57,10 @@ def upload_image_to_s3(file, department_id, filename="banner.jpg"):
             object_key,
             ExtraArgs={'ContentType': content_type}
         )
-    return f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
+    return f"https://cdn.crashreportsonline.com/{object_key}"
 
 def get_police_banner_url(department_id):
-    return f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{folderName}{department_id}/banner/banner.jpg"
+    return f"https://cdn.crashreportsonline.com/{folderName}{department_id}/banner/banner.jpg"
 
 # TO CREATE POLICE DEPARTMENT 
 class createPoliceDepartment(Resource):

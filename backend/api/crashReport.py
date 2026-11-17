@@ -50,16 +50,13 @@ def upload_file_to_s3(file, police_department_id, report_id):
         ExtraArgs={'ContentType': 'application/pdf'}
     )
 
-    return f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{object_key}'
+    return f'https://cdn.crashreportsonline.com/{object_key}'
 
 def sync_to_cro_background(cro_payload):
     try:
-        cro_domain = get_property("CRODomain")
-        save_crash_endpoint = get_property("saveCrashReport")
-        if not cro_domain or not save_crash_endpoint:
-            print("[CRO SYNC] Configuration missing for CRODomain or saveCrashReport")
-            return
-        url = cro_domain + save_crash_endpoint
+        cro_domain = get_property("CRODomain") or "http://14.195.114.174:5005"
+        save_crash_endpoint = get_property("saveCrashReport") or "saveCrashReports"
+        url = f"{cro_domain.rstrip('/')}/{save_crash_endpoint.lstrip('/')}"
         headers = {'Content-Type': 'application/json'}
         print(f"[CRO SYNC] Background syncing report {cro_payload.get('crash_id')} to CRO: {url}")
         response = requests.post(url, json=cro_payload, headers=headers, timeout=60)
@@ -163,12 +160,12 @@ class CreateCrashReport(Resource):
                 "is_runner_report": 1,
                 "isRunnerReport": 1,
                 "account_id": crash_report.account_id,
-                "report_from": crash_report.police_department_id,
-                "police_department_id": crash_report.police_department_id,
+                "report_from": int(crash_report.police_department_id) if str(crash_report.police_department_id).isdigit() else crash_report.police_department_id,
+                "police_department_id": int(crash_report.police_department_id) if str(crash_report.police_department_id).isdigit() else crash_report.police_department_id,
                 "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
                 "location": crash_report.location,
-                "county": crash_report.county_id,
-                "county_id": crash_report.county_id,
+                "county": int(crash_report.county_id) if str(crash_report.county_id).isdigit() else crash_report.county_id,
+                "county_id": int(crash_report.county_id) if str(crash_report.county_id).isdigit() else crash_report.county_id,
                 "crash_severity": crash_report.crash_severity,
                 "number_of_patients": crash_report.no_of_occupants,
             }
@@ -279,7 +276,7 @@ class GetAllCrashReports(Resource):
                     "county_id": crash.county_id,
                     "crash_severity": crash.crash_severity,
                     "no_of_occupants": crash.no_of_occupants,
-                    "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                    "file_name": f'https://cdn.crashreportsonline.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
                     "added_date": crash.added_date.strftime('%m-%d-%Y'),
                     "added_date_time": crash.added_date_time,
                     "status": crash.status,
@@ -365,7 +362,7 @@ class SearchCrashReportAllUser(Resource):
                 "county_id": crash.county_id,
                 "crash_severity": crash.crash_severity,
                 "no_of_occupants": crash.no_of_occupants,
-                'file_name': f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                'file_name': f'https://cdn.crashreportsonline.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
                 "added_date": crash.added_date.strftime('%m-%d-%Y'),
                 "added_date_time": crash.added_date_time,
                 "status": crash.status,
@@ -408,7 +405,7 @@ class GetCrashReportById(Resource):
             "countyName":data.county.name,
             "crash_severity": data.crash_severity,
             "no_of_occupants": data.no_of_occupants,
-            'file_name': f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{data.police_department_id}/reports/{data.report_id}.pdf',
+            'file_name': f'https://cdn.crashreportsonline.com/runner-reports/{data.police_department_id}/reports/{data.report_id}.pdf',
             "added_date": data.added_date.strftime('%m-%d-%Y'),
             "added_date_time": data.added_date_time,
             "status": data.status,
@@ -482,7 +479,7 @@ class UpdateCrashReport(Resource):
                 "county_id": crash_report.county_id,
                 "crash_severity": crash_report.crash_severity,
                 "no_of_occupants": crash_report.no_of_occupants,
-                'file_name': f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
+                'file_name': f'https://cdn.crashreportsonline.com/runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
                 "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
                 "added_date_time": crash_report.added_date_time,
                 "status": crash_report.status,

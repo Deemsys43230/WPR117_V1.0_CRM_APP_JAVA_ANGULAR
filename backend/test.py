@@ -74,7 +74,7 @@ def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
         object_key,
         ExtraArgs={'ContentType': 'image/jpeg', 'ACL': 'public-read'}
     )
-    file_url = f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
+    file_url = f"https://cdn.crashreportsonline.com/{object_key}"
     return file_url
 
 def get_property(property_name):
