@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../services/auth-service';
+import { FlashMessageService } from '../flash-message/flash-message.service';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
-    constructor(private router: Router,private authService: AuthService ) { }
+    constructor(private router: Router, private authService: AuthService, private flashMessageService: FlashMessageService) { }
    intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         let domain = environment.domainName;
         const request = req.clone({
@@ -42,7 +43,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 } else {
                     errorMessage = `Error: ${err.message}`
                 }
-                window.alert(errorMessage);
+                this.flashMessageService.errorMessage(errorMessage, 2);
                 return throwError(err);
             }
             return throwError( err );

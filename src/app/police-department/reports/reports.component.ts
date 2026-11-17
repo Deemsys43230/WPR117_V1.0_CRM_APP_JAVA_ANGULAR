@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { CrashSeverity, Injuries, ItemsPerPage, SeatingPosition } from 'src/app/constants';
 import { PoliceDepartmentDataService } from 'src/app/shared/api/police-department-data.service';
+import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
 import { OccupantsService } from 'src/app/shared/services/occupants-service';
 
 @Component({
@@ -17,6 +18,7 @@ export class ReportsComponent {
   @ViewChild(BsDatepickerDirective, { static: false }) datepicker: BsDatepickerDirective;  // Reference to BsDatepickerDirective instance
   @ViewChild(BsDatepickerDirective, { static: false }) datepickerForFrom: BsDatepickerDirective;
   @ViewChild(BsDatepickerDirective, { static: false }) datepickerForTo: BsDatepickerDirective;
+  @ViewChild('deleteConfirmationCancelButton') deleteConfirmationCancelButton: ElementRef<HTMLButtonElement>;
 
   policeImageUrl: string = '';
   police_name: any;
@@ -51,8 +53,10 @@ export class ReportsComponent {
   isFromDateError: boolean = false;
   isToDateError: boolean = false;
   selectedItemsPerPage = 25;
+  public reportIdPendingDeletion: string | null = null;
+  public isDeletingReport = false;
 
-  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService, private datePipe: DatePipe) { }
+  constructor(private fb: FormBuilder, private policeDepartmentService: PoliceDepartmentDataService, private router: Router, private activatedRoute: ActivatedRoute, private occupantsService: OccupantsService, private datePipe: DatePipe, private flashMessageService: FlashMessageService) { }
 
   //ngOnInit
   ngOnInit(): void {
@@ -478,12 +482,42 @@ export class ReportsComponent {
     this.router.navigate(['reports/', this.police_name, 'add-new-report'])
   }
 
-  // Handle delete
-  delete(report_id: string) {
-    this.occupantsService.deleteCrashReport(report_id).subscribe(res => {
-      alert(res.message)
-      this.getAllOccupants();
-    })
+  requestDelete(reportId: string): void {
+    this.reportIdPendingDeletion = reportId;
+  }
+
+  cancelDelete(): void {
+    this.reportIdPendingDeletion = null;
+  }
+
+  confirmDelete(): void {
+    if (this.reportIdPendingDeletion === null || this.isDeletingReport) {
+      return;
+    }
+
+    this.isDeletingReport = true;
+    this.occupantsService.deleteCrashReport(this.reportIdPendingDeletion).subscribe({
+      next: res => {
+        this.isDeletingReport = false;
+        this.reportIdPendingDeletion = null;
+        this.closeDeleteConfirmationModal();
+        if (res.status) {
+          this.getAllOccupants();
+         this.flashMessageService.successMessage(res.message || 'Report deleted successfully.', 2);
+        } else {
+          this.flashMessageService.errorMessage(res.message || 'Unable to delete report.', 2);
+        }
+      },
+      error: error => {
+        this.isDeletingReport = false;
+        this.reportIdPendingDeletion = null;
+        this.closeDeleteConfirmationModal();
+      }
+    });
+  }
+
+  private closeDeleteConfirmationModal(): void {
+    this.deleteConfirmationCancelButton?.nativeElement.click();
   }
 
   // Handle edit

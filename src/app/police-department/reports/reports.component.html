@@ -145,8 +145,9 @@
                                 <div class="report-actions">
                                     <a class="edit-btn" title="Edit" (click)="edit(data.report_id)"><i
                                             class="fa fa-pencil fa-sm"></i></a>
-                                    <a class="delete-btn" title="Delete" (click)="delete(data.report_id)"><i
-                                            class="fa fa-trash fa-sm"></i></a>
+                                    <a class="delete-btn" title="Delete" role="button" aria-label="Delete report"
+                                        data-toggle="modal" data-target="#confirmReportDeleteModal"
+                                        (click)="requestDelete(data.report_id)"><i class="fa fa-trash fa-sm"></i></a>
                                     <a class="view-btn" title="View Report Details" data-toggle="modal"
                                         data-target="#viewReportModalUpload" (click)="getById(data.report_id)">
                                         <i class="fa fa-eye fa-sm"></i>
@@ -440,5 +441,28 @@
             <!-- Pagination ends -->
         </div>
 
+    </div>
+    <div class="modal fade" id="confirmReportDeleteModal" tabindex="-1" role="dialog"
+        aria-labelledby="confirmReportDeleteTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered delete-confirmation-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmReportDeleteTitle">Confirm Report Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        (click)="cancelDelete()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this report?
+                </div>
+                <div class="modal-footer">
+                    <button #deleteConfirmationCancelButton type="button" class="btn btn-secondary" data-dismiss="modal"
+                        (click)="cancelDelete()">Cancel</button>
+                    <button type="button" class="btn btn-danger" [disabled]="isDeletingReport"
+                        (click)="confirmDelete()">Yes</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

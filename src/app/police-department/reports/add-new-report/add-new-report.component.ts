@@ -179,6 +179,7 @@ export class AddNewReportComponent {
 
     // Check form validity
     if (!this.addNewReportForm.valid) {
+          this.spinner.hide();
       return;
     }
 
