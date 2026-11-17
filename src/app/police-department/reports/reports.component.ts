@@ -475,6 +475,7 @@ export class ReportsComponent {
       this.togglePagination();
       this.pagesArray(this.currentPage, this.count, this.pageValue, 25);
       this.reportsData = this.occupantDetail.map(data => ({
+        report_id: data.report_id,
         crashDate: data.crash_date,
         report_number: data.report_number,
         location: data.location,
