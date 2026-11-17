@@ -152,11 +152,30 @@ class resetPassword(Resource):
           
 class dashboardGetAll(Resource):
     def get(self):
-        department = PoliceDepartmentModel.query.count()
-        account = Accounts.query.count()
-        occupants = Occupants.query.count()
-        crashreport = CrashReports.query.count()
-        return jsonify({'Total Department':department,'Total Accounts':account,'Total Occupants':occupants,'Total Crash Reports':crashreport})
+        try:
+            department = PoliceDepartmentModel.query.count()
+            account = Accounts.query.count()
+            try:
+                occupants = Occupants.query.count()
+            except Exception as occ_err:
+                print(f"[dashboardGetAll] Error querying occupants: {occ_err}")
+                occupants = 0
+
+            try:
+                crashreport = CrashReports.query.count()
+            except Exception as crash_err:
+                print(f"[dashboardGetAll] Error querying crash reports: {crash_err}")
+                crashreport = 0
+
+            return jsonify({
+                'Total Department': department,
+                'Total Accounts': account,
+                'Total Occupants': occupants,
+                'Total Crash Reports': crashreport,
+                'status': True
+            })
+        except Exception as e:
+            return jsonify({'status': False, 'error': str(e)}), 500
         
       
 
