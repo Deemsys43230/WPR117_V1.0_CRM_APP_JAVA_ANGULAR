@@ -82,12 +82,12 @@ export class AccountsComponent implements OnInit {
     var policeData = [];
     this.accountsDepartmentService.getAccountsDepartmentDetailsByPagination(this.searchData).subscribe((res) => {
       if (res.status) {
-        this.spinner.hide();
         this.callChildComponent = true;
         const requests = res.data.map((ele: any) => {
           return this.policeDepartmentService.getByIdPoliceDepartmentDetails(ele.police_department_id).toPromise()
             .then((val) => {
               if (val.status) {
+                this.spinner.hide();
                 return {
                   account_id: ele.account_id,
                   email_id: ele.email_id,
