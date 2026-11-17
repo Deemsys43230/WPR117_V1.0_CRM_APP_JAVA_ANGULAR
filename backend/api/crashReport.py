@@ -1,6 +1,7 @@
 from io import BytesIO
 import os
 import uuid
+import threading
 import boto3
 from flask import Flask, app, request, jsonify, Blueprint
 import requests
@@ -50,6 +51,21 @@ def upload_file_to_s3(file, police_department_id, report_id):
     )
 
     return f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{object_key}'
+
+def sync_to_cro_background(cro_payload):
+    try:
+        cro_domain = get_property("CRODomain")
+        save_crash_endpoint = get_property("saveCrashReport")
+        if not cro_domain or not save_crash_endpoint:
+            print("[CRO SYNC] Configuration missing for CRODomain or saveCrashReport")
+            return
+        url = cro_domain + save_crash_endpoint
+        headers = {'Content-Type': 'application/json'}
+        print(f"[CRO SYNC] Background syncing report {cro_payload.get('crash_id')} to CRO: {url}")
+        response = requests.post(url, json=cro_payload, headers=headers, timeout=60)
+        print(f"[CRO SYNC] Status: {response.status_code}, Response: {response.text[:200] if response.text else 'Empty'}")
+    except Exception as e:
+        print(f"[CRO SYNC ERROR] Failed to sync report to CRO in background: {e}")
 
 app = Flask(__name__)
 # Configure upload folder
@@ -156,36 +172,20 @@ class CreateCrashReport(Resource):
                 "crash_severity": crash_report.crash_severity,
                 "number_of_patients": crash_report.no_of_occupants,
             }
-            # Prepare headers
-            headers = {
-                'Content-Type': 'application/json'
-            }
-            # URL to which the GET request is sent
-            url = get_property("CRODomain") + get_property("saveCrashReport")
-            try:
-                response = requests.post(url, json=cro_data, headers=headers, timeout=5)
-                if response.status_code == 200:
-                    response_json = response.json()
-                    return jsonify({
-                        'status': True,
-                        'msg': 'Crash Report Added Successfully',
-                        'data': response_json,
-                        'file_url': file_url
-                    })
-                else:
-                    return jsonify({
-                        'status': True,
-                        'msg': 'Crash Report Added Successfully',
-                        'file_url': file_url,
-                        'details': response.text
-                    })
-            except requests.exceptions.RequestException as req_err:
-                print(f"Warning: Failed to sync with CRO: {req_err}")
-                return jsonify({
-                    'status': True,
-                    'msg': 'Crash Report Added Successfully',
-                    'file_url': file_url
-                })
+            # Trigger background sync to CRO
+            threading.Thread(target=sync_to_cro_background, args=(cro_data,), daemon=True).start()
+
+            return jsonify({
+                'status': True,
+                'msg': 'Crash Report Added Successfully',
+                'file_url': file_url,
+                'data': {
+                    'report_id': crash_report.report_id,
+                    'report_number': crash_report.report_number,
+                    'file_url': file_url,
+                    **data
+                }
+            })
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
@@ -244,6 +244,10 @@ class GetAllCrashReports(Resource):
             if addedOnToDate:
                 to_date = datetime.strptime(addedOnToDate,'%m-%d-%Y').strftime('%Y-%m-%d')
                 query = query.filter(CrashReports.added_date <= to_date) 
+
+            # Order by recent first
+            query = query.order_by(CrashReports.added_date_time.desc(), CrashReports.added_date.desc(), CrashReports.crash_date.desc())
+
             # Apply pagination
             offset = (page - 1) * itemsPerPage
             crash_report_details = query.limit(itemsPerPage).offset(offset).all()
@@ -325,6 +329,9 @@ class SearchCrashReportAllUser(Resource):
                     func.lower(Occupants.last_name) == lastName.lower()
                 )
             )
+        # Order by recent first
+        query = query.order_by(CrashReports.added_date_time.desc(), CrashReports.added_date.desc(), CrashReports.crash_date.desc())
+
         # Paginate the results
         result = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
         # Prepare the response data

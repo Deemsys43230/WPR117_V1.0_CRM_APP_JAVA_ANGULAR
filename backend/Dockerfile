@@ -30,5 +30,5 @@ RUN mkdir -p /app/uploads
 
 EXPOSE 5000
 
-CMD ["waitress-serve", "--listen=0.0.0.0:5000", "--threads=8", "--call", "app:create_app"]
+CMD ["waitress-serve", "--listen=0.0.0.0:5001", "--threads=8", "--call", "app:create_app"]
 
