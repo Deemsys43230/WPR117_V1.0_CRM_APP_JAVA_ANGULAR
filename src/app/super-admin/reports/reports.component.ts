@@ -28,7 +28,7 @@ export class ReportsComponent implements OnInit {
   public table_data: TableData;
   public searchData: any;
   public currentPage: any = 1;
-  public items_per_page = 10;
+  public items_per_page = 25;
   public searchValue: any;
   public callChildComponent: boolean | undefined;
   public searchReportsForm: FormGroup;
@@ -108,7 +108,7 @@ export class ReportsComponent implements OnInit {
     }
     this.searchData = {
       page: this.currentPage,
-      itemsPerPage: this.items_per_page ? this.items_per_page : 10,
+      itemsPerPage: this.items_per_page ? this.items_per_page : 25,
       addedOnFromDate: formattedFromDate ? formattedFromDate : "",
       addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.searchReportsForm?.value.countyId) ? this.searchReportsForm.value.countyId : "",
@@ -268,10 +268,10 @@ export class ReportsComponent implements OnInit {
   resetSearch() {
     this.searchValue = {
       currentPage: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 25,
     };
     this.currentPage = 1;
-    this.items_per_page = 10;
+    this.items_per_page = 25;
     this.searchReportsForm.reset(
       { countyId: "", policeDepartmentId: "" });
     this.setupSearchData()

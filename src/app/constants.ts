@@ -41,10 +41,6 @@ export const icons = [
 // Items Per Page
 export const ItemsPerPage = [
     {
-        'data': 'Show 10 Per Page',
-        'value': 10
-    },
-    {
         'data': 'Show 25 Per Page',
         'value': 25
     },
@@ -55,7 +51,11 @@ export const ItemsPerPage = [
     {
         'data': 'Show 100 Per Page',
         'value': 100
-    }
+    },
+    {
+        'data': 'Show 200 Per Page',
+        'value': 200
+    },
 ]
 
 export interface TableData{

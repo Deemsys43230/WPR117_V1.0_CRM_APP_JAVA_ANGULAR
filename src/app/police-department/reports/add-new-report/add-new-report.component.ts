@@ -11,6 +11,7 @@ import { OccupantsService } from 'src/app/shared/services/occupants-service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-add-new-report',
@@ -38,7 +39,7 @@ export class AddNewReportComponent {
   backendMessage: string | null = null;
   today: Date;
 
-  constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService, private datePipe: DatePipe) {
+  constructor(private fb: FormBuilder, private countryService: CountyService, private flashMessageService: FlashMessageService, private policeDepartmentService: PoliceDepartmentService, private router: Router, private activatedRoute: ActivatedRoute, private crashReportService: CrashReportService, private accountsdepartment: AccountsDepartmentService, private occupantsService: OccupantsService, private datePipe: DatePipe, private spinner: NgxSpinnerService) {
     this.addNewReportForm = this.fb.group({
       crash_date: [null],
     });
@@ -166,6 +167,7 @@ export class AddNewReportComponent {
 
   //On submit
   onSubmit() {
+    this.spinner.show();
     const rawDate = this.addNewReportForm.value.crash_date;
     const formattedDate = this.datePipe.transform(rawDate, 'yyyy-MM-dd');
     this.isAddFormSubmitted = true;
@@ -212,18 +214,22 @@ export class AddNewReportComponent {
       if (this.report_id) {
         this.crashReportService.updateCrashReport(formData, this.report_id).subscribe(res => {
           if (res?.status) {
+            this.spinner.hide();
             this.flashMessageService.successMessage(res.msg, 2);
             this.router.navigate(['reports/', this.police_name]);
           } else {
+            this.spinner.hide();
             this.flashMessageService.errorMessage(res?.msg, 2);
           }
         });
       } else {
         this.crashReportService.saveCrashReport(formData).subscribe(res => {
           if (res.status) {
+            this.spinner.hide();
             this.flashMessageService.successMessage(res.msg, 2);
             this.router.navigate(['reports/', this.police_name]);
           } else {
+            this.spinner.hide();
             this.flashMessageService.errorMessage(res.msg, 2);
           }
         });

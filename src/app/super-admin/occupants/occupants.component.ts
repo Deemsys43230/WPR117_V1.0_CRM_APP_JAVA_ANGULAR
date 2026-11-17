@@ -33,7 +33,7 @@ export class OccupantsComponent implements OnInit {
   public endIndex: number;
   public page = 1;
   public ItemsPerPage: any = [];
-  public pageValue: number = 10;
+  public pageValue: number = 25;
   public pagebutton: boolean = false;
   public searchPage: number;
   public isPageAvailable: boolean;
@@ -41,7 +41,7 @@ export class OccupantsComponent implements OnInit {
   public occupantDetail: any = [];
   public error: boolean = false;
   public crashReport: any = null;
-  public selectedItemsPerPage = 10;
+  public selectedItemsPerPage = 25;
   public reportType: number = 2;
   today: Date;
   minimumDate: Date;
@@ -165,7 +165,7 @@ export class OccupantsComponent implements OnInit {
     }
     this.searchData = {
       page: this.currentPage,
-      itemsPerPage: this.pageValue ? this.pageValue : 10,
+      itemsPerPage: this.pageValue ? this.pageValue : 25,
       addedOnFromDate: formattedFromDate ? formattedFromDate : "",
       addedOnToDate: formattedToDate ? formattedToDate : "",
       countyId: (this.searchOccupantsForm?.value.countyId) ? this.searchOccupantsForm.value.countyId : "",
@@ -183,10 +183,6 @@ export class OccupantsComponent implements OnInit {
       if (res.status) {
         this.occupantDetail = res.data
         this.count = res.total;
-        this.calculateTotalPages();
-        this.setPaginatedData();
-        this.togglePagination();
-        this.pagesArray(this.currentPage, this.count, this.pageValue, 10)
         this.occupantsData = [];
         this.occupantDetail.forEach(data => {
           this.occupantsData.push({
@@ -200,6 +196,11 @@ export class OccupantsComponent implements OnInit {
             report_id: data.report_id
           });
         });
+        // Pagination values derived from the response
+        this.calculateTotalPages();
+        this.setPaginatedData();
+        this.togglePagination();
+        this.pagesArray(this.currentPage, this.count, this.pageValue, 25)
         if (this.occupantDetail.length == 0) {
           this.error = true;
         } else {
@@ -266,21 +267,12 @@ export class OccupantsComponent implements OnInit {
   calculateTotalPages() {
     this.totalPages = Math.ceil(this.count / this.pageValue);
   }
-  // Set  Data For Item Per Page In Table
+
+  // Set start / end index for the current page
+  // (table rows are filled once in getAllOccupants, so nothing is pushed here)
   setPaginatedData() {
     this.startIndex = (this.currentPage - 1) * this.pageValue;
     this.endIndex = Math.min(this.startIndex + this.pageValue, this.count);
-    this.occupantDetail.forEach(data => {
-      this.occupantsData.push({
-        crashDate: data.crash_date,
-        report_number: data.report_number,
-        location: data.location,
-        no_of_occupants: data.no_of_occupants,
-        file_name: data.file_name,
-        occupantsForms: data.occupantsForms,
-        police_department: data.police_department
-      });
-    })
   }
 
   //To change pagination based on search
@@ -294,140 +286,91 @@ export class OccupantsComponent implements OnInit {
     }
   }
 
+  // Common handler: switch to a page and reload the data
+  private changePage(page: number) {
+    this.isPageAvailable = false;
+    this.searchPage = null;
+    this.currentPage = page;
+    this.searchData["page"] = page;
+    this.getAllOccupants();
+  }
+
   //  Route For  Next  Page   Number Function
   nextPage() {
-    this.isPageAvailable = false;
     if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.setPaginatedData();
-      this.searchPage = null;
-      this.searchData["page"] = this.currentPage
-      this.getAllOccupants();
+      this.changePage(this.currentPage + 1);
     }
   }
 
   // Route For  Previous  Page   Number Function
   previousPage() {
-    this.isPageAvailable = false;
     if (this.currentPage > 1) {
-      this.currentPage--;
-      this.setPaginatedData();
-      this.searchPage = null;
-      this.searchData["page"] = this.currentPage
-      this.getAllOccupants();
+      this.changePage(this.currentPage - 1);
     }
   }
 
-  // Selected Page
+  // Selected Page (ignores the '...' placeholders and the page already open)
   selectedPage(pageNum: any) {
-    this.currentPage = pageNum;
-    this.isPageAvailable = false;
-    this.searchData["page"] = this.currentPage
-    this.getAllOccupants();
-    this.calculateTotalPages();
-    this.searchPage = null;
-    this.setPaginatedData();
+    if (typeof pageNum !== 'number' || pageNum === this.currentPage) {
+      return;
+    }
+    this.changePage(pageNum);
   }
 
   goToPage(page: number) {
-    this.isPageAvailable = false;
-    this.currentPage = page;
-    this.searchData["page"] = this.currentPage
-    this.getAllOccupants();
-    this.calculateTotalPages();
-    this.searchPage = null;
-    this.setPaginatedData();
+    this.selectedPage(page);
   }
 
   // To Change The Item Per Page Number For  Pagination
   onChangePagination(event) {
     this.pageValue = parseInt(event.target.value)
-    const totalPages = Math.ceil(this.count / this.pageValue); // Recalculate total pages
-    this.currentPage = Math.min(this.currentPage, totalPages); // Adjust current page if it's beyond total pages
+    this.selectedItemsPerPage = this.pageValue;
     this.searchData["itemsPerPage"] = this.pageValue
-    this.getAllOccupants();
+    // Old page number no longer maps to the same rows, so start from page 1
+    this.currentPage = 1;
     // Reset error messages
     this.isPageAvailable = false;
     // Clear the search field
+    this.searchPage = null;
     const searchPageInput: HTMLInputElement | null = document.querySelector('.searchPage');
     if (searchPageInput) {
       searchPageInput.value = '';
     }
-    // Ensure the page button state is reset
-    this.pagebutton = false;
+    this.getAllOccupants();
   }
 
-  // To Get Array Of Page Numbers Based On Number Of Items Per Page And Pagination Range
-  pagesArray(currentPage, collectionLength, rowsPerPage, paginationRange) {
-    var pages = [];
-    var totalPages = Math.ceil(collectionLength / rowsPerPage);
-    var halfWay = Math.ceil(paginationRange / 2);
-    var position;
+  // Compact page list: first 2 pages, current page +/- 1, last 2 pages, with '...' for gaps
+  // e.g. page 1   -> [1, 2, '...', 584, 585]
+  //      page 5   -> [1, 2, '...', 4, 5, 6, '...', 584, 585]
+  //      page 584 -> [1, 2, '...', 583, 584, 585]
+  // (paginationRange is kept in the signature but no longer needed)
+  pagesArray(currentPage, collectionLength, rowsPerPage, paginationRange?) {
+    const totalPages = Math.ceil(collectionLength / rowsPerPage);
+    const current = Number(currentPage);
 
-    if (currentPage <= halfWay) {
-      position = 'start';
-    } else if (totalPages - halfWay < currentPage) {
-      position = 'end';
-    } else {
-      position = 'middle';
-    }
+    const visible = new Set<number>();
+    [1, 2, totalPages - 1, totalPages, current - 1, current, current + 1].forEach(p => {
+      if (p >= 1 && p <= totalPages) { visible.add(p); }
+    });
+    const sorted = Array.from(visible).sort((a, b) => a - b);
 
-    var ellipsesNeeded = paginationRange < totalPages;
-    var i = 1;
-    while (i <= totalPages && i <= paginationRange) {
-      var pageNumber = this.calculatePageNumber(
-        i,
-        currentPage,
-        paginationRange,
-        totalPages
-      );
-      var openingEllipsesNeeded =
-        i === 2 && (position === 'middle' || position === 'end');
-      var closingEllipsesNeeded =
-        i === paginationRange - 1 &&
-        (position === 'middle' || position === 'start');
-      if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
-        pages.push('...');
-      } else {
-        pages.push(pageNumber);
+    const pages: any[] = [];
+    sorted.forEach((p, i) => {
+      if (i > 0) {
+        const gap = p - sorted[i - 1];
+        if (gap === 2) { pages.push(p - 1); }      // only one page hidden: show it instead of '...'
+        else if (gap > 2) { pages.push('...'); }
       }
-      i++;
-    }
+      pages.push(p);
+    });
     this.pages = pages;
-  }
-
-  // To Calculate Page Number  Based On Current Page Number
-  calculatePageNumber(
-    i: number,
-    currentPage: number,
-    paginationRange: number,
-    totalPages: number
-  ): number {
-    let halfWay = Math.ceil(paginationRange / 2);
-    if (i === paginationRange) {
-      return totalPages;
-    } else if (i === 1) {
-      return i;
-    } else if (paginationRange < totalPages) {
-      if (totalPages - halfWay < currentPage) {
-        return totalPages - paginationRange + i;
-      } else if (halfWay < currentPage) {
-        return currentPage - halfWay + i;
-      } else {
-        return i;
-      }
-    } else {
-      return i;
-    }
   }
 
   // Search Page  Number Function
   searchPageno() {
-    const value = this.searchPage;
-    if (value > 0 && this.totalPages >= value) {
-      this.isPageAvailable = false;
-      this.currentPage = value;
-      this.getAllOccupants();
+    const value = Number(this.searchPage);
+    if (Number.isInteger(value) && value > 0 && this.totalPages >= value) {
+      this.changePage(value);
     } else {
       this.isPageAvailable = true;
     }
@@ -485,7 +428,6 @@ export class OccupantsComponent implements OnInit {
       searchType: 1,
       accountId: "0",
     };
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
     this.getAllOccupants();
   }
 
@@ -495,15 +437,14 @@ export class OccupantsComponent implements OnInit {
     this.isToDateError = null;
     this.searchPage = null;
     this.isPageAvailable = false;
-    this.selectedItemsPerPage = 10; // Reset dropdown value to 10
+    this.selectedItemsPerPage = 25; // Reset dropdown value to 25
     this.searchOccupantsForm.reset(
       { countyId: "", policeDepartmentId: "" });
     this.setupSearchData();
-    this.pageValue = 10;
+    this.pageValue = 25;
     this.currentPage = 1;
     this.searchData["itemsPerPage"] = this.pageValue
     this.getAllOccupants();
-    this.occupantDetail.length <= this.pageValue ? this.pageValue = 10 : '';
   }
 
   //Get Police Department details by id

@@ -23,7 +23,7 @@ export class AccountsComponent implements OnInit {
   public searchData: any;
   public searchAccountsDepartmentForm: any;
   public currentPage: any = 1;
-  public itemsPerPage = 10;
+  public itemsPerPage = 25;
   public callChildComponent: boolean | undefined;
   public count: any[] = [];
   public roleList: any[] = [];
@@ -243,10 +243,10 @@ export class AccountsComponent implements OnInit {
   resetSearch() {
     this.searchValue = {
       currentPage: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 25,
     };
     this.currentPage = 1;
-    this.itemsPerPage = 10;
+    this.itemsPerPage = 25;
     this.searchAccountsDepartmentForm.reset({
       role_id: '',
       police_department_id: '',
