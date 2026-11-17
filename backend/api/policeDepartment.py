@@ -11,10 +11,10 @@ import requests
 
 app = Flask(__name__)
 # Configure upload folder
-app.config['UPLOAD_FOLDER'] = 'C:/wamp64/www/SavePoliceDepartmentImage'  # Change to your WAMP server path
+app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'C:/wamp64/www/SavePoliceDepartmentImage')  # Change to your WAMP server path
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload size (optional)
 # Allowed file extensions for validation (optional)
-ALLOWED_EXTENSIONS = {'jpg'}
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 # TO CREATE POLICE DEPARTMENT 
@@ -40,15 +40,14 @@ class createPoliceDepartment(Resource):
                     db.create_all()
                     db.session.add(police)
                     db.session.flush()
-                    if 'image' not in request.files:
-                        return jsonify({'error': 'No file part in the request'})
-                    if not allowed_file(image.filename):
-                        return jsonify({'error': 'Invalid file type. Only PDF files are allowed.'})
-                    filename = f"{police.police_department_id}_banner.jpg"
-                    upload_folder = app.config['UPLOAD_FOLDER']
-                    save_path = os.path.join(upload_folder, filename)
-                    os.makedirs(upload_folder, exist_ok=True)
-                    image.save(save_path)
+                    if image and image.filename != '':
+                        if not allowed_file(image.filename):
+                            return jsonify({'error': 'Invalid file type. Only image files (jpg, jpeg, png, webp) are allowed.'})
+                        filename = f"{police.police_department_id}_banner.jpg"
+                        upload_folder = app.config['UPLOAD_FOLDER']
+                        save_path = os.path.join(upload_folder, filename)
+                        os.makedirs(upload_folder, exist_ok=True)
+                        image.save(save_path)
                     createPoliceAccounts(police)
                     # AWS image upload
                     # if image is None:
