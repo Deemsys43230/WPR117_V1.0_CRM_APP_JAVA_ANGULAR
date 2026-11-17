@@ -26,6 +26,7 @@ import { ChangePasswordComponent } from './police-department/change-password/cha
 import { SearchComponent } from './police-department/search/search.component';
 import {CalendarModule} from 'primeng/calendar';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ContactUsComponent } from './police-department/contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     PoliceDepartmentHeaderComponent,
     ChangePasswordComponent,
     SearchComponent,
+    ContactUsComponent
   ],
   imports: [
     BrowserModule,

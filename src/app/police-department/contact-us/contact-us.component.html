@@ -1,0 +1,91 @@
+<div class="page-bg">
+
+  <!-- Hero (same banner as the search page) -->
+  <div class="hero">
+    <img src="assets/images/policeman.jpg" alt="Ohio Traffic Crash Reports" class="img-container">
+  </div>
+
+  <div class="custom-container">
+    <section class="contact-card" aria-labelledby="contactTitle">
+      <div class="contact-layout">
+
+        <!-- ============ Left panel (same position as the search form) ============ -->
+        <aside class="side-panel" aria-label="Send an email">
+          <h2 class="panel-title">Email Us</h2>
+
+          <div class="mail-icon" aria-hidden="true">
+            <svg viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="8" width="112" height="80" rx="14" fill="currentColor" />
+              <path d="M10 26 L60 62 L110 26" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <a [href]="mailtoHref" class="email-chip">{{ supportEmail }}</a>
+
+          <a [href]="mailtoHref" class="send-btn">
+            <i class="fa fa-envelope" aria-hidden="true"></i> Send Mail
+          </a>
+
+          <button type="button" class="copy-btn" (click)="copyEmail()">
+            <i class="fa" [ngClass]="copied ? 'fa-check' : 'fa-clone'" aria-hidden="true"></i>
+            {{ copied ? 'Email copied' : 'Copy email address' }}
+          </button>
+          <span class="sr-only" role="status" aria-live="polite">{{ copied ? 'Email address copied' : '' }}</span>
+        </aside>
+
+        <!-- ============ Right column (same position as the results) ============ -->
+        <div class="main-col">
+
+          <div class="main-head">
+            <h1 class="main-title" id="contactTitle">Contact Us</h1>
+            <button type="button" class="back-btn" (click)="goBack()">
+              <i class="fa fa-reply" aria-hidden="true"></i> Back to Search
+            </button>
+          </div>
+
+          <div class="help-panel">
+            <h3 class="help-lead">Having problems downloading your crash report?</h3>
+            <p class="help-text">
+              Email us at <a [href]="mailtoHref" class="text-link">{{ supportEmail }}</a> with:
+            </p>
+
+            <div class="field-grid">
+              <div class="field-group field-group--required">
+                <h4 class="field-group-title">Required details</h4>
+                <ul class="field-list">
+                  <li *ngFor="let f of requiredFields">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <span>{{ f }} <span class="req">*</span></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="field-group">
+                <h4 class="field-group-title">Optional, helps us find it faster</h4>
+                <ul class="field-list">
+                  <li *ngFor="let f of optionalFields">
+                    <i class="fa fa-circle-o" aria-hidden="true"></i>
+                    <span>{{ f }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="promise">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              We will be happy to email your report within the next 24 hours.
+            </p>
+          </div>
+
+          <!-- Info note -->
+          <div class="info-note">
+            <span>Please note that currently we provide service only for the Boardman &amp; Fairborn Police
+              Departments in Ohio. We are in the process of integrating with more Departments.</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

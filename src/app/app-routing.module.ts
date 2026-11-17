@@ -10,6 +10,7 @@ import { AddNewReportComponent } from './police-department/reports/add-new-repor
 import { ViewDepartmentComponent } from './police-department/view-department/view-department.component';
 import { ChangePasswordComponent } from './police-department/change-password/change-password.component';
 import { SearchComponent } from './police-department/search/search.component';
+import { ContactUsComponent } from './police-department/contact-us/contact-us.component';
 
 const routes: Routes = [
   // {
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: '',
     component: SearchComponent, // Route for '/' 
+  },
+  {
+    path: 'contactUs',
+    component: ContactUsComponent,
   },
   {
     path: "admin/:departmentName",
