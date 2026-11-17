@@ -116,7 +116,7 @@
         </div>
 
         <!-- Tab Content -->
-        <div class="tab-content mt-3">
+        <div class="tab-content mt-3 mb-3">
             <!-- Upload Reports Tab -->
             <div class="tab-pane fade show" [ngClass]="{'active': currentTab === 'uploadReports'}">
                 <!-- Cards Start -->
@@ -416,7 +416,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row justify-content-center" *ngIf="!error">
+            <div class="row justify-content-center mb-4" *ngIf="!error">
                 <div class="col-md-4">
                     <div class="pagination-controls d-flex justify-content-center me-5 w-100" *ngIf="!pagebutton">
                         <ul class="numberListContainer p-0">

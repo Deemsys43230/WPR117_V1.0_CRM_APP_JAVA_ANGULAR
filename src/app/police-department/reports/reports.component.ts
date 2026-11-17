@@ -275,7 +275,7 @@ export class ReportsComponent {
         this.calculateTotalPages();
         this.setPaginatedData();
         this.togglePagination();
-        this.pagesArray(this.currentPage, this.count, this.pageValue, 25)
+        this.pagesArray(this.currentPage, this.totalPages)
         this.reportsData = [];
         this.occupantDetail.forEach(data => {
           this.reportsData.push({
@@ -331,68 +331,40 @@ export class ReportsComponent {
     }
   }
 
-  // To Get Array Of Page Numbers Based On Number Of Items Per Page And Pagination Range
-  pagesArray(currentPage, collectionLength, rowsPerPage, paginationRange) {
-    var pages = [];
-    var totalPages = Math.ceil(collectionLength / rowsPerPage);
-    var halfWay = Math.ceil(paginationRange / 2);
-    var position;
+  // Keep the current page and its neighbors visible without listing every page.
+  pagesArray(currentPage: number, totalPages: number) {
+    const pageCount = Math.max(0, Math.floor(totalPages));
+    const activePage = Math.min(Math.max(1, Math.floor(currentPage)), pageCount);
 
-    if (currentPage <= halfWay) {
-      position = 'start';
-    } else if (totalPages - halfWay < currentPage) {
-      position = 'end';
-    } else {
-      position = 'middle';
+    if (pageCount <= 7) {
+      this.pages = Array.from({ length: pageCount }, (_, index) => index + 1);
+      return;
     }
 
-    var ellipsesNeeded = paginationRange < totalPages;
-    var i = 1;
-    while (i <= totalPages && i <= paginationRange) {
-      var pageNumber = this.calculatePageNumber(
-        i,
-        currentPage,
-        paginationRange,
-        totalPages
-      );
-      var openingEllipsesNeeded =
-        i === 2 && (position === 'middle' || position === 'end');
-      var closingEllipsesNeeded =
-        i === paginationRange - 1 &&
-        (position === 'middle' || position === 'start');
-      if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
-        pages.push('...');
-      } else {
-        pages.push(pageNumber);
+    if (activePage <= 3) {
+      this.pages = Array.from({ length: activePage + 1 }, (_, index) => index + 1);
+      if (activePage + 1 < pageCount - 2) {
+        this.pages.push('...');
       }
-      i++;
+      this.pages.push(pageCount - 1, pageCount);
+      return;
     }
-    this.pages = pages;
-  }
 
-  // To Calculate Page Number  Based On Current Page Number
-  calculatePageNumber(
-    i: number,
-    currentPage: number,
-    paginationRange: number,
-    totalPages: number
-  ): number {
-    let halfWay = Math.ceil(paginationRange / 2);
-    if (i === paginationRange) {
-      return totalPages;
-    } else if (i === 1) {
-      return i;
-    } else if (paginationRange < totalPages) {
-      if (totalPages - halfWay < currentPage) {
-        return totalPages - paginationRange + i;
-      } else if (halfWay < currentPage) {
-        return currentPage - halfWay + i;
-      } else {
-        return i;
+    this.pages = [1];
+
+    if (activePage >= pageCount - 2) {
+      this.pages.push('...');
+      for (let page = pageCount - 4; page <= pageCount; page++) {
+        this.pages.push(page);
       }
-    } else {
-      return i;
+      return;
     }
+
+    this.pages.push('...');
+    for (let page = activePage - 1; page <= activePage + 1; page++) {
+      this.pages.push(page);
+    }
+    this.pages.push('...', pageCount - 1, pageCount);
   }
 
   // To Change The Item Per Page Number For  Pagination
@@ -473,7 +445,7 @@ export class ReportsComponent {
       this.calculateTotalPages();
       this.setPaginatedData();
       this.togglePagination();
-      this.pagesArray(this.currentPage, this.count, this.pageValue, 25);
+      this.pagesArray(this.currentPage, this.totalPages);
       this.reportsData = this.occupantDetail.map(data => ({
         report_id: data.report_id,
         crashDate: data.crash_date,
