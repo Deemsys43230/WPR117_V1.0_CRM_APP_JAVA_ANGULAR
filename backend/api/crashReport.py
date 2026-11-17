@@ -36,7 +36,10 @@ def upload_file_to_s3(file, police_department_id, report_id):
     except s3.exceptions.ClientError as e:
         # If the file does not exist, continue without any action
         if e.response['Error']['Code'] != '404':
-            raise
+            pass
+
+    if hasattr(file, 'seek'):
+        file.seek(0)
 
     # Upload the new file
     s3.upload_fileobj(
@@ -82,17 +85,13 @@ class CreateCrashReport(Resource):
             }
             occupants_list.append(occupant)
         try:
-            # file upload for production
-            # file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
             if 'crashReportFile' not in request.files:
                 return jsonify({'error': 'No file part in the request'})
             crash_report_file = request.files['crashReportFile']
             if not allowed_file(crash_report_file.filename):
                 return jsonify({'error': 'Invalid file type. Only PDF files are allowed.'})
-            filename = f"{value['report_id']}.pdf" 
-            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-            crash_report_file.save(save_path)
+
+            file_url = upload_file_to_s3(crash_report_file, value['police_department_id'], value['report_id'])
             value['file_name'] = f'{value["report_id"]}.pdf'
             crash_report = CrashReports(**value)
             crash_report.save_to_crash_reports()
@@ -113,7 +112,7 @@ class CreateCrashReport(Resource):
                 "county_id": crash_report.county_id,
                 "no_of_occupants": crash_report.no_of_occupants,
                 "file_path": f'{crash_report.report_id}.pdf',
-                "save_path":save_path,
+                "save_path": file_url,
                 "is_runner_report": 1,
                 "police_department_id": crash_report.police_department_id,
                 "report_id": crash_report.report_id,
@@ -139,9 +138,9 @@ class CreateCrashReport(Resource):
                 ]
             }
 
-            data = {
+            cro_data = {
                 "local_report_number": crash_report.report_number,
-                "crash_url":save_path,
+                "crash_url": file_url,
                 "is_runner_report": 1,
                 "account_id": crash_report.account_id,
                 "police_department_id": crash_report.police_department_id,
@@ -157,23 +156,30 @@ class CreateCrashReport(Resource):
             }
             # URL to which the GET request is sent
             url = get_property("CRODomain") + get_property("saveCrashReport")
-            # Make POST request using requests module
-            response = requests.post(url, json=data, headers=headers)
-            
-            # Check response status and return result
-            if response.status_code == 200:
-                response_json = response.json()
+            try:
+                response = requests.post(url, json=cro_data, headers=headers, timeout=5)
+                if response.status_code == 200:
+                    response_json = response.json()
+                    return jsonify({
+                        'status': True,
+                        'msg': 'Crash Report Added Successfully',
+                        'data': response_json,
+                        'file_url': file_url
+                    })
+                else:
+                    return jsonify({
+                        'status': True,
+                        'msg': 'Crash Report Added Successfully',
+                        'file_url': file_url,
+                        'details': response.text
+                    })
+            except requests.exceptions.RequestException as req_err:
+                print(f"Warning: Failed to sync with CRO: {req_err}")
                 return jsonify({
                     'status': True,
                     'msg': 'Crash Report Added Successfully',
-                    'data': response_json
+                    'file_url': file_url
                 })
-            else:
-                return jsonify({
-                    'status': False,
-                    'msg': 'Failed to get a valid response from the server.',
-                    'details': response.text
-                }), response.status_code
         except SQLAlchemyError as e:
             db.session.rollback()
             return jsonify({'msg': 'Error saving data to database', 'error': str(e)})
@@ -263,7 +269,7 @@ class GetAllCrashReports(Resource):
                     "county_id": crash.county_id,
                     "crash_severity": crash.crash_severity,
                     "no_of_occupants": crash.no_of_occupants,
-                    "file_name": f"http://14.195.114.174/SaveCrashReports/{crash.report_id}.pdf",
+                    "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
                     "added_date": crash.added_date.strftime('%m-%d-%Y'),
                     "added_date_time": crash.added_date_time,
                     "status": crash.status,
@@ -346,8 +352,7 @@ class SearchCrashReportAllUser(Resource):
                 "county_id": crash.county_id,
                 "crash_severity": crash.crash_severity,
                 "no_of_occupants": crash.no_of_occupants,
-                # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{crash.police_department_id}/reports/{crash.report_id}.pdf',
-                'file_name':f"http://14.195.114.174/SaveCrashReports/{crash.report_id}.pdf",
+                'file_name': f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
                 "added_date": crash.added_date.strftime('%m-%d-%Y'),
                 "added_date_time": crash.added_date_time,
                 "status": crash.status,
@@ -390,8 +395,7 @@ class GetCrashReportById(Resource):
             "countyName":data.county.name,
             "crash_severity": data.crash_severity,
             "no_of_occupants": data.no_of_occupants,
-            # "file_name": f'{AWSCredentials["S3StorageLinkForimages"]}{data.police_department_id}/reports/{data.report_id}.pdf',
-            'file_name':f"http://14.195.114.174/SaveCrashReports/{data.report_id}.pdf",
+            'file_name': f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{data.police_department_id}/reports/{data.report_id}.pdf',
             "added_date": data.added_date.strftime('%m-%d-%Y'),
             "added_date_time": data.added_date_time,
             "status": data.status,
@@ -431,19 +435,12 @@ class UpdateCrashReport(Resource):
                 occupants_list.append(occupant)
             if 'crashReportFile' in request.files:
                 crash_report_file = request.files['crashReportFile']
-                # file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, crash_report.report_id)
                 if not allowed_file(crash_report_file.filename):
                     return jsonify({'error': 'Invalid file type. Only PDF files are allowed.'})
-                # Example: Extract report_id from the request or form data
                 report_id = crash_report.report_id
                 if not report_id:
                     return jsonify({'error': 'Missing report ID'})
-                filename = f"{report_id}.pdf"
-                save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                # Ensure the directory exists
-                os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-                # Save or replace the file
-                crash_report_file.save(save_path)
+                file_url = upload_file_to_s3(crash_report_file, crash_report.police_department_id, report_id)
                 crash_report.file_name = f'{crash_report.report_id}.pdf'
             else:
                 crash_report.file_name = f'{crash_report.report_id}.pdf'
@@ -472,8 +469,7 @@ class UpdateCrashReport(Resource):
                 "county_id": crash_report.county_id,
                 "crash_severity": crash_report.crash_severity,
                 "no_of_occupants": crash_report.no_of_occupants,
-                # "file_name": f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
-                'file_name':f"http://14.195.114.174/SaveCrashReports/{crash_report.report_id}.pdf",
+                'file_name': f'https://{AWSCredentials["PUBLIC_BUCKET_NAME"]}.s3.amazonaws.com/runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf',
                 "added_date": crash_report.added_date.strftime('%m-%d-%Y'),
                 "added_date_time": crash_report.added_date_time,
                 "status": crash_report.status,

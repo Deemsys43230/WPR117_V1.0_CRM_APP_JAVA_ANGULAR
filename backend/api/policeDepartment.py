@@ -1,22 +1,67 @@
 from operator import and_
 import os
-from flask import Blueprint, Flask, jsonify,request
-from flask_restful import Resource,Api
-from config import AWSCredentials, CRMAppDomain,bucketURL,bannerLocation,awsUpload,tempFolder,folderName,bannerFolderName
+import boto3
+from flask import Blueprint, Flask, jsonify, request
+from flask_restful import Resource, Api
+from config import AWSCredentials, CRMAppDomain, bucketURL, bannerLocation, awsUpload, tempFolder, folderName, bannerFolderName
 from models import Accounts, PoliceDepartmentModel, Users
 from db import db
 from test import get_property, role_required, uploadFileToAWSS3
 import requests
 
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=AWSCredentials["AWS_ACCESS_KEY"],
+    aws_secret_access_key=AWSCredentials["AWS_SECRET_ACCESS_KEY"]
+)
 
-app = Flask(__name__)
-# Configure upload folder
-app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'C:/wamp64/www/SavePoliceDepartmentImage')  # Change to your WAMP server path
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max upload size (optional)
 # Allowed file extensions for validation (optional)
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'}
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload_image_to_s3(file, department_id, filename="banner.jpg"):
+    object_key = f"{folderName}{department_id}/banner/{filename}"
+    ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else 'jpg'
+    content_types = {
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'webp': 'image/webp',
+        'gif': 'image/gif',
+        'bmp': 'image/bmp'
+    }
+    content_type = content_types.get(ext, 'image/jpeg')
+    try:
+        s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+        s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+    except s3.exceptions.ClientError as e:
+        if e.response['Error']['Code'] != '404':
+            pass
+
+    if hasattr(file, 'read'):
+        if hasattr(file, 'seek'):
+            file.seek(0)
+        s3.upload_fileobj(
+            Fileobj=file,
+            Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'],
+            Key=object_key,
+            ExtraArgs={'ContentType': content_type}
+        )
+    else:
+        # file is a path string
+        s3.upload_file(
+            file,
+            AWSCredentials['PUBLIC_BUCKET_NAME'],
+            object_key,
+            ExtraArgs={'ContentType': content_type}
+        )
+    return f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{object_key}"
+
+def get_police_banner_url(department_id):
+    return f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{folderName}{department_id}/banner/banner.jpg"
+
 # TO CREATE POLICE DEPARTMENT 
 class createPoliceDepartment(Resource):
     @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
@@ -40,38 +85,28 @@ class createPoliceDepartment(Resource):
                     db.create_all()
                     db.session.add(police)
                     db.session.flush()
+
+                    file_url = None
                     if image and image.filename != '':
                         if not allowed_file(image.filename):
                             return jsonify({'error': 'Invalid file type. Only image files (jpg, jpeg, png, webp) are allowed.'})
-                        filename = f"{police.police_department_id}_banner.jpg"
-                        upload_folder = app.config['UPLOAD_FOLDER']
-                        save_path = os.path.join(upload_folder, filename)
-                        os.makedirs(upload_folder, exist_ok=True)
-                        image.save(save_path)
+                        file_url = upload_image_to_s3(image, police.police_department_id, "banner.jpg")
+                    else:
+                        default_image_path = os.path.join(tempFolder, 'banner.jpg').replace('\\', '/')
+                        if os.path.exists(default_image_path):
+                            file_url = upload_image_to_s3(default_image_path, police.police_department_id, "banner.jpg")
+                        else:
+                            file_url = get_police_banner_url(police.police_department_id)
+
                     createPoliceAccounts(police)
-                    # AWS image upload
-                    # if image is None:
-                    #     default_image_path = os.path.join(tempFolder,'banner.jpg').replace('\\','/')
-                    #     default_file_name='banner.jpg'
-                    #     file_url = uploadFileToAWSS3(default_image_path, default_file_name, police.police_department_id, 2)
-                    # else:
-                    #     path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
-                    #     os.makedirs(os.path.dirname(path), exist_ok=True)
-                    #     if awsUpload == 1:
-                    #         saved_file_path = save_temporary_file(image, path).replace('\\','/')
-                    #         if saved_file_path:
-                    #             file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
-                    #             os.remove(saved_file_path)
-                    #             folder_path = os.path.dirname(saved_file_path)
-                    #             if not os.listdir(folder_path):
-                    #                 os.rmdir(folder_path)
                     db.session.commit()           
                     return jsonify({
-                                'msg': 'Police Department Added Successfully',
-                                'status': True,
-                                'police_department_id': police.police_department_id,
-                                'data': {**data}
-                            })
+                        'msg': 'Police Department Added Successfully',
+                        'status': True,
+                        'police_department_id': police.police_department_id,
+                        'url': file_url,
+                        'data': {**data, 'url': file_url}
+                    })
                 else:
                     return jsonify({'msg': 'Duplicate Creation Of Department Code', 'status': False})
             else:
@@ -81,24 +116,33 @@ class createPoliceDepartment(Resource):
 
 # TO STORE IN CRO APP - POLICE AGENCY
 def createPoliceAccounts(police):
-    payload = {
-        "agency_id":police.police_department_id,
-        "name":police.name,
-        "county":police.county_id,
-        "scheduler_type":1
-    }
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    url = get_property("CRODomain") + get_property("createPolice")
-    response = requests.post(url, json=payload, headers=headers)
-    if response is not None and response.status_code == 200:
-        return jsonify({'status': True})    
-    else:
-        return jsonify({
-            'status': False,
-            'msg': 'Failed to get a valid response from the server.',
-        })
+    try:
+        cro_domain = get_property("CRODomain")
+        create_police_endpoint = get_property("createPolice")
+        if not cro_domain or not create_police_endpoint:
+            return {'status': False, 'msg': 'CRO configuration missing'}
+
+        url = cro_domain + create_police_endpoint
+        payload = {
+            "agency_id": police.police_department_id,
+            "name": police.name,
+            "county": police.county_id,
+            "scheduler_type": 1
+        }
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        response = requests.post(url, json=payload, headers=headers, timeout=5)
+        if response is not None and response.status_code == 200:
+            return {'status': True}    
+        else:
+            return {
+                'status': False,
+                'msg': 'Failed to get a valid response from the server.',
+            }
+    except requests.exceptions.RequestException as e:
+        print(f"Error syncing police agency to CRO: {e}")
+        return {'status': False, 'error': str(e)}
         
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
@@ -134,7 +178,7 @@ class getAllPoliceDepartment(Resource):
                     'login_link':data.login_link,
                     'search_link':data.search_link,
                     'status':data.status,
-                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
+                    'url': get_police_banner_url(data.police_department_id),
                     'is_enabled':data.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
@@ -165,7 +209,7 @@ class getByIdPoliceDepartment(Resource):
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     # 'url':f"https://{AWSCredentials['PUBLIC_BUCKET_NAME']}.s3.amazonaws.com/{folderName}{id}{bannerLocation}"
-                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
+                    'url': get_police_banner_url(data.police_department_id),
                 }
                 return jsonify({'status':True,'data':police_data})
             return jsonify({'status':False,'msg':'No Such Details Found'})
@@ -193,7 +237,7 @@ class getByNamePoliceDepartment(Resource):
                     'viewLoginLink':CRMAppDomain+""+data.login_link,
                     'viewSearchLink':CRMAppDomain+""+data.search_link,
                     # 'url':bucketURL+""+str(data.police_department_id)+""+bannerLocation
-                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
+                    'url': get_police_banner_url(data.police_department_id),
                 }
                 return jsonify({'status':True,'data':police_data})
             return jsonify({'status':False,'msg':'No Such Details Found'})
@@ -208,42 +252,19 @@ class updatePoliceDepartment(Resource):
         try:
             police = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
             if police:
-                # file_url = None
                 data = request.form
-                police.county_id=data.get('county_id')
+                police.county_id = data.get('county_id')
                 police.name = data.get('name')
                 police.code = data.get('code')
                 image = request.files.get('image')
+                file_url = get_police_banner_url(police.police_department_id)
                 if image and allowed_file(image.filename):
-                    filename = f"{police.police_department_id}_banner.jpg"
-                    upload_folder = app.config['UPLOAD_FOLDER']
-                    os.makedirs(upload_folder, exist_ok=True) 
-                    save_path = os.path.join(upload_folder, filename)
-                    image.save(save_path)
-                    police.image = filename
-                    db.session.commit()
-                # elif image is not None:
-                #     return jsonify({'error': 'Invalid file type. Only allowed file types are supported.'})
-                else:
-                    police.image = f"{police.police_department_id}_banner.jpg"
-                    db.session.commit()
-
-                # if image:
-                #     path = os.path.join(tempFolder, str(police.police_department_id), image.filename)
-                #     os.makedirs(os.path.dirname(path), exist_ok=True)
-                #     if awsUpload == 1:
-                #         saved_file_path = save_temporary_file(image, path).replace('\\','/')
-                #         if saved_file_path:
-                #             file_url = uploadFileToAWSS3(saved_file_path,image.filename, police.police_department_id, 2)
-                #             police.image = file_url
-                #             db.session.commit()
-                #             os.remove(saved_file_path)
-                #             folder_path = os.path.dirname(saved_file_path)
-                #             if not os.listdir(folder_path):
-                #                 os.rmdir(folder_path)
-                return jsonify({'status':True,'msg':'Updated Police Department Details','data':{**data}})
+                    file_url = upload_image_to_s3(image, police.police_department_id, "banner.jpg")
+                db.session.commit()
+                return jsonify({'status': True, 'msg': 'Updated Police Department Details', 'data': {**data, 'url': file_url}})
+            return jsonify({'status': False, 'msg': 'Police Department not found'})
         except Exception as e:
-            return jsonify({'status':False,'error':str(e)})
+            return jsonify({'status': False, 'error': str(e)})
 
 # ENABLE DISABLE POLICE DEPARTMENT BY ID
 class enableDisablePoliceDepartment(Resource):
@@ -301,8 +322,7 @@ class policeDepartmentDetailsByUsername(Resource):
                     'is_enabled':account.police_dep_id.is_enabled,
                     'viewLoginLink':CRMAppDomain+""+account.police_dep_id.login_link,
                     'viewSearchLink':CRMAppDomain+""+account.police_dep_id.search_link,
-                    # 'url':bucketURL+""+str(account.police_dep_id.police_department_id)+""+bannerLocation
-                    'url':f"http://14.195.114.174/SavePoliceDepartmentImage/{data.police_department_id}_banner.jpg",
+                    'url': get_police_banner_url(account.police_dep_id.police_department_id),
                 }
                 }
             return jsonify({'msg':'Police Department Details','data':police_data,'status':True})
