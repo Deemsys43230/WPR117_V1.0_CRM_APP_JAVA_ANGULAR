@@ -139,13 +139,19 @@ class CreateCrashReport(Resource):
             }
 
             cro_data = {
+                "crash_id": crash_report.report_id,
                 "local_report_number": crash_report.report_number,
                 "crash_url": file_url,
+                "pdf_url": file_url,
+                "file_path": f"runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf",
                 "is_runner_report": 1,
+                "isRunnerReport": 1,
                 "account_id": crash_report.account_id,
+                "report_from": crash_report.police_department_id,
                 "police_department_id": crash_report.police_department_id,
                 "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
                 "location": crash_report.location,
+                "county": crash_report.county_id,
                 "county_id": crash_report.county_id,
                 "crash_severity": crash_report.crash_severity,
                 "number_of_patients": crash_report.no_of_occupants,
