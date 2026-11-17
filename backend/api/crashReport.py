@@ -507,28 +507,47 @@ class UpdateCrashReport(Resource):
 
 # Delete Crash Report by id
 class DeleteCrashReport(Resource):
-    def get(self,id):
-        crash_report=CrashReports.query.filter_by(report_id=id).first()
-        object_key = f'runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf'
+    def _delete_report(self, id):
+        try:
+            crash_report = CrashReports.query.filter_by(report_id=id).first()
+            if not crash_report:
+                return {'status': False, 'message': 'Crash report not found or already deleted'}, 404
 
-        try:
-            s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-        # If the file exists, delete it
-            s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-        except s3.exceptions.ClientError as e:
-        # If the file does not exist, continue without any action
-            if e.response['Error']['Code'] != '404':
-             raise
-        try:
-            occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
-            for occupant in occupants_to_delete:
-                db.session.delete(occupant)
+            # Attempt S3 cleanup safely
+            try:
+                if crash_report.police_department_id:
+                    object_key = f'runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf'
+                    try:
+                        s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
+                    except Exception as s3_err:
+                        print(f"[DeleteCrashReport] S3 deletion warning: {s3_err}")
+            except Exception as e:
+                print(f"[DeleteCrashReport] S3 key construction warning: {e}")
+
+            # Safely delete occupants
+            try:
+                occupants_to_delete = Occupants.query.filter_by(report_id=id).all()
+                for occupant in occupants_to_delete:
+                    db.session.delete(occupant)
+            except Exception as occ_err:
+                print(f"[DeleteCrashReport] Warning deleting occupants: {occ_err}")
+
             db.session.delete(crash_report)
             db.session.commit()
-            return {'message': 'Crash report deleted successfully'}, 200
+            return {'status': True, 'message': 'Crash report deleted successfully'}, 200
         except Exception as e:
             db.session.rollback()
-            return {'message': f'Error deleting record from the database: {str(e)}'}, 500
+            print(f"[DeleteCrashReport ERROR] {e}")
+            return {'status': False, 'message': f'Error deleting report: {str(e)}'}, 500
+
+    def get(self, id):
+        return self._delete_report(id)
+
+    def delete(self, id):
+        return self._delete_report(id)
+
+    def post(self, id):
+        return self._delete_report(id)
 
 class checkReportNumberExist(Resource):
     def post(self):
