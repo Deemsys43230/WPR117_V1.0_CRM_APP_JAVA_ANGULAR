@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TableData } from 'src/app/constants';
@@ -9,15 +9,19 @@ import { RoleService } from 'src/app/shared/services/role.service';
 import { AuthService } from 'src/app/shared/services/auth-service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { FlashMessageService } from 'src/app/shared/flash-message/flash-message.service';
+
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-accounts-component',
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss'],
 })
-export class AccountsComponent implements OnInit {
+export class AccountsComponent implements OnInit, AfterViewInit {
   @ViewChild(TableConfigComponent) TableConfigComponent:
     | TableConfigComponent
     | undefined;
+  @ViewChild('resetPasswordModal') resetPasswordModalElement!: ElementRef<HTMLElement>;
 
   public table_data: TableData;
   public searchData: any;
@@ -29,6 +33,9 @@ export class AccountsComponent implements OnInit {
   public roleList: any[] = [];
   public departmentList: any[] = [];
   public searchValue: any;
+  public accountPendingPasswordReset: any = null;
+  public isResettingPassword = false;
+  private resetPasswordModal: any;
 
   constructor(
     private router: Router,
@@ -48,6 +55,10 @@ export class AccountsComponent implements OnInit {
     this.getAllRoles();
     this.getAllDepartments();
     this.getAccountsDepartmentByPagination();
+  }
+
+  ngAfterViewInit(): void {
+    this.resetPasswordModal = new bootstrap.Modal(this.resetPasswordModalElement.nativeElement);
   }
 
   //initialization of searchAccessManagementForm
@@ -206,13 +217,38 @@ export class AccountsComponent implements OnInit {
   }
 
   private handleResetPassword(data: any) {
+    this.accountPendingPasswordReset = data;
+    this.resetPasswordModal.show();
+  }
+
+  cancelResetPassword(): void {
+    if (!this.isResettingPassword) {
+      this.accountPendingPasswordReset = null;
+    }
+  }
+
+  confirmResetPassword(): void {
+    if (!this.accountPendingPasswordReset || this.isResettingPassword) {
+      return;
+    }
+
     const payload = {
-      account_id: data.account_id
+      account_id: this.accountPendingPasswordReset.account_id
     };
+    this.isResettingPassword = true;
     this.resetPassword.resetPassword(payload).subscribe((response) => {
+      this.isResettingPassword = false;
+      this.resetPasswordModal.hide();
+      this.accountPendingPasswordReset = null;
       if (response.status) {
-        alert('Password reset successfully')
+        this.flashMessageService.successMessage(response.msg || 'Password reset successfully.', 2);
+      } else {
+        this.flashMessageService.errorMessage(response.msg || 'Unable to reset password.', 2);
       }
+    }, () => {
+      this.isResettingPassword = false;
+      this.resetPasswordModal.hide();
+      this.accountPendingPasswordReset = null;
     })
   }
 

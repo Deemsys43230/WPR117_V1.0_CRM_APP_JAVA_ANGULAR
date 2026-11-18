@@ -75,3 +75,28 @@
 <table-config *ngIf="callChildComponent" [tableData]="table_data" [search]="searchValue" (page)="page($event)"
   (actionOutput)="actionOutput($event)"></table-config>
 <!-- Table Ends -->
+
+<div #resetPasswordModal class="modal fade" tabindex="-1" aria-labelledby="resetPasswordModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resetPasswordModalTitle">Reset Password</h5>
+        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"
+          [disabled]="isResettingPassword" (click)="cancelResetPassword()"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to reset the password for
+        <strong>{{accountPendingPasswordReset?.username}}</strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          [disabled]="isResettingPassword" (click)="cancelResetPassword()">Cancel</button>
+        <button type="button" class="btn common-btn-color" [disabled]="isResettingPassword"
+          (click)="confirmResetPassword()">
+          {{isResettingPassword ? 'Resetting...' : 'Yes, reset password'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
