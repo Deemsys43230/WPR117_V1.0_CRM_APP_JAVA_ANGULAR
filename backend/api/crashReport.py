@@ -168,6 +168,7 @@ class CreateCrashReport(Resource):
                 "county_id": int(crash_report.county_id) if str(crash_report.county_id).isdigit() else crash_report.county_id,
                 "crash_severity": crash_report.crash_severity,
                 "number_of_patients": crash_report.no_of_occupants,
+                "occupants": data.get("occupants", [])
             }
             # Trigger background sync to CRO
             threading.Thread(target=sync_to_cro_background, args=(cro_data,), daemon=True).start()
@@ -500,6 +501,28 @@ class UpdateCrashReport(Resource):
                     for occupant in occupants_list
                     ]
                     }
+
+            cro_data = {
+                "crash_id": crash_report.report_id,
+                "local_report_number": crash_report.report_number,
+                "crash_url": value['file_name'],
+                "pdf_url": value['file_name'],
+                "file_path": f"runner-reports/{crash_report.police_department_id}/reports/{crash_report.report_id}.pdf",
+                "is_runner_report": 1,
+                "isRunnerReport": 1,
+                "account_id": crash_report.account_id,
+                "report_from": int(crash_report.police_department_id) if str(crash_report.police_department_id).isdigit() else crash_report.police_department_id,
+                "police_department_id": int(crash_report.police_department_id) if str(crash_report.police_department_id).isdigit() else crash_report.police_department_id,
+                "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
+                "location": crash_report.location,
+                "county": int(crash_report.county_id) if str(crash_report.county_id).isdigit() else crash_report.county_id,
+                "county_id": int(crash_report.county_id) if str(crash_report.county_id).isdigit() else crash_report.county_id,
+                "crash_severity": crash_report.crash_severity,
+                "number_of_patients": crash_report.no_of_occupants,
+                "occupants": value.get("occupants", [])
+            }
+            threading.Thread(target=sync_to_cro_background, args=(cro_data,), daemon=True).start()
+
             return jsonify({'msg': 'Crash Report Updated Successfully', "status":True,"data":value})
         except SQLAlchemyError as e:
             db.session.rollback()
