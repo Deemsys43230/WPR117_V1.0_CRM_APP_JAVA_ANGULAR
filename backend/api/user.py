@@ -83,12 +83,12 @@ class policeDepartmentLogin(Resource):
             username = data.get('username')
             password = data.get('password')
             if not department_name:
-                return jsonify({'message': 'Department name is required', 'status': False})
+                return jsonify({'msg': 'Department name is required', 'status': False})
             if not username or not password:
-                return jsonify({'message': 'Username and password are required', 'status': False})
+                return jsonify({'msg': 'Username and password are required', 'status': False})
             police = PoliceDepartmentModel.query.filter_by(name=department_name).first()
             if not police:
-                return jsonify({'message': 'Department not found', 'status': False})
+                return jsonify({'msg': 'Department not found', 'status': False})
             if police.is_enabled == 0:
                 return jsonify({'data': {'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
             account_data = Accounts.query.filter_by(police_department_id=police.police_department_id).all()
@@ -97,11 +97,11 @@ class policeDepartmentLogin(Resource):
                 if user_data:
                     user = Users.query.filter_by(username=username, status=1).first()
                     if not user:
-                        return jsonify({'message': 'User is inactive or not found', 'status': False})
+                        return jsonify({'msg': 'User is inactive or not found', 'status': False})
                     if user.is_enable == 0:
                         return jsonify({'data': {'msg': 'Your Account is Disabled, Please Contact Superadmin'}, 'status': False})
                     if not check_md5_hash(user.password, password):  
-                        return jsonify({'message': 'Incorrect username or password', 'status': False})
+                        return jsonify({'msg': 'Incorrect username or password', 'status': False})
                     rolename = Roles.query.filter_by(role_id=user.role_id).first()
                     refresh_token = create_refresh_token(identity=user.username, expires_delta=timedelta(hours=24))
                     access_token = create_access_token(identity=user.username, expires_delta=timedelta(hours=24))
