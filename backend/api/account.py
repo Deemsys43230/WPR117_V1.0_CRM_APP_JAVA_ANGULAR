@@ -5,6 +5,7 @@ from flask_restful import Api, Resource
 from db import db
 from models import  Accounts,Users
 from test import role_required
+from config import PASSWORD_SALT
 
 
 def generate_short_uuid():
@@ -17,8 +18,9 @@ def generate_short_uuid():
 class createAccount(Resource):
     @staticmethod
     def hash_password(password):
+        salted_password = f"{password}{{{PASSWORD_SALT}}}"
         md5 = hashlib.md5()
-        md5.update(password.encode('utf-8'))
+        md5.update(salted_password.encode('utf-8'))
         return md5.hexdigest()
     @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def post(self):

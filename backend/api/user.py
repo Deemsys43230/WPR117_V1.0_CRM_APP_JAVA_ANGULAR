@@ -9,13 +9,15 @@ import hashlib
 from flask_cors import cross_origin
 
 from test import role_required, sendMailToResetPassword
+from config import PASSWORD_SALT
         
 # Change password
 class ChangePassword(Resource):
     @staticmethod
     def hash_password(password):
+        salted_password = f"{password}{{{PASSWORD_SALT}}}"
         md5 = hashlib.md5()
-        md5.update(password.encode('utf-8'))
+        md5.update(salted_password.encode('utf-8'))
         return md5.hexdigest()
     @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
     def post(self):
@@ -27,8 +29,8 @@ class ChangePassword(Resource):
             confirm_password = data.get('confirm_password')
             if old_password == new_password:
                 return jsonify({'msg':'Same As Old Password'})
-            user = Users.query.filter(Users.account_id ==account_id,Users.password==self.hash_password(old_password)).first()
-            if user:
+            user = Users.query.filter(Users.account_id == account_id).first()
+            if user and check_md5_hash(user.password, old_password):
                 if new_password == confirm_password:
                     user.password = self.hash_password(new_password)
                     db.session.commit()
@@ -39,9 +41,14 @@ class ChangePassword(Resource):
             return jsonify({'status':False,'error':str(e)})    
 
 def check_md5_hash(hashed_password, password):
-    md5 = hashlib.md5()
-    md5.update(password.encode('utf-8'))
-    return hashed_password == md5.hexdigest()
+    # Java-compatible salted MD5: password{salt}
+    salted_password = f"{password}{{{PASSWORD_SALT}}}"
+    salted_md5 = hashlib.md5(salted_password.encode('utf-8')).hexdigest()
+    if hashed_password == salted_md5:
+        return True
+    # Fallback to plain MD5
+    plain_md5 = hashlib.md5(password.encode('utf-8')).hexdigest()
+    return hashed_password == plain_md5
 class userLogin(Resource):
     def post(self):
         try:
@@ -125,9 +132,10 @@ class policeDepartmentLogin(Resource):
 class resetPassword(Resource):
     @staticmethod
     def hash_password(password):
-        # Use MD5 for hashing passwords
+        # Use Salted MD5 matching Java Spring Security for hashing passwords
+        salted_password = f"{password}{{{PASSWORD_SALT}}}"
         md5 = hashlib.md5()
-        md5.update(password.encode('utf-8'))
+        md5.update(salted_password.encode('utf-8'))
         return md5.hexdigest()  
     # Return the hash as a hex string
     # @role_required('ROLE_SUPER_ADMIN','ROLE_ADMIN','ROLE_USER')
