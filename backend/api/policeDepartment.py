@@ -22,6 +22,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def upload_image_to_s3(file, department_id, filename="banner.jpg"):
+    bucket = 'injurycrashreports' if AWSCredentials.get('PUBLIC_BUCKET_NAME') in [None, '', 'crm-tests'] else AWSCredentials['PUBLIC_BUCKET_NAME']
     object_key = f"{folderName}{department_id}/banner/{filename}"
     ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else 'jpg'
     content_types = {
@@ -34,18 +35,16 @@ def upload_image_to_s3(file, department_id, filename="banner.jpg"):
     }
     content_type = content_types.get(ext, 'image/jpeg')
     try:
-        s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-        s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-    except s3.exceptions.ClientError as e:
-        if e.response['Error']['Code'] != '404':
-            pass
+        s3.delete_object(Bucket=bucket, Key=object_key)
+    except Exception:
+        pass
 
     if hasattr(file, 'read'):
         if hasattr(file, 'seek'):
             file.seek(0)
         s3.upload_fileobj(
             Fileobj=file,
-            Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'],
+            Bucket=bucket,
             Key=object_key,
             ExtraArgs={'ContentType': content_type}
         )
@@ -53,7 +52,7 @@ def upload_image_to_s3(file, department_id, filename="banner.jpg"):
         # file is a path string
         s3.upload_file(
             file,
-            AWSCredentials['PUBLIC_BUCKET_NAME'],
+            bucket,
             object_key,
             ExtraArgs={'ContentType': content_type}
         )

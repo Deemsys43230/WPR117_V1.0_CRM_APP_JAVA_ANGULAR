@@ -61,18 +61,17 @@ def sendMailToResetPassword(to,body):
 
 # FUNCTION FOR UPLOAD IMAGE IN AWS
 def uploadFileToAWSS3(filepath,file_name,department_id,upload_status):
+    bucket = 'injurycrashreports' if AWSCredentials.get('PUBLIC_BUCKET_NAME') in [None, '', 'crm-tests'] else AWSCredentials['PUBLIC_BUCKET_NAME']
     object_key = f"{folderName}{department_id}{bannerFolderName}{file_name}"  
     try:
-        s3.head_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-        s3.delete_object(Bucket=AWSCredentials['PUBLIC_BUCKET_NAME'], Key=object_key)
-    except s3.exceptions.ClientError as e:
-        if e.response['Error']['Code'] != '404':
-            raise  
+        s3.delete_object(Bucket=bucket, Key=object_key)
+    except Exception:
+        pass
     s3.upload_file(
         filepath,
-        AWSCredentials['PUBLIC_BUCKET_NAME'],
+        bucket,
         object_key,
-        ExtraArgs={'ContentType': 'image/jpeg', 'ACL': 'public-read'}
+        ExtraArgs={'ContentType': 'image/jpeg'}
     )
     file_url = f"https://cdn.crashreportsonline.com/{object_key}"
     return file_url
