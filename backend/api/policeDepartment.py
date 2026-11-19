@@ -1,5 +1,6 @@
 from operator import and_
 import os
+import threading
 import boto3
 from flask import Blueprint, Flask, jsonify, request
 from flask_restful import Resource, Api
@@ -97,8 +98,9 @@ class createPoliceDepartment(Resource):
                         else:
                             file_url = get_police_banner_url(police.police_department_id)
 
-                    createPoliceAccounts(police)
-                    db.session.commit()           
+                    db.session.commit()
+                    # Sync to CRO in background (non-blocking)
+                    threading.Thread(target=createPoliceAccounts, args=(police.police_department_id, police.name, police.county_id), daemon=True).start()
                     return jsonify({
                         'msg': 'Police Department Added Successfully',
                         'status': True,
@@ -114,33 +116,27 @@ class createPoliceDepartment(Resource):
             return jsonify({'msg': 'An error occurred', 'status': False, 'error': str(e)})
 
 # TO STORE IN CRO APP - POLICE AGENCY
-def createPoliceAccounts(police):
+def createPoliceAccounts(department_id, department_name, county_id):
     try:
-        cro_domain = get_property("CRODomain")
-        create_police_endpoint = get_property("createPolice")
-        if not cro_domain or not create_police_endpoint:
-            return {'status': False, 'msg': 'CRO configuration missing'}
-
-        url = cro_domain + create_police_endpoint
+        cro_domain = get_property("CRODomain") or "http://14.195.114.174:5005"
+        create_police_endpoint = get_property("createPolice") or "createPoliceAgency"
+        url = cro_domain.rstrip('/') + '/' + create_police_endpoint.lstrip('/')
         payload = {
-            "agency_id": police.police_department_id,
-            "name": police.name,
-            "county": police.county_id,
+            "agency_id": department_id,
+            "name": department_name,
+            "county": county_id,
             "scheduler_type": 1
         }
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        response = requests.post(url, json=payload, headers=headers, timeout=5)
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
         if response is not None and response.status_code == 200:
-            return {'status': True}    
+            print(f"[CRO SYNC] Police agency {department_id} synced successfully")
+            return {'status': True}
         else:
-            return {
-                'status': False,
-                'msg': 'Failed to get a valid response from the server.',
-            }
+            print(f"[CRO SYNC] Failed to sync police agency {department_id}: {response.status_code if response else 'No response'}")
+            return {'status': False, 'msg': 'Failed to get a valid response from the server.'}
     except requests.exceptions.RequestException as e:
-        print(f"Error syncing police agency to CRO: {e}")
+        print(f"[CRO SYNC ERROR] Error syncing police agency to CRO: {e}")
         return {'status': False, 'error': str(e)}
         
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION

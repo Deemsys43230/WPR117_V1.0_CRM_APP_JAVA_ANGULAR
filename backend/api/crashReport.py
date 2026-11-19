@@ -95,29 +95,35 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 class CreateCrashReport(Resource):
     def post(self):
-        value = {
-            "report_id": generate_short_uuid(),
-            "account_id": request.form.get('account_id'),
-            "police_department_id": request.form.get('police_department_id'),
-            "report_number": request.form.get('report_number'),
-            "crash_date": request.form.get('crash_date'),
-            "location": request.form.get('location'),
-            "county_id": request.form.get('county_id'),
-            "crash_severity": request.form.get('crash_severity'),
-            "no_of_occupants": int(request.form.get('no_of_occupants')),
-            "status": 1
-        }
-        occupants_list = []
-        for i in range(value["no_of_occupants"]):
-            occupant = {
-                "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
-                "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
-                "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
-                "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
-                "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
-                "status": request.form.get(f'occupantsForms[{i}][status]')
+        try:
+            no_of_occupants_raw = request.form.get('no_of_occupants')
+            if not no_of_occupants_raw:
+                return jsonify({'status': False, 'error': 'no_of_occupants is required'})
+            value = {
+                "report_id": generate_short_uuid(),
+                "account_id": request.form.get('account_id'),
+                "police_department_id": request.form.get('police_department_id'),
+                "report_number": request.form.get('report_number'),
+                "crash_date": request.form.get('crash_date'),
+                "location": request.form.get('location'),
+                "county_id": request.form.get('county_id'),
+                "crash_severity": request.form.get('crash_severity'),
+                "no_of_occupants": int(no_of_occupants_raw),
+                "status": 1
             }
-            occupants_list.append(occupant)
+            occupants_list = []
+            for i in range(value["no_of_occupants"]):
+                occupant = {
+                    "first_name": request.form.get(f'occupantsForms[{i}][first_name]'),
+                    "last_name": request.form.get(f'occupantsForms[{i}][last_name]'),
+                    "injuries": request.form.get(f'occupantsForms[{i}][injuries]'),
+                    "seating_position": request.form.get(f'occupantsForms[{i}][seating_position]'),
+                    "sequence_no": request.form.get(f'occupantsForms[{i}][sequence_no]'),
+                    "status": request.form.get(f'occupantsForms[{i}][status]')
+                }
+                occupants_list.append(occupant)
+        except (TypeError, ValueError) as e:
+            return jsonify({'status': False, 'error': f'Invalid form data: {str(e)}'})
         try:
             if 'crashReportFile' not in request.files:
                 return jsonify({'error': 'No file part in the request'})
