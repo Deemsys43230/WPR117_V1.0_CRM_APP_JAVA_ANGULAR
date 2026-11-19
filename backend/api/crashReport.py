@@ -97,18 +97,39 @@ class CreateCrashReport(Resource):
     def post(self):
         try:
             no_of_occupants_raw = request.form.get('no_of_occupants')
-            if not no_of_occupants_raw:
-                return jsonify({'status': False, 'error': 'no_of_occupants is required'})
+            if no_of_occupants_raw is None or str(no_of_occupants_raw).strip() == "":
+                no_of_occupants_val = 0
+            else:
+                no_of_occupants_val = int(no_of_occupants_raw)
+
+            account_id = request.form.get('account_id')
+            police_dept_id = request.form.get('police_department_id')
+            county_id = request.form.get('county_id')
+
+            # Fallback 1: If police_department_id is missing or undefined (common when saving from a police department account)
+            if not police_dept_id or str(police_dept_id).lower() in ('', 'none', 'null', 'undefined'):
+                if account_id:
+                    acc = Accounts.query.filter_by(account_id=account_id).first()
+                    if acc and acc.police_department_id:
+                        police_dept_id = acc.police_department_id
+
+            # Fallback 2: If county_id is missing or undefined, resolve it from the police department
+            if not county_id or str(county_id).lower() in ('', 'none', 'null', 'undefined'):
+                if police_dept_id:
+                    pd = PoliceDepartmentModel.query.filter_by(police_department_id=police_dept_id).first()
+                    if pd and pd.county_id:
+                        county_id = pd.county_id
+
             value = {
                 "report_id": generate_short_uuid(),
-                "account_id": request.form.get('account_id'),
-                "police_department_id": request.form.get('police_department_id'),
+                "account_id": account_id,
+                "police_department_id": police_dept_id,
                 "report_number": request.form.get('report_number'),
                 "crash_date": request.form.get('crash_date'),
                 "location": request.form.get('location'),
-                "county_id": request.form.get('county_id'),
+                "county_id": county_id,
                 "crash_severity": request.form.get('crash_severity'),
-                "no_of_occupants": int(no_of_occupants_raw),
+                "no_of_occupants": no_of_occupants_val,
                 "status": 1
             }
             occupants_list = []
@@ -178,6 +199,10 @@ class CreateCrashReport(Resource):
                 ]
             }
 
+            # Retrieve department name to guarantee CRO can map or create the agency
+            dept_obj = PoliceDepartmentModel.query.filter_by(police_department_id=crash_report.police_department_id).first() if crash_report.police_department_id else None
+            dept_name = dept_obj.name if dept_obj else ""
+
             cro_data = {
                 "crash_id": crash_report.report_id,
                 "local_report_number": crash_report.report_number,
@@ -189,6 +214,9 @@ class CreateCrashReport(Resource):
                 "account_id": crash_report.account_id,
                 "report_from": int(crash_report.police_department_id) if str(crash_report.police_department_id).isdigit() else crash_report.police_department_id,
                 "police_department_id": int(crash_report.police_department_id) if str(crash_report.police_department_id).isdigit() else crash_report.police_department_id,
+                "police_department_name": dept_name,
+                "department_name": dept_name,
+                "agency_name": dept_name,
                 "crash_date": crash_report.crash_date.strftime('%m-%d-%Y'),
                 "location": crash_report.location,
                 "county": int(crash_report.county_id) if str(crash_report.county_id).isdigit() else crash_report.county_id,

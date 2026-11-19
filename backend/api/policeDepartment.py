@@ -142,46 +142,54 @@ def createPoliceAccounts(department_id, department_name, county_id):
 # GET ALL POLICE DEPARTMENTS WITH SEARCH AND PAGINATION
 class getAllPoliceDepartment(Resource):
     def post(self):
-        data = request.get_json()
-        items_per_page = data.get('items_per_page',None)
-        query_count = PoliceDepartmentModel.query.filter_by(status=1).count()
-        if items_per_page == "":
-            items_per_page = query_count
         try:
-            data = request.get_json()
-            page = data.get('page',1)
-            name = data.get('name',None)
-            county = data.get('county',None)
-            print("county",county)
-            offset = (page - 1) * items_per_page
-            query = PoliceDepartmentModel.query
+            data = request.get_json() or {}
+            items_per_page = data.get('items_per_page', None)
+            page = data.get('page', 1)
+            name = data.get('name', None)
+            county = data.get('county', None)
+
+            # Query active police departments excluding internal Deemsys accounts
+            query = PoliceDepartmentModel.query.filter(
+                PoliceDepartmentModel.status == 1,
+                ~PoliceDepartmentModel.name.ilike('%deemsys%'),
+                ~PoliceDepartmentModel.code.ilike('%deemsys%')
+            )
             if name:
                 query = query.filter(PoliceDepartmentModel.name.ilike(f"%{name}%"))
             if county:
                 query = query.filter(PoliceDepartmentModel.county_id == county)
+
             count = query.count()
+            if items_per_page is None or items_per_page == "":
+                items_per_page = count if count > 0 else 10
+            else:
+                items_per_page = int(items_per_page)
+
+            page = int(page) if str(page).isdigit() else 1
+            offset = (page - 1) * items_per_page
             police = query.limit(items_per_page).offset(offset).all()
-            result=[]
-            for data in police:
+            result = []
+            for d in police:
                 police_data = {
-                    'department_id':data.police_department_id,
-                    'county_id':data.county_id,
-                    'county_name':data.county.name,
-                    'name':data.name,
-                    'status':data.county.status,
-                    'code':data.code,
-                    'login_link':data.login_link,
-                    'search_link':data.search_link,
-                    'status':data.status,
-                    'url': get_police_banner_url(data.police_department_id),
-                    'is_enabled':data.is_enabled,
-                    'viewLoginLink':CRMAppDomain+""+data.login_link,
-                    'viewSearchLink':CRMAppDomain+""+data.search_link,
+                    'department_id': d.police_department_id,
+                    'county_id': d.county_id,
+                    'county_name': d.county.name if d.county else None,
+                    'name': d.name,
+                    'status': d.county.status if d.county else None,
+                    'code': d.code,
+                    'login_link': d.login_link,
+                    'search_link': d.search_link,
+                    'status': d.status,
+                    'url': get_police_banner_url(d.police_department_id),
+                    'is_enabled': d.is_enabled,
+                    'viewLoginLink': CRMAppDomain + "" + (d.login_link or ""),
+                    'viewSearchLink': CRMAppDomain + "" + (d.search_link or ""),
                 }
                 result.append(police_data)
-            return jsonify({'status':True,'data':result,'count':count})
+            return jsonify({'status': True, 'data': result, 'count': count})
         except Exception as e:
-            return jsonify({'status':False,'error':str(e)})
+            return jsonify({'status': False, 'error': str(e)})
     
 # GET POLICE DEPARTMENT BY ID
 class getByIdPoliceDepartment(Resource):
