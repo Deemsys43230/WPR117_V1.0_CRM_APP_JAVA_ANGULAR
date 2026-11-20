@@ -36,20 +36,22 @@ export class AddDepartmentComponent implements OnInit {
     }
     this.getAllCounty()
     this.initializationAddPoliceDepartmentForm()
-    this.addPoliceDepartmentForm.get('name')?.valueChanges.subscribe(value => {
-      this.onChangeName(value);
-    });
+    if (!this.isEdit) {
+      this.addPoliceDepartmentForm.get('name')?.valueChanges.subscribe(value => {
+        this.onChangeName(value);
+      });
+    }
   }
 
 
   //Initialize Add Police Department Form
   initializationAddPoliceDepartmentForm() {
     this.addPoliceDepartmentForm = this.fb.group({
-      name: ['', [Validators.required,Validators.pattern("[a-zA-Z ]*")]],
+      name: [{ value: '', disabled: this.isEdit }, [Validators.required,Validators.pattern("[a-zA-Z ]*")]],
       countyId: ['', Validators.required],
       code: ['', [Validators.required,this.codePatternValidator()]],
-      loginLink: ['', Validators.required],
-      searchLink: ['', Validators.required],
+      loginLink: [{ value: '', disabled: true }, Validators.required],
+      searchLink: [{ value: '', disabled: true }, Validators.required],
       image: [""]
     })
   }
@@ -76,6 +78,7 @@ export class AddDepartmentComponent implements OnInit {
   getPoliceDepartmentById() {
     this.policeDepartmentService.getByIdPoliceDepartmentDetails(this.id).subscribe(res => {
       if (res.status) {
+        console.log(res.data,'data');
         const data = {
           name: res.data.name,
           countyId: res.data.county_id,
@@ -102,16 +105,14 @@ export class AddDepartmentComponent implements OnInit {
   }
 
   //Auto Data Patching while entering Name
-  onChangeName(value){
-    if (value) {
-      const lowercaseValue = value?.split(' ')[0].toLowerCase(); // Take only the first word and convert it to lowercase
-      const searchLinkValue = `${lowercaseValue}_search`;
-  
-      this.addPoliceDepartmentForm.patchValue({
-        loginLink: lowercaseValue,
-        searchLink: searchLinkValue
-      });
-    }
+  onChangeName(value: string): void {
+    const name = value || '';
+    const firstWord = name.trim()?.toLowerCase() || '';
+
+    this.addPoliceDepartmentForm.patchValue({
+      loginLink: name.toLowerCase(),
+      searchLink: firstWord ? `${firstWord}_search` : ''
+    });
   }
 
   //Toggle edit image
@@ -147,7 +148,7 @@ export class AddDepartmentComponent implements OnInit {
 
   //Submit form data
   onSubmit() {
-    const data = this.addPoliceDepartmentForm.value;
+    const data = this.addPoliceDepartmentForm.getRawValue();
     const formData = new FormData();
     formData.append('county_id',data.countyId)
     formData.append('name',data.name)
