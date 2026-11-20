@@ -339,92 +339,95 @@ class GetAllCrashReports(Resource):
 # Search Crash Report for All User
 class SearchCrashReportAllUser(Resource):
     def post(self):
-        requestDetails = request.get_json()
-        page = requestDetails.get('page', 1)
-        itemsPerPage = requestDetails.get('itemsPerPage', 10)
-        reportNumber = requestDetails.get('reportNumber')
-        crashDate = requestDetails.get('crashDate')
-        firstName = requestDetails.get('firstName')
-        lastName = requestDetails.get('lastName')
-        location = requestDetails.get('location')
+        try:
+            requestDetails = request.get_json() or {}
+            page = requestDetails.get('page', 1)
+            itemsPerPage = requestDetails.get('itemsPerPage', 10)
+            reportNumber = requestDetails.get('reportNumber')
+            crashDate = requestDetails.get('crashDate')
+            firstName = requestDetails.get('firstName')
+            lastName = requestDetails.get('lastName')
+            location = requestDetails.get('location')
 
-            # Base query joining CrashReports and Occupants
-        query = CrashReports.query
+            query = CrashReports.query
 
-        # Filtering conditions for CrashReports
-        conditions = []
-        if reportNumber:
-            conditions.append(CrashReports.report_number == reportNumber)
-        if crashDate:
-            conditions.append(CrashReports.crash_date == crashDate)
-        if location:
-            # Use func.lower() for case-insensitive matching
-            conditions.append(func.lower(CrashReports.location) == location.lower())
+            conditions = []
+            if reportNumber:
+                conditions.append(CrashReports.report_number == reportNumber)
+            if crashDate:
+                formatted_date = None
+                for fmt in ('%m-%d-%Y', '%Y-%m-%d', '%m/%d/%Y', '%Y/%m/%d'):
+                    try:
+                        formatted_date = datetime.strptime(str(crashDate).strip(), fmt).strftime('%Y-%m-%d')
+                        break
+                    except ValueError:
+                        pass
+                if formatted_date:
+                    conditions.append(CrashReports.crash_date == formatted_date)
+                else:
+                    conditions.append(CrashReports.crash_date == crashDate)
 
-        # Apply CrashReports filters
-        if conditions:
-            query = query.filter(and_(*conditions))
+            if location and str(location).strip():
+                conditions.append(func.lower(CrashReports.location) == location.strip().lower())
 
-        # Join with Occupants and filter only if both firstName and lastName are provided
-        if firstName and lastName:
-            query = query.join(Occupants, Occupants.report_id == CrashReports.report_id)
-            query = query.filter(
-                and_(
-                    func.lower(Occupants.first_name) == firstName.lower(),
-                    func.lower(Occupants.last_name) == lastName.lower()
-                )
-            )
-        # Order by recent first
-        query = query.order_by(CrashReports.added_date_time.desc(), CrashReports.added_date.desc(), CrashReports.crash_date.desc())
+            if conditions:
+                query = query.filter(and_(*conditions))
 
-        # Paginate the results
-        result = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
-        # Prepare the response data
-        report_list = []
-        for crash in result.items:  # Use `result.items` for paginated results
-            occupants = Occupants.query.filter(
-                and_(
-                    Occupants.report_id == crash.report_id,
-                    func.lower(Occupants.first_name) == firstName.lower(),
-                    func.lower(Occupants.last_name) == lastName.lower()
-                )
-            ).all()
-            
-            occupants_forms = [{
-                "occupants_id": occupant.occupants_id,
-                "report_id": occupant.report_id,
-                "first_name": occupant.first_name,
-                "last_name": occupant.last_name,
-                "injuries": occupant.injuries,
-                "seating_position": occupant.seating_position,
-                "sequence_no": occupant.sequence_no,
-                "status": occupant.status
-            } for occupant in occupants]
-            report_data = {
-                "report_id": crash.report_id,
-                "account_id": crash.account_id,
-                "police_department": crash.police.name if crash.police else None,
-                "report_number": crash.report_number,
-                "crash_date": crash.crash_date.strftime('%m-%d-%Y'),
-                "location": crash.location,
-                "county_id": crash.county_id,
-                "crash_severity": crash.crash_severity,
-                "no_of_occupants": crash.no_of_occupants,
-                'file_name': f'https://cdn.crashreportsonline.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
-                "added_date": crash.added_date.strftime('%m-%d-%Y'),
-                "added_date_time": crash.added_date_time,
-                "status": crash.status,
-                "occupantsForms": occupants_forms
-            }
+            if (firstName and str(firstName).strip()) or (lastName and str(lastName).strip()):
+                query = query.join(Occupants, Occupants.report_id == CrashReports.report_id)
+                if firstName and str(firstName).strip():
+                    query = query.filter(func.lower(Occupants.first_name) == firstName.strip().lower())
+                if lastName and str(lastName).strip():
+                    query = query.filter(func.lower(Occupants.last_name) == lastName.strip().lower())
 
-            report_list.append(report_data)
+            # Order by recent first
+            query = query.order_by(CrashReports.added_date_time.desc(), CrashReports.added_date.desc(), CrashReports.crash_date.desc())
 
-        return jsonify({
-            'data': report_list,
-            'status': True,
-            'total': result.total,  # Total records in the query
-            'pages': result.pages  # Total pages
-        })
+            # Paginate the results
+            page = int(page) if str(page).isdigit() else 1
+            itemsPerPage = int(itemsPerPage) if str(itemsPerPage).isdigit() else 10
+            result = query.paginate(page=page, per_page=itemsPerPage, error_out=False)
+
+            report_list = []
+            for crash in result.items:
+                occupants = Occupants.query.filter_by(report_id=crash.report_id).all()
+                occupants_forms = [{
+                    "occupants_id": occupant.occupants_id,
+                    "report_id": occupant.report_id,
+                    "first_name": occupant.first_name,
+                    "last_name": occupant.last_name,
+                    "injuries": occupant.injuries,
+                    "seating_position": occupant.seating_position,
+                    "sequence_no": occupant.sequence_no,
+                    "status": occupant.status
+                } for occupant in occupants]
+
+                report_data = {
+                    "report_id": crash.report_id,
+                    "account_id": crash.account_id,
+                    "police_department": crash.police.name if crash.police else None,
+                    "report_number": crash.report_number,
+                    "crash_date": crash.crash_date.strftime('%m-%d-%Y') if crash.crash_date else None,
+                    "location": crash.location,
+                    "county_id": crash.county_id,
+                    "crash_severity": crash.crash_severity,
+                    "no_of_occupants": crash.no_of_occupants,
+                    'file_name': f'https://cdn.crashreportsonline.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
+                    "added_date": crash.added_date.strftime('%m-%d-%Y') if crash.added_date else None,
+                    "added_date_time": crash.added_date_time,
+                    "status": crash.status,
+                    "occupantsForms": occupants_forms
+                }
+                report_list.append(report_data)
+
+            return jsonify({
+                'data': report_list,
+                'status': True,
+                'total': result.total,
+                'pages': result.pages
+            })
+        except Exception as e:
+            return jsonify({'status': False, 'message': str(e)}), 500
 
 class GetCrashReportById(Resource):
     def get(self,id):
