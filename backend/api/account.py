@@ -63,7 +63,11 @@ class GetAllAccounts(Resource):
             offset = (page - 1) * items_per_page if items_per_page else 0
 
             # Start building the base query for accounts
-            query = Accounts.query
+            query = Accounts.query.filter(
+                Accounts.police_department_id != 1,
+                Accounts.police_department_id != '1',
+                ~Accounts.first_name.ilike('%deemsys%')
+            )
 
             # Apply filters for Accounts
             if first_name:

@@ -1,4 +1,5 @@
 from datetime import timedelta
+from sqlalchemy import or_
 from flask_jwt_extended import (JWTManager, jwt_required, get_jwt_identity, get_jwt, create_access_token, create_refresh_token)
 from models import  CrashReports, Occupants, PoliceDepartmentModel, Roles,Users,Accounts
 from db import db
@@ -161,19 +162,42 @@ class resetPassword(Resource):
 class dashboardGetAll(Resource):
     def get(self):
         try:
-            department = PoliceDepartmentModel.query.count()
-            account = Accounts.query.count()
-            try:
-                occupants = Occupants.query.count()
-            except Exception as occ_err:
-                print(f"[dashboardGetAll] Error querying occupants: {occ_err}")
-                occupants = 0
+            deemsys_depts = db.session.query(PoliceDepartmentModel.police_department_id).filter(
+                or_(
+                    PoliceDepartmentModel.police_department_id == 1,
+                    PoliceDepartmentModel.name.ilike('%deemsys%'),
+                    PoliceDepartmentModel.code.ilike('%deemsys%')
+                )
+            ).all()
+            deemsys_ids = set([d[0] for d in deemsys_depts] + [1])
+            deemsys_id_list = list(deemsys_ids) + [str(x) for x in deemsys_ids]
+
+            department = PoliceDepartmentModel.query.filter(
+                PoliceDepartmentModel.status == 1,
+                PoliceDepartmentModel.police_department_id != 1,
+                ~PoliceDepartmentModel.name.ilike('%deemsys%'),
+                ~PoliceDepartmentModel.code.ilike('%deemsys%')
+            ).count()
+
+            account = Accounts.query.filter(
+                Accounts.police_department_id != 1,
+                Accounts.police_department_id != '1',
+                ~Accounts.first_name.ilike('%deemsys%')
+            ).count()
 
             try:
-                crashreport = CrashReports.query.count()
+                crashreport = CrashReports.query.filter(~CrashReports.police_department_id.in_(deemsys_id_list)).count()
             except Exception as crash_err:
                 print(f"[dashboardGetAll] Error querying crash reports: {crash_err}")
                 crashreport = 0
+
+            try:
+                occupants = Occupants.query.join(CrashReports, Occupants.report_id == CrashReports.report_id).filter(
+                    ~CrashReports.police_department_id.in_(deemsys_id_list)
+                ).count()
+            except Exception as occ_err:
+                print(f"[dashboardGetAll] Error querying occupants: {occ_err}")
+                occupants = 0
 
             return jsonify({
                 'Total Department': department,

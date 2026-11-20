@@ -152,6 +152,7 @@ class getAllPoliceDepartment(Resource):
             # Query active police departments excluding internal Deemsys accounts
             query = PoliceDepartmentModel.query.filter(
                 PoliceDepartmentModel.status == 1,
+                PoliceDepartmentModel.police_department_id != 1,
                 ~PoliceDepartmentModel.name.ilike('%deemsys%'),
                 ~PoliceDepartmentModel.code.ilike('%deemsys%')
             )
@@ -196,7 +197,14 @@ class getByIdPoliceDepartment(Resource):
     @role_required('ROLE_SUPER_ADMIN','ROLE_USER','ROLE_ADMIN')
     def get(self,id):
         try:
-            data = PoliceDepartmentModel.query.filter_by(police_department_id=id).first()
+            if id == 1:
+                return jsonify({'status':False,'msg':'No Such Details Found'})
+            data = PoliceDepartmentModel.query.filter(
+                PoliceDepartmentModel.police_department_id == id,
+                PoliceDepartmentModel.police_department_id != 1,
+                ~PoliceDepartmentModel.name.ilike('%deemsys%'),
+                ~PoliceDepartmentModel.code.ilike('%deemsys%')
+            ).first()
             if data:
                 police_data = {
                     'department_id':data.police_department_id,
@@ -224,7 +232,14 @@ class getByIdPoliceDepartment(Resource):
 class getByNamePoliceDepartment(Resource):
     def get(self,name):
         try:
-            data = PoliceDepartmentModel.query.filter_by(name=name).first()
+            if 'deemsys' in str(name).lower():
+                return jsonify({'status':False,'msg':'No Such Details Found'})
+            data = PoliceDepartmentModel.query.filter(
+                PoliceDepartmentModel.name == name,
+                PoliceDepartmentModel.police_department_id != 1,
+                ~PoliceDepartmentModel.name.ilike('%deemsys%'),
+                ~PoliceDepartmentModel.code.ilike('%deemsys%')
+            ).first()
             if data:
                 police_data = {
                     'department_id':data.police_department_id,

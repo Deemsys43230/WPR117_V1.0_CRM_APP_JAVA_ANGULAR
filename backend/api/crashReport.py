@@ -65,6 +65,20 @@ def upload_file_to_s3(file, police_department_id, report_id):
 
     return f'https://cdn.crashreportsonline.com/{object_key}'
 
+def get_deemsys_department_ids():
+    try:
+        depts = db.session.query(PoliceDepartmentModel.police_department_id).filter(
+            or_(
+                PoliceDepartmentModel.police_department_id == 1,
+                PoliceDepartmentModel.name.ilike('%deemsys%'),
+                PoliceDepartmentModel.code.ilike('%deemsys%')
+            )
+        ).all()
+        ids = set([d[0] for d in depts] + [1])
+    except Exception:
+        ids = {1}
+    return list(ids) + [str(x) for x in ids]
+
 def sync_to_cro_background(cro_payload):
     try:
         cro_domain = get_property("CRODomain") or "http://14.195.114.174:5005"
@@ -240,7 +254,7 @@ class GetAllCrashReports(Resource):
     @role_required('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_USER')
     def post(self):
         try:
-            requestDetails = request.get_json()
+            requestDetails = request.get_json() or {}
             page = requestDetails.get('page', 1)
             itemsPerPage = requestDetails.get('itemsPerPage')
             accountId = requestDetails.get('accountId')
@@ -257,6 +271,11 @@ class GetAllCrashReports(Resource):
             policeDepartmentId = requestDetails.get('policeDepartmentId')
 
             query = CrashReports.query
+
+            # Always exclude internal Deemsys department reports from response
+            deemsys_ids = get_deemsys_department_ids()
+            query = query.filter(~CrashReports.police_department_id.in_(deemsys_ids))
+
             user = Users.query.filter_by(username=get_jwt_identity()).first()
             if reportType == 1 and policeDepartmentId=="" and user:
                 accountId = user.account_id
@@ -293,17 +312,28 @@ class GetAllCrashReports(Resource):
             # Order by recent first
             query = query.order_by(CrashReports.added_date_time.desc(), CrashReports.added_date.desc(), CrashReports.crash_date.desc())
 
-            # Apply pagination
+            # Apply pagination safely
+            if itemsPerPage is None or str(itemsPerPage).strip() == "":
+                itemsPerPage = 10
+            else:
+                itemsPerPage = int(itemsPerPage)
+            page = int(page) if str(page).isdigit() else 1
             offset = (page - 1) * itemsPerPage
+
             crash_report_details = query.limit(itemsPerPage).offset(offset).all()
             count = query.count()
             report_list = []
             for crash in crash_report_details:
-    # Query the Occupants for the current CrashReport
-                occupants = db.session.query(Occupants).filter(Occupants.report_id == crash.report_id,Occupants.first_name.ilike(f'%{firstName}%'),Occupants.last_name.ilike(f'%{lastName}%')).all()
+                # Query the Occupants for the current CrashReport safely
+                occupants_query = db.session.query(Occupants).filter(Occupants.report_id == crash.report_id)
+                if firstName:
+                    occupants_query = occupants_query.filter(Occupants.first_name.ilike(f'%{firstName}%'))
+                if lastName:
+                    occupants_query = occupants_query.filter(Occupants.last_name.ilike(f'%{lastName}%'))
+                occupants = occupants_query.all()
 
                 occupants_forms = [{
-                    "occupants_id": occupant.occupants_id,  # Accessing from Occupants, not CrashReports
+                    "occupants_id": occupant.occupants_id,
                     "report_id": occupant.report_id,
                     "first_name": occupant.first_name,
                     "last_name": occupant.last_name,
@@ -313,26 +343,25 @@ class GetAllCrashReports(Resource):
                     "status": occupant.status
                 } for occupant in occupants]
 
-                # Now you can add this to your report data
                 report_data = {
                     "report_id": crash.report_id,
                     "account_id": crash.account_id,
-                    "police_department": crash.police.name,
+                    "police_department": crash.police.name if crash.police else None,
                     "report_number": crash.report_number,
-                    "crash_date": crash.crash_date.strftime('%m-%d-%Y'),
+                    "crash_date": crash.crash_date.strftime('%m-%d-%Y') if crash.crash_date else None,
                     "location": crash.location,
                     "county_id": crash.county_id,
                     "crash_severity": crash.crash_severity,
                     "no_of_occupants": crash.no_of_occupants,
                     "file_name": f'https://cdn.crashreportsonline.com/runner-reports/{crash.police_department_id}/reports/{crash.report_id}.pdf',
-                    "added_date": crash.added_date.strftime('%m-%d-%Y'),
+                    "added_date": crash.added_date.strftime('%m-%d-%Y') if crash.added_date else None,
                     "added_date_time": crash.added_date_time,
                     "status": crash.status,
                     "occupantsForms": occupants_forms
                 }
 
                 report_list.append(report_data)
-            return jsonify({'data': report_list, 'status': True, 'total': count,})
+            return jsonify({'data': report_list, 'status': True, 'total': count})
         except Exception as e:
             return jsonify({'status': False, 'message': str(e)})
 
@@ -350,6 +379,10 @@ class SearchCrashReportAllUser(Resource):
             location = requestDetails.get('location')
 
             query = CrashReports.query
+
+            # Always exclude internal Deemsys department reports from response
+            deemsys_ids = get_deemsys_department_ids()
+            query = query.filter(~CrashReports.police_department_id.in_(deemsys_ids))
 
             conditions = []
             if reportNumber:
@@ -432,6 +465,11 @@ class SearchCrashReportAllUser(Resource):
 class GetCrashReportById(Resource):
     def get(self,id):
         data=CrashReports.query.filter_by(report_id=id).first()
+        if not data:
+            return jsonify({'data': None, 'status': False, 'message': 'Crash Report not found'})
+        deemsys_ids = get_deemsys_department_ids()
+        if str(data.police_department_id) in [str(x) for x in deemsys_ids]:
+            return jsonify({'data': None, 'status': False, 'message': 'Crash Report not found'})
         occupant_data = Occupants.query.filter_by(report_id =id).all()
         occupants_list=[]
         for occupant in occupant_data:
@@ -634,6 +672,8 @@ class checkReportNumberExist(Resource):
          query = CrashReports.query
          if reportId!="":
             query = query.filter(CrashReports.report_id != reportId)
+         deemsys_ids = get_deemsys_department_ids()
+         query = query.filter(~CrashReports.police_department_id.in_(deemsys_ids))
          crash_report = query.filter_by(report_number=reportNumber).first()
          if crash_report:
              return jsonify({'status':False,'isExist':1,'message':'Report Number Already Exist'})
