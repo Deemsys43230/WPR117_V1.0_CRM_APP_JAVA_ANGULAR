@@ -27,7 +27,13 @@ def generate_short_uuid():
     return short_uuid
 
 def upload_file_to_s3(file, police_department_id, report_id):
-    bucket = 'injurycrashreports' if AWSCredentials.get('PUBLIC_BUCKET_NAME') in [None, '', 'crm-tests'] else AWSCredentials['PUBLIC_BUCKET_NAME']
+    # cdn.crashreportsonline.com CloudFront origin is 'injurycrashreports'
+    cdn_bucket = 'injurycrashreports'
+    configured_bucket = AWSCredentials.get('PUBLIC_BUCKET_NAME')
+    target_buckets = [cdn_bucket]
+    if configured_bucket and configured_bucket not in ('', 'crm-tests', cdn_bucket):
+        target_buckets.append(configured_bucket)
+
     object_key = f'runner-reports/{police_department_id}/reports/{report_id}.pdf'
     root_key = f'{report_id}.pdf'
     alt_key = f'crashreports/{report_id}.pdf'
@@ -37,39 +43,25 @@ def upload_file_to_s3(file, police_department_id, report_id):
         'ContentDisposition': 'inline'
     }
 
-    # Delete existing if any
-    for k in (object_key, root_key, alt_key):
-        try:
-            s3.delete_object(Bucket=bucket, Key=k)
-        except Exception:
-            pass
-
-    if hasattr(file, 'seek'):
-        file.seek(0)
-        s3.upload_fileobj(Fileobj=file, Bucket=bucket, Key=object_key, ExtraArgs=extra_args)
-        try:
+    # Read bytes once so we can reliably upload to multiple buckets/keys
+    if hasattr(file, 'read'):
+        if hasattr(file, 'seek'):
             file.seek(0)
-            s3.upload_fileobj(Fileobj=file, Bucket=bucket, Key=root_key, ExtraArgs=extra_args)
-            file.seek(0)
-            s3.upload_fileobj(Fileobj=file, Bucket=bucket, Key=alt_key, ExtraArgs=extra_args)
-        except Exception as alt_err:
-            print(f"[upload_file_to_s3] Alternate keys upload warning: {alt_err}")
-    elif hasattr(file, 'read'):
         file_bytes = file.read()
-        s3.put_object(Bucket=bucket, Key=object_key, Body=file_bytes, **extra_args)
-        try:
-            s3.put_object(Bucket=bucket, Key=root_key, Body=file_bytes, **extra_args)
-            s3.put_object(Bucket=bucket, Key=alt_key, Body=file_bytes, **extra_args)
-        except Exception as alt_err:
-            print(f"[upload_file_to_s3] Alternate keys upload warning: {alt_err}")
     else:
-        # file is file path
-        s3.upload_file(file, bucket, object_key, ExtraArgs=extra_args)
-        try:
-            s3.upload_file(file, bucket, root_key, ExtraArgs=extra_args)
-            s3.upload_file(file, bucket, alt_key, ExtraArgs=extra_args)
-        except Exception as alt_err:
-            print(f"[upload_file_to_s3] Alternate keys upload warning: {alt_err}")
+        with open(file, 'rb') as f:
+            file_bytes = f.read()
+
+    for b in target_buckets:
+        for k in (object_key, root_key, alt_key):
+            try:
+                s3.delete_object(Bucket=b, Key=k)
+            except Exception:
+                pass
+            try:
+                s3.put_object(Bucket=b, Key=k, Body=file_bytes, **extra_args)
+            except Exception as up_err:
+                print(f"[upload_file_to_s3] Warning uploading {k} to {b}: {up_err}")
 
     return f'https://cdn.crashreportsonline.com/{object_key}'
 
